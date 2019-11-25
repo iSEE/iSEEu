@@ -22,6 +22,7 @@
 #' @export
 #' @importFrom S4Vectors DataFrame
 #' @importFrom iSEE iSEE featAssayPlotDefaults
+#' @importFrom shiny runApp
 #'
 #' @examples
 #' library(scRNAseq)

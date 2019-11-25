@@ -14,6 +14,7 @@
 #' @export
 #' @importFrom S4Vectors DataFrame
 #' @importFrom iSEE iSEE
+#' @importFrom shiny runApp
 #'
 #' @examples
 #' example("SingleCellExperiment")
