@@ -1,13 +1,31 @@
 Package: iSEEu
 Type: Package
-Title: Definition Of Modes For iSEE
+Title: iSEE Universe
 Version: 0.1.0
-Authors@R: c(person("Kevin", "Rue-Albrecht", role = "aut", email = "kevin.rue-albrecht@kennedy.ox.ac.uk", comment = c(ORCID = "0000-0003-3899-3872")),
-    person("Federico", "Marini", role="aut", email="marinif@uni-mainz.de", comment = c(ORCID = '0000-0003-3252-7758')),
-    person("Charlotte", "Soneson", role=c("aut", "cre"), email="charlottesoneson@gmail.com", comment = c(ORCID = '0000-0003-3833-2169')),
-    person("Aaron", "Lun", role="aut", email="infinite.monkeys.with.keyboards@gmail.com", comment = c(ORCID = '0000-0002-3564-4813')))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: 
+    c(
+    person("Charlotte", 
+           "Soneson", 
+           role=c("aut", "cre"), 
+           email="charlottesoneson@gmail.com", 
+           comment = c(ORCID = '0000-0003-3833-2169')),
+    person("Federico", 
+           "Marini", 
+           role="aut", 
+           email="marinif@uni-mainz.de", 
+           comment = c(ORCID = '0000-0003-3252-7758')),
+    person("Kevin", 
+           "Rue-Albrecht", 
+           role = "aut", 
+           email = "kevin.rue-albrecht@kennedy.ox.ac.uk", 
+           comment = c(ORCID = "0000-0003-3899-3872")),
+    person("Aaron", 
+           "Lun", 
+           role="aut", 
+           email="infinite.monkeys.with.keyboards@gmail.com", 
+           comment = c(ORCID = '0000-0002-3564-4813')))
+Description: Contains a set of modes for iSEE, allowing easy configuration of 
+    iSEE applications.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: 
