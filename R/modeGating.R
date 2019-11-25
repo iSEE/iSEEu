@@ -58,17 +58,17 @@ modeGating <- function(se, features, featAssayMax=max(2, nrow(features)), ..., p
 
   featAssayArgs <- iSEE::featAssayPlotDefaults(se, featAssayMax)
   # prepare featAssayArgs
-  featAssayArgs[["XAxis"]] <- "Feature name"
+  featAssayArgs[[iSEE:::.featAssayXAxis]] <- iSEE:::.featAssayXAxisFeatNameTitle
   # Y axes take all the odd-numbered feature names
-  featAssayArgs[["XAxisFeatName"]] <- features[,"x"]
+  featAssayArgs[[iSEE:::.featAssayXAxisFeatName]] <- features[,"x"]
   # X axes take all the even-numbered feature names
-  featAssayArgs[["YAxisFeatName"]] <- features[,"y"]
-  featAssayArgs[["SelectByPlot"]] <- c(
+  featAssayArgs[[iSEE:::.featAssayYAxisFeatName]] <- features[,"y"]
+  featAssayArgs[[iSEE:::.selectByPlot]] <- c(
     "",
     sprintf("Feature assay plot %i", seq(1, nrow(features) - 1, 1)),
     rep("", nrow(featAssayArgs) - nrow(features))
   )
-  featAssayArgs[["SelectEffect"]] <- c(
+  featAssayArgs[[iSEE:::.selectEffect]] <- c(
     "",
     rep("Restrict", nrow(features) - 2),
     "Color",
