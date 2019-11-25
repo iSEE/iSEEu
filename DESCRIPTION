@@ -30,9 +30,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: 
     iSEE
-RoxygenNote: 7.0.0
 Imports:
     S4Vectors
 Suggests: 
     scRNAseq,
     scater
+RoxygenNote: 7.0.1
+Roxygen: list(markdown = TRUE)
