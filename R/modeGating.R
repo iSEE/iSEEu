@@ -3,23 +3,26 @@
 #'
 #' This mode launches a Shiny App preconfigured with multiple chain-linked
 #' feature expression plots is launched for interactive data exploration of the
-#' \code{\link{SingleCellExperiment}} or \code{\link{SummarizedExperiment}}
+#' [SingleCellExperiment][SingleCellExperiment::SingleCellExperiment()] or 
+#' [SummarizedExperiment][SummarizedExperiment::SummarizedExperiment()]
 #' object.
 #'
-#' @param se An object that coercible to \linkS4class{SingleCellExperiment}
-#' @param features \code{data.frame} with columns named \code{x} and \code{y}
+#' @param se An object that coercible to 
+#' [SingleCellExperiment-class][SingleCellExperiment::SingleCellExperiment()]
+#' @param features `data.frame` with columns named `x` and `y`
 #' that define the features on the axes of the linked plots.
 #' Plots are serially linked from the first row to the last.
 #' @param featAssayMax Maximal number of feature assay plots in the app.
-#' @param ... Additional arguments passed to \code{\link{iSEE}}.
+#' @param ... Additional arguments passed to [iSEE()].
 #' @param plot_width The grid width of linked plots (numeric vector of
-#' length either 1 or equal to \code{nrow(features)}
+#' length either 1 or equal to `nrow(features)`
 #'
 #' @return A Shiny app object is returned.
 #'
 #' @export
 #' @importFrom S4Vectors DataFrame
 #' @importFrom iSEE iSEE featAssayPlotDefaults
+#' @importFrom shiny runApp
 #'
 #' @examples
 #' library(scRNAseq)

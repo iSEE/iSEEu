@@ -13,7 +13,8 @@ modeGating(
 )
 }
 \arguments{
-\item{se}{An object that coercible to \linkS4class{SingleCellExperiment}}
+\item{se}{An object that coercible to
+\link[SingleCellExperiment:SingleCellExperiment]{SingleCellExperiment-class}}
 
 \item{features}{\code{data.frame} with columns named \code{x} and \code{y}
 that define the features on the axes of the linked plots.
@@ -21,7 +22,7 @@ Plots are serially linked from the first row to the last.}
 
 \item{featAssayMax}{Maximal number of feature assay plots in the app.}
 
-\item{...}{Additional arguments passed to \code{\link{iSEE}}.}
+\item{...}{Additional arguments passed to \code{\link[=iSEE]{iSEE()}}.}
 
 \item{plot_width}{The grid width of linked plots (numeric vector of
 length either 1 or equal to \code{nrow(features)}}
@@ -32,7 +33,8 @@ A Shiny app object is returned.
 \description{
 This mode launches a Shiny App preconfigured with multiple chain-linked
 feature expression plots is launched for interactive data exploration of the
-\code{\link{SingleCellExperiment}} or \code{\link{SummarizedExperiment}}
+\link[SingleCellExperiment:SingleCellExperiment]{SingleCellExperiment} or
+\link[SummarizedExperiment:SummarizedExperiment]{SummarizedExperiment}
 object.
 }
 \examples{

@@ -5,15 +5,16 @@
 #'
 #' This mode presents the advantage to launch an interface in a minimal amount of time,
 #' as it does not need to render any panel when the interface is launched.
-#' Users can then use the \code{"Organize panels"} widget to select panels to display in the interface.
+#' Users can then use the `"Organize panels"` widget to select panels to display in the interface.
 #'
-#' @param ... Arguments passed to \code{\link{iSEE}}.
+#' @param ... Arguments passed to [iSEE()].
 #'
 #' @return A Shiny app object is returned.
 #'
 #' @export
 #' @importFrom S4Vectors DataFrame
 #' @importFrom iSEE iSEE
+#' @importFrom shiny runApp
 #'
 #' @examples
 #' example("SingleCellExperiment")
