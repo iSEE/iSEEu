@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/csoneson/iSEEu.svg?branch=master)](https://travis-ci.org/csoneson/iSEEu)
+status](https://travis-ci.com/csoneson/iSEEu.svg?branch=master)](https://travis-ci.com/csoneson/iSEEu)
 <!-- badges: end -->
 
 Modes for [iSEE](https://bioconductor.org/packages/iSEE/)
