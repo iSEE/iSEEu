@@ -35,6 +35,11 @@ Imports:
     shiny
 Suggests: 
     scRNAseq,
-    scater
+    scater,
+    knitr,
+    rmarkdown,
+    BiocStyle,
+    htmltools
 RoxygenNote: 7.0.1
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
