@@ -56,37 +56,36 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 
 # Contributing to the iSEE universe (`iSEEu`)
 
-[... some general info? ... ]
+[... some general info? ...]
 
 ## Developer Day at the European Bioconductor 2019 conference 
 
 The European Bioconductor 2019 conference (`#EuroBioc2019`) takes place at the UCLouvain, in Brussels (Belgium) - https://eurobioc2019.bioconductor.org.
 During this conference, there will be a Developer Day event, where hackathon-like sessions will be focused around some topics proposed by the participants.
 
-    The `iSEE` development team proposed such a session, see here for more details: https://github.com/Bioconductor/EuroBioc2019/issues/4.
-    What follows is the original description of the topic, as a call to action for potential contributors to join in and design some "modes", i.e. preconfigured sets of panels and linked content to be used as starting setup when launching `iSEE`.
+The `iSEE` development team proposed such a session, see here for more details: https://github.com/Bioconductor/EuroBioc2019/issues/4.
+What follows is the original description of the topic, as a call to action for potential contributors to join in and design some "modes", i.e. preconfigured sets of panels and linked content to be used as starting setup when launching `iSEE`.
     
-    The `iSEE` Bioconductor package (http://bioconductor.org/packages/iSEE/) enables interactive exploration of any type of data that can be stored in a `SummarizedExperiment` object. 
-    The default user interface of iSEE consists of a set of up to eight panels, each displaying a different aspect of the provided object (see e.g. http://shiny.imbei.uni-mainz.de:3838/iSEE/ for an example). 
-    The user is, however, free to change this interface interactively, by removing, adding or resizing existing panels, as well as by adding custom panels. 
-    In addition to changing the interface layout interactively, the user can pre-configure the set of panels, and even their content, and provide this information to `iSEE` when launching the application.
-    
-    In an attempt to simplify this procedure for commonly used setups, we implemented a few different `iSEE` "modes" (https://github.com/csoneson/iSEE/blob/master/R/modes.R), each of which defines a set of panels and content for the resulting application.
-    
-    The purpose of this "hackathon" session is to expand the set of `iSEE` modes to cover a wider range of common applications. 
-    The expected outcome is a collection of new modes suitable for various types of data analyses.
-    Depending on the participants, we will start by introducing the `iSEE` package and its capabilities.
-    
-    Some suggestions for new modes to implement:
-    
-    - scRNA-seq QC
-    - Single panel type applications
-    - bulk RNA-seq DE exploration
-
+> The `iSEE` Bioconductor package (http://bioconductor.org/packages/iSEE/) enables interactive exploration of any type of data that can be stored in a `SummarizedExperiment` object. 
+The default user interface of iSEE consists of a set of up to eight panels, each displaying a different aspect of the provided object (see e.g. http://shiny.imbei.uni-mainz.de:3838/iSEE/ for an example). 
+The user is, however, free to change this interface interactively, by removing, adding or resizing existing panels, as well as by adding custom panels. 
+In addition to changing the interface layout interactively, the user can pre-configure the set of panels, and even their content, and provide this information to `iSEE` when launching the application.
+> 
+> In an attempt to simplify this procedure for commonly used setups, we implemented a few different `iSEE` "modes" (https://github.com/csoneson/iSEE/blob/master/R/modes.R), each of which defines a set of panels and content for the resulting application.
+> 
+> The purpose of this "hackathon" session is to expand the set of `iSEE` modes to cover a wider range of common applications. 
+The expected outcome is a collection of new modes suitable for various types of data analyses.
+Depending on the participants, we will start by introducing the `iSEE` package and its capabilities.
+> 
+> Some suggestions for new modes to implement:
+> 
+> - scRNA-seq QC
+> - Single panel type applications
+> - bulk RNA-seq DE exploration
 
 # Getting started
 
-- install `iSEE` first - the development version is recommended
+- install `iSEE` first - the development version is recommended.
 
 ```{r eval=FALSE}
 BiocManager::install("iSEE", version = "devel")
@@ -94,7 +93,7 @@ BiocManager::install("iSEE", version = "devel")
 remotes::install_github("csoneson/iSEE")
 ```
 
-- fork the `iSEEu` repo (https://github.com/csoneson/iSEEu) and clone it locally 
+- fork the `iSEEu` repo (https://github.com/csoneson/iSEEu) and clone it locally.
 
 ```
 git clone https://github.com/[your_github_username]/iSEEu.git
@@ -104,12 +103,12 @@ git clone https://github.com/[your_github_username]/iSEEu.git
   A typical contribution would be a function defining an `iSEE` mode, named `modeXXX`, where `XXX` provides a clear representation of the purpose of the mode. 
   Please place each mode in a script of its own, with the same name as the function. 
   The function should be documented (including an example), and any required packages should be added to the DESCRIPTION file. 
-  Example data sets can often be obtained from `ExperimentHub` package (e.g. from the [scRNAseq](http://bioconductor.org/packages/scRNAseq/) package for scRNAseq data), and should not be added to the `iSEEu` package.
+  Example data sets can often be obtained from `ExperimentHub` package (e.g. from the [scRNAseq](http://bioconductor.org/packages/scRNAseq/) package for single-cell RNA-sequencing data), and should not be added to the `iSEEu` package.
   
-- make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies
+- make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies.
 
 - once your `mode` function is done, consider adding some information in the package.
-  Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder)
+  Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder).
 
 # Some more info
 
@@ -129,8 +128,8 @@ Yes.
 Mainly guided by common sense of "never changing a working system", please stick to the conventions we have been adopting for developing the existing codebase.
 A few simple style options:
 
-- keep the indentation as it is in the initial functions already available
-- if writing text (e.g. vignette), please use one sentence per line - this makes `git diff` operations easier to check
-- in code, use a degree of balance 
+- keep the indentation as it is in the initial functions already available.
+- if writing text (e.g. vignette), please use one sentence per line - this makes `git diff` operations easier to check.
+- in code, use a degree of balance.
 - for names, try to keep some consistency with what already is existing.
-  We use camelCase for modes and some other functions), and prepend most unexported elements with a dot
+  We use camelCase for modes and some other functions), and prepend most unexported elements with a dot.
