@@ -84,7 +84,7 @@ During this conference, there will be a Developer Day event, where hackathon-lik
     - bulk RNA-seq DE exploration
 
 
-## Getting started
+# Getting started
 
 - install `iSEE` first - the development version is recommended
 
@@ -111,7 +111,7 @@ git clone https://github.com/[your_github_username]/iSEEu.git
 - once your `mode` function is done, consider adding some information in the package.
   Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder)
 
-## Some more info
+# Some more info
 
 #### Where do I look for constants within `iSEE`? {-}
 
@@ -125,6 +125,12 @@ There are several modes already defined in the `R/` directory.
 
 #### Are there any style guides I am supposed to follow? {-}
 
-...
+Yes. 
+Mainly guided by common sense of "never changing a working system", please stick to the conventions we have been adopting for developing the existing codebase.
+A few simple style options:
 
-
+- keep the indentation as it is in the initial functions already available
+- if writing text (e.g. vignette), please use one sentence per line - this makes `git diff` operations easier to check
+- in code, use a degree of balance 
+- for names, try to keep some consistency with what already is existing.
+  We use camelCase for modes and some other functions), and prepend most unexported elements with a dot
