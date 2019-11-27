@@ -100,22 +100,28 @@ remotes::install_github("csoneson/iSEE")
 git clone https://github.com/[your_github_username]/iSEEu.git
 ```
 
-- make the desired changes in the files - start from the `R` folder, then document via `roxygen2`
-
+- make the desired changes in the files - start from the `R` folder, then document via `roxygen2` - and push to your fork. 
+  A typical contribution would be a function defining an `iSEE` mode, named `modeXXX`, where `XXX` provides a clear representation of the purpose of the mode. 
+  Please place each mode in a script of its own, with the same name as the function. 
+  The function should be documented (including an example), and any required packages should be added to the DESCRIPTION file. 
+  Example data sets can often be obtained from `ExperimentHub` package (e.g. from the [scRNAseq](http://bioconductor.org/packages/scRNAseq/) package for scRNAseq data), and should not be added to the `iSEEu` package.
+  
 - make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies
 
-- once your `mode` object is done, consider adding some information in the package.
+- once your `mode` function is done, consider adding some information in the package.
   Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder)
 
 ## Some more info
 
 #### Where do I look for constants within `iSEE`? {-}
 
-...
+Many of the "global" variables that are used in several places in `iSEE` are defined in the [constants.R](https://github.com/csoneson/iSEE/blob/master/R/constants.R) script in `iSEE`. 
+We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. 
+To access a constant, use `iSEE:::.constantName`. 
 
 #### Is there any example I can check out to understand how things are supposed to work? {-}
 
-...
+There are several modes already defined in the `R/` directory. 
 
 #### Are there any style guides I am supposed to follow? {-}
 
