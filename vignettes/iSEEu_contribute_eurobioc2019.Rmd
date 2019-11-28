@@ -109,6 +109,11 @@ git clone https://github.com/[your_github_username]/iSEEu.git
 
 - once your `mode` function is done, consider adding some information in the package.
   Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder).
+  
+- more on documenting and code guidelines:
+  - if possible, please consider adding an example in the dedicated Roxygen preamble to show how to run each function
+  - if possible, consider adding one or more unit tests - we use the `testthat` framework
+
 
 # Some more info
 
@@ -132,4 +137,4 @@ A few simple style options:
 - if writing text (e.g. vignette), please use one sentence per line - this makes `git diff` operations easier to check.
 - in code, use a degree of balance.
 - for names, try to keep some consistency with what already is existing.
-  We use camelCase for modes and some other functions), and prepend most unexported elements with a dot.
+  We use camelCase for modes and some other functions, and prepend most unexported elements with a dot.
