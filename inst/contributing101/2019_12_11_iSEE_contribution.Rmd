@@ -1,0 +1,46 @@
+---
+title: "Contributing to `iSEE`"
+subtitle: ""
+author: "Federico Marini (marinif@uni-mainz.de), Charlotte Soneson (charlotte.soneson@fmi.ch)</br>
+  <!-- `r icon::fa('twitter')` `@FedeBioinfo`</br> -->
+  "
+date: "2019/12/02</br>"
+output:
+  xaringan::moon_reader:
+    css: ["default", "default-fonts","css/FMstyles.css","css/animate.css"]
+    lib_dir: libs
+    # chakra: libs/remark-latest.min.js
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: [center, middle]
+---
+
+class: center
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(eval = FALSE,
+                      message = FALSE, 
+                      echo = FALSE, 
+                      warnings = FALSE,
+                      fig.align = "center")
+```
+
+# `Sys.getenv("USER")`
+
+I'm **Federico Marini**, Virchow Fellow @CTH Mainz/IMBEI (University Medical Center), Mainz, Germany
+
+--
+
+I'm **Charlotte Soneson**, Research Associate @FMI (Computational Biology Platform), Basel, Switzerland
+
+--
+
+Together with Kevin Rue-Albrecht and Aaron Lun, we are the *shared, proud foster parents* of the `iSEE` package :)
+
+
+
+
+
