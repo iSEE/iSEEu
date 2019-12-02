@@ -146,6 +146,10 @@ modeGating
 
 --
 
+Here is a short questionnaire: [`https://forms.gle/e4TYTdGV4ptMncop8`](https://forms.gle/e4TYTdGV4ptMncop8) - [`http://bit.ly/iSEE_survey`](http://bit.ly/iSEE_survey) in short
+
+--
+
 Checkout `vignettes/iSEEu_contribute_eurobioc2019.Rmd`
 
 --
