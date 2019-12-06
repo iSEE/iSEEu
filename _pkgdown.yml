@@ -1,0 +1,43 @@
+authors:
+  Charlotte Soneson:
+    href: https://csoneson.github.io  
+  Federico Marini:
+    href: https://federicomarini.github.io
+  Kevin Rue-Albrecht:
+    href: https://kevinrue.github.io
+  Aaron Lun:
+    href: https://LTLA.github.io
+    
+template:
+  params:
+    bootswatch: cosmo
+
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: Articles
+      menu:
+      - text: |
+          iSEEu_contribute_eurobioc2019
+        href: articles/iSEEu_contribute_eurobioc2019.html
+    news:
+      text: Changelog
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/csoneson/iSEEu
