@@ -9,7 +9,7 @@ author:
   email: marinif@uni-mainz.de
 - name: Charlotte Soneson
   affiliation: 
-  - &id3 Institute of Molecular Life Sciences, University of Zurich
+  - &id3 Friedrich Miescher Institute for Biomedical Research, Basel
   - SIB Swiss Institute of Bioinformatics
   email: charlottesoneson@gmail.com
 - name: Kevin Rue-Albrecht
@@ -56,7 +56,8 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 
 # Contributing to the iSEE universe (`iSEEu`)
 
-[... some general info? ...]
+The `iSEEu` package contains material and code that is useful to users of the `iSEE` package, but not strictly necessary for its function. 
+We welcome contributions from the community, see below for more instructions. 
 
 ## Developer Day at the European Bioconductor 2019 conference 
 
@@ -103,13 +104,13 @@ git clone https://github.com/[your_github_username]/iSEEu.git
   A typical contribution would be a function defining an `iSEE` mode, named `modeXXX`, where `XXX` provides a clear representation of the purpose of the mode. 
   Please place each mode in a script of its own, with the same name as the function. 
   The function should be documented (including an example), and any required packages should be added to the DESCRIPTION file. 
-  Example data sets can often be obtained from `ExperimentHub` package (e.g. from the [scRNAseq](http://bioconductor.org/packages/scRNAseq/) package for single-cell RNA-sequencing data), and should not be added to the `iSEEu` package.
+  Example data sets can often be obtained from an `ExperimentHub` package (e.g. from the [scRNAseq](http://bioconductor.org/packages/scRNAseq/) package for single-cell RNA-sequencing data), and should not be added to the `iSEEu` package.
   
+- once your `mode` function is done, consider adding some information in the package.
+  Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder). Also add yourself as a contributor (`ctb`) to the DESCRIPTION file.
+
 - make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies.
 
-- once your `mode` function is done, consider adding some information in the package.
-  Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder).
-  
 - more on documenting and code guidelines:
   - if possible, please consider adding an example in the dedicated Roxygen preamble to show how to run each function
   - if possible, consider adding one or more unit tests - we use the `testthat` framework
@@ -138,3 +139,16 @@ A few simple style options:
 - in code, use a degree of balance.
 - for names, try to keep some consistency with what already is existing.
   We use camelCase for modes and some other functions, and prepend most unexported elements with a dot.
+
+#### What if I need a custom panel type? {-}
+
+In addition to the eight standard panel types, custom panels are easily accommodated within `iSEE` applications. 
+For a guide, see the corresponding [vignette](https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html). 
+For examples, see [this repo](https://github.com/kevinrue/iSEE_custom).
+
+#### Where can I find a comprehensive introduction to `iSEE`? {-}
+
+The `iSEE` package contains several vignettes detailing the main functionality. 
+You can also take a look at this [workshop](https://kevinrue.github.io/iSEEWorkshop2019/index.html). 
+A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available [here](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/).
+

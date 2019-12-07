@@ -4,7 +4,7 @@ subtitle: ""
 author: "Federico Marini (marinif@uni-mainz.de), <br>Charlotte Soneson (charlotte.soneson@fmi.ch)</br>
   <!-- `r icon::fa('twitter')` `@FedeBioinfo`</br> -->
   "
-date: "2019/12/02</br>"
+date: "2019-12-10</br>"
 output:
   xaringan::moon_reader:
     css: ["default", "default-fonts","css/FMstyles.css","css/animate.css"]
