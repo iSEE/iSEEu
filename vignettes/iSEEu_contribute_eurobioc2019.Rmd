@@ -146,6 +146,10 @@ In addition to the eight standard panel types, custom panels are easily accommod
 For a guide, see the corresponding [vignette](https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html). 
 For examples, see [this repo](https://github.com/kevinrue/iSEE_custom).
 
+#### Are there other examples on how to use `iSEE` for exploring other datasets/data types? {-}
+
+Yes, you can have a look at the examples in https://github.com/federicomarini/iSEE_instances, where we tried to put together fully worked vignettes to re-analyze publicly available datasets, e.g. also trying to replicate some key visualizations of the original publications.
+
 #### Where can I find a comprehensive introduction to `iSEE`? {-}
 
 The `iSEE` package contains several vignettes detailing the main functionality. 
