@@ -1,5 +1,6 @@
 pandoc: '2.2'
 pkgdown: 1.4.1
 pkgdown_sha: ~
-articles: []
+articles:
+  iSEEu_contribute_eurobioc2019: iSEEu_contribute_eurobioc2019.html
 
