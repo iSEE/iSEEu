@@ -35,6 +35,13 @@ Imports:
     shiny
 Suggests: 
     scRNAseq,
-    scater
+    scater,
+    knitr,
+    rmarkdown,
+    BiocStyle,
+    htmltools
+URL: https://github.com/csoneson/iSEEu
+BugReports: https://github.com/csoneson/iSEEu/issues
 RoxygenNote: 7.0.1
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

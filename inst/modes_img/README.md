@@ -1,0 +1,1 @@
+This folder contains screenshots of the `mode` objects developed as a companion to the main `iSEE` package 
