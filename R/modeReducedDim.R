@@ -25,7 +25,7 @@
 #' @return A Shiny app object is returned.
 #'
 #' @export
-#' @importFrom methods is
+#' @importFrom methods is new
 #' @importFrom SingleCellExperiment reducedDimNames colData
 #' @importFrom S4Vectors DataFrame
 #'
