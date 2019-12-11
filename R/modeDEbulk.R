@@ -14,6 +14,7 @@
 #' # TODO: specify all the prelim steps!!!
 #' se_airway <- readRDS("se_airway_de.rds")
 #' sce_airway <- as(se_airway, "SingleCellExperiment")
+#' sce_airway <- scater::runPCA(sce_airway, exprs_values = "vst_counts")
 #' # I could safely filter out rows for non-expressed features
 #' sce_airway <- sce_airway[rowSums(counts(sce_airway)) > 0,]
 #' 
@@ -90,3 +91,4 @@ modeDEbulk <- function(se, plot_width = 4, ...) {
   )
   return(app)
 } 
+
