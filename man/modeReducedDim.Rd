@@ -9,7 +9,7 @@ modeReducedDim(
   includeNames = reducedDimNames(se),
   colorBy = NULL,
   ...,
-  plot_width = 4
+  plot_width = NULL
 )
 }
 \arguments{
@@ -20,12 +20,17 @@ to display as individual panels. The default uses all available in
 \code{reducedDimNames(se)}.}
 
 \item{colorBy}{Character scalar controling coloring of cells. Must match either
-to one of \code{colnames(colData(se))} or \code{rownames(se)}.}
+to one of \code{colnames(colData(se))} or \code{rownames(se)}. If coloring
+by a feature, a row statistics table is openend in addition to the
+reduced dimension panels, from which the latter are receiving the color.}
 
 \item{...}{Additional arguments passed to \code{\link{iSEE}}.}
 
 \item{plot_width}{The grid width of linked plots (numeric vector of length
-either 1 or equal to \code{length(includeNames)}}
+either 1 or equal to \code{length(includeNames)}). The total width of
+the window is 12, so \code{plot_width = 4} for example will show three
+panels per row. If \code{plot_width = NULL} (the default), a value will be
+estimated depending on the number of reduced dimension panels.}
 }
 \value{
 A Shiny app object is returned.
@@ -50,10 +55,12 @@ sce <- runUMAP(sce)
 reducedDimNames(sce)
 
 # launch the app ----
+# ... coloring by a column data variable
 app <- modeReducedDim(sce, colorBy = "Primary.Type")
 if (interactive()) {
   shiny::runApp(app, port=1234)
 }
+# ... coloring by a feature
 app <- modeReducedDim(sce, colorBy = "Scnn1a")
 if (interactive()) {
   shiny::runApp(app, port=1234)
