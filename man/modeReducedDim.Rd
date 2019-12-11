@@ -21,8 +21,10 @@ to display as individual panels. The default uses all available in
 
 \item{colorBy}{Character scalar controling coloring of cells. Must match either
 to one of \code{colnames(colData(se))} or \code{rownames(se)}. If coloring
-by a feature, a row statistics table is openend in addition to the
-reduced dimension panels, from which the latter are receiving the color.}
+by a colData column, a column data plot is opened in addition to the
+reduced dimension panels. If coloring by a feature, a row statistics table
+is openend in addition to the reduced dimension panels, from which the
+latter are receiving the color.}
 
 \item{...}{Additional arguments passed to \code{\link{iSEE}}.}
 

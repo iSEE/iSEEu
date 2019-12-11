@@ -36,8 +36,12 @@ test_that("modeReducedDim works", {
   expect_equal(app1, app2)
 
   # remark: use shinyTest instead
+  envapp1 <- environment(get("server", envir = environment(app1$serverFuncSource)))
+  envapp2 <- environment(get("server", envir = environment(app2$serverFuncSource)))
   envapp3 <- environment(get("server", envir = environment(app3$serverFuncSource)))
   envapp4 <- environment(get("server", envir = environment(app4$serverFuncSource)))
-  expect_identical(nrow(get("initialPanels", envir = envapp3)), 2L)
+  expect_identical(nrow(get("initialPanels", envir = envapp1)), 2L)
+  expect_identical(nrow(get("initialPanels", envir = envapp2)), 2L)
+  expect_identical(nrow(get("initialPanels", envir = envapp3)), 3L)
   expect_identical(nrow(get("initialPanels", envir = envapp4)), 3L)
 })

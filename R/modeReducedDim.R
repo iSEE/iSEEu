@@ -11,8 +11,10 @@
 #'   \code{reducedDimNames(se)}.
 #' @param colorBy Character scalar controling coloring of cells. Must match either
 #'   to one of \code{colnames(colData(se))} or \code{rownames(se)}. If coloring
-#'   by a feature, a row statistics table is openend in addition to the
-#'   reduced dimension panels, from which the latter are receiving the color.
+#'   by a colData column, a column data plot is opened in addition to the
+#'   reduced dimension panels. If coloring by a feature, a row statistics table
+#'   is openend in addition to the reduced dimension panels, from which the
+#'   latter are receiving the color.
 #' @param ... Additional arguments passed to \code{\link{iSEE}}.
 #' @param plot_width The grid width of linked plots (numeric vector of length
 #'   either 1 or equal to \code{length(includeNames)}). The total width of
@@ -79,7 +81,7 @@ modeReducedDim <- function(
   if (is.null(plot_width)) {
     nr <- floor(sqrt(n))
     nc <- ceiling(n / nr)
-    plot_width <- 12 / nc
+    plot_width <- 12 / max(nc, 3)
   }
 
   # initial panels to show
@@ -95,23 +97,36 @@ modeReducedDim <- function(
   redDimPlotArgs[['XAxis']] <- rep(1L, n)
   redDimPlotArgs[['YAxis']] <- rep(2L, n)
 
-  rowStatTableArgs <- NULL
+  rowStatTableArgs <- colDataPlotArgs <- NULL
 
   # add color
   if (!is.null(colorBy)) {
     if (colorBy %in% colnames(colData(se))) {
+      # coloring of reduced dimension panels
       redDimPlotArgs[['ColorBy']] <- rep("Column data", n)
-      redDimPlotArgs[['ColorByColData']] <- rep(colorBy, n)
+      redDimPlotArgs[['ColorByColData']] <- rep(colorBy, n) # TODO: receive color from "Column data plot 1"
+
+      # additional column data plot
+      colDataPlotArgs <- new('DataFrame', nrows = maxOtherPanels,
+                             rownames = sprintf('colDataPlot%i', seq_len(maxOtherPanels)))
+      colDataPlotArgs[['YAxis']] <- rep(colorBy, maxOtherPanels)
+      colDataPlotArgs[['XAxis']] <- rep("None", maxOtherPanels)
+      colDataPlotArgs[['ColorBy']] <- rep("Column data", maxOtherPanels)
+      colDataPlotArgs[['ColorByColData']] <- rep(colorBy, maxOtherPanels)
+      initialPanels <- rbind(initialPanels,
+                             DataFrame(Name = "Column data plot 1",
+                                       Width = plot_width[1]))
+
     } else {
+      # coloring of reduced dimension panels
       redDimPlotArgs[['ColorBy']] <- rep("Feature name", n)
       redDimPlotArgs[['ColorByRowTable']] <- rep("Row statistics table 1", n)
 
+      # additional row statistic table
       rowStatTableArgs <- new('DataFrame', nrows = maxOtherPanels,
                               rownames = sprintf('rowStatTable%i', seq_len(maxOtherPanels)))
       rowStatTableArgs[['Selected']] <- rep(match(colorBy, rownames(se)), maxOtherPanels)
       rowStatTableArgs[['Search']] <- rep(colorBy, maxOtherPanels)
-
-
       initialPanels <- rbind(initialPanels,
                              DataFrame(Name = "Row statistics table 1",
                                        Width = plot_width[1]))
@@ -121,7 +136,7 @@ modeReducedDim <- function(
   # Preconfigure an app
   app <- iSEE(
     se = se,
-    redDimArgs = redDimPlotArgs, colDataArgs = NULL, featAssayArgs = NULL,
+    redDimArgs = redDimPlotArgs, colDataArgs = colDataPlotArgs, featAssayArgs = NULL,
     rowStatArgs = rowStatTableArgs, rowDataArgs = NULL, sampAssayArgs = NULL,
     colStatArgs = NULL, customDataArgs = NULL, customStatArgs = NULL,
     heatMapArgs = NULL,
