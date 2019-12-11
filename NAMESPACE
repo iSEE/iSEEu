@@ -2,7 +2,11 @@
 
 export(modeEmpty)
 export(modeGating)
+export(modeReducedDim)
 importFrom(S4Vectors,DataFrame)
+importFrom(SingleCellExperiment,colData)
+importFrom(SingleCellExperiment,reducedDimNames)
 importFrom(iSEE,featAssayPlotDefaults)
 importFrom(iSEE,iSEE)
+importFrom(methods,is)
 importFrom(shiny,runApp)
