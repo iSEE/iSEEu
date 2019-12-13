@@ -25,10 +25,6 @@ setClass("__ENCODED__", contains="__PARENT__")
 #' sce <- mockSCE()
 #' sce <- logNormCounts(sce)
 #'
-#' # Spits out a NULL and a warning if no reducedDims are available.
-#' sce0 <- .cacheCommonInfo(x, sce)
-#' .refineParameters(x, sce0)
-#'
 #' # Replaces the default with something sensible.
 #' sce <- runPCA(sce)
 #' sce0 <- .cacheCommonInfo(x, sce)
@@ -54,7 +50,6 @@ setMethod("initialize", "__ENCODED__", function(.Object, ...) {
 })
 
 #' @export
-#' @importClassesFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom methods callNextMethod
 setMethod(".cacheCommonInfo", "__ENCODED__", function(x, se) {
     callNextMethod()
