@@ -32,7 +32,7 @@ local({
           warning('The parent class name is empty!', call. = FALSE)
         )
 
-        iSEEu:::new_panel_file(encoded, decoded, parentclass)
+        iSEEu::new_panel_file(encoded, decoded, parentclass)
         shiny::stopApp()
       })
 
