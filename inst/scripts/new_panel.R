@@ -1,3 +1,4 @@
+# Adapted from https://github.com/rstudio/blogdown/blob/master/inst/scripts/new_post.R
 local({
   txt_input = function(..., width = '100%') shiny::textInput(..., width = width)
   sel_input = function(...) shiny::selectizeInput(
