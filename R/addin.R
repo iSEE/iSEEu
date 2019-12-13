@@ -1,7 +1,25 @@
+#' New iSEE panel class addin.
+#'
+#' Runs the addin miniUI to create a new iSEE panel class.
+#'
+#' @return `NULL`, invisibly.
+#'
+#' @author Kevin Rue-Albrecht
+#'
+#' @rdname INTERNAL_new_panel_addin
 new_panel_addin = function() {
   sys.source(system.file(package = 'iSEEu', 'scripts', 'new_panel.R'))
 }
 
+#' List available parent classes for new iSEE panel classes
+#'
+#' Collects the list of classes - both virtual and concrete - defined in either [iSEE::iSEE-pkg] or `iSEEu`, and that extend the [iSEE::Panel-class].
+#'
+#' @return A character vector
+#'
+#' @author Kevin Rue-Albrecht
+#'
+#' @rdname INTERNAL_collect_parent_classes
 #' @importFrom methods extends getClasses
 collect_parent_classes <- function() {
 	x <- unique(c(getClasses("package:iSEE"), getClasses("package:iSEEu")))
