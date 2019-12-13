@@ -4,7 +4,7 @@ new_panel_addin = function() {
 
 #' @importFrom methods extends getClasses
 collect_parents <- function() {
-	x <- getClasses("package:iSEE")
+	x <- unique(c(getClasses("package:iSEE"), getClasses("package:iSEEu")))
 	is_panel <- function(Class) {
 		extends(Class, "Panel")
 	}
