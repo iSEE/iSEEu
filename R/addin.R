@@ -15,7 +15,7 @@ new_panel_addin = function() {
 #'
 #' Collects the list of classes - both virtual and concrete - defined in either [iSEE::iSEE-pkg] or `iSEEu`, and that extend the [iSEE::Panel-class].
 #'
-#' @return A character vector
+#' @return A character vector of S4 class names.
 #'
 #' @author Kevin Rue-Albrecht
 #'
@@ -30,7 +30,7 @@ collect_parent_classes <- function() {
 	x[keep]
 }
 
-#' Create a new panel file
+#' Create a new panel class file
 #'
 #' Opens a template R script in the editor, to define a new iSEE panel class .
 #'
@@ -45,7 +45,9 @@ collect_parent_classes <- function() {
 #' @seealso \linkS4class{Panel}
 #'
 #' @examples
-#' new_panel_file("NewRedDimPlot", "New reduced dimension plot", "RedDimPlot")
+#' if (Sys.getenv("RSTUDIO") == "1") {
+#'     new_panel_file("NewRedDimPlot", "New reduced dimension plot", "RedDimPlot")
+#' }
 new_panel_file <- function(encoded, decoded, parent="Panel") {
   template_file <- system.file(package = "iSEEu", "templates", "NewPanel.R")
   template_content <- scan(template_file, "character", sep = "\n", quiet = TRUE, blank.lines.skip = FALSE)

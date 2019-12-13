@@ -2,7 +2,7 @@
 % Please edit documentation in R/addin.R
 \name{new_panel_file}
 \alias{new_panel_file}
-\title{Create a new panel file}
+\title{Create a new panel class file}
 \usage{
 new_panel_file(encoded, decoded, parent = "Panel")
 }
@@ -17,7 +17,9 @@ new_panel_file(encoded, decoded, parent = "Panel")
 Opens a template R script in the editor, to define a new iSEE panel class .
 }
 \examples{
-new_panel_file("NewRedDimPlot", "New reduced dimension plot", "RedDimPlot")
+if (Sys.getenv("RSTUDIO") == "1") {
+    new_panel_file("NewRedDimPlot", "New reduced dimension plot", "RedDimPlot")
+}
 }
 \seealso{
 \linkS4class{Panel}
