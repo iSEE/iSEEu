@@ -1,9 +1,9 @@
 new_panel_addin = function() {
-  sys.source(system.file(package = 'iSEE', 'scripts', 'new_panel.R'))
+  sys.source(system.file(package = 'iSEEu', 'scripts', 'new_panel.R'))
 }
 
 #' @importFrom methods extends getClasses
-collect_parents <- function() {
+collect_parent_classes <- function() {
 	x <- unique(c(getClasses("package:iSEE"), getClasses("package:iSEEu")))
 	is_panel <- function(Class) {
 		extends(Class, "Panel")
@@ -29,8 +29,8 @@ collect_parents <- function() {
 #' @examples
 #' new_panel_file("NewRedDimPlot", "New reduced dimension plot", "RedDimPlot")
 new_panel_file <- function(encoded, decoded, parent="Panel") {
-  template_file <- system.file(package = "iSEE", "templates", "NewPanel.R")
-  template_content <- scan(template_file, "character", sep = "\n", quiet = TRUE)
+  template_file <- system.file(package = "iSEEu", "templates", "NewPanel.R")
+  template_content <- scan(template_file, "character", sep = "\n", quiet = TRUE, blank.lines.skip = FALSE)
   template_content <- paste0(template_content, collapse = "\n")
   template_content <- gsub("__ENCODED__", encoded, template_content, fixed = TRUE)
   template_content <- gsub("__DECODED__", decoded, template_content, fixed = TRUE)

@@ -3,7 +3,7 @@ local({
   sel_input = function(...) shiny::selectizeInput(
     ..., width = '98%', multiple = FALSE, options = list(create = TRUE)
   )
-  parent_choices = sort(iSEE:::collect_parents())
+  parent_choices = sort(iSEE:::collect_parent_classes())
   shiny::runGadget(
     miniUI::miniPage(miniUI::miniContentPanel(
       txt_input('encoded', 'Class encoded name', placeholder = 'MyNewPlot'),
