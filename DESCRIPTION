@@ -31,6 +31,7 @@ Encoding: UTF-8
 Depends: 
     iSEE
 Imports:
+    methods,
     S4Vectors,
     shiny
 Suggests: 
