@@ -2,7 +2,10 @@
 
 export(modeEmpty)
 export(modeGating)
+export(new_panel_file)
 importFrom(S4Vectors,DataFrame)
 importFrom(iSEE,featAssayPlotDefaults)
 importFrom(iSEE,iSEE)
+importFrom(methods,extends)
+importFrom(methods,getClasses)
 importFrom(shiny,runApp)
