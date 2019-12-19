@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-Charlotte Soneson \email{charlotte.soneson@uzh.ch}
+Charlotte Soneson \email{charlottesoneson@gmail.com}
 
 Federico Marini \email{marinif@uni-mainz.de}
 
