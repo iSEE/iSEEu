@@ -2,7 +2,7 @@
 #'
 #' `iSEEu` is a package that provides modes and panels for `iSEE`, allowing easy configuration of `iSEE` applications.
 #'
-#' @author Charlotte Soneson \email{charlotte.soneson@@uzh.ch}
+#' @author Charlotte Soneson \email{charlottesoneson@@gmail.com}
 #' @author Federico Marini \email{marinif@@uni-mainz.de}
 #' @author Kevin Rue-Albrecht \email{kevin.rue-albrecht@@kennedy.ox.ac.uk}
 #' @author Aaron Lun \email{infinite.monkeys.with.keyboards@@gmail.com}
