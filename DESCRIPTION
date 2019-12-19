@@ -42,6 +42,6 @@ Suggests:
     htmltools
 URL: https://github.com/csoneson/iSEEu
 BugReports: https://github.com/csoneson/iSEEu/issues
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
