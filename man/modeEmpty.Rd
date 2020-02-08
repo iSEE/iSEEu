@@ -13,8 +13,7 @@ modeEmpty(...)
 A Shiny app object is returned.
 }
 \description{
-This mode launches an app that does not display any panel,
-irrespective of which panels are available.
+This mode launches an app that does not display any panel.
 }
 \details{
 This mode presents the advantage to launch an interface in a minimal amount of time,
@@ -23,9 +22,12 @@ Users can then use the \code{"Organize panels"} widget to select panels to displ
 }
 \examples{
 example("SingleCellExperiment")
+rownames(sce) <- paste0("G", 1:200)
+colnames(sce) <- paste0("C", 1:100)
 
 app <- modeEmpty(sce)
 if (interactive()) {
   shiny::runApp(app, port=1234)
 }
+
 }
