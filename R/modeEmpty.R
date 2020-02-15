@@ -11,8 +11,8 @@
 #' @return A Shiny app object is returned.
 #'
 #' @export
-#' @importFrom iSEE iSEE RedDimPlot ColDataPlot ColStatTable ComplexHeatmapPlot
-#'   FeatAssayPlot RowDataPlot RowStatTable SampAssayPlot
+#' @importFrom iSEE iSEE ReducedDimPlot ColumnDataPlot ColumnDataTable ComplexHeatmapPlot
+#'   FeatureAssayPlot RowDataPlot RowDataTable SampleAssayPlot
 #' @importFrom shiny runApp
 #'
 #' @examples
@@ -28,10 +28,10 @@
 modeEmpty <- function(...) {
   arguments <- list(...)
   if (!("extra" %in% names(arguments))) {
-    arguments$extra <- list(iSEE::RedDimPlot(), iSEE::ColDataPlot(),
-                            iSEE::ColStatTable(), iSEE::ComplexHeatmapPlot(),
-                            iSEE::FeatAssayPlot(), iSEE::RowDataPlot(),
-                            iSEE::RowStatTable(), iSEE::SampAssayPlot())
+    arguments$extra <- list(iSEE::ReducedDimPlot(), iSEE::ColumnDataPlot(),
+                            iSEE::ColumnDataTable(), iSEE::ComplexHeatmapPlot(),
+                            iSEE::FeatureAssayPlot(), iSEE::RowDataPlot(),
+                            iSEE::RowDataTable(), iSEE::SampleAssayPlot())
   }
   if (!("initial" %in% names(arguments))) {
     arguments$initial <- list()

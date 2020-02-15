@@ -14,7 +14,7 @@ modeGating(se, features, plotAssay = NA_character_, ..., plotWidth = 4)
 that define the features on the axes of the linked plots.
 Plots are serially linked from the first row to the last.}
 
-\item{plotAssay}{The assay (one of \link{assayNames(se)}) to use for the plots
+\item{plotAssay}{The assay (one of assayNames(se)) to use for the plots
 (character vector of length either 1 or equal to \code{nrow(features)}).}
 
 \item{...}{Additional arguments passed to \code{\link[=iSEE]{iSEE()}}.}

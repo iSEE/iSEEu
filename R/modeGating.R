@@ -11,7 +11,7 @@
 #' @param features `data.frame` with columns named `x` and `y`
 #' that define the features on the axes of the linked plots.
 #' Plots are serially linked from the first row to the last.
-#' @param plotAssay The assay (one of [assayNames(se)]) to use for the plots
+#' @param plotAssay The assay (one of assayNames(se)) to use for the plots
 #'   (character vector of length either 1 or equal to `nrow(features)`).
 #' @param ... Additional arguments passed to [iSEE()].
 #' @param plotWidth The grid width of linked plots (numeric vector of
@@ -20,8 +20,8 @@
 #' @return A Shiny app object is returned.
 #'
 #' @export
-#' @importFrom iSEE iSEE RedDimPlot ColDataPlot ColStatTable ComplexHeatmapPlot
-#'   FeatAssayPlot RowDataPlot RowStatTable SampAssayPlot
+#' @importFrom iSEE iSEE ReducedDimPlot ColumnDataPlot ColumnDataTable ComplexHeatmapPlot
+#'   FeatureAssayPlot RowDataPlot RowDataTable SampleAssayPlot
 #' @importFrom shiny runApp
 #'
 #' @examples
@@ -56,7 +56,7 @@
 #'
 modeGating <- function(se, features, plotAssay = NA_character_,
                        ..., plotWidth = 4) {
-  # This mode is meaningless with fewer than two FeatAssayPlots
+  # This mode is meaningless with fewer than two FeatureAssayPlots
   stopifnot(nrow(features) > 1)
   stopifnot(all(c("x", "y") %in% colnames(features)))
   stopifnot(length(plotWidth) %in% c(1, nrow(features)))
@@ -70,10 +70,10 @@ modeGating <- function(se, features, plotAssay = NA_character_,
 
   arguments <- list(...)
   if (!("extra" %in% names(arguments))) {
-    arguments$extra <- list(iSEE::RedDimPlot(), iSEE::ColDataPlot(),
-                            iSEE::ColStatTable(), iSEE::ComplexHeatmapPlot(),
-                            iSEE::FeatAssayPlot(), iSEE::RowDataPlot(),
-                            iSEE::RowStatTable(), iSEE::SampAssayPlot())
+    arguments$extra <- list(iSEE::ReducedDimPlot(), iSEE::ColumnDataPlot(),
+                            iSEE::ColumnDataTable(), iSEE::ComplexHeatmapPlot(),
+                            iSEE::FeatureAssayPlot(), iSEE::RowDataPlot(),
+                            iSEE::RowDataTable(), iSEE::SampleAssayPlot())
   }
   if ("initial" %in% names(arguments)) {
     warning("Replacing specified 'initial' argument. Use iSEE::iSEE() directly ",
@@ -83,13 +83,13 @@ modeGating <- function(se, features, plotAssay = NA_character_,
   arguments$se <- se
 
   initial <- lapply(seq_len(nrow(features)), function(i) {
-    iSEE::FeatAssayPlot(
+    iSEE::FeatureAssayPlot(
       Assay = plotAssay[i],
       XAxis = "Feature name",
       XAxisFeatName = features[i, "x"],
       YAxisFeatName = features[i, "y"],
       SelectColSource = ifelse(i == 1, "---",
-                               paste0("FeatAssayPlot", i - 1)),
+                               paste0("FeatureAssayPlot", i - 1)),
       SelectEffect = ifelse(i != nrow(features), "Restrict",
                             "Color"),
       PanelWidth = as.integer(plotWidth[i])
