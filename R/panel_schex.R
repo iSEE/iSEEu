@@ -1,3 +1,5 @@
+# TODO: brushing on this panel crashes the app (plot.data is not set)
+
 #' @export
 setClass("schexPlot", contains="ReducedDimPlot")
 
@@ -18,6 +20,13 @@ setMethod(".generateDotPlotData", "schexPlot", function(x, envir){
     data_cmds[["make_hexbin"]] <- sprintf("se.schex <- schex::make_hexbin(se, 80, dimension_reduction = %s)",
         deparse(x[[iSEE:::.redDimType]]))
 
+    color_choice <- x[[iSEE:::.colorByField]]
+    if (color_choice == iSEE:::.colorBySampNameTitle) {
+        data_cmds[["Selected_sample"]] <- sprintf(
+            "se.schex[['Selected_sample']] <- factor(colnames(se.schex) %%in%% %s, c(FALSE, TRUE))",
+            deparse(x[[iSEE:::.colorBySampName]]))
+    }
+
     gene_selected_y <- x[[iSEE:::.colorByFeatName]]
     plot_title <- gene_selected_y
 
@@ -30,16 +39,19 @@ setMethod(".generateDotPlotData", "schexPlot", function(x, envir){
 setMethod(".generateDotPlot", "schexPlot", function(x, labels, envir) {
     plot_cmds <- list()
 
-    # TODO: iSEE:::.colorBySampNameTitle should not be an option
+    color_choice <- x[[iSEE:::.colorByField]]
+
     # TODO: action='mean' does not support discrete factor or character values
-    if (identical(x[[iSEE:::.colorByField]], iSEE:::.colorByFeatNameTitle)) {
+    if (color_choice == iSEE:::.colorByFeatNameTitle) {
         plot_hexbin_cmd <- sprintf("schex::plot_hexbin_feature(se.schex, feature=%s, action='mean', type=%s) +",
             deparse(x[[iSEE:::.colorByFeatName]]),
             deparse(x[[iSEE:::.colorByFeatNameAssay]])
             )
-    } else if (identical(x[[iSEE:::.colorByField]], iSEE:::.colorByColDataTitle)) {
+    } else if (color_choice == iSEE:::.colorByColDataTitle) {
         plot_hexbin_cmd <- sprintf("schex::plot_hexbin_meta(se.schex, col=%s, action='mean') +",
             deparse(x[[iSEE:::.colorByColData]]))
+    } else if (color_choice == iSEE:::.colorBySampNameTitle) {
+        plot_hexbin_cmd <- sprintf("schex::plot_hexbin_meta(se.schex, col='Selected_sample', action='prop') +")
     } else { # iSEE:::.colorByNothingTitle
         plot_hexbin_cmd <- sprintf("schex::plot_hexbin_density(se.schex, title = NULL, xlab = NULL, ylab = NULL) +")
     }
