@@ -41,7 +41,7 @@ setMethod(".generateDotPlot", "schexPlot", function(x, labels, envir) {
         plot_hexbin_cmd <- sprintf("schex::plot_hexbin_meta(se.schex, col=%s, action='mean') +",
             deparse(x[[iSEE:::.colorByColData]]))
     } else { # iSEE:::.colorByNothingTitle
-        plot_hexbin_cmd <- sprintf("plot_hexbin_density(se.schex, title = NULL, xlab = NULL, ylab = NULL) +")
+        plot_hexbin_cmd <- sprintf("schex::plot_hexbin_density(se.schex, title = NULL, xlab = NULL, ylab = NULL) +")
     }
 
     plot_cmds[["ggplot"]] <- plot_hexbin_cmd
