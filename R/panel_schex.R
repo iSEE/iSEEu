@@ -5,3 +5,6 @@ setClass("schexPlot", contains="ReducedDimPlot")
 schexPlot <- function(...) {
     new("schexPlot", ...)
 }
+
+#' @export
+setMethod(".fullName", "schexPlot", function(x) "schex plot")
