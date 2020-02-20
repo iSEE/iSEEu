@@ -86,12 +86,12 @@ modeGating <- function(se, features, plotAssay = NA_character_,
     iSEE::FeatureAssayPlot(
       Assay = plotAssay[i],
       XAxis = "Feature name",
-      XAxisFeatName = features[i, "x"],
-      YAxisFeatName = features[i, "y"],
-      SelectColSource = ifelse(i == 1, "---",
-                               paste0("FeatureAssayPlot", i - 1)),
-      SelectEffect = ifelse(i != nrow(features), "Restrict",
-                            "Color"),
+      XAxisFeatureName = features[i, "x"],
+      YAxisFeatureName = features[i, "y"],
+      ColumnSelectionSource = ifelse(i == 1, "---",
+                                     paste0("FeatureAssayPlot", i - 1)),
+      SelectionEffect = ifelse(i != nrow(features), "Restrict",
+                               "Color"),
       PanelWidth = as.integer(plotWidth[i])
     )
   })
