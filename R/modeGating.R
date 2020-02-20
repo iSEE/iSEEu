@@ -68,20 +68,6 @@ modeGating <- function(se, features, plotAssay = NA_character_,
     plotAssay <- rep(plotAssay, nrow(features))
   }
 
-  arguments <- list(...)
-  if (!("extra" %in% names(arguments))) {
-    arguments$extra <- list(iSEE::ReducedDimensionPlot(), iSEE::ColumnDataPlot(),
-                            iSEE::ColumnDataTable(), iSEE::ComplexHeatmapPlot(),
-                            iSEE::FeatureAssayPlot(), iSEE::RowDataPlot(),
-                            iSEE::RowDataTable(), iSEE::SampleAssayPlot())
-  }
-  if ("initial" %in% names(arguments)) {
-    warning("Replacing specified 'initial' argument. Use iSEE::iSEE() directly ",
-            "for more precise control of the starting configuration.")
-    arguments$initial <- NULL
-  }
-  arguments$se <- se
-
   initial <- lapply(seq_len(nrow(features)), function(i) {
     iSEE::FeatureAssayPlot(
       Assay = plotAssay[i],
@@ -95,9 +81,8 @@ modeGating <- function(se, features, plotAssay = NA_character_,
       PanelWidth = as.integer(plotWidth[i])
     )
   })
-  arguments$initial <- initial
 
-  app <- do.call(iSEE::iSEE, arguments)
+  app <- iSEE::iSEE(se = se, initial = initial, ...)
 
   return(app)
 }
