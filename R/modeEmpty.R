@@ -26,19 +26,14 @@
 #' }
 #'
 modeEmpty <- function(...) {
-  arguments <- list(...)
-  if (!("extra" %in% names(arguments))) {
-    arguments$extra <- list(iSEE::ReducedDimensionPlot(), iSEE::ColumnDataPlot(),
-                            iSEE::ColumnDataTable(), iSEE::ComplexHeatmapPlot(),
-                            iSEE::FeatureAssayPlot(), iSEE::RowDataPlot(),
-                            iSEE::RowDataTable(), iSEE::SampleAssayPlot())
-  }
-  if (!("initial" %in% names(arguments))) {
-    arguments$initial <- list()
-  }
+  extra <- list(iSEE::ReducedDimensionPlot(), iSEE::ColumnDataPlot(),
+                iSEE::ColumnDataTable(), iSEE::ComplexHeatmapPlot(),
+                iSEE::FeatureAssayPlot(), iSEE::RowDataPlot(),
+                iSEE::RowDataTable(), iSEE::SampleAssayPlot())
+  initial <- list()
 
   # Preconfigure an app
-  app <- do.call(iSEE::iSEE, arguments)
+  app <- iSEE::iSEE(initial = initial, extra = extra, ...)
 
   return(app)
 }
