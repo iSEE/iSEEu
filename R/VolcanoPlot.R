@@ -37,26 +37,26 @@
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.acceptablePValueFields}}.
-#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptableLogFCFields}}.
+#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.acceptableLogFCFields}}.
+#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptableLogPValueFields}}.
 #' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
-#' otherwise it will call the \linkS4class{ColumnDataPlot} method.
+#' otherwise it will call the \linkS4class{RowDataPlot} method.
 #' }
 #'
 #' For monitoring reactive expressions:
 #' \itemize{
-#' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{ColumnDataPlot} method.
+#' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{RowDataPlot} method.
 #' }
 #'
 #' For defining the panel name:
 #' \itemize{
-#' \item \code{\link{.fullName}(x)} will return \code{"Column data plot"}.
+#' \item \code{\link{.fullName}(x)} will return \code{"Volcano plot"}.
 #' }
 #'
 #' For creating the plot:
 #' \itemize{
 #' \item \code{\link{.generateDotPlotData}(x, envir)} will create a data.frame of row metadata variables in \code{envir}.
-#' This should contain negative log-transformed p-values on the y-axis and log-fold changes on the y-axis,
+#' This should contain negative log-transformed p-values on the y-axis and log-fold changes on the x-axis,
 #' in addition to an extra field specifying whether or not the feature was considered to be significantly up or down.
 #' The method will return the commands required to do so as well as a list of labels.
 #' \item \code{\link{.prioritizeDotPlotData}(x, envir)} will create variables in \code{envir} marking the priority of points.
@@ -164,7 +164,7 @@ setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
             numericInput(input_FUN("LogFCValueThreshold"), label="Log-FC threshold:", 
                 value=x[["LogFCThreshold"]], min=0, max=NA, step=0.5),
-            selectInput(input_FUN("PValueCorrection"), label="Correction method;",
+            selectInput(input_FUN("PValueCorrection"), label="Correction method:",
                 selected=x[["PValueCorrection"]], choices=p.adjust.methods)
         )
     )
