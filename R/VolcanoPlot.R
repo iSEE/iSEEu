@@ -28,6 +28,10 @@
 #'
 #' For setting up data values:
 #' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names} and \code{lfc.rowData.names}. 
+#' Each of these is a character vector of permissible names for p-values and log-fold changes, respectively;
+#' see \code{?\link{.acceptablePValueFields}} for details.
+#' This will also call the equivalent \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
@@ -81,6 +85,22 @@
 #' .colorByNoneDotPlotField,VolcanoPlot-method
 #' .colorByNoneDotPlotScale,VolcanoPlot-method
 #'
+#' @examples
+#' # Making up some results:
+#' se <- SummarizedExperiment(matrix(rnorm(10000), 1000, 10))
+#' rownames(se) <- paste0("GENE_", seq_len(nrow(se)))
+#' rowData(se)$PValue <- runif(nrow(se))
+#' rowData(se)$LogFC <- rnorm(nrow(se))
+#' rowData(se)$AveExpr <- rnorm(nrow(se))
+#'
+#' if (interactive()) {
+#'     iSEE(se, initial=list(VolcanoPlot())
+#' }
+#' 
+#' @author Aaron Lun
+#'
+#' @seealso 
+#' \link{RowDataPlot}, for the base class.
 #' @name VolcanoPlot-class
 NULL
 
@@ -90,6 +110,9 @@ setClass("VolcanoPlot", contains="RowDataPlot",
 
 #' @export
 setMethod(".fullName", "VolcanoPlot", function(x) "Volcano plot")
+
+#' @export
+setMethod(".panelColor", "VolcanoPlot", function(x) "#DEAE10")
 
 #' @export
 setMethod("initialize", "VolcanoPlot", function(.Object, ...) {
@@ -140,15 +163,26 @@ setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
 })
 
 #' @export
+setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
+    se <- callNextMethod()
+
+    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+    pfields <- intersect(all.cont, .acceptablePValueFields())
+    lfields <- intersect(all.cont, .acceptableLogFCFields())
+
+    .setCachedCommonInfo(se, "VolcanoPlot", 
+        pval.rowData.names=pfields,
+        lfc.rowData.names=lfields)
+})
+
+#' @export
 setMethod(".allowableXAxisChoices", "VolcanoPlot", function(x, se) {
-    everything <- callNextMethod()
-    intersect(everything, .acceptableLogFCFields())
+    .getCachedCommonInfo(se, "VolcanoPlot")$lfc.rowData.names
 })
 
 #' @export
 setMethod(".allowableYAxisChoices", "VolcanoPlot", function(x, se) {
-    everything <- callNextMethod()
-    intersect(everything, .acceptablePValueFields())
+    .getCachedCommonInfo(se, "VolcanoPlot")$pval.rowData.names
 })
 
 #' @export
@@ -172,8 +206,7 @@ setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
 
 #' @export
 setMethod(".hideInterface", "VolcanoPlot", function(x, field) {
-    if (field == "XAxis") TRUE
-    callNextMethod()       
+    if (field == "XAxis") TRUE else callNextMethod()       
 })
 
 #' @export

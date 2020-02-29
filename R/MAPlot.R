@@ -30,6 +30,10 @@
 #'
 #' For setting up data values:
 #' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names}, \code{ave.rowData.names} and \code{lfc.rowData.names}. 
+#' Each of these is a character vector of permissible names for p-values, average abundances and log-fold changes, respectively;
+#' see \code{?\link{.acceptablePValueFields}} for details.
+#' This will also call the equivalent \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
@@ -83,6 +87,23 @@
 #' .colorByNoneDotPlotField,MAPlot-method
 #' .colorByNoneDotPlotScale,MAPlot-method
 #'
+#' @examples
+#' # Making up some results:
+#' se <- SummarizedExperiment(matrix(rnorm(10000), 1000, 10))
+#' rownames(se) <- paste0("GENE_", seq_len(nrow(se)))
+#' rowData(se)$PValue <- runif(nrow(se))
+#' rowData(se)$LogFC <- rnorm(nrow(se))
+#' rowData(se)$AveExpr <- rnorm(nrow(se))
+#'
+#' if (interactive()) {
+#'     iSEE(se, initial=list(MAPlot()))
+#' }
+#'
+#' @author Aaron Lun
+#'
+#' @seealso 
+#' \link{RowDataPlot}, for the base class.
+#'
 #' @name MAPlot-class
 NULL
 
@@ -92,6 +113,9 @@ setClass("MAPlot", contains="RowDataPlot",
 
 #' @export
 setMethod(".fullName", "MAPlot", function(x) "MA plot")
+
+#' @export
+setMethod(".panelColor", "MAPlot", function(x) "#666600")
 
 #' @export
 setMethod("initialize", "MAPlot", function(.Object, ...) {
@@ -145,7 +169,7 @@ setMethod(".refineParameters", "MAPlot", function(x, se) {
 
     x[["XAxis"]] <- "Row data"
 
-    pallowed <- .find_ma_pvalue_fields(se)
+    pallowed <- .getCachedCommonInfo(se, "MAPlot")$pval.rowData.names
     if (length(pallowed)==0L) {
         warning(sprintf("no valid 'PValueField' detected for '%s'", class(x)[1]))
         return(NULL)
@@ -159,27 +183,29 @@ setMethod(".refineParameters", "MAPlot", function(x, se) {
     x
 })
 
-# Could also implement this via .cachedCommonInfo,
-# but it's not a heavy operation so whatever.
-# Either way, though, we do need to expose the
-# '.get_common_info' getter and setter.
-.find_ma_pvalue_fields <- function(se) {
-    intersect(
-        iSEE:::.get_common_info(se, "RowDotPlot")$continuous.rowData.names,
-        .acceptablePValueFields()
-    )
-}
+#' @export
+setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
+    se <- callNextMethod()
+
+    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+    pfields <- intersect(all.cont, .acceptablePValueFields())
+    afields <- intersect(all.cont, .acceptableAveAbFields())
+    lfields <- intersect(all.cont, .acceptableLogFCFields())
+
+    .setCachedCommonInfo(se, "MAPlot", 
+        pval.rowData.names=pfields,
+        ave.rowData.names=afields,
+        lfc.rowData.names=lfields)
+})
 
 #' @export
 setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) {
-    everything <- callNextMethod()
-    intersect(everything, .acceptableAveAbFields())
+    .getCachedCommonInfo(se, "MAPlot")$ave.rowData.names
 })
 
 #' @export
 setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) {
-    everything <- callNextMethod()
-    intersect(everything, .acceptableLogFCFields())
+    .getCachedCommonInfo(se, "MAPlot")$lfc.rowData.names
 })
 
 #' @export
@@ -191,8 +217,10 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
 
     c(callNextMethod(),
         list(
-            selectInput(input_FUN("PValueField"), label="P-value field:",
-                selected=x[["PValueField"]], choices=.find_ma_pvalue_fields(se)),
+            selectInput(input_FUN("PValueField"), 
+                label="P-value field:",
+                selected=x[["PValueField"]], 
+                choices=.getCachedCommonInfo(se, "MAPlot")$pval.rowData.names),
             numericInput(input_FUN("PValueThreshold"), label="P-value threshold:", 
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
             numericInput(input_FUN("LogFCValueThreshold"), label="Log-FC threshold:", 
@@ -205,8 +233,7 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
 
 #' @export
 setMethod(".hideInterface", "MAPlot", function(x, field) {
-    if (field == "XAxis") TRUE
-    callNextMethod()       
+    if (field == "XAxis") TRUE else callNextMethod()       
 })
 
 #' @export
