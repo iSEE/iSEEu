@@ -9,6 +9,7 @@
 #' @name iSEEu-pkg
 #' @docType package
 #' @keywords internal
+#' @import iSEE 
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
