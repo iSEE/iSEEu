@@ -62,3 +62,29 @@ NULL
     options(iSEEu_de_acceptable=list(PValue=PValue, LogFC=LogFC, AveAb=AveAb))
     invisible(NULL)
 }
+
+#' @importFrom ggplot2 scale_color_manual
+.de_color_scale <- "scale_color_manual(values=c(down='dodgerblue', none='grey', up='salmon'), name='Outcome',
+    labels=setNames(sprintf('%s (%s)', c('Down', 'None', 'Up'), tabulate(.de_status, 3)), c('down', 'none', 'up'))) +"
+
+.define_de_priority <- function(envir) {
+    cmds <- c(
+        ".priority <- factor(plot.data$IsSig, c('none', 'down', 'sig'), ordered=TRUE);",
+        ".rescaled <- c(none=1, down=2, up=2);"
+    )
+    eval(parse(text=cmds), envir)
+    list(commands=cmds, rescaled=TRUE)
+}
+
+#' @importFrom stats p.adjust
+.define_de_status <- function(x, lfc, pval) {
+    c(
+        sprintf(
+            ".de_status <- p.adjust(%s, method=%s) <= %s & abs(%s) >= %s;",
+            pval, deparse(x[["PValueCorrection"]]), deparse(x[["PValueThreshold"]]), 
+            lfc, deparse(x[["LogFCThreshold"]])
+        ),
+        sprintf(".de_status <- .de_status * sign(%s) + 2L;", lfc),
+        "plot.data$IsSig <- c('down', 'none', 'up')[.de_status];"
+    )
+}
