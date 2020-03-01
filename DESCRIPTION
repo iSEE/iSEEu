@@ -34,7 +34,8 @@ Imports:
     S4Vectors,
     shiny,
     methods,
-    SingleCellExperiment
+    SingleCellExperiment,
+    ggplot2
 Suggests: 
     scRNAseq,
     scater,
