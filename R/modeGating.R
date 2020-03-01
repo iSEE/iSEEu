@@ -20,8 +20,7 @@
 #' @return A Shiny app object is returned.
 #'
 #' @export
-#' @importFrom iSEE iSEE ReducedDimensionPlot ColumnDataPlot ColumnDataTable ComplexHeatmapPlot
-#'   FeatureAssayPlot RowDataPlot RowDataTable SampleAssayPlot
+#' @importFrom iSEE iSEE FeatureAssayPlot
 #' @importFrom shiny runApp
 #'
 #' @examples
