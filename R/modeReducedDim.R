@@ -1,4 +1,3 @@
-
 #' App pre-configured to compare multiple reduced dimension plots
 #'
 #' This mode launches a Shiny App preconfigured with multiple linked reduced
