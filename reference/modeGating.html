@@ -37,7 +37,7 @@
 
 <meta property="og:title" content="App pre-configured to link multiple feature assay plots — modeGating" />
 <meta property="og:description" content="This mode launches a Shiny App preconfigured with multiple chain-linked
-feature expression plots is launched for interactive data exploration of the
+feature expression plots for interactive data exploration of the
 SingleCellExperiment or
 SummarizedExperiment
 object." />
@@ -126,25 +126,19 @@ object." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>App pre-configured to link multiple feature assay plots</h1>
-    <small class="dont-index">Source: <a href='https://github.com/csoneson/iSEEu/blob/master/R/modeGating.R'><code>R/modeGating.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/modeGating.R'><code>R/modeGating.R</code></a></small>
     <div class="hidden name"><code>modeGating.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>This mode launches a Shiny App preconfigured with multiple chain-linked
-feature expression plots is launched for interactive data exploration of the
+feature expression plots for interactive data exploration of the
 <a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a> or
 <a href='https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html'>SummarizedExperiment</a>
 object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modeGating</span>(
-  <span class='no'>se</span>,
-  <span class='no'>features</span>,
-  <span class='kw'>featAssayMax</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>features</span>)),
-  <span class='no'>...</span>,
-  <span class='kw'>plot_width</span> <span class='kw'>=</span> <span class='fl'>4</span>
-)</pre>
+    <pre class="usage"><span class='fu'>modeGating</span>(<span class='no'>se</span>, <span class='no'>features</span>, <span class='kw'>plotAssay</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='no'>...</span>, <span class='kw'>plotWidth</span> <span class='kw'>=</span> <span class='fl'>4</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,15 +155,16 @@ that define the features on the axes of the linked plots.
 Plots are serially linked from the first row to the last.</p></td>
     </tr>
     <tr>
-      <th>featAssayMax</th>
-      <td><p>Maximal number of feature assay plots in the app.</p></td>
+      <th>plotAssay</th>
+      <td><p>The assay (one of assayNames(se)) to use for the plots
+(character vector of length either 1 or equal to <code><a href='https://rdrr.io/r/base/nrow.html'>nrow(features)</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Additional arguments passed to <code>iSEE()</code>.</p></td>
     </tr>
     <tr>
-      <th>plot_width</th>
+      <th>plotWidth</th>
       <td><p>The grid width of linked plots (numeric vector of
 length either 1 or equal to <code><a href='https://rdrr.io/r/base/nrow.html'>nrow(features)</a></code></p></td>
     </tr>
@@ -183,7 +178,7 @@ length either 1 or equal to <code><a href='https://rdrr.io/r/base/nrow.html'>nro
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
 
 <span class='co'># Example data ----</span>
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>using temporary cache /tmp/RtmpjwBg5F/BiocFileCache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2019-12-17</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "SingleCellExperiment"
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>using temporary cache /tmp/Rtmp6fKp7b/BiocFileCache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-02-26</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "SingleCellExperiment"
 #&gt; attr(,"package")
 #&gt; [1] "SingleCellExperiment"</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='input'><span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/logNormCounts.html'>logNormCounts</a></span>(<span class='no'>sce</span>, <span class='kw'>exprs_values</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)
@@ -203,7 +198,7 @@ length either 1 or equal to <code><a href='https://rdrr.io/r/base/nrow.html'>nro
 
 <span class='co'># launch the app itself ----</span>
 
-<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeGating</span>(<span class='no'>sce</span>, <span class='kw'>features</span><span class='kw'>=</span><span class='no'>plot_features</span>, <span class='kw'>featAssayMax</span><span class='kw'>=</span><span class='fl'>6</span>)
+<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeGating</span>(<span class='no'>sce</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='no'>plot_features</span>)
 <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
   <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span>(<span class='no'>app</span>, <span class='kw'>port</span><span class='kw'>=</span><span class='fl'>1234</span>)
 }</div></pre>

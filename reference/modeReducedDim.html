@@ -124,7 +124,7 @@ SingleCellExperiment object." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>App pre-configured to compare multiple reduced dimension plots</h1>
-    <small class="dont-index">Source: <a href='https://github.com/csoneson/iSEEu/blob/master/R/modeReducedDim.R'><code>R/modeReducedDim.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/modeReducedDim.R'><code>R/modeReducedDim.R</code></a></small>
     <div class="hidden name"><code>modeReducedDim.Rd</code></div>
     </div>
 
@@ -186,7 +186,7 @@ estimated depending on the number of reduced dimension panels.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
 
 <span class='co'># Example data ----</span>
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2019-12-17</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "SingleCellExperiment"
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-02-26</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "SingleCellExperiment"
 #&gt; attr(,"package")
 #&gt; [1] "SingleCellExperiment"</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)
@@ -197,13 +197,13 @@ estimated depending on the number of reduced dimension panels.</p></td>
 <span class='fu'>reducedDimNames</span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "PCA"  "TSNE" "UMAP"</div><div class='input'>
 <span class='co'># launch the app ----</span>
 <span class='co'># ... coloring by a column data variable</span>
-<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Primary.Type"</span>)
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Primary.Type"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '*Args' and 'initialPanels' are deprecated.</span>
+#&gt; <span class='warning'>Use 'initial' and 'extra' instead.</span></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
   <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span>(<span class='no'>app</span>, <span class='kw'>port</span><span class='kw'>=</span><span class='fl'>1234</span>)
 }
 <span class='co'># ... coloring by a feature</span>
-<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Scnn1a"</span>)
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Scnn1a"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '*Args' and 'initialPanels' are deprecated.</span>
+#&gt; <span class='warning'>Use 'initial' and 'extra' instead.</span></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
   <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span>(<span class='no'>app</span>, <span class='kw'>port</span><span class='kw'>=</span><span class='fl'>1234</span>)
 }</div></pre>
   </div>
