@@ -72,7 +72,7 @@ The default user interface of iSEE consists of a set of up to eight panels, each
 The user is, however, free to change this interface interactively, by removing, adding or resizing existing panels, as well as by adding custom panels. 
 In addition to changing the interface layout interactively, the user can pre-configure the set of panels, and even their content, and provide this information to `iSEE` when launching the application.
 > 
-> In an attempt to simplify this procedure for commonly used setups, we implemented a few different `iSEE` "modes" (https://github.com/csoneson/iSEE/blob/master/R/modes.R), each of which defines a set of panels and content for the resulting application.
+> In an attempt to simplify this procedure for commonly used setups, we implemented a few different `iSEE` "modes" (https://github.com/iSEE/iSEE/blob/master/R/modes.R), each of which defines a set of panels and content for the resulting application.
 > 
 > The purpose of this "hackathon" session is to expand the set of `iSEE` modes to cover a wider range of common applications. 
 The expected outcome is a collection of new modes suitable for various types of data analyses.
@@ -91,10 +91,10 @@ Depending on the participants, we will start by introducing the `iSEE` package a
 ```{r eval=FALSE}
 BiocManager::install("iSEE", version = "devel")
 # or
-remotes::install_github("csoneson/iSEE")
+remotes::install_github("iSEE/iSEE")
 ```
 
-- fork the `iSEEu` repo (https://github.com/csoneson/iSEEu) and clone it locally.
+- fork the `iSEEu` repo (https://github.com/iSEE/iSEEu) and clone it locally.
 
 ```
 git clone https://github.com/[your_github_username]/iSEEu.git
@@ -120,7 +120,7 @@ git clone https://github.com/[your_github_username]/iSEEu.git
 
 #### Where do I look for constants within `iSEE`? {-}
 
-Many of the "global" variables that are used in several places in `iSEE` are defined in the [constants.R](https://github.com/csoneson/iSEE/blob/master/R/constants.R) script in `iSEE`. 
+Many of the "global" variables that are used in several places in `iSEE` are defined in the [constants.R](https://github.com/iSEE/iSEE/blob/master/R/constants.R) script in `iSEE`. 
 We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. 
 To access a constant, use `iSEE:::.constantName`. 
 
@@ -144,15 +144,15 @@ A few simple style options:
 
 In addition to the eight standard panel types, custom panels are easily accommodated within `iSEE` applications. 
 For a guide, see the corresponding [vignette](https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html). 
-For examples, see [this repo](https://github.com/kevinrue/iSEE_custom).
+For examples, see [this repo](https://github.com/iSEE/iSEE_custom).
 
 #### Are there other examples on how to use `iSEE` for exploring other datasets/data types? {-}
 
-Yes, you can have a look at the examples in https://github.com/federicomarini/iSEE_instances, where we tried to put together fully worked vignettes to re-analyze publicly available datasets, e.g. also trying to replicate some key visualizations of the original publications.
+Yes, you can have a look at the examples in https://github.com/iSEE/iSEE_instances, where we tried to put together fully worked vignettes to re-analyze publicly available datasets, e.g. also trying to replicate some key visualizations of the original publications.
 
 #### Where can I find a comprehensive introduction to `iSEE`? {-}
 
 The `iSEE` package contains several vignettes detailing the main functionality. 
-You can also take a look at this [workshop](https://kevinrue.github.io/iSEEWorkshop2019/index.html). 
+You can also take a look at this [workshop](https://isee.github.io/iSEEWorkshop2019/index.html). 
 A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available [here](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/).
 

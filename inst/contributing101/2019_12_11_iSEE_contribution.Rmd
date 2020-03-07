@@ -142,7 +142,7 @@ modeGating
 
 --
 
-[`https://github.com/csoneson/iSEEu`](https://github.com/csoneson/iSEEu)
+[`https://github.com/iSEE/iSEEu`](https://github.com/iSEE/iSEEu)
 
 --
 
