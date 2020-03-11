@@ -1,9 +1,9 @@
 #' The VolcanoPlot class
-#' 
+#'
 #' The VolcanoPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a volcano plot.
 #' It retrieves the log-fold change and p-value from and creates a row-based plot where each point represents a feature.
 #' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
-#' 
+#'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
@@ -19,7 +19,7 @@
 #' \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
 #' @section Constructor:
-#' \code{VolcanoPlot(...)} creates an instance of a VolcanoPlot class, 
+#' \code{VolcanoPlot(...)} creates an instance of a VolcanoPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
@@ -28,7 +28,7 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names} and \code{lfc.rowData.names}. 
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names} and \code{lfc.rowData.names}.
 #' Each of these is a character vector of permissible names for p-values and log-fold changes, respectively;
 #' see \code{?\link{.acceptablePValueFields}} for details.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method.
@@ -98,16 +98,18 @@
 #' if (interactive()) {
 #'     iSEE(se, initial=list(VolcanoPlot()))
 #' }
-#' 
+#'
 #' @author Aaron Lun
 #'
-#' @seealso 
+#' @importFrom SummarizedExperiment rowData
+#'
+#' @seealso
 #' \link{RowDataPlot}, for the base class.
 #' @name VolcanoPlot-class
 NULL
 
 #' @export
-setClass("VolcanoPlot", contains="RowDataPlot", 
+setClass("VolcanoPlot", contains="RowDataPlot",
     slots=c(PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character"))
 
 #' @export
@@ -172,7 +174,7 @@ setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
     pfields <- intersect(all.cont, .acceptablePValueFields())
     lfields <- intersect(all.cont, .acceptableLogFCFields())
 
-    .setCachedCommonInfo(se, "VolcanoPlot", 
+    .setCachedCommonInfo(se, "VolcanoPlot",
         pval.rowData.names=pfields,
         lfc.rowData.names=lfields)
 })
@@ -188,7 +190,7 @@ setMethod(".allowableYAxisChoices", "VolcanoPlot", function(x, se) {
 })
 
 #' @export
-#' @importFrom shiny numericInput
+#' @importFrom shiny numericInput selectInput
 #' @importFrom stats p.adjust.methods
 setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
@@ -196,9 +198,9 @@ setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
 
     c(callNextMethod(),
         list(
-            numericInput(input_FUN("PValueThreshold"), label="P-value threshold:", 
+            numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
-            numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:", 
+            numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
                 value=x[["LogFCThreshold"]], min=0, max=NA, step=0.5),
             selectInput(input_FUN("PValueCorrection"), label="Correction method:",
                 selected=x[["PValueCorrection"]], choices=p.adjust.methods)
@@ -208,7 +210,7 @@ setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
 
 #' @export
 setMethod(".hideInterface", "VolcanoPlot", function(x, field) {
-    if (field == "XAxis") TRUE else callNextMethod()       
+    if (field == "XAxis") TRUE else callNextMethod()
 })
 
 #' @export

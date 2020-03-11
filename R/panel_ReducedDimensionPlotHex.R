@@ -1,3 +1,86 @@
+#' The ReducedDimensionHexPlot class
+#'
+#' The ReducedDimensionHexPlot is a \linkS4class{ReducedDimensionPlot} subclass that is dedicated to creating a reduced dimension plot summarisign data points in hexagonal bins.
+#'
+#' @section Slot overview:
+#' The following slots control the parameters used in the visualization:
+#' \itemize{
+#' \item \code{BinResolution}, a numeric positive scalar specifying the number of hexagonal bins in both vertical and horizontal directions.
+#' Defaults to 100.
+#' }
+#'
+#' In addition, this class inherits all slots from its parent \linkS4class{ReducedDimensionPlot},
+#' \linkS4class{ColumnDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
+#'
+#' @section Constructor:
+#' \code{ReducedDimensionHexPlot(...)} creates an instance of a ReducedDimensionHexPlot class,
+#' where any slot and its value can be passed to \code{...} as a named argument.
+#'
+#' @section Supported methods:
+#' In the following code snippets, \code{x} is an instance of a \linkS4class{ReducedDimensionHexPlot} class.
+#' Refer to the documentation for each method for more details on the remaining arguments.
+#'
+#' For defining the interface:
+#' \itemize{
+#' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
+#' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="Downsample"},
+#' otherwise it will call the \linkS4class{ReducedDimensionPlot} method.
+#' }
+#'
+#' For monitoring reactive expressions:
+#' \itemize{
+#' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{ReducedDimensionPlot} method.
+#' }
+#'
+#' For defining the panel name:
+#' \itemize{
+#' \item \code{\link{.fullName}(x)} will return \code{"Hexagonal reduced dimension plot"}.
+#' }
+#'
+#' @docType methods
+#' @aliases ReducedDimensionHexPlot ReducedDimensionHexPlot-class
+#' initialize,ReducedDimensionHexPlot-method
+#' .fullName,ReducedDimensionHexPlot-method
+#' .panelColor,ReducedDimensionHexPlot-method
+#' .cacheCommonInfo,ReducedDimensionHexPlot-method
+#' .createObservers,ReducedDimensionHexPlot-method
+#' .defineVisualShapeInterface,ReducedDimensionHexPlot-method
+#' .defineVisualSizeInterface,ReducedDimensionHexPlot-method
+#' .defineVisualOtherInterface,ReducedDimensionHexPlot-method
+#' .generateDotPlot,ReducedDimensionHexPlot-method
+#' .hideInterface,ReducedDimensionHexPlot-method
+#'
+#' @examples
+#' library(scRNAseq)
+#'
+#' # Example data ----
+#' sce <- ReprocessedAllenData(assays="tophat_counts")
+#' class(sce)
+#'
+#' library(scater)
+#' sce <- logNormCounts(sce, exprs_values="tophat_counts")
+#'
+#' sce <- runPCA(sce, ncomponents=4)
+#' sce <- runTSNE(sce)
+#' rowData(sce)$ave_count <- rowMeans(assay(sce, "tophat_counts"))
+#' rowData(sce)$n_cells <- rowSums(assay(sce, "tophat_counts") > 0)
+#'
+#' # launch the app itself ----
+#'
+#' if (interactive()) {
+#'     iSEE(sce, initial=list(
+#'         ReducedDimensionHexPlot(BinResolution=50),
+#'         ReducedDimensionPlot()
+#'     ))
+#' }
+#'
+#' @author Kevin Rue-Albrecht
+#'
+#' @seealso
+#' \link{ReducedDimensionPlot}, for the base class.
+#' @name ReducedDimensionHexPlot-class
+NULL
+
 # Definition ----
 
 collated <- character(0)
@@ -74,6 +157,7 @@ setMethod(".defineVisualShapeInterface", "ReducedDimensionHexPlot", function(x) 
 })
 
 #' @export
+#' @importFrom shiny tagList
 setMethod(".defineVisualSizeInterface", "ReducedDimensionHexPlot", function(x) {
     plot_name <- .getEncodedName(x)
     tagList(
