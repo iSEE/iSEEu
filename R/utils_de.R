@@ -69,7 +69,7 @@ NULL
 
 .define_de_priority <- function(envir) {
     cmds <- c(
-        ".priority <- factor(plot.data$IsSig, c('none', 'down', 'sig'), ordered=TRUE);",
+        ".priority <- factor(plot.data$IsSig, c('none', 'down', 'up'), ordered=TRUE);",
         ".rescaled <- c(none=1, down=2, up=2);"
     )
     eval(parse(text=cmds), envir)
