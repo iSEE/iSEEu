@@ -136,12 +136,12 @@ setValidity2("VolcanoPlot", function(object) {
 
     p <- object[["PValueThreshold"]]
     if (length(p)!=1 || p <= 0 || p > 1) {
-        msg <- c(msg, "'PValueThreshold' must be in (0, 1]")
+        msg <- c(msg, "'PValueThreshold' must be a numeric scalar in (0, 1]")
     }
 
     lfc <- object[["LogFCThreshold"]]
     if (length(lfc)!=1 || lfc < 0) {
-        msg <- c(msg, "'LogFCThreshold' must be non-negative")
+        msg <- c(msg, "'LogFCThreshold' must be a non-negative numeric scalar")
     }
 
     corr <- object[["PValueCorrection"]]
@@ -166,6 +166,10 @@ setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
 
 #' @export
 setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "VolcanoPlot"))) {
+        return(se)
+    }
+
     se <- callNextMethod()
 
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
