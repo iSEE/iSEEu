@@ -36,8 +36,8 @@ test_that("MAPlot refinement works correctly", {
     x <- MAPlot()
     expect_identical(x[["XAxis"]], "None")
     expect_identical(x[["PValueField"]], NA_character_)
-    expect_identical(y[["XAxisRowData"]], NA_character_)
-    expect_identical(y[["YAxis"]], NA_character_)
+    expect_identical(x[["XAxisRowData"]], NA_character_)
+    expect_identical(x[["YAxis"]], NA_character_)
 
     se2 <- .cacheCommonInfo(x, se)
     y <- .refineParameters(x, se2)

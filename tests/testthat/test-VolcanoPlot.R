@@ -32,8 +32,8 @@ test_that("VolcanoPlot common caching works correctly", {
 test_that("VolcanoPlot refinement works correctly", {
     x <- VolcanoPlot()
     expect_identical(x[["XAxis"]], "None")
-    expect_identical(y[["XAxisRowData"]], NA_character_)
-    expect_identical(y[["YAxis"]], NA_character_)
+    expect_identical(x[["XAxisRowData"]], NA_character_)
+    expect_identical(x[["YAxis"]], NA_character_)
 
     se2 <- .cacheCommonInfo(x, se)
     y <- .refineParameters(x, se2)
