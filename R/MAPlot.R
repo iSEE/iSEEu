@@ -145,12 +145,12 @@ setValidity2("MAPlot", function(object) {
 
     p <- object[["PValueThreshold"]]
     if (length(p)!=1 || p <= 0 || p > 1) {
-        msg <- c(msg, "'PValueThreshold' must be in (0, 1]")
+        msg <- c(msg, "'PValueThreshold' must be a numeric scalar in (0, 1]")
     }
 
     lfc <- object[["LogFCThreshold"]]
     if (length(lfc)!=1 || lfc < 0) {
-        msg <- c(msg, "'LogFCThreshold' must be non-negative")
+        msg <- c(msg, "'LogFCThreshold' must be a non-negative numeric scalar")
     }
 
     corr <- object[["PValueCorrection"]]
@@ -187,6 +187,10 @@ setMethod(".refineParameters", "MAPlot", function(x, se) {
 
 #' @export
 setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "MAPlot"))) {
+        return(se)
+    }
+
     se <- callNextMethod()
 
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
@@ -211,7 +215,7 @@ setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) {
 })
 
 #' @export
-#' @importFrom shiny numericInput
+#' @importFrom shiny numericInput selectInput
 #' @importFrom stats p.adjust.methods
 setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
