@@ -1,0 +1,88 @@
+---
+title: Universe of iSEE panels
+author:
+- name: Aaron Lun
+  email: infinite.monkeys.with.keyboards@gmail.com
+date: "`r BiocStyle::doc_date()`"
+package: iSEE
+output: BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Panel universe}
+  %\VignetteEncoding{UTF-8}  
+  %\VignettePackage{iSEEu}
+  %\VignetteKeywords{GeneExpression, RNASeq, Sequencing, Visualization, QualityControl, GUI}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+library(BiocStyle)
+```
+
+# Overview
+
+The `r Biocpkg("iSEE")` package provides a general and flexible framework for interactively exploring `SummarizedExperiment` objects.
+However, in many cases, more specialized panels are required for effective visualization of specific data types.
+The `r Biocpkg("iSEEu")` package implements a collection of such dedicated panel classes that work directly in the `iSEE` application and can smoothly interact with other panels.
+This allows users to quickly parametrize bespoke apps for their data to address scientific questions of interest.
+We first load in the package:
+
+```{r}
+library(iSEEu)
+```
+
+All the panels described in this document can be specified by simply passing them into the `iSEE()` function via the `initial=` argument.
+For example, we can create an app to explore differential expression results using a volcano and MA plot:
+
+```{r}
+# Making up some results:
+se <- SummarizedExperiment(matrix(rnorm(10000), 1000, 10))
+rownames(se) <- paste0("GENE_", seq_len(nrow(se)))
+rowData(se)$PValue <- runif(nrow(se))
+rowData(se)$LogFC <- rnorm(nrow(se))
+rowData(se)$AveExpr <- rnorm(nrow(se))
+
+app <- iSEE(se, initial=list(VolcanoPlot(), MAPlot()))
+```
+
+# Differential expression plots
+
+The `MAPlot` class creates a MA plot, i.e., with the log-fold change on the y-axis and the average expression on the x-axis.
+Features with significant differences in each direction are highlighted and counted on the legend.
+Users can vary the significance threshold and apply _ad hoc_ filters on the log-fold change.
+This is a subclass of the `RowDataPlot` so points can be transmitted to other panels as multiple row selections.
+Instances of this class are created like:
+
+```{r}
+ma.panel <- MAPlot()
+class(ma.panel)
+```
+
+The `VolcanoPlot` class creates a volcano plot with the log-fold change on the x-axis and the negative log-p-value on the y-axis.
+Features with significant differences in each direction are highlighted and counted on the legend.
+Users can vary the significance threshold and apply _ad hoc_ filters on the log-fold change.
+This is a subclass of the `RowDataPlot` so points can be transmitted to other panels as multiple row selections.
+Instances of this class are created like:
+
+```{r}
+vol.panel <- VolcanoPlot()
+class(vol.panel)
+```
+
+# App modes
+
+`r Biocpkg("iSEEu")` contains a number of "modes" that allow users to conveniently load an `iSEE` instance in one of several common configurations:
+
+- `modeEmpty()` will launch an empty app, i.e., with no panels.
+This is occasionally useful to jump to the landing page where a user can then upload a `SummarizedExperiment` object.
+- `modeGating()` will launch an app with multiple feature assay panels that are linked to each other.
+This is useful for applying sequential restrictions on the data, equivalent to gating in a flow cytometry experiment.
+-  `modeReducedDim()` will launch an app with multiple reduced dimension plots.
+This is useful for examining different views of large high-dimensional datasets (e.g., single-cell studies).
+
+# Session information
+
+```{r}
+sessionInfo()
+```
+
