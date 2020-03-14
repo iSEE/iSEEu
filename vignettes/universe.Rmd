@@ -69,6 +69,17 @@ vol.panel <- VolcanoPlot()
 class(vol.panel)
 ```
 
+# App modes
+
+`r Biocpkg("iSEEu")` contains a number of "modes" that allow users to conveniently load an `iSEE` instance in one of several common configurations:
+
+- `modeEmpty()` will launch an empty app, i.e., with no panels.
+This is occasionally useful to jump to the landing page where a user can then upload a `SummarizedExperiment` object.
+- `modeGating()` will launch an app with multiple feature assay panels that are linked to each other.
+This is useful for applying sequential restrictions on the data, equivalent to gating in a flow cytometry experiment.
+-  `modeReducedDim()` will launch an app with multiple reduced dimension plots.
+This is useful for examining different views of large high-dimensional datasets (e.g., single-cell studies).
+
 # Session information
 
 ```{r}
