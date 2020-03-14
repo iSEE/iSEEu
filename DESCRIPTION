@@ -30,7 +30,6 @@ Description: iSEEu (the iSEE universe) contains diverse functionality to extend
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: 
-    R (>= 4.0.0),
     iSEE
 Imports:
     S4Vectors,
