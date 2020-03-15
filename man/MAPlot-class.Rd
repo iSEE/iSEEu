@@ -70,16 +70,12 @@ For defining the interface:
 \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptableLogFCFields}}.
 \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 otherwise it will call the \linkS4class{RowDataPlot} method.
+\item \code{\link{.fullName}(x)} will return \code{"MA plot"}.
 }
 
 For monitoring reactive expressions:
 \itemize{
 \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{RowDataPlot} method.
-}
-
-For defining the panel name:
-\itemize{
-\item \code{\link{.fullName}(x)} will return \code{"MA plot"}.
 }
 
 For creating the plot:
