@@ -194,7 +194,7 @@ setMethod(".createObservers", "ReducedDimensionHexPlot", function(x, se, input, 
 
 #' @export
 #' @importMethodsFrom iSEE .generateDotPlot
-#' @importFrom iSEE .addFacets
+#' @importFrom iSEE .addFacets .buildAes
 #' @importFrom ggplot2 geom_hex
 setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, envir) {
     plot_data <- envir$plot.data
@@ -244,11 +244,11 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
     color_discrete <- is.factor(plot_data$ColorBy)
 
     if (color_set && !color_discrete) {
-        new_aes <- iSEE:::.build_aes(color=FALSE, shape=shape_set, size=size_set, alt=c(z="ColorBy"))
+        new_aes <- .buildAes(color=FALSE, shape=shape_set, size=size_set, alt=c(z="ColorBy"))
     } else if (color_set && param_choices[["ColorBy"]] == "Sample name") {
-        new_aes <- iSEE:::.build_aes(color=FALSE, shape=shape_set, size=size_set)
+        new_aes <- .buildAes(color=FALSE, shape=shape_set, size=size_set)
     } else {
-        new_aes <- iSEE:::.build_aes(color=color_set, shape=shape_set, size=size_set)
+        new_aes <- .buildAes(color=color_set, shape=shape_set, size=size_set)
     }
 
     plot_cmds[["hex"]] <- .create_hex(param_choices,
