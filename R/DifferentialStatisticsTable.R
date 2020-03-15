@@ -9,8 +9,11 @@
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
 #' \item \code{LogFC}, a numeric scalar indicating the log-fold change threshold to test against.
+#' Defaults to zero.
 #' \item \code{TestMethod}, string indicating the test to use (based on the \code{findMarkers} function from \pkg{scran}).
-#' This can be \code{"t"}, \code{"wilcox"} or \code{"binom"}.
+#' This can be \code{"t"} (default), \code{"wilcox"} or \code{"binom"}.
+#' \item \code{Assay}, string indicating the assay to use for testing.
+#' Defaults to the first named assay in the SummarizedExperiment.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowTable}, 
@@ -24,6 +27,15 @@
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{DifferentialStatisticsTable} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
 #' 
+#' For setting up data values:
+#' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry containing \code{valid.assay.names}. 
+#' This will also call the equivalent \linkS4class{RowTable} method.
+#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
+#' This will also call the equivalent \linkS4class{RowTable} method for further refinements to \code{x}.
+#' If valid assay names are not available, \code{NULL} is returned instead.
+#' }
+#'
 #' For defining the interface:
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
@@ -71,11 +83,14 @@
 #' .defineDataInterface,DifferentialStatisticsTable-method
 #' .generateTable,DifferentialStatisticsTable-method
 #' .createObservers,DifferentialStatisticsTable-method
+#' .cacheCommonInfo,DifferentialStatisticsTable-method
+#' .refineParameters,DifferentialStatisticsTable-method
 #' .multiSelectionInvalidated,DifferentialStatisticsTable-method
 NULL
 
 #' @export
-setClass("DifferentialStatisticsTable", contains="RowTable", slots=c(LogFC="numeric", TestMethod="character"))
+setClass("DifferentialStatisticsTable", contains="RowTable", 
+    slots=c(LogFC="numeric", TestMethod="character", Assay="character"))
 
 #' @importFrom S4Vectors setValidity2
 setValidity2("DifferentialStatisticsTable", function(object) {
@@ -87,6 +102,10 @@ setValidity2("DifferentialStatisticsTable", function(object) {
 
     if (!isSingleString(val <- object[["TestMethod"]]) || !val %in% c("t", "wilcox", "binom")) {
         msg <- c(msg, "'TestMethod' must be in 't', 'wilcox' or 'binom'")
+    }
+
+    if (length(object[["Assay"]])!=1) {
+        msg <- c(msg, "'Assay' must be a single string")
     }
 
     if (length(msg)) {
@@ -101,21 +120,61 @@ DifferentialStatisticsTable <- function(...) {
 }
 
 #' @export
-setMethod("initialize", "DifferentialStatisticsTable", function(.Object, LogFC=0, TestMethod="t", ...)
-{
-    callNextMethod(.Object, LogFC=LogFC, ColumnSelectionType="Union", TestMethod=TestMethod, ...)
-})
+setMethod("initialize", "DifferentialStatisticsTable", function(.Object, LogFC=0, TestMethod="t", Assay=NA_character_, ...)
+    callNextMethod(.Object, LogFC=LogFC, ColumnSelectionType="Union", TestMethod=TestMethod, Assay=Assay, ...))
 
 #' @export
 #' @importFrom shiny numericInput selectInput
 setMethod(".defineDataInterface", "DifferentialStatisticsTable", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
     list(
-        numericInput(paste0(plot_name, "_LogFC"), label="Log-FC threshold", min=0, value=x[["LogFC"]]),
-        selectInput(paste0(plot_name, "_TestMethod"), label="Test method", 
+        numericInput(paste0(plot_name, "_LogFC"), 
+            label="Log-FC threshold", 
+            min=0, 
+            value=x[["LogFC"]]),
+        selectInput(paste0(plot_name, "_TestMethod"), 
+            label="Test method", 
             choices=c(`t-test`="t", `Wilcoxon rank sum`="wilcox", `Binomial test`="binom"),
-            selected=x[["TestMethod"]])
+            selected=x[["TestMethod"]]),
+        selectInput(paste0(plot_name, "_Assay"),
+            label="Assay",
+            choices=.getCachedCommonInfo(se, "DifferentialStatisticsTable")$valid.assay.names,
+            selected=x[["Assay"]])
     )
+})
+
+#' @export
+#' @importFrom SummarizedExperiment assayNames
+setMethod(".cacheCommonInfo", "DifferentialStatisticsTable", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "DifferentialStatisticsTable"))) {
+        return(se)
+    }
+
+    se <- callNextMethod()
+
+    named_assays <- assayNames(se)
+    named_assays <- named_assays[named_assays!=""]
+    .setCachedCommonInfo(se, "DifferentialStatisticsTable", valid.assay.names=named_assays)
+})
+
+#' @export
+#' @importFrom methods callNextMethod
+setMethod(".refineParameters", "DifferentialStatisticsTable", function(x, se) {
+    x <- callNextMethod()
+    if (is.null(x)) {
+        return(NULL)
+    }
+
+    valid.choices <- .getCachedCommonInfo(se, "DifferentialStatisticsTable")$valid.assay.names
+    if (length(valid.choices)==0L) {
+        warning(sprintf("no valid 'Assay' detected for '%s'", class(x)[1]))
+        return(NULL)    
+    }
+    if (is.na(x[["Assay"]])) {
+        x[["Assay"]] <- valid.choices[1]
+    }
+
+    x
 })
 
 #' @export
@@ -156,8 +215,9 @@ setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
             eval(parse(text=commands), envir=envir)
         } else {
             stat.cmds <- c(
-                sprintf(".de.stats <- scran::findMarkers(logcounts(se)%s, .grouping, 
-    direction='up', lfc=%s, test.type=%s)", subsettor, x[["LogFC"]], deparse(x[["TestMethod"]])),
+                sprintf(".de.stats <- scran::findMarkers(assay(se, %s)%s, .grouping, 
+    direction='up', lfc=%s, test.type=%s)", 
+                    deparse(x[["Assay"]]), subsettor, x[["LogFC"]], deparse(x[["TestMethod"]])),
                 "tab <- as.data.frame(.de.stats[['active']]);"
             )
             eval(parse(text=stat.cmds), envir=envir)
@@ -170,7 +230,7 @@ setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
 
 #' @export
 setMethod(".hideInterface", "DifferentialStatisticsTable", function(x, field) {
-    if (field %in% c("RowSelectionSource", "RowSelectionType", "RowSelectionSaved")) {
+    if (field %in% c("RowSelectionSource", "RowSelectionType", "RowSelectionSaved", "RowSelectionDynamicSource")) {
         TRUE
     } else if (field %in% "ColumnSelectionSource") {
         FALSE
