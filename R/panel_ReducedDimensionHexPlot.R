@@ -122,7 +122,7 @@ setMethod("initialize", "ReducedDimensionHexPlot", function(.Object, ...) {
 #' @export
 #' @importFrom SummarizedExperiment colData
 #' @importFrom methods callNextMethod
-#' @importFrom iSEE .findAtomicFields
+#' @importFrom iSEE .findAtomicFields .whichGroupable .whichNumeric
 setMethod(".cacheCommonInfo", "ReducedDimensionHexPlot", function(x, se) {
     if (!is.null(.getCachedCommonInfo(se, "ReducedDimensionHexPlot"))) {
         return(se)
@@ -134,8 +134,8 @@ setMethod(".cacheCommonInfo", "ReducedDimensionHexPlot", function(x, se) {
     displayable <- .findAtomicFields(df)
 
     subdf <- df[,displayable,drop=FALSE]
-    discrete <- iSEE:::.which_groupable(subdf)
-    continuous <- iSEE:::.which_numeric(subdf)
+    discrete <- .whichGroupable(subdf)
+    continuous <- .whichNumeric(subdf)
 
     .setCachedCommonInfo(se, "ReducedDimensionHexPlot",
         valid.colData.names=displayable,
