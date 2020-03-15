@@ -109,10 +109,11 @@ setMethod(".panelColor", "ReducedDimensionHexPlot", function(x) "#991717")
 
 #' @export
 #' @importFrom methods callNextMethod
+#' @importFrom iSEE .emptyDefault
 setMethod("initialize", "ReducedDimensionHexPlot", function(.Object, ...) {
     args <- list(...)
 
-    args <- iSEE:::.empty_default(args, .plotBinResolution, 100)
+    args <- .emptyDefault(args, .plotBinResolution, 100)
     args[["Downsample"]] <- FALSE
 
     do.call(callNextMethod, c(list(.Object), args))
