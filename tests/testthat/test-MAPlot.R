@@ -100,5 +100,3 @@ test_that("MAPlot dot plot generation works correctly", {
     .generateDotPlot(y, out$labels, envir)
     expect_s3_class(envir$dot.plot, "ggplot")
 })
-
-
