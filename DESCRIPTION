@@ -36,10 +36,12 @@ Imports:
     methods,
     SummarizedExperiment,
     SingleCellExperiment,
+    SummarizedExperiment,
     ggplot2
 Suggests: 
     scRNAseq,
     scater,
+    scran,
     knitr,
     rmarkdown,
     BiocStyle,
