@@ -47,16 +47,12 @@
 #' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptableLogFCFields}}.
 #' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 #' otherwise it will call the \linkS4class{RowDataPlot} method.
+#' \item \code{\link{.fullName}(x)} will return \code{"MA plot"}.
 #' }
 #'
 #' For monitoring reactive expressions:
 #' \itemize{
 #' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{RowDataPlot} method.
-#' }
-#'
-#' For defining the panel name:
-#' \itemize{
-#' \item \code{\link{.fullName}(x)} will return \code{"MA plot"}.
 #' }
 #'
 #' For creating the plot:
@@ -120,13 +116,11 @@ setMethod(".fullName", "MAPlot", function(x) "MA plot")
 setMethod(".panelColor", "MAPlot", function(x) "#666600")
 
 #' @export
-setMethod("initialize", "MAPlot", function(.Object, ...) {
-    args <- list(...)
-    if (is.null(args$PValueField)) args$PValueField <- NA_character_
-    if (is.null(args$PValueThreshold)) args$PValueThreshold <- 0.05
-    if (is.null(args$LogFCThreshold)) args$LogFCThreshold <- 0
-    if (is.null(args$PValueCorrection)) args$PValueCorrection <- "BH"
-    do.call(callNextMethod, c(list(.Object), args))
+setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
+    PValueThreshold=0.05, LogFCThreshold=0, PValueCorrection="BH", ...) 
+{
+    callNextMethod(.Object, PValueField=PValueField, PValueThreshold=PValueThreshold,
+        LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
 })
 
 #' @export
