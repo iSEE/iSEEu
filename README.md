@@ -14,15 +14,15 @@ For example, during the Developer Day at the European Bioconductor 2019 conferen
 
 `iSEEu` can be easily installed from Bioconductor using `BiocManager::install()`:
 
-```
-if (!requireNamespace("BiocManager", quietly=TRUE))
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("iSEEu")
 ```
 
 Optionally, if you want to install the development version from GitHub, you can use:
 
-```
+``` r
 BiocManager::install("iSEE/iSEEu", dependencies = TRUE)
 # or alternatively...
 remotes::install_github("iSEE/iSEEu", dependencies = TRUE)
@@ -35,7 +35,7 @@ Setting `dependencies = TRUE` should ensure that all packages, including the one
 
 - install `iSEE` first - the development version is recommended.
 
-```{r eval=FALSE}
+``` r
 BiocManager::install("iSEE", version = "devel")
 # or
 remotes::install_github("iSEE/iSEE")
@@ -43,7 +43,7 @@ remotes::install_github("iSEE/iSEE")
 
 - fork the `iSEEu` repo (https://github.com/iSEE/iSEEu) and clone it locally.
 
-```
+``` bash
 git clone https://github.com/[your_github_username]/iSEEu.git
 ```
 
