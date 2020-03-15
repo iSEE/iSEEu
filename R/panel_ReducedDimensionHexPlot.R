@@ -194,7 +194,7 @@ setMethod(".createObservers", "ReducedDimensionHexPlot", function(x, se, input, 
 
 #' @export
 #' @importMethodsFrom iSEE .generateDotPlot
-#' @importFrom iSEE .addFacets .buildAes
+#' @importFrom iSEE .addFacets .buildAes .buildLabs
 #' @importFrom ggplot2 geom_hex
 setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, envir) {
     plot_data <- envir$plot.data
@@ -258,7 +258,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
     if (is.null(color_lab) || color_discrete) {
         color_lab <- "Count"
     }
-    plot_cmds[["labs"]] <- iSEE:::.build_labs(x=x_lab, y=y_lab, fill=color_lab, shape=shape_lab, size=size_lab, title=title)
+    plot_cmds[["labs"]] <- .buildLabs(x=x_lab, y=y_lab, fill=color_lab, shape=shape_lab, size=size_lab, title=title)
 
     # Adding further aesthetic elements.
     plot_cmds[["theme_base"]] <- "theme_bw() +"
