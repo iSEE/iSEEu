@@ -180,14 +180,11 @@ If valid p-value and log-fold change fields are not available, <code>NULL</code>
 <li><p><code>.allowableYAxisChoices(x, se)</code> returns a character vector specifying the acceptable p-value-related variables in <code>rowData(se)</code> that can be used as choices for the y-axis, see <code>?.acceptableLogPValueFields</code>.</p></li>
 <li><p><code>.hideInterface(x, field)</code> will return <code>TRUE</code> for <code>field="XAxis"</code>,
 otherwise it will call the RowDataPlot method.</p></li>
+<li><p><code>.fullName(x)</code> will return <code>"Volcano plot"</code>.</p></li>
 </ul>
 
 <p>For monitoring reactive expressions:</p><ul>
 <li><p><code>.createObservers(x, se, input, session, pObjects, rObjects)</code> sets up observers for all new slots described above, as well as in the parent classes via the RowDataPlot method.</p></li>
-</ul>
-
-<p>For defining the panel name:</p><ul>
-<li><p><code>.fullName(x)</code> will return <code>"Volcano plot"</code>.</p></li>
 </ul>
 
 <p>For creating the plot:</p><ul>
