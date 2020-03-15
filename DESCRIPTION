@@ -39,6 +39,7 @@ Imports:
 Suggests: 
     scRNAseq,
     scater,
+    scran,
     knitr,
     rmarkdown,
     BiocStyle,
