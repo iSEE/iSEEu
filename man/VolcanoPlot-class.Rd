@@ -16,6 +16,9 @@
 \alias{.colorByNoneDotPlotField,VolcanoPlot-method}
 \alias{.colorByNoneDotPlotScale,VolcanoPlot-method}
 \alias{.generateDotPlot,VolcanoPlot-method}
+\alias{.cacheCommonInfo,VolcanoPlot-method}
+\alias{.createObservers,VolcanoPlot-method}
+\alias{.hideInterface,VolcanoPlot-method}
 \title{The VolcanoPlot class}
 \description{
 The VolcanoPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a volcano plot.
@@ -65,7 +68,7 @@ For defining the interface:
 \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
 \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.acceptableLogFCFields}}.
-\item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptableLogPValueFields}}.
+\item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptablePValueFields}}.
 \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 otherwise it will call the \linkS4class{RowDataPlot} method.
 \item \code{\link{.fullName}(x)} will return \code{"Volcano plot"}.

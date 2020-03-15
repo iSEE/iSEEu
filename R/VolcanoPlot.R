@@ -42,7 +42,7 @@
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
 #' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.acceptableLogFCFields}}.
-#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptableLogPValueFields}}.
+#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptablePValueFields}}.
 #' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 #' otherwise it will call the \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.fullName}(x)} will return \code{"Volcano plot"}.
@@ -82,6 +82,9 @@
 #' .colorByNoneDotPlotField,VolcanoPlot-method
 #' .colorByNoneDotPlotScale,VolcanoPlot-method
 #' .generateDotPlot,VolcanoPlot-method
+#' .cacheCommonInfo,VolcanoPlot-method
+#' .createObservers,VolcanoPlot-method
+#' .hideInterface,VolcanoPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -116,9 +119,9 @@ setMethod(".panelColor", "VolcanoPlot", function(x) "#DEAE10")
 
 #' @export
 setMethod("initialize", "VolcanoPlot", function(.Object, PValueThreshold=0.05,
-    LogFCThreshold=0, PValueCorrection="BH", ...) 
+    LogFCThreshold=0, PValueCorrection="BH", ...)
 {
-    callNextMethod(.Object, PValueThreshold=PValueThreshold, 
+    callNextMethod(.Object, PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
 })
 
