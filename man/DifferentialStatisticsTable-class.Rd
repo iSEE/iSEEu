@@ -9,6 +9,8 @@
 \alias{.defineDataInterface,DifferentialStatisticsTable-method}
 \alias{.generateTable,DifferentialStatisticsTable-method}
 \alias{.createObservers,DifferentialStatisticsTable-method}
+\alias{.cacheCommonInfo,DifferentialStatisticsTable-method}
+\alias{.refineParameters,DifferentialStatisticsTable-method}
 \alias{.multiSelectionInvalidated,DifferentialStatisticsTable-method}
 \title{Differential statistics table}
 \description{
@@ -22,8 +24,11 @@ or (ii) each subset of points in each saved selection.
 The following slots control the thresholds used in the visualization:
 \itemize{
 \item \code{LogFC}, a numeric scalar indicating the log-fold change threshold to test against.
+Defaults to zero.
 \item \code{TestMethod}, string indicating the test to use (based on the \code{findMarkers} function from \pkg{scran}).
-This can be \code{"t"}, \code{"wilcox"} or \code{"binom"}.
+This can be \code{"t"} (default), \code{"wilcox"} or \code{"binom"}.
+\item \code{Assay}, string indicating the assay to use for testing.
+Defaults to the first named assay in the SummarizedExperiment.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{RowTable},
@@ -40,6 +45,15 @@ where any slot and its value can be passed to \code{...} as a named argument.
 
 In the following code snippets, \code{x} is an instance of a \linkS4class{DifferentialStatisticsTable} class.
 Refer to the documentation for each method for more details on the remaining arguments.
+
+For setting up data values:
+\itemize{
+\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry containing \code{valid.assay.names}.
+This will also call the equivalent \linkS4class{RowTable} method.
+\item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
+This will also call the equivalent \linkS4class{RowTable} method for further refinements to \code{x}.
+If valid assay names are not available, \code{NULL} is returned instead.
+}
 
 For defining the interface:
 \itemize{
