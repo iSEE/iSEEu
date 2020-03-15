@@ -8,25 +8,25 @@
 #' @param includeNames Character vector with the names of reduced dimensions
 #'   to display as individual panels. The default uses all available in
 #'   \code{reducedDimNames(se)}.
-#' @param colorBy Character scalar controling coloring of cells. Must match either
+#' @param colorBy Character scalar controlling coloring of cells. Must match either
 #'   to one of \code{colnames(colData(se))} or \code{rownames(se)}. If coloring
 #'   by a colData column, a column data plot is opened in addition to the
 #'   reduced dimension panels. If coloring by a feature, a row statistics table
 #'   is openend in addition to the reduced dimension panels, from which the
 #'   latter are receiving the color.
 #' @param ... Additional arguments passed to \code{\link{iSEE}}.
-#' @param plot_width The grid width of linked plots (numeric vector of length
+#' @param plotWidth The grid width of linked plots (numeric vector of length
 #'   either 1 or equal to \code{length(includeNames)}). The total width of
-#'   the window is 12, so \code{plot_width = 4} for example will show three
-#'   panels per row. If \code{plot_width = NULL} (the default), a value will be
+#'   the window is 12, so \code{plotWidth = 4} for example will show three
+#'   panels per row. If \code{plotWidth = NULL} (the default), a value will be
 #'   estimated depending on the number of reduced dimension panels.
 #'
 #' @return A Shiny app object is returned.
 #'
 #' @export
-#' @importFrom methods is new
+#' @importFrom methods is
 #' @importFrom SingleCellExperiment reducedDimNames colData
-#' @importFrom S4Vectors DataFrame
+#' @importFrom iSEE ReducedDimensionPlot ColumnDataPlot RowDataTable iSEE
 #'
 #' @examples
 #' library(scRNAseq)
@@ -58,93 +58,82 @@ modeReducedDim <- function(
   includeNames = reducedDimNames(se),
   colorBy = NULL,
   ...,
-  plot_width = NULL) {
+  plotWidth = NULL) {
   # This mode is only for SingleCellExperiments
   stopifnot(exprs = {
     is(se, "SingleCellExperiment")
     is.character(includeNames)
     length(includeNames) > 0L
     all(includeNames %in% reducedDimNames(se))
-    is.null(plot_width) || (is.numeric(plot_width) &&
-                              (length(plot_width) == 1L ||
-                                 length(plot_width) == length(includeNames)))
+    is.null(plotWidth) || (is.numeric(plotWidth) &&
+                              (length(plotWidth) == 1L ||
+                                 length(plotWidth) == length(includeNames)))
     is.null(colorBy) || (is.character(colorBy) && length(colorBy) == 1L &&
                            (colorBy %in% colnames(colData(se)) ||
                               colorBy %in% rownames(se)))
   })
 
-  maxOtherPanels <- 5L # maximum number of other (non-redDim) panels
-
-  # determine plot_width
+  # determine plotWidth
   n <- length(includeNames)
-  if (is.null(plot_width)) {
+  if (is.null(plotWidth)) {
     nr <- floor(sqrt(n))
     nc <- ceiling(n / nr)
-    plot_width <- 12 / max(nc, 3)
+    plotWidth <- 12 / max(nc, 3)
   }
 
-  # initial panels to show
-  initialPanels <- DataFrame(
-    Name = c(sprintf("Reduced dimension plot %i", seq_len(n))),
-    Width = plot_width
-  )
-
-  # define reduced dimension panels
-  redDimPlotArgs <- new('DataFrame', nrows = n,
-                        rownames = sprintf('redDimPlot%i', seq_len(n)))
-  redDimPlotArgs[['Type']] <- match(includeNames, reducedDimNames(se))
-  redDimPlotArgs[['XAxis']] <- rep(1L, n)
-  redDimPlotArgs[['YAxis']] <- rep(2L, n)
-
-  rowStatTableArgs <- colDataPlotArgs <- NULL
+  initial <- lapply(seq_len(n), function(i) {
+    iSEE::ReducedDimensionPlot(
+      Type = includeNames[i],
+      PanelWidth = as.integer(plotWidth)
+    )
+  })
 
   # add color
   if (!is.null(colorBy)) {
     if (colorBy %in% colnames(colData(se))) {
       # coloring of reduced dimension panels
-      redDimPlotArgs[['ColorBy']] <- rep("Column data", n)
-      redDimPlotArgs[['ColorByColData']] <- rep(colorBy, n) # TODO: receive color from "Column data plot 1"
+      initial <- lapply(initial, function(rdp) {
+        rdp[["ColorBy"]] <- "Column data"
+        rdp[["ColorByColumnData"]] <- colorBy
+        rdp
+      })
 
-      # additional column data plot
-      colDataPlotArgs <- new('DataFrame', nrows = maxOtherPanels,
-                             rownames = sprintf('colDataPlot%i', seq_len(maxOtherPanels)))
-      colDataPlotArgs[['YAxis']] <- rep(colorBy, maxOtherPanels)
-      colDataPlotArgs[['XAxis']] <- rep("None", maxOtherPanels)
-      colDataPlotArgs[['ColorBy']] <- rep("Column data", maxOtherPanels)
-      colDataPlotArgs[['ColorByColData']] <- rep(colorBy, maxOtherPanels)
-      initialPanels <- rbind(initialPanels,
-                             DataFrame(Name = "Column data plot 1",
-                                       Width = plot_width[1]))
+      cdp <- list(
+        iSEE::ColumnDataPlot(
+          YAxis = colorBy,
+          XAxis = "None",
+          ColorBy = "Column data",
+          ColorByColumnData = colorBy,
+          PanelWidth = as.integer(plotWidth[1])
+        )
+      )
+
+      initial <- c(initial, cdp)
 
     } else {
       # coloring of reduced dimension panels
-      redDimPlotArgs[['ColorBy']] <- rep("Feature name", n)
-      redDimPlotArgs[['ColorByRowTable']] <- rep("Row statistics table 1", n)
+      initial <- lapply(initial, function(rdp) {
+        rdp[["ColorBy"]] <- "Feature name"
+        rdp[["ColorByFeatureSource"]] <- "RowDataTable1"
+        rdp
+      })
 
-      # additional row statistic table
-      rowStatTableArgs <- new('DataFrame', nrows = maxOtherPanels,
-                              rownames = sprintf('rowStatTable%i', seq_len(maxOtherPanels)))
-      rowStatTableArgs[['Selected']] <- rep(match(colorBy, rownames(se)), maxOtherPanels)
-      rowStatTableArgs[['Search']] <- rep(colorBy, maxOtherPanels)
-      initialPanels <- rbind(initialPanels,
-                             DataFrame(Name = "Row statistics table 1",
-                                       Width = plot_width[1]))
+      rdt <- list(
+        iSEE::RowDataTable(
+          Selected = colorBy,
+          Search = colorBy,
+          PanelWidth = as.integer(plotWidth[1])
+        )
+      )
+
+      initial <- c(initial, rdt)
     }
   }
 
   # Preconfigure an app
-  app <- iSEE(
+  app <- iSEE::iSEE(
     se = se,
-    redDimArgs = redDimPlotArgs, colDataArgs = colDataPlotArgs, featAssayArgs = NULL,
-    rowStatArgs = rowStatTableArgs, rowDataArgs = NULL, sampAssayArgs = NULL,
-    colStatArgs = NULL, customDataArgs = NULL, customStatArgs = NULL,
-    heatMapArgs = NULL,
-    redDimMax = length(reducedDimNames(se)), colDataMax = maxOtherPanels,
-    featAssayMax = maxOtherPanels, rowStatMax = maxOtherPanels,
-    rowDataMax = maxOtherPanels, sampAssayMax = maxOtherPanels,
-    colStatMax = maxOtherPanels, customDataMax = maxOtherPanels,
-    customStatMax = maxOtherPanels, heatMapMax = maxOtherPanels,
-    initialPanels = initialPanels,
+    initial = initial,
     ...
   )
 
