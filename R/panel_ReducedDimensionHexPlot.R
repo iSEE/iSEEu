@@ -194,6 +194,7 @@ setMethod(".createObservers", "ReducedDimensionHexPlot", function(x, se, input, 
 
 #' @export
 #' @importMethodsFrom iSEE .generateDotPlot
+#' @importFrom iSEE .addFacets
 #' @importFrom ggplot2 geom_hex
 setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, envir) {
     plot_data <- envir$plot.data
@@ -215,7 +216,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
     plot_cmds <- do.call(.reduced_dimension_hex_plot, args)
 
     # Adding a faceting command, if applicable.
-    facet_cmd <- iSEE:::.add_facets(x)
+    facet_cmd <- .addFacets(x)
     if (length(facet_cmd)) {
         N <- length(plot_cmds)
         plot_cmds[[N]] <- paste(plot_cmds[[N]], "+")
