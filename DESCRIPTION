@@ -35,6 +35,7 @@ Imports:
     shiny,
     methods,
     SingleCellExperiment,
+    SummarizedExperiment,
     ggplot2
 Suggests: 
     scRNAseq,
