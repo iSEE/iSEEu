@@ -227,7 +227,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
         flip=(plot_type == "violin_horizontal"),
         envir=envir, commands=plot_cmds)
 
-    list(plot=iSEE:::.text_eval(plot_cmds, envir), commands=plot_cmds)
+    list(plot=.textEval(plot_cmds, envir), commands=plot_cmds)
 })
 
 .reduced_dimension_hex_plot <- function(plot_data, param_choices,
