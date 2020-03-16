@@ -7,6 +7,7 @@
 \alias{.fullName,DifferentialStatisticsTable-method}
 \alias{.panelColor,DifferentialStatisticsTable-method}
 \alias{.defineDataInterface,DifferentialStatisticsTable-method}
+\alias{.hideInterface,DifferentialStatisticsTable-method}
 \alias{.generateTable,DifferentialStatisticsTable-method}
 \alias{.createObservers,DifferentialStatisticsTable-method}
 \alias{.cacheCommonInfo,DifferentialStatisticsTable-method}
@@ -72,7 +73,7 @@ For monitoring reactive expressions:
 For creating the table:
 \itemize{
 \item \code{\link{.generateTable}(x, envir)} will create a data.frame of newly computed statistics in \code{envir}.
-The method will return the commands required to do so as well as a list of labels.
+The method will return the commands required to do so.
 }
 }
 
