@@ -3,9 +3,11 @@
 \name{GeneSetTable-class}
 \alias{GeneSetTable-class}
 \alias{GeneSetTable}
+\alias{initialize,GeneSetTable-method}
 \alias{.fullName,GeneSetTable-method}
 \alias{.panelColor,GeneSetTable-method}
 \alias{.defineDataInterface,GeneSetTable-method}
+\alias{.hideInterface,GeneSetTable-method}
 \alias{.defineOutput,GeneSetTable-method}
 \alias{.generateOutput,GeneSetTable-method}
 \alias{.createObservers,GeneSetTable-method}
@@ -65,7 +67,7 @@ For monitoring reactive expressions:
 For creating the table:
 \itemize{
 \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir},
-based on the \code{mode="show"} output of \code{\link{.geneSetCommands}}.
+based on the \code{mode="show"} output of \code{\link{.getGeneSetCommands}}.
 It will also return the commands required to do so.
 \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
 will add a \code{\link{datatable}} widget to the output,
@@ -75,7 +77,7 @@ which is used to render the aforementioned data.frame.
 For controlling the multiple selections:
 \itemize{
 \item \code{\link{.multiSelectionDimension}(x)} returns \code{"row"}.
-\item \code{\link{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the \code{mode="extract"} output of \code{\link{.geneSetCommands}}.
+\item \code{\link{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the \code{mode="extract"} output of \code{\link{.getGeneSetCommands}}.
 \code{index} is ignored.
 \item \code{\link{.multiSelectionActive}(x)} returns the name of the currently selected gene set,
 unless no selection is made, in which case \code{NULL} is returned.
