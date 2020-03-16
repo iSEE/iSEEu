@@ -77,14 +77,14 @@ NULL
 }
 
 #' @export
-#' @rdname utils-gene_set
+#' @rdname utils-geneset
 .setIdentifierType <- function(value) {
     options(iSEEu_gene_set_id=value)
     invisible(NULL)
 }
 
 #' @export
-#' @rdname utils-gene_set
+#' @rdname utils-geneset
 .getOrganism <- function() {
     global <- getOption("iSEEu_gene_set_species", NULL)
     if (is.null(global)) {
@@ -95,14 +95,14 @@ NULL
 }
 
 #' @export
-#' @rdname utils-gene_set
+#' @rdname utils-geneset
 .setOrganism <- function(value) {
     options(iSEEu_gene_set_species=value)
     invisible(NULL)
 }
 
 #' @export
-#' @rdname utils-gene_set
+#' @rdname utils-geneset
 .getGeneSetCommands <- function(collection, mode) {
     global <- getOption("iSEEu_gene_set_commands", NULL)[[collection]]
     if (!is.null(global)) {
@@ -131,7 +131,7 @@ NULL
 }
 
 #' @export
-#' @rdname utils-gene_set
+#' @rdname utils-geneset
 .setGeneSetCommands <- function(value) {
     options(iSEEu_gene_set_commands=value)
     invisible(NULL)
