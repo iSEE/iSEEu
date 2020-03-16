@@ -53,7 +53,7 @@
 #' For creating the table:
 #' \itemize{
 #' \item \code{\link{.generateTable}(x, envir)} will create a data.frame of newly computed statistics in \code{envir}.
-#' The method will return the commands required to do so as well as a list of labels.
+#' The method will return the commands required to do so.
 #' }
 #'
 #' @examples
@@ -81,6 +81,7 @@
 #' .fullName,DifferentialStatisticsTable-method
 #' .panelColor,DifferentialStatisticsTable-method
 #' .defineDataInterface,DifferentialStatisticsTable-method
+#' .hideInterface,DifferentialStatisticsTable-method
 #' .generateTable,DifferentialStatisticsTable-method
 #' .createObservers,DifferentialStatisticsTable-method
 #' .cacheCommonInfo,DifferentialStatisticsTable-method
