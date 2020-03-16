@@ -3,9 +3,24 @@
 \name{utils-geneset}
 \alias{utils-geneset}
 \alias{.getIdentifierType}
+\alias{.setIdentifierType}
+\alias{.getOrganism}
+\alias{.setOrganism}
+\alias{.getGeneSetCommands}
+\alias{.setGeneSetCommands}
 \title{Gene set utilities}
 \usage{
 .getIdentifierType()
+
+.setIdentifierType(value)
+
+.getOrganism()
+
+.setOrganism(value)
+
+.getGeneSetCommands(collection, mode)
+
+.setGeneSetCommands(value)
 }
 \arguments{
 \item{value}{For \code{.setIdentifierType} and \code{.setOrganism},
