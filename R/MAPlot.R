@@ -75,6 +75,9 @@
 #' initialize,MAPlot-method
 #' .refineParameters,MAPlot-method
 #' .defineDataInterface,MAPlot-method
+#' .cacheCommonInfo,MAPlot-method
+#' .createObservers,MAPlot-method
+#' .hideInterface,MAPlot-method
 #' .fullName,MAPlot-method
 #' .panelColor,MAPlot-method
 #' .generateDotPlotData,MAPlot-method

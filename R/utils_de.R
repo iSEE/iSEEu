@@ -20,11 +20,11 @@
 #' old <- .getAcceptablePValueFields()
 #' old
 #'
-#' .setAcceptableFields(PValue="YAY")
+#' .setAcceptablePValueFields("YAY")
 #' .getAcceptablePValueFields()
 #'
 #' # Restoring.
-#' .setAcceptableFields(PValue=old)
+#' .setAcceptablePValueFields(old)
 #'
 #' @name utils-de
 NULL

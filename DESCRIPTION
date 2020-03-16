@@ -36,7 +36,8 @@ Imports:
     methods,
     SingleCellExperiment,
     SummarizedExperiment,
-    ggplot2
+    ggplot2,
+    DT
 Suggests: 
     scRNAseq,
     scater,
