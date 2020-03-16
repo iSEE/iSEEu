@@ -69,6 +69,40 @@ vol.panel <- VolcanoPlot()
 class(vol.panel)
 ```
 
+# Dynamically recalculated panels
+
+The `DynamicReducedDimensionPlot` class creates a scatter plot with a dimensionality reduction result, namely principal components analysis (PCA), $t$-stochastic neighbor embedding ($t$-SNE) or uniform manifold and approximate projection (UMAP).
+It does so dynamically on the subset of points that are selected in a transmitting panels,
+allowing users to focus on finer structure when dealing with a heterogeneous population.
+Calculations are performed using relevant functions from the `r Biocpkg("scater")` package.
+
+```{r}
+dyn.panel <- DynamicReducedDimensionPlot()
+class(dyn.panel)
+```
+
+The `DifferentialStatisticsTable` class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel.
+If only the active selection exists in the transmitting panel, a comparison is performed between the points in that selection and all unselected points.
+If saved selections are present, pairwise comparisons between the active selection and each saved selection is performed and the results are combined into a single table using the `findMarkers()` function from `r Biocpkg("scran")`.
+
+```{r}
+diff.panel <- DifferentialStatisticsTable()
+class(diff.panel)
+```
+
+# Gene set table
+
+The `GeneSetTable()` class is a bit unusual in that its rows do not correspond to any dimension of the `SummarizedExperiment`.
+Rather, each row is a gene set (e.g., from GO or KEGG) that, upon click, transmits a multiple row selection to other panels.
+The multiple selection consists of all genes in the chosen gene set,
+allowing users to identify the positions of all genes in a pathway of interest on, say, a volcano plot.
+This is also a rare example of a panel that only transmits and does not receive any selections from other panels.
+
+```{r}
+gset.tab <- GeneSetTable()
+class(gset.tab)
+```
+
 # App modes
 
 `r Biocpkg("iSEEu")` contains a number of "modes" that allow users to conveniently load an `iSEE` instance in one of several common configurations:
