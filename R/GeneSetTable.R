@@ -65,7 +65,7 @@
 #' @author Aaron Lun
 #' @examples
 #' library(scRNAseq)
-#' sce <- LunSpikeInData()
+#' sce <- LunSpikeInData(location=FALSE)
 #'
 #' library(scater)
 #' sce <- logNormCounts(sce)
@@ -121,7 +121,7 @@ setValidity2("GeneSetTable", function(object) {
     msg <- character(0)
 
     if (!isSingleString(type <- object[["Type"]])) {
-        msg <- c(msg, sprintf("'Organism' should be a single string", orgdb))
+        msg <- c(msg, "'Organism' should be a single string")
     }
 
     if (!isSingleString(object[["Selected"]])) {
@@ -169,7 +169,8 @@ setMethod(".defineDataInterface", "GeneSetTable", function(x, se, select_info) {
             label="Gene set type:",
             choices=.list_available_gene_sets(),
             selected=x[["Type"]]
-        )
+        ),
+        callNextMethod()
     )
 })
 

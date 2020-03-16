@@ -89,7 +89,7 @@ which is set to the number of features in \code{se}.
 
 \examples{
 library(scRNAseq)
-sce <- LunSpikeInData()
+sce <- LunSpikeInData(location=FALSE)
 
 library(scater)
 sce <- logNormCounts(sce)
