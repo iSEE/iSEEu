@@ -88,7 +88,7 @@
                   <a class="author_email" href="mailto:#"></a><a href="mailto:infinite.monkeys.with.keyboards@gmail.com">infinite.monkeys.with.keyboards@gmail.com</a>
       
                   
-            <h4 class="date">15 March 2020</h4>
+            <h4 class="date">16 March 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/iSEE/iSEEu/blob/master/vignettes/universe.Rmd"><code>vignettes/universe.Rmd</code></a></small>
       <div class="hidden name"><code>universe.Rmd</code></div>
@@ -128,6 +128,32 @@
 ## attr(,"package")
 ## [1] "iSEEu"</code></pre>
 </div>
+<div id="dynamically-recalculated-panels" class="section level1">
+<h1 class="hasAnchor">
+<a href="#dynamically-recalculated-panels" class="anchor"></a>Dynamically recalculated panels</h1>
+<p>The <code>DynamicReducedDimensionPlot</code> class creates a scatter plot with a dimensionality reduction result, namely principal components analysis (PCA), <span class="math inline">\(t\)</span>-stochastic neighbor embedding (<span class="math inline">\(t\)</span>-SNE) or uniform manifold and approximate projection (UMAP). It does so dynamically on the subset of points that are selected in a transmitting panels, allowing users to focus on finer structure when dealing with a heterogeneous population. Calculations are performed using relevant functions from the <em><a href="https://bioconductor.org/packages/3.11/scater">scater</a></em> package.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">dyn.panel &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DynamicReducedDimensionPlot-class.html">DynamicReducedDimensionPlot</a></span>()</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(dyn.panel)</a></code></pre></div>
+<pre><code>## [1] "DynamicReducedDimensionPlot"
+## attr(,"package")
+## [1] "iSEEu"</code></pre>
+<p>The <code>DifferentialStatisticsTable</code> class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel. If only the active selection exists in the transmitting panel, a comparison is performed between the points in that selection and all unselected points. If saved selections are present, pairwise comparisons between the active selection and each saved selection is performed and the results are combined into a single table using the <code>findMarkers()</code> function from <em><a href="https://bioconductor.org/packages/3.11/scran">scran</a></em>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">diff.panel &lt;-<span class="st"> </span><span class="kw"><a href="../reference/DifferentialStatisticsTable-class.html">DifferentialStatisticsTable</a></span>()</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(diff.panel)</a></code></pre></div>
+<pre><code>## [1] "DifferentialStatisticsTable"
+## attr(,"package")
+## [1] "iSEEu"</code></pre>
+</div>
+<div id="gene-set-table" class="section level1">
+<h1 class="hasAnchor">
+<a href="#gene-set-table" class="anchor"></a>Gene set table</h1>
+<p>The <code><a href="../reference/GeneSetTable-class.html">GeneSetTable()</a></code> class is a bit unusual in that its rows do not correspond to any dimension of the <code>SummarizedExperiment</code>. Rather, each row is a gene set (e.g., from GO or KEGG) that, upon click, transmits a multiple row selection to other panels. The multiple selection consists of all genes in the chosen gene set, allowing users to identify the positions of all genes in a pathway of interest on, say, a volcano plot. This is also a rare example of a panel that only transmits and does not receive any selections from other panels.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">gset.tab &lt;-<span class="st"> </span><span class="kw"><a href="../reference/GeneSetTable-class.html">GeneSetTable</a></span>()</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(gset.tab)</a></code></pre></div>
+<pre><code>## [1] "GeneSetTable"
+## attr(,"package")
+## [1] "iSEEu"</code></pre>
+</div>
 <div id="app-modes" class="section level1">
 <h1 class="hasAnchor">
 <a href="#app-modes" class="anchor"></a>App modes</h1>
@@ -144,7 +170,7 @@
 <div id="session-information" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h1>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
 <pre><code>## R Under development (unstable) (2020-03-13 r77948)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 16.04.6 LTS
@@ -213,6 +239,8 @@
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#overview">Overview</a></li>
       <li><a href="#differential-expression-plots">Differential expression plots</a></li>
+      <li><a href="#dynamically-recalculated-panels">Dynamically recalculated panels</a></li>
+      <li><a href="#gene-set-table">Gene set table</a></li>
       <li><a href="#app-modes">App modes</a></li>
       <li><a href="#session-information">Session information</a></li>
       </ul>

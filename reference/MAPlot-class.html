@@ -142,7 +142,7 @@ Users are expected to load relevant statistics into the <code>rowData</code> of 
 
 <p>The following slots control the thresholds used in the visualization:</p><ul>
 <li><p><code>PValueField</code>, a string specifying the field of <code>rowData</code> containing the p-values.
-See <code>?<a href='acceptable-de.html'>.acceptablePValueFields</a></code> for more details.</p></li>
+See <code>?<a href='utils-de.html'>.getAcceptablePValueFields</a></code> for more details.</p></li>
 <li><p><code>PValueThreshold</code>, a numeric scalar in (0, 1] specifying the threshold to use on the (adjusted) p-value.
 Defaults to 0.05.</p></li>
 <li><p><code>LogFCThreshold</code>, a non-negative numeric scalar specifying the threshold to use on the log-fold change.
@@ -168,7 +168,7 @@ Refer to the documentation for each method for more details on the remaining arg
 <p>For setting up data values:</p><ul>
 <li><p><code>.cacheCommonInfo(x)</code> adds a <code>"MAPlot"</code> entry containing <code>pval.rowData.names</code>, <code>ave.rowData.names</code> and <code>lfc.rowData.names</code>.
 Each of these is a character vector of permissible names for p-values, average abundances and log-fold changes, respectively;
-see <code>?<a href='acceptable-de.html'>.acceptablePValueFields</a></code> for details.
+see <code>?<a href='utils-de.html'>.getAcceptablePValueFields</a></code> for details.
 This will also call the equivalent RowDataPlot method.</p></li>
 <li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>XAxis="Row data"</code>.
 This will also call the equivalent RowDataPlot method for further refinements to <code>x</code>.
@@ -178,8 +178,8 @@ If valid p-value and log-fold change fields are not available, <code>NULL</code>
 <p>For defining the interface:</p><ul>
 <li><p><code>.defineDataInterface(x, se, select_info)</code> returns a list of interface elements for manipulating all slots described above.</p></li>
 <li><p><code>.panelColor(x)</code> will return the specified default color for this panel class.</p></li>
-<li><p><code>.allowableXAxisChoices(x, se)</code> returns a character vector specifying the acceptable average abundance-related variables in <code>rowData(se)</code> that can be used as choices for the x-axis, see <code>?<a href='acceptable-de.html'>.acceptableAveAbFields</a></code>.</p></li>
-<li><p><code>.allowableYAxisChoices(x, se)</code> returns a character vector specifying the acceptable log-fold change-related variables in <code>rowData(se)</code> that can be used as choices for the y-axis, see <code>?<a href='acceptable-de.html'>.acceptableLogFCFields</a></code>.</p></li>
+<li><p><code>.allowableXAxisChoices(x, se)</code> returns a character vector specifying the acceptable average abundance-related variables in <code>rowData(se)</code> that can be used as choices for the x-axis, see <code>?<a href='utils-de.html'>.getAcceptableAveAbFields</a></code>.</p></li>
+<li><p><code>.allowableYAxisChoices(x, se)</code> returns a character vector specifying the acceptable log-fold change-related variables in <code>rowData(se)</code> that can be used as choices for the y-axis, see <code>?<a href='utils-de.html'>.getAcceptableLogFCFields</a></code>.</p></li>
 <li><p><code>.hideInterface(x, field)</code> will return <code>TRUE</code> for <code>field="XAxis"</code>,
 otherwise it will call the RowDataPlot method.</p></li>
 <li><p><code>.fullName(x)</code> will return <code>"MA plot"</code>.</p></li>
