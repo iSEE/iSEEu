@@ -30,7 +30,7 @@
 #' \itemize{
 #' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names} and \code{lfc.rowData.names}. 
 #' Each of these is a character vector of permissible names for p-values and log-fold changes, respectively;
-#' see \code{?\link{.acceptablePValueFields}} for details.
+#' see \code{?\link{.getAcceptablePValueFields}} for details.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
@@ -41,8 +41,8 @@
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.acceptableLogFCFields}}.
-#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.acceptableLogPValueFields}}.
+#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.getAcceptableLogFCFields}}.
+#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.getAcceptableLogPValueFields}}.
 #' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 #' otherwise it will call the \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.fullName}(x)} will return \code{"Volcano plot"}.
@@ -168,8 +168,8 @@ setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
     se <- callNextMethod()
 
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
-    pfields <- intersect(all.cont, .acceptablePValueFields())
-    lfields <- intersect(all.cont, .acceptableLogFCFields())
+    pfields <- intersect(all.cont, .getAcceptablePValueFields())
+    lfields <- intersect(all.cont, .getAcceptableLogFCFields())
 
     .setCachedCommonInfo(se, "VolcanoPlot", 
         pval.rowData.names=pfields,

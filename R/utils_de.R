@@ -3,52 +3,52 @@
 #' Set or get the acceptable fields to use for all \linkS4class{Panel} instances related to differential expression,
 #' including \linkS4class{VolcanoPlot} and \linkS4class{MAPlot}.
 #'
-#' @param PValue,LogFC,AveAb Character vector of acceptable fields (usually in the \code{\link{rowData}}) for a given statistic.
+#' @param value Character vector of acceptable fields (usually in the \code{\link{rowData}}) for a given statistic.
 #'
 #' @return
-#' \code{.acceptablePValueFields} will return a character vector of acceptable names for p-value fields.
+#' \code{.getAcceptablePValueFields} will return a character vector of acceptable names for p-value fields.
 #'
-#' \code{.acceptableLogFCFields} will return a character vector of acceptable names for log-FC fields.
+#' \code{.getAcceptableLogFCFields} will return a character vector of acceptable names for log-FC fields.
 #'
-#' \code{.acceptableAveAbFields} will return a character vector of acceptable names for average abundance fields.
+#' \code{.getAcceptableAveAbFields} will return a character vector of acceptable names for average abundance fields.
 #'
-#' \code{.setAcceptableFields} will define the set of acceptable fields.
+#' The setter functions will define the set of acceptable fields and return \code{NULL} invisibly.
 #' 
 #' @author Aaron Lun
 #'
 #' @examples
-#' old <- .acceptablePValueFields()
+#' old <- .getAcceptablePValueFields()
 #' old
 #'
 #' .setAcceptableFields(PValue="YAY")
-#' .acceptablePValueFields()
+#' .getAcceptablePValueFields()
 #'
 #' # Restoring.
 #' .setAcceptableFields(PValue=old)
 #'
-#' @name acceptable-de
+#' @name utils-de
 NULL
 
 #' @export
-#' @rdname acceptable-de
-.acceptablePValueFields <- function() {
+#' @rdname utils-de
+.getAcceptablePValueFields <- function() {
     .acceptable_template("PValue", c("PValue", "p.value", "pval"))
 }
 
 #' @export
-#' @rdname acceptable-de
-.acceptableLogFCFields <- function() {
+#' @rdname utils-de
+.getAcceptableLogFCFields <- function() {
     .acceptable_template("LogFC", c("logFC", "LogFC"))
 }
 
 #' @export
-#' @rdname acceptable-de
-.acceptableAveAbFields <- function() {
+#' @rdname utils-de
+.getAcceptableAveAbFields <- function() {
     .acceptable_template("AveAb", c("AveExpr", "logCPM"))
 }
 
 .acceptable_template <- function(field, defaults) {
-    global <- getOption("iSEEu_de_acceptable", NULL)[[field]]
+    global <- getOption(paste0("iSEEu_de_acceptable_", tolower(field)), NULL)
     if (is.null(global)) {
         defaults
     } else {
@@ -57,9 +57,23 @@ NULL
 }
 
 #' @export
-#' @rdname acceptable-de
-.setAcceptableFields <- function(PValue=NULL, LogFC=NULL, AveAb=NULL) {
-    options(iSEEu_de_acceptable=list(PValue=PValue, LogFC=LogFC, AveAb=AveAb))
+#' @rdname utils-de
+.setAcceptablePValueFields <- function(value) {
+    options(iSEEu_de_acceptable_pvalue=value)
+    invisible(NULL)
+}
+
+#' @export
+#' @rdname utils-de
+.setAcceptableLogFCFields <- function(value) {
+    options(iSEEu_de_acceptable_logfc=value)
+    invisible(NULL)
+}
+
+#' @export
+#' @rdname utils-de
+.setAcceptableAveAbFields <- function(value) {
+    options(iSEEu_de_acceptable_aveab=value)
     invisible(NULL)
 }
 
