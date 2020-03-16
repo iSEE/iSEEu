@@ -110,23 +110,39 @@ NULL
     }
 
     if (collection=="GO") {
-        if (mode=="show") {
-            paste("require(GO.db);",
-                sprintf(".all_terms <- AnnotationDbi::keys(%s::%s, keytype='GO');", .getOrganism(), .getOrganism()),
-                "tab <- AnnotationDbi::select(GO.db, keys=.all_terms, columns='TERM');",
+        nm <- "GO"
+    } else {
+        nm <- "PATH"
+    }
+
+    if (mode=="show") {
+        term_cmd <- sprintf(".all_terms <- AnnotationDbi::keys(%s::%s, keytype='%s');", .getOrganism(), .getOrganism(), nm)
+        if (collection=="GO") {
+            paste(
+                term_cmd,
+                "tab <- AnnotationDbi::select(GO.db::GO.db, keys=.all_terms, columns='TERM');",
                 "rownames(tab) <- tab$GOID;",
                 "tab$GOID <- NULL;", 
                 sep="\n")
         } else {
-            dp <- deparse(.getIdentifierType())
             paste(
-                sprintf(".genes_in_set <- tryCatch(select(%s::%s, keys=%%s, keytype='GO',", 
-                    .getOrganism(), .getOrganism()),
-                sprintf("   column=%s)[,%s], error=function(e) character(0));", dp, dp),
-                "selected <- intersect(rownames(se), .genes_in_set)",
+                term_cmd,
+                "tab <- read.delim('http://rest.kegg.jp/list/pathway', header=FALSE);",
+                "colnames(tab) <- c('ID', 'Description');",
+                "rownames(tab) <- sub('path:map', '', tab$ID);",
+                "tab <- tab[intersect(rownames(tab), .all_terms),];",
                 sep="\n"
             )
         }
+    } else {
+        dp <- deparse(.getIdentifierType())
+        paste(
+            sprintf(".genes_in_set <- tryCatch(AnnotationDbi::select(%s::%s, keys=%%s, keytype='%s',", 
+                .getOrganism(), .getOrganism(), nm),
+            sprintf("   column=%s)[,%s], error=function(e) character(0));", dp, dp),
+            "selected <- intersect(rownames(se), .genes_in_set)",
+            sep="\n"
+        )
     }
 }
 
