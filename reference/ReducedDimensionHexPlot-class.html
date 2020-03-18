@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Differential statistics table — DifferentialStatisticsTable-class • iSEEu</title>
+<title>The ReducedDimensionHexPlot class — ReducedDimensionHexPlot-class • iSEEu</title>
 
 
 <!-- jquery -->
@@ -35,11 +35,8 @@
 
 
 
-<meta property="og:title" content="Differential statistics table — DifferentialStatisticsTable-class" />
-<meta property="og:description" content="A table that dynamically computes differential statistics based on a selected subset of samples.
-Comparisons are made between the active selection in the transmitting panel
-and (i) all non-selected points, if no saved selections are available;
-or (ii) each subset of points in each saved selection." />
+<meta property="og:title" content="The ReducedDimensionHexPlot class — ReducedDimensionHexPlot-class" />
+<meta property="og:description" content="The ReducedDimensionHexPlot is a ReducedDimensionPlot subclass that is dedicated to creating a reduced dimension plot summarisign data points in hexagonal bins." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,16 +121,13 @@ or (ii) each subset of points in each saved selection." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Differential statistics table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/DifferentialStatisticsTable.R'><code>R/DifferentialStatisticsTable.R</code></a></small>
-    <div class="hidden name"><code>DifferentialStatisticsTable-class.Rd</code></div>
+    <h1>The ReducedDimensionHexPlot class</h1>
+    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/panel_ReducedDimensionHexPlot.R'><code>R/panel_ReducedDimensionHexPlot.R</code></a></small>
+    <div class="hidden name"><code>ReducedDimensionHexPlot-class.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A table that dynamically computes differential statistics based on a selected subset of samples.
-Comparisons are made between the active selection in the transmitting panel
-and (i) all non-selected points, if no saved selections are available;
-or (ii) each subset of points in each saved selection.</p>
+    <p>The ReducedDimensionHexPlot is a ReducedDimensionPlot subclass that is dedicated to creating a reduced dimension plot summarisign data points in hexagonal bins.</p>
     </div>
 
 
@@ -142,70 +136,65 @@ or (ii) each subset of points in each saved selection.</p>
 
     
 
-<p>The following slots control the thresholds used in the visualization:</p><ul>
-<li><p><code>LogFC</code>, a numeric scalar indicating the log-fold change threshold to test against.
-Defaults to zero.</p></li>
-<li><p><code>TestMethod</code>, string indicating the test to use (based on the <code>findMarkers</code> function from <span class="pkg">scran</span>).
-This can be <code>"t"</code> (default), <code>"wilcox"</code> or <code>"binom"</code>.</p></li>
-<li><p><code>Assay</code>, string indicating the assay to use for testing.
-Defaults to the first named assay in the SummarizedExperiment.</p></li>
+<p>The following slots control the parameters used in the visualization:</p><ul>
+<li><p><code>BinResolution</code>, a numeric positive scalar specifying the number of hexagonal bins in both vertical and horizontal directions.
+Defaults to 100.</p></li>
 </ul>
 
-<p>In addition, this class inherits all slots from its parent RowTable,
-Table and Panel classes.</p>
+<p>In addition, this class inherits all slots from its parent ReducedDimensionPlot,
+ColumnDotPlot, DotPlot and Panel classes.</p>
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
     
 
-<p><code>DifferentialStatisticsTable(...)</code> creates an instance of a DifferentialStatisticsTable class,
+<p><code>ReducedDimensionHexPlot(...)</code> creates an instance of a ReducedDimensionHexPlot class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
     
 
-<p>In the following code snippets, <code>x</code> is an instance of a DifferentialStatisticsTable class.
+<p>In the following code snippets, <code>x</code> is an instance of a ReducedDimensionHexPlot class.
 Refer to the documentation for each method for more details on the remaining arguments.</p>
-<p>For setting up data values:</p><ul>
-<li><p><code>.cacheCommonInfo(x)</code> adds a <code>"DifferentialStatisticsTable"</code> entry containing <code>valid.assay.names</code>.
-This will also call the equivalent RowTable method.</p></li>
-<li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>"Assay"</code> to the first valid value.
-This will also call the equivalent RowTable method for further refinements to <code>x</code>.
-If valid assay names are not available, <code>NULL</code> is returned instead.</p></li>
-</ul>
-
 <p>For defining the interface:</p><ul>
-<li><p><code>.defineDataInterface(x, se, select_info)</code> returns a list of interface elements for manipulating all slots described above.</p></li>
 <li><p><code>.panelColor(x)</code> will return the specified default color for this panel class.</p></li>
-<li><p><code>.fullName(x)</code> will return <code>"Differential statistics table"</code>.</p></li>
-<li><p><code>.hideInterface(x)</code> will return <code>TRUE</code> for UI elements related to multiple row selections,
-otherwise calling the method for RowTable.</p></li>
+<li><p><code>.hideInterface(x, field)</code> will return <code>TRUE</code> for <code>field="Downsample"</code>,
+otherwise it will call the ReducedDimensionPlot method.</p></li>
 </ul>
 
 <p>For monitoring reactive expressions:</p><ul>
-<li><p><code>.createObservers(x, se, input, session, pObjects, rObjects)</code> sets up observers for all new slots described above, as well as in the parent classes via the RowTable method.</p></li>
+<li><p><code>.createObservers(x, se, input, session, pObjects, rObjects)</code> sets up observers for all new slots described above, as well as in the parent classes via the ReducedDimensionPlot method.</p></li>
 </ul>
 
-<p>For creating the table:</p><ul>
-<li><p><code>.generateTable(x, envir)</code> will create a data.frame of newly computed statistics in <code>envir</code>.
-The method will return the commands required to do so.</p></li>
+<p>For defining the panel name:</p><ul>
+<li><p><code>.fullName(x)</code> will return <code>"Hexagonal reduced dimension plot"</code>.</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>ReducedDimensionPlot, for the base class.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='input'>
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>using temporary cache /tmp/RtmpVNveGF/BiocFileCache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-03-12</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/logNormCounts.html'>logNormCounts</a></span>(<span class='no'>sce</span>, <span class='kw'>exprs_values</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)
+
+<span class='co'># Example data ----</span>
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-03-12</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "SingleCellExperiment"
+#&gt; attr(,"package")
+#&gt; [1] "SingleCellExperiment"</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/logNormCounts.html'>logNormCounts</a></span>(<span class='no'>sce</span>, <span class='kw'>exprs_values</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)
+
 <span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/runPCA.html'>runPCA</a></span>(<span class='no'>sce</span>, <span class='kw'>ncomponents</span><span class='kw'>=</span><span class='fl'>4</span>)
 <span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/runTSNE.html'>runTSNE</a></span>(<span class='no'>sce</span>)
+<span class='fu'>rowData</span>(<span class='no'>sce</span>)$<span class='no'>ave_count</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowMeans</a></span>(<span class='fu'>assay</span>(<span class='no'>sce</span>, <span class='st'>"tophat_counts"</span>))
+<span class='fu'>rowData</span>(<span class='no'>sce</span>)$<span class='no'>n_cells</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>rowSums</a></span>(<span class='fu'>assay</span>(<span class='no'>sce</span>, <span class='st'>"tophat_counts"</span>) <span class='kw'>&gt;</span> <span class='fl'>0</span>)
 
-<span class='no'>dst</span> <span class='kw'>&lt;-</span> <span class='fu'>DifferentialStatisticsTable</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>, <span class='kw'>PanelWidth</span><span class='kw'>=</span><span class='fl'>8L</span>,
-    <span class='kw'>ColumnSelectionSource</span><span class='kw'>=</span><span class='st'>"ReducedDimensionPlot1"</span>)
-
-<span class='no'>rdp</span> <span class='kw'>&lt;-</span> <span class='fu'>ReducedDimensionPlot</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>,
-    <span class='kw'>ColorByFeatureSource</span><span class='kw'>=</span><span class='st'>"DifferentialStatisticsTable1"</span>)
+<span class='co'># launch the app itself ----</span>
 
 <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-    <span class='fu'>iSEE</span>(<span class='no'>sce</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>rdp</span>, <span class='no'>dst</span>))
+    <span class='fu'>iSEE</span>(<span class='no'>sce</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='fu'>ReducedDimensionHexPlot</span>(<span class='kw'>BinResolution</span><span class='kw'>=</span><span class='fl'>50</span>),
+        <span class='fu'>ReducedDimensionPlot</span>()
+    ))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -214,9 +203,12 @@ The method will return the commands required to do so.</p></li>
       <li><a href="#slot-overview">Slot overview</a></li>
       <li><a href="#constructor">Constructor</a></li>
       <li><a href="#supported-methods">Supported methods</a></li>
+      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
+    <h2>Author</h2>
+    <p>Kevin Rue-Albrecht</p>
   </div>
 </div>
 
