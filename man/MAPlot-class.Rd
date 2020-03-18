@@ -19,9 +19,6 @@
 \alias{.colorByNoneDotPlotField,MAPlot-method}
 \alias{.colorByNoneDotPlotScale,MAPlot-method}
 \alias{.generateDotPlot,MAPlot-method}
-\alias{.cacheCommonInfo,MAPlot-method}
-\alias{.createObservers,MAPlot-method}
-\alias{.hideInterface,MAPlot-method}
 \title{The MAPlot class}
 \description{
 The MAPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.

@@ -9,7 +9,7 @@ modeReducedDim(
   includeNames = reducedDimNames(se),
   colorBy = NULL,
   ...,
-  plot_width = NULL
+  plotWidth = NULL
 )
 }
 \arguments{
@@ -19,7 +19,7 @@ modeReducedDim(
 to display as individual panels. The default uses all available in
 \code{reducedDimNames(se)}.}
 
-\item{colorBy}{Character scalar controling coloring of cells. Must match either
+\item{colorBy}{Character scalar controlling coloring of cells. Must match either
 to one of \code{colnames(colData(se))} or \code{rownames(se)}. If coloring
 by a colData column, a column data plot is opened in addition to the
 reduced dimension panels. If coloring by a feature, a row statistics table
@@ -28,10 +28,10 @@ latter are receiving the color.}
 
 \item{...}{Additional arguments passed to \code{\link{iSEE}}.}
 
-\item{plot_width}{The grid width of linked plots (numeric vector of length
+\item{plotWidth}{The grid width of linked plots (numeric vector of length
 either 1 or equal to \code{length(includeNames)}). The total width of
-the window is 12, so \code{plot_width = 4} for example will show three
-panels per row. If \code{plot_width = NULL} (the default), a value will be
+the window is 12, so \code{plotWidth = 4} for example will show three
+panels per row. If \code{plotWidth = NULL} (the default), a value will be
 estimated depending on the number of reduced dimension panels.}
 }
 \value{

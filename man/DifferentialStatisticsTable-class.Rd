@@ -13,7 +13,6 @@
 \alias{.cacheCommonInfo,DifferentialStatisticsTable-method}
 \alias{.refineParameters,DifferentialStatisticsTable-method}
 \alias{.multiSelectionInvalidated,DifferentialStatisticsTable-method}
-\alias{.hideInterface,DifferentialStatisticsTable-method}
 \title{Differential statistics table}
 \description{
 A table that dynamically computes differential statistics based on a selected subset of samples.
