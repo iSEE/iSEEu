@@ -1,9 +1,9 @@
 #' The MAPlot class
-#' 
+#'
 #' The MAPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.
 #' It retrieves the log-fold change and average abundance and creates a row-based plot where each point represents a feature.
 #' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
-#' 
+#'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
@@ -21,7 +21,7 @@
 #' \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
 #' @section Constructor:
-#' \code{MAPlot(...)} creates an instance of a MAPlot class, 
+#' \code{MAPlot(...)} creates an instance of a MAPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
@@ -30,7 +30,7 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names}, \code{ave.rowData.names} and \code{lfc.rowData.names}. 
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names}, \code{ave.rowData.names} and \code{lfc.rowData.names}.
 #' Each of these is a character vector of permissible names for p-values, average abundances and log-fold changes, respectively;
 #' see \code{?\link{.getAcceptablePValueFields}} for details.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method.
@@ -87,6 +87,9 @@
 #' .colorByNoneDotPlotField,MAPlot-method
 #' .colorByNoneDotPlotScale,MAPlot-method
 #' .generateDotPlot,MAPlot-method
+#' .cacheCommonInfo,MAPlot-method
+#' .createObservers,MAPlot-method
+#' .hideInterface,MAPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -102,14 +105,14 @@
 #'
 #' @author Aaron Lun
 #'
-#' @seealso 
+#' @seealso
 #' \link{RowDataPlot}, for the base class.
 #'
 #' @name MAPlot-class
 NULL
 
 #' @export
-setClass("MAPlot", contains="RowDataPlot", 
+setClass("MAPlot", contains="RowDataPlot",
     slots=c(PValueField="character", PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character"))
 
 #' @export
@@ -120,7 +123,7 @@ setMethod(".panelColor", "MAPlot", function(x) "#666600")
 
 #' @export
 setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
-    PValueThreshold=0.05, LogFCThreshold=0, PValueCorrection="BH", ...) 
+    PValueThreshold=0.05, LogFCThreshold=0, PValueCorrection="BH", ...)
 {
     callNextMethod(.Object, PValueField=PValueField, PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
@@ -195,7 +198,7 @@ setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
     afields <- intersect(all.cont, .getAcceptableAveAbFields())
     lfields <- intersect(all.cont, .getAcceptableLogFCFields())
 
-    .setCachedCommonInfo(se, "MAPlot", 
+    .setCachedCommonInfo(se, "MAPlot",
         pval.rowData.names=pfields,
         ave.rowData.names=afields,
         lfc.rowData.names=lfields)
@@ -220,13 +223,13 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
 
     c(callNextMethod(),
         list(
-            selectInput(input_FUN("PValueField"), 
+            selectInput(input_FUN("PValueField"),
                 label="P-value field:",
-                selected=x[["PValueField"]], 
+                selected=x[["PValueField"]],
                 choices=.getCachedCommonInfo(se, "MAPlot")$pval.rowData.names),
-            numericInput(input_FUN("PValueThreshold"), label="P-value threshold:", 
+            numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
-            numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:", 
+            numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
                 value=x[["LogFCThreshold"]], min=0, max=NA, step=0.5),
             selectInput(input_FUN("PValueCorrection"), label="Correction method:",
                 selected=x[["PValueCorrection"]], choices=p.adjust.methods)
@@ -236,7 +239,7 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
 
 #' @export
 setMethod(".hideInterface", "MAPlot", function(x, field) {
-    if (field == "XAxis") TRUE else callNextMethod()       
+    if (field == "XAxis") TRUE else callNextMethod()
 })
 
 #' @export

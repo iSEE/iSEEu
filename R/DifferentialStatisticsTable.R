@@ -16,20 +16,20 @@
 #' Defaults to the first named assay in the SummarizedExperiment.
 #' }
 #'
-#' In addition, this class inherits all slots from its parent \linkS4class{RowTable}, 
+#' In addition, this class inherits all slots from its parent \linkS4class{RowTable},
 #' \linkS4class{Table} and \linkS4class{Panel} classes.
 #'
 #' @section Constructor:
-#' \code{DifferentialStatisticsTable(...)} creates an instance of a DifferentialStatisticsTable class, 
+#' \code{DifferentialStatisticsTable(...)} creates an instance of a DifferentialStatisticsTable class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{DifferentialStatisticsTable} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
-#' 
+#'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry containing \code{valid.assay.names}. 
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry containing \code{valid.assay.names}.
 #' This will also call the equivalent \linkS4class{RowTable} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
 #' This will also call the equivalent \linkS4class{RowTable} method for further refinements to \code{x}.
@@ -68,7 +68,7 @@
 #' dst <- DifferentialStatisticsTable(PanelId=1L, PanelWidth=8L,
 #'     ColumnSelectionSource="ReducedDimensionPlot1")
 #'
-#' rdp <- ReducedDimensionPlot(PanelId=1L, 
+#' rdp <- ReducedDimensionPlot(PanelId=1L,
 #'     ColorByFeatureSource="DifferentialStatisticsTable1")
 #'
 #' if (interactive()) {
@@ -87,10 +87,11 @@
 #' .cacheCommonInfo,DifferentialStatisticsTable-method
 #' .refineParameters,DifferentialStatisticsTable-method
 #' .multiSelectionInvalidated,DifferentialStatisticsTable-method
+#' .hideInterface,DifferentialStatisticsTable-method
 NULL
 
 #' @export
-setClass("DifferentialStatisticsTable", contains="RowTable", 
+setClass("DifferentialStatisticsTable", contains="RowTable",
     slots=c(LogFC="numeric", TestMethod="character", Assay="character"))
 
 #' @importFrom S4Vectors setValidity2
@@ -129,12 +130,12 @@ setMethod("initialize", "DifferentialStatisticsTable", function(.Object, LogFC=0
 setMethod(".defineDataInterface", "DifferentialStatisticsTable", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
     list(
-        numericInput(paste0(plot_name, "_LogFC"), 
-            label="Log-FC threshold", 
-            min=0, 
+        numericInput(paste0(plot_name, "_LogFC"),
+            label="Log-FC threshold",
+            min=0,
             value=x[["LogFC"]]),
-        selectInput(paste0(plot_name, "_TestMethod"), 
-            label="Test method", 
+        selectInput(paste0(plot_name, "_TestMethod"),
+            label="Test method",
             choices=c(`t-test`="t", `Wilcoxon rank sum`="wilcox", `Binomial test`="binom"),
             selected=x[["TestMethod"]]),
         selectInput(paste0(plot_name, "_Assay"),
@@ -169,7 +170,7 @@ setMethod(".refineParameters", "DifferentialStatisticsTable", function(x, se) {
     valid.choices <- .getCachedCommonInfo(se, "DifferentialStatisticsTable")$valid.assay.names
     if (length(valid.choices)==0L) {
         warning(sprintf("no valid 'Assay' detected for '%s'", class(x)[1]))
-        return(NULL)    
+        return(NULL)
     }
     if (is.na(x[["Assay"]])) {
         x[["Assay"]] <- valid.choices[1]
@@ -207,17 +208,17 @@ setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
                 ".grouping <- rep(names(col_selected), lengths(col_selected));")
             subsettor <- "[,.chosen,drop=FALSE]"
         }
-        
+
         eval(parse(text=spawn.cmds), envir)
 
         # Check that there actually are two groups, otherwise this bit fails hard.
         if (length(unique(envir$.grouping)) < 2L) {
-            commands <- empty            
+            commands <- empty
             eval(parse(text=commands), envir=envir)
         } else {
             stat.cmds <- c(
-                sprintf(".de.stats <- scran::findMarkers(assay(se, %s)%s, .grouping, 
-    direction='up', lfc=%s, test.type=%s)", 
+                sprintf(".de.stats <- scran::findMarkers(assay(se, %s)%s, .grouping,
+    direction='up', lfc=%s, test.type=%s)",
                     deparse(x[["Assay"]]), subsettor, x[["LogFC"]], deparse(x[["TestMethod"]])),
                 "tab <- as.data.frame(.de.stats[['active']]);"
             )

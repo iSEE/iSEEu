@@ -24,8 +24,9 @@ Authors@R:
            role="aut", 
            email="infinite.monkeys.with.keyboards@gmail.com", 
            comment = c(ORCID = '0000-0002-3564-4813')))
-Description: Contains a set of modes for iSEE, allowing easy configuration of 
-    iSEE applications.
+Description: iSEEu (the iSEE universe) contains diverse functionality to extend 
+    the usage of the iSEE package, including additional classes for the panels, 
+    or modes allowing easy configuration of iSEE applications.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: 
@@ -34,8 +35,8 @@ Imports:
     S4Vectors,
     shiny,
     methods,
-    SingleCellExperiment,
     SummarizedExperiment,
+    SingleCellExperiment,
     ggplot2,
     DT
 Suggests: 
