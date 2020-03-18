@@ -19,6 +19,9 @@
 \alias{.colorByNoneDotPlotField,VolcanoPlot-method}
 \alias{.colorByNoneDotPlotScale,VolcanoPlot-method}
 \alias{.generateDotPlot,VolcanoPlot-method}
+\alias{.cacheCommonInfo,VolcanoPlot-method}
+\alias{.createObservers,VolcanoPlot-method}
+\alias{.hideInterface,VolcanoPlot-method}
 \title{The VolcanoPlot class}
 \description{
 The VolcanoPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a volcano plot.

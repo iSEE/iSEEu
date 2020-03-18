@@ -13,6 +13,7 @@
 \alias{.cacheCommonInfo,DifferentialStatisticsTable-method}
 \alias{.refineParameters,DifferentialStatisticsTable-method}
 \alias{.multiSelectionInvalidated,DifferentialStatisticsTable-method}
+\alias{.hideInterface,DifferentialStatisticsTable-method}
 \title{Differential statistics table}
 \description{
 A table that dynamically computes differential statistics based on a selected subset of samples.
@@ -89,7 +90,7 @@ sce <- runTSNE(sce)
 dst <- DifferentialStatisticsTable(PanelId=1L, PanelWidth=8L,
     ColumnSelectionSource="ReducedDimensionPlot1")
 
-rdp <- ReducedDimensionPlot(PanelId=1L, 
+rdp <- ReducedDimensionPlot(PanelId=1L,
     ColorByFeatureSource="DifferentialStatisticsTable1")
 
 if (interactive()) {

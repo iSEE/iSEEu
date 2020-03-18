@@ -35,8 +35,8 @@ Imports:
     S4Vectors,
     shiny,
     methods,
-    SingleCellExperiment,
     SummarizedExperiment,
+    SingleCellExperiment,
     ggplot2,
     DT
 Suggests: 
