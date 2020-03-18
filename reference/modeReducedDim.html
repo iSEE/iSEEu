@@ -139,7 +139,7 @@ dimension plots for interactive data exploration of the
   <span class='kw'>includeNames</span> <span class='kw'>=</span> <span class='fu'>reducedDimNames</span>(<span class='no'>se</span>),
   <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>,
-  <span class='kw'>plot_width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>plotWidth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -157,7 +157,7 @@ to display as individual panels. The default uses all available in
     </tr>
     <tr>
       <th>colorBy</th>
-      <td><p>Character scalar controling coloring of cells. Must match either
+      <td><p>Character scalar controlling coloring of cells. Must match either
 to one of <code><a href='https://rdrr.io/r/base/colnames.html'>colnames(colData(se))</a></code> or <code><a href='https://rdrr.io/r/base/colnames.html'>rownames(se)</a></code>. If coloring
 by a colData column, a column data plot is opened in addition to the
 reduced dimension panels. If coloring by a feature, a row statistics table
@@ -169,11 +169,11 @@ latter are receiving the color.</p></td>
       <td><p>Additional arguments passed to <code>iSEE</code>.</p></td>
     </tr>
     <tr>
-      <th>plot_width</th>
+      <th>plotWidth</th>
       <td><p>The grid width of linked plots (numeric vector of length
 either 1 or equal to <code><a href='https://rdrr.io/r/base/length.html'>length(includeNames)</a></code>). The total width of
-the window is 12, so <code>plot_width = 4</code> for example will show three
-panels per row. If <code>plot_width = NULL</code> (the default), a value will be
+the window is 12, so <code>plotWidth = 4</code> for example will show three
+panels per row. If <code>plotWidth = NULL</code> (the default), a value will be
 estimated depending on the number of reduced dimension panels.</p></td>
     </tr>
     </table>
@@ -197,13 +197,13 @@ estimated depending on the number of reduced dimension panels.</p></td>
 <span class='fu'>reducedDimNames</span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "PCA"  "TSNE" "UMAP"</div><div class='input'>
 <span class='co'># launch the app ----</span>
 <span class='co'># ... coloring by a column data variable</span>
-<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Primary.Type"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '*Args' and 'initialPanels' are deprecated.</span>
-#&gt; <span class='warning'>Use 'initial' and 'extra' instead.</span></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Primary.Type"</span>)
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
   <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span>(<span class='no'>app</span>, <span class='kw'>port</span><span class='kw'>=</span><span class='fl'>1234</span>)
 }
 <span class='co'># ... coloring by a feature</span>
-<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Scnn1a"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '*Args' and 'initialPanels' are deprecated.</span>
-#&gt; <span class='warning'>Use 'initial' and 'extra' instead.</span></div><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeReducedDim</span>(<span class='no'>sce</span>, <span class='kw'>colorBy</span> <span class='kw'>=</span> <span class='st'>"Scnn1a"</span>)
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
   <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span>(<span class='no'>app</span>, <span class='kw'>port</span><span class='kw'>=</span><span class='fl'>1234</span>)
 }</div></pre>
   </div>
