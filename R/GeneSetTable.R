@@ -19,13 +19,13 @@
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
 #'
 #' @section Constructor:
-#' \code{GeneSetTable(...)} creates an instance of a GeneSetTable class, 
+#' \code{GeneSetTable(...)} creates an instance of a GeneSetTable class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{DifferentialStatisticsTable} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
-#' 
+#'
 #' For defining the interface:
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
@@ -45,8 +45,8 @@
 #' \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir},
 #' based on the \code{mode="show"} output of \code{\link{.getGeneSetCommands}}.
 #' It will also return the commands required to do so.
-#' \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)} 
-#' will add a \code{\link{datatable}} widget to the output, 
+#' \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
+#' will add a \code{\link{datatable}} widget to the output,
 #' which is used to render the aforementioned data.frame.
 #' }
 #'
@@ -99,11 +99,11 @@
 #' .generateOutput,GeneSetTable-method
 #' .createObservers,GeneSetTable-method
 #' .renderOutput,GeneSetTable-method
-#' .multiSelectionDimension,GeneSetTable-method 
-#' .multiSelectionActive,GeneSetTable-method 
-#' .multiSelectionCommands,GeneSetTable-method 
-#' .multiSelectionAvailable,GeneSetTable-method 
-#' .multiSelectionClear,GeneSetTable-method 
+#' .multiSelectionDimension,GeneSetTable-method
+#' .multiSelectionActive,GeneSetTable-method
+#' .multiSelectionCommands,GeneSetTable-method
+#' .multiSelectionAvailable,GeneSetTable-method
+#' .multiSelectionClear,GeneSetTable-method
 NULL
 
 #' @export
@@ -143,6 +143,7 @@ setMethod("initialize", "GeneSetTable", function(.Object, Type="GO", Selected=""
     callNextMethod(.Object, Type=Type, Selected=Selected, Search=Search, SearchColumns=SearchColumns, ...))
 
 #' @export
+#' @importFrom methods new
 GeneSetTable <- function(...) {
     new("GeneSetTable", ...)
 }
@@ -161,7 +162,7 @@ setMethod(".defineOutput", "GeneSetTable", function(x, ...) {
 })
 
 #' @export
-#' @importFrom shiny selectInput 
+#' @importFrom shiny selectInput
 setMethod(".defineDataInterface", "GeneSetTable", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
     list(

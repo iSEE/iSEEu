@@ -117,6 +117,7 @@ setValidity2("DifferentialStatisticsTable", function(object) {
 })
 
 #' @export
+#' @importFrom methods new
 DifferentialStatisticsTable <- function(...) {
     new("DifferentialStatisticsTable", ...)
 }
