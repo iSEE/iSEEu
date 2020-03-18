@@ -1,7 +1,7 @@
 Package: iSEEu
 Type: Package
 Title: iSEE Universe
-Version: 0.1.1
+Version: 1.99.0
 Authors@R: 
     c(
     person("Charlotte", 
@@ -32,9 +32,9 @@ Encoding: UTF-8
 Depends: 
     iSEE
 Imports:
+    methods,
     S4Vectors,
     shiny,
-    methods,
     SummarizedExperiment,
     SingleCellExperiment,
     ggplot2,

@@ -129,6 +129,7 @@ setMethod("initialize", "VolcanoPlot", function(.Object, PValueThreshold=0.05,
 })
 
 #' @export
+#' @importFrom methods new
 VolcanoPlot <- function(...) {
     new("VolcanoPlot", ...)
 }

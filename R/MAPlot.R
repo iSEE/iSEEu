@@ -130,6 +130,7 @@ setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
 })
 
 #' @export
+#' @importFrom methods new
 MAPlot <- function(...) {
     new("MAPlot", ...)
 }

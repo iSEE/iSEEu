@@ -8,7 +8,7 @@
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
 #' \item \code{Type}, a string specifying the type of dimensionality reduction method to use.
-#' This can be \code{"PCA"} (default), \code{"TSNE"} or \code{"UMAP"}, 
+#' This can be \code{"PCA"} (default), \code{"TSNE"} or \code{"UMAP"},
 #' which uses the relevant functions from the \pkg{scater} package.
 #' \item \code{NGenes}, an integer scalar specifying the number of highly variable genes to use in the dimensionality reduction.
 #' Only used if an explicit selection of features is not made in the app.
@@ -17,20 +17,20 @@
 #' Defaults to the first named assay in the SummarizedExperiment.
 #' }
 #'
-#' In addition, this class inherits all slots from its parent \linkS4class{ColumnDotPlot}, 
+#' In addition, this class inherits all slots from its parent \linkS4class{ColumnDotPlot},
 #' \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
 #' @section Constructor:
-#' \code{DynamicReducedDimensionPlot(...)} creates an instance of a DynamicReducedDimensionPlot class, 
+#' \code{DynamicReducedDimensionPlot(...)} creates an instance of a DynamicReducedDimensionPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{DynamicReducedDimensionPlot} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
-#' 
+#'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DynamicReducedDimensionPlot"} entry containing \code{valid.assay.names}. 
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DynamicReducedDimensionPlot"} entry containing \code{valid.assay.names}.
 #' This will also call the equivalent \linkS4class{ColumnDotPlot} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
 #' This will also call the equivalent \linkS4class{ColumnDotPlot} method for further refinements to \code{x}.
@@ -122,6 +122,7 @@ setMethod("initialize", "DynamicReducedDimensionPlot", function(.Object, Type="P
     callNextMethod(.Object, Type=Type, NGenes=NGenes, Assay=Assay, ...))
 
 #' @export
+#' @importFrom methods new
 DynamicReducedDimensionPlot <- function(...) {
     new("DynamicReducedDimensionPlot", ...)
 }

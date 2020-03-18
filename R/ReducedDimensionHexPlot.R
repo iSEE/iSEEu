@@ -93,6 +93,7 @@ collated[.plotBinResolution] <- "numeric"
 setClass("ReducedDimensionHexPlot", contains="ReducedDimensionPlot", slots=collated)
 
 #' @export
+#' @importFrom methods new
 ReducedDimensionHexPlot <- function(...) {
     new("ReducedDimensionHexPlot", ...)
 }
