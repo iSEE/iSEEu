@@ -134,19 +134,19 @@
 <div id="some-more-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#some-more-info" class="anchor"></a>Some more info</h2>
-<div id="where-do-i-look-for-constants-within-isee--" class="section level4">
+<div id="where-do-i-look-for-constants-within-isee" class="section level4">
 <h4 class="hasAnchor">
-<a href="#where-do-i-look-for-constants-within-isee--" class="anchor"></a>Where do I look for constants within <code>iSEE</code>? {-}</h4>
+<a href="#where-do-i-look-for-constants-within-isee" class="anchor"></a>Where do I look for constants within <code>iSEE</code>?</h4>
 <p>Many of the “global” variables that are used in several places in <code>iSEE</code> are defined in the <a href="https://github.com/iSEE/iSEE/blob/master/R/constants.R">constants.R</a> script in <code>iSEE</code>. We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. To access a constant, use <code>iSEE:::.constantName</code>.</p>
 </div>
-<div id="is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work--" class="section level4">
+<div id="is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work" class="section level4">
 <h4 class="hasAnchor">
-<a href="#is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work--" class="anchor"></a>Is there any example I can check out to understand how things are supposed to work? {-}</h4>
+<a href="#is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work" class="anchor"></a>Is there any example I can check out to understand how things are supposed to work?</h4>
 <p>There are several modes already defined in the <code>R/</code> directory.</p>
 </div>
-<div id="are-there-any-style-guides-i-am-supposed-to-follow--" class="section level4">
+<div id="are-there-any-style-guides-i-am-supposed-to-follow" class="section level4">
 <h4 class="hasAnchor">
-<a href="#are-there-any-style-guides-i-am-supposed-to-follow--" class="anchor"></a>Are there any style guides I am supposed to follow? {-}</h4>
+<a href="#are-there-any-style-guides-i-am-supposed-to-follow" class="anchor"></a>Are there any style guides I am supposed to follow?</h4>
 <p>Yes. Mainly guided by common sense of “never changing a working system”, please stick to the conventions we have been adopting for developing the existing codebase. A few simple style options:</p>
 <ul>
 <li>keep the indentation as it is in the initial functions already available.</li>
@@ -155,19 +155,19 @@
 <li>for names, try to keep some consistency with what already is existing. We use camelCase for modes and some other functions, and prepend most unexported elements with a dot.</li>
 </ul>
 </div>
-<div id="what-if-i-need-a-custom-panel-type--" class="section level4">
+<div id="what-if-i-need-a-custom-panel-type" class="section level4">
 <h4 class="hasAnchor">
-<a href="#what-if-i-need-a-custom-panel-type--" class="anchor"></a>What if I need a custom panel type? {-}</h4>
+<a href="#what-if-i-need-a-custom-panel-type" class="anchor"></a>What if I need a custom panel type?</h4>
 <p>In addition to the eight standard panel types, custom panels are easily accommodated within <code>iSEE</code> applications. For a guide, see the corresponding <a href="https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html">vignette</a>. For examples, see <a href="https://github.com/iSEE/iSEE_custom">this repo</a>.</p>
 </div>
-<div id="are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types--" class="section level4">
+<div id="are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types" class="section level4">
 <h4 class="hasAnchor">
-<a href="#are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types--" class="anchor"></a>Are there other examples on how to use <code>iSEE</code> for exploring other datasets/data types? {-}</h4>
+<a href="#are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types" class="anchor"></a>Are there other examples on how to use <code>iSEE</code> for exploring other datasets/data types?</h4>
 <p>Yes, you can have a look at the examples in <a href="https://github.com/iSEE/iSEE_instances" class="uri">https://github.com/iSEE/iSEE_instances</a>, where we tried to put together fully worked vignettes to re-analyze publicly available datasets, e.g. also trying to replicate some key visualizations of the original publications.</p>
 </div>
-<div id="where-can-i-find-a-comprehensive-introduction-to-isee--" class="section level4">
+<div id="where-can-i-find-a-comprehensive-introduction-to-isee" class="section level4">
 <h4 class="hasAnchor">
-<a href="#where-can-i-find-a-comprehensive-introduction-to-isee--" class="anchor"></a>Where can I find a comprehensive introduction to <code>iSEE</code>? {-}</h4>
+<a href="#where-can-i-find-a-comprehensive-introduction-to-isee" class="anchor"></a>Where can I find a comprehensive introduction to <code>iSEE</code>?</h4>
 <p>The <code>iSEE</code> package contains several vignettes detailing the main functionality. You can also take a look at this <a href="https://isee.github.io/iSEEWorkshop2019/index.html">workshop</a>. A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available <a href="http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/">here</a>.</p>
 </div>
 </div>
