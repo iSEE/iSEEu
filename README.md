@@ -61,17 +61,17 @@ git clone https://github.com/[your_github_username]/iSEEu.git
 
 ## Some more info
 
-#### Where do I look for constants within `iSEE`? {-}
+#### Where do I look for constants within `iSEE`?
 
 Many of the "global" variables that are used in several places in `iSEE` are defined in the [constants.R](https://github.com/iSEE/iSEE/blob/master/R/constants.R) script in `iSEE`. 
 We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. 
 To access a constant, use `iSEE:::.constantName`. 
 
-#### Is there any example I can check out to understand how things are supposed to work? {-}
+#### Is there any example I can check out to understand how things are supposed to work?
 
 There are several modes already defined in the `R/` directory. 
 
-#### Are there any style guides I am supposed to follow? {-}
+#### Are there any style guides I am supposed to follow?
 
 Yes. 
 Mainly guided by common sense of "never changing a working system", please stick to the conventions we have been adopting for developing the existing codebase.
@@ -83,17 +83,17 @@ A few simple style options:
 - for names, try to keep some consistency with what already is existing.
   We use camelCase for modes and some other functions, and prepend most unexported elements with a dot.
 
-#### What if I need a custom panel type? {-}
+#### What if I need a custom panel type?
 
 In addition to the eight standard panel types, custom panels are easily accommodated within `iSEE` applications. 
 For a guide, see the corresponding [vignette](https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html). 
 For examples, see [this repo](https://github.com/iSEE/iSEE_custom).
 
-#### Are there other examples on how to use `iSEE` for exploring other datasets/data types? {-}
+#### Are there other examples on how to use `iSEE` for exploring other datasets/data types?
 
 Yes, you can have a look at the examples in https://github.com/iSEE/iSEE_instances, where we tried to put together fully worked vignettes to re-analyze publicly available datasets, e.g. also trying to replicate some key visualizations of the original publications.
 
-#### Where can I find a comprehensive introduction to `iSEE`? {-}
+#### Where can I find a comprehensive introduction to `iSEE`?
 
 The `iSEE` package contains several vignettes detailing the main functionality. 
 You can also take a look at this [workshop](https://isee.github.io/iSEEWorkshop2019/index.html). 
