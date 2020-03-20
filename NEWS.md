@@ -1,4 +1,4 @@
-# iSEEu 1.99.0
+# iSEEu 0.99.0
 
 * Added panel `DifferentialStatisticsTable`
 * Added panel `DynamicReducedDimensionPlot	`
