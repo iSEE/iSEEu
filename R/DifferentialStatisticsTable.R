@@ -189,7 +189,7 @@ setMethod(".createObservers", "DifferentialStatisticsTable",
     plot_name <- .getEncodedName(x)
 
     .createUnprotectedParameterObservers(plot_name,
-        fields=c("LogFC", "TestMethod"),
+        fields=c("LogFC", "TestMethod", "Assay"),
         input=input, pObjects=pObjects, rObjects=rObjects)
 })
 
