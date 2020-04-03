@@ -3,8 +3,7 @@
 #' This mode launches a Shiny App preconfigured with multiple chain-linked
 #' feature expression plots for interactive data exploration of the
 #' [SingleCellExperiment][SingleCellExperiment::SingleCellExperiment()] or
-#' [SummarizedExperiment][SummarizedExperiment::SummarizedExperiment()]
-#' object.
+#' \code{\link{SummarizedExperiment}} object.
 #'
 #' @param se An object that coercible to
 #' [SingleCellExperiment-class][SingleCellExperiment::SingleCellExperiment()]
