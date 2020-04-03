@@ -33,7 +33,8 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages(c('remotes', 'BiocManager'), Ncpu = 2L)
+          install.packages(c('remotes', 'BiocManager', 'dbplyr'), Ncpu = 2L)
+          BiocManager::install('GenomeInfoDbData')
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), "depends.Rds", version = 2)
         shell: Rscript {0}
 
