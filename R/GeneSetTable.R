@@ -206,10 +206,14 @@ setMethod(".createObservers", "GeneSetTable", function(x, se, input, session, pO
         fields="Type",
         input=input, pObjects=pObjects, rObjects=rObjects)
 
-    # Observer for the DataTable row selection:
+    # Observer for the DataTable row selection. Note that this needs the
+    # ignoreNULL=FALSE in order to acknowledge 'unselection'; however, it
+    # _also_ needs ignoreInit=TRUE to avoid wiping out any initial value of
+    # 'Selected' due to an empty input at app start.
     select_field <- paste0(panel_name, "_rows_selected")
     observeEvent(input[[select_field]], {
         chosen <- input[[select_field]]
+
         if (length(chosen)==0L) {
             chosen <- ""
         } else {
@@ -223,7 +227,8 @@ setMethod(".createObservers", "GeneSetTable", function(x, se, input, session, pO
         pObjects$memory[[panel_name]][["Selected"]] <- chosen
         .requestActiveSelectionUpdate(panel_name, session=session, pObjects=pObjects,
             rObjects=rObjects, update_output=FALSE)
-    }, ignoreNULL=FALSE)
+
+    }, ignoreNULL=FALSE, ignoreInit=TRUE)
 
     # Observer for the search field:
     search_field <- paste0(panel_name, "_search")
