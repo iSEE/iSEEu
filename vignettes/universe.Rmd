@@ -19,6 +19,10 @@ knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
 library(BiocStyle)
 ```
 
+```{r, eval=!exists("SCREENSHOT"), include=FALSE}
+SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
+```
+
 # Overview
 
 The `r Biocpkg("iSEE")` package provides a general and flexible framework for interactively exploring `SummarizedExperiment` objects.
@@ -31,21 +35,31 @@ We first load in the package:
 library(iSEEu)
 ```
 
-All the panels described in this document can be specified by simply passing them into the `iSEE()` function via the `initial=` argument.
-For example, we can create an app to explore differential expression results using a volcano and MA plot:
-
-```{r}
-# Making up some results:
-se <- SummarizedExperiment(matrix(rnorm(10000), 1000, 10))
-rownames(se) <- paste0("GENE_", seq_len(nrow(se)))
-rowData(se)$PValue <- runif(nrow(se))
-rowData(se)$LogFC <- rnorm(nrow(se))
-rowData(se)$AveExpr <- rnorm(nrow(se))
-
-app <- iSEE(se, initial=list(VolcanoPlot(), MAPlot()))
-```
+All the panels described in this document can be deployed by simply passing them into the `iSEE()` function via the `initial=` argument, as shown in the following examples.
 
 # Differential expression plots
+
+To demonstrate the use of these panels,
+we will perform a differential expression analysis on the `r Biocpkg("airway")` dataset with the `r Biocpkg("edgeR")` package.
+We store the resulting statistics in the `rowData` of the `SummarizedExperiment` so that it can be accessed by `iSEE` panels.
+
+```{r}
+library(airway)
+data(airway)
+
+library(edgeR)
+y <- DGEList(assay(airway), samples=colData(airway))
+y <- y[filterByExpr(y, group=y$samples$dex),]
+y <- calcNormFactors(y)
+
+design <- model.matrix(~dex, y$samples)
+y <- estimateDisp(y, design)
+fit <- glmQLFit(y, design)
+res <- glmQLFTest(fit, coef=2)
+
+tab <- topTags(res, n=Inf)$table
+rowData(airway) <- cbind(rowData(airway), tab[rownames(airway),])
+```
 
 The `MAPlot` class creates a MA plot, i.e., with the log-fold change on the y-axis and the average expression on the x-axis.
 Features with significant differences in each direction are highlighted and counted on the legend.
@@ -54,8 +68,12 @@ This is a subclass of the `RowDataPlot` so points can be transmitted to other pa
 Instances of this class are created like:
 
 ```{r}
-ma.panel <- MAPlot()
-class(ma.panel)
+ma.panel <- MAPlot(PanelWidth=6L)
+app <- iSEE(airway, initial=list(ma.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/ma.png")
 ```
 
 The `VolcanoPlot` class creates a volcano plot with the log-fold change on the x-axis and the negative log-p-value on the y-axis.
@@ -65,20 +83,65 @@ This is a subclass of the `RowDataPlot` so points can be transmitted to other pa
 Instances of this class are created like:
 
 ```{r}
-vol.panel <- VolcanoPlot()
-class(vol.panel)
+vol.panel <- VolcanoPlot(PanelWidth=6L)
+app <- iSEE(airway, initial=list(vol.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/volcano.png")
 ```
 
 # Dynamically recalculated panels
 
+To demonstrate, we will perform a quick analysis of a small dataset from the `r Biocpkg("scRNAseq")` package.
+This involves computing normalized expression values and low-dimensional results using the `r Biocpkg("scater")` package.
+
+```{r}
+library(scRNAseq)
+sce <- ReprocessedAllenData(assays="tophat_counts")
+
+library(scater)
+sce <- logNormCounts(sce, exprs_values="tophat_counts")
+sce <- runPCA(sce, ncomponents=4)
+sce <- runTSNE(sce)
+```
+
 The `DynamicReducedDimensionPlot` class creates a scatter plot with a dimensionality reduction result, namely principal components analysis (PCA), $t$-stochastic neighbor embedding ($t$-SNE) or uniform manifold and approximate projection (UMAP).
-It does so dynamically on the subset of points that are selected in a transmitting panels,
+It does so dynamically on the subset of points that are selected in a transmitting panel,
 allowing users to focus on finer structure when dealing with a heterogeneous population.
 Calculations are performed using relevant functions from the `r Biocpkg("scater")` package.
 
 ```{r}
-dyn.panel <- DynamicReducedDimensionPlot()
-class(dyn.panel)
+# Receives a selection from a reduced dimension plot.
+dyn.panel <- DynamicReducedDimensionPlot(Type="UMAP", Assay="logcounts",
+    ColumnSelectionSource="ReducedDimensionPlot1", PanelWidth=6L)
+
+# NOTE: users do not have to manually create this, just 
+# copy it from the "Panel Settings" of an already open app.
+red.panel <- ReducedDimensionPlot(PanelId=1L, PanelWidth=6L,
+    BrushData = list(
+        xmin = -45.943, xmax = -15.399, ymin = -58.560, 
+        ymax = 49.701, coords_css = list(xmin = 51.009, 
+            xmax = 165.009, ymin = 39.009, 
+            ymax = 422.009), coords_img = list(xmin = 66.313, 
+            xmax = 214.514, ymin = 50.712, 
+            ymax = 548.612), img_css_ratio = list(x = 1.300, 
+            y = 1.299), mapping = list(x = "X", y = "Y"), 
+        domain = list(left = -49.101, right = 57.228, 
+            bottom = -70.389, top = 53.519), 
+        range = list(left = 50.986, right = 566.922, 
+            bottom = 603.013, top = 33.155), 
+        log = list(x = NULL, y = NULL), direction = "xy", 
+        brushId = "ReducedDimensionPlot1_Brush", 
+        outputId = "ReducedDimensionPlot1"
+    )
+)
+
+app <- iSEE(sce, initial=list(red.panel, dyn.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/dynreddim.png")
 ```
 
 The `DifferentialStatisticsTable` class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel.
@@ -86,8 +149,36 @@ If only the active selection exists in the transmitting panel, a comparison is p
 If saved selections are present, pairwise comparisons between the active selection and each saved selection is performed and the results are combined into a single table using the `findMarkers()` function from `r Biocpkg("scran")`.
 
 ```{r}
-diff.panel <- DifferentialStatisticsTable()
-class(diff.panel)
+diff.panel <- DifferentialStatisticsTable(PanelWidth=8L, Assay="logcounts",
+    ColumnSelectionSource="ReducedDimensionPlot1",)
+
+# Recycling the reduced dimension panel above, adding a saved selection to
+# compare to the active selection.
+red.panel[["SelectionHistory"]] <- list(
+    BrushData = list(
+        xmin = 15.143, xmax = 57.228, ymin = -40.752, 
+        ymax = 25.674, coords_css = list(xmin = 279.009, 
+            xmax = 436.089, ymin = 124.009, 
+            ymax = 359.009), coords_img = list(xmin = 362.716, 
+            xmax = 566.922, ymin = 161.212, 
+            ymax = 466.712), img_css_ratio = list(x = 1.300, 
+            y = 1.299), mapping = list(x = "X", y = "Y"), 
+        domain = list(left = -49.101, right = 57.228, 
+            bottom = -70.389, top = 53.519), 
+        range = list(left = 50.986, right = 566.922, 
+            bottom = 603.013, top = 33.155), 
+        log = list(x = NULL, y = NULL), direction = "xy", 
+        brushId = "ReducedDimensionPlot1_Brush", 
+        outputId = "ReducedDimensionPlot1"
+    )
+)
+red.panel[["PanelWidth"]] <- 4L # To fit onto one line.
+
+app <- iSEE(sce, initial=list(red.panel, diff.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/diffstat.png")
 ```
 
 # Gene set table
@@ -99,8 +190,19 @@ allowing users to identify the positions of all genes in a pathway of interest o
 This is also a rare example of a panel that only transmits and does not receive any selections from other panels.
 
 ```{r}
-gset.tab <- GeneSetTable()
-class(gset.tab)
+.setIdentifierType("ENSEMBL")
+gset.tab <- GeneSetTable(Selected="GO:0002576", 
+    Search="platelet", PanelWidth=6L)
+
+# This volcano plot will highlight the genes in the selected gene set.
+vol.panel <- VolcanoPlot(RowSelectionSource="GeneSetTable1",
+    SelectionEffect="Color", PanelWidth=6L)
+
+app <- iSEE(airway, initial=list(gset.tab, vol.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/geneset.png")
 ```
 
 # App modes
