@@ -25,8 +25,8 @@
 #' }
 #'
 modeEmpty <- function(...) {
-  # Preconfigure an app
-  app <- iSEE::iSEE(initial = list(), ...)
-
-  return(app)
+    # Preconfigure an app
+    app <- iSEE::iSEE(initial = list(), ...)
+    
+    return(app)
 }
