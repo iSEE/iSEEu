@@ -54,34 +54,32 @@
 #'
 modeGating <- function(se, features, plotAssay = NA_character_,
                        ..., plotWidth = 4) {
-  # This mode is meaningless with fewer than two FeatureAssayPlots
-  stopifnot(nrow(features) > 1)
-  stopifnot(all(c("x", "y") %in% colnames(features)))
-  stopifnot(length(plotWidth) %in% c(1, nrow(features)))
-  if (length(plotWidth) == 1) {
-    plotWidth <- rep(plotWidth, nrow(features))
-  }
-  stopifnot(length(plotAssay) %in% c(1, nrow(features)))
-  if (length(plotAssay) == 1) {
-    plotAssay <- rep(plotAssay, nrow(features))
-  }
-
-  initial <- lapply(seq_len(nrow(features)), function(i) {
-    iSEE::FeatureAssayPlot(
-      Assay = plotAssay[i],
-      XAxis = "Feature name",
-      XAxisFeatureName = features[i, "x"],
-      YAxisFeatureName = features[i, "y"],
-      ColumnSelectionSource = ifelse(i == 1, "---",
-                                     paste0("FeatureAssayPlot", i - 1)),
-      SelectionEffect = ifelse(i != nrow(features), "Restrict",
-                               "Color"),
-      PanelWidth = as.integer(plotWidth[i])
-    )
-  })
-
-  app <- iSEE::iSEE(se = se, initial = initial, ...)
-
-  return(app)
+    # This mode is meaningless with fewer than two FeatureAssayPlots
+    stopifnot(nrow(features) > 1)
+    stopifnot(all(c("x", "y") %in% colnames(features)))
+    stopifnot(length(plotWidth) %in% c(1, nrow(features)))
+    if (length(plotWidth) == 1) {
+        plotWidth <- rep(plotWidth, nrow(features))
+    }
+    stopifnot(length(plotAssay) %in% c(1, nrow(features)))
+    if (length(plotAssay) == 1) {
+        plotAssay <- rep(plotAssay, nrow(features))
+    }
+    
+    initial <- lapply(seq_len(nrow(features)), function(i) {
+        iSEE::FeatureAssayPlot(
+            Assay = plotAssay[i],
+            XAxis = "Feature name",
+            XAxisFeatureName = features[i, "x"],
+            YAxisFeatureName = features[i, "y"],
+            ColumnSelectionSource = ifelse(i == 1, "---", paste0("FeatureAssayPlot", i - 1)),
+            SelectionEffect = ifelse(i != nrow(features), "Restrict", "Color"),
+            PanelWidth = as.integer(plotWidth[i])
+        )
+    })
+    
+    app <- iSEE::iSEE(se = se, initial = initial, ...)
+    
+    return(app)
 }
 
