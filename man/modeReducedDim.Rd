@@ -60,11 +60,11 @@ reducedDimNames(sce)
 # ... coloring by a column data variable
 app <- modeReducedDim(sce, colorBy = "Primary.Type")
 if (interactive()) {
-  shiny::runApp(app, port=1234)
+    shiny::runApp(app, port=1234)
 }
 # ... coloring by a feature
 app <- modeReducedDim(sce, colorBy = "Scnn1a")
 if (interactive()) {
-  shiny::runApp(app, port=1234)
+    shiny::runApp(app, port=1234)
 }
 }
