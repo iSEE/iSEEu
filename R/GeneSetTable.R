@@ -306,7 +306,7 @@ setMethod(".multiSelectionCommands", "GeneSetTable", function(x, index) {
 
 #' @export
 setMethod(".multiSelectionActive", "GeneSetTable", function(x) {
-    if (x[["Selected"]]!="") {
+    if (nzchar(x[["Selected"]])) {
         x[["Selected"]]
     } else {
         NULL

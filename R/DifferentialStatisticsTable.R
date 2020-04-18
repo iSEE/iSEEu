@@ -156,7 +156,7 @@ setMethod(".cacheCommonInfo", "DifferentialStatisticsTable", function(x, se) {
     se <- callNextMethod()
 
     named_assays <- assayNames(se)
-    named_assays <- named_assays[named_assays!=""]
+    named_assays <- named_assays[nzchar(named_assays)]
     .setCachedCommonInfo(se, "DifferentialStatisticsTable", valid.assay.names=named_assays)
 })
 
