@@ -12,6 +12,7 @@ vignette: >
   %\VignettePackage{iSEEu}
   %\VignetteKeywords{GeneExpression, RNASeq, Sequencing, Visualization, QualityControl, GUI}
   %\VignetteEngine{knitr::rmarkdown}
+bibliography: iSEEu.bib  
 ---
 
 ```{r, echo=FALSE}
@@ -25,7 +26,7 @@ SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
 
 # Overview
 
-The `r Biocpkg("iSEE")` package provides a general and flexible framework for interactively exploring `SummarizedExperiment` objects.
+The `r Biocpkg("iSEE")` package [@iSEE-2018] provides a general and flexible framework for interactively exploring `SummarizedExperiment` objects.
 However, in many cases, more specialized panels are required for effective visualization of specific data types.
 The `r Biocpkg("iSEEu")` package implements a collection of such dedicated panel classes that work directly in the `iSEE` application and can smoothly interact with other panels.
 This allows users to quickly parametrize bespoke apps for their data to address scientific questions of interest.
@@ -288,3 +289,4 @@ A compiled version from the Bioc2019 conference (based on Bioconductor release 3
 sessionInfo()
 ```
 
+# References {-}
