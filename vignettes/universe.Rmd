@@ -294,7 +294,7 @@ For examples, see [this repo](https://github.com/iSEE/iSEE_custom).
 #### Where can I find a comprehensive introduction to `r Biocpkg("iSEE")`? {-}
 
 The `r Biocpkg("iSEE")` package contains several vignettes detailing the main functionality. 
-You can also take a look at this [workshop](https://kevinrue.github.io/iSEEWorkshop2019/index.html). 
+You can also take a look at this [workshop](https://iSEE.github.io/iSEEWorkshop2019/index.html). 
 A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available [here](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/).
 
 
