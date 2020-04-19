@@ -19,7 +19,7 @@ author:
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com  
 date: "`r BiocStyle::doc_date()`"
-package: iSEE
+package: iSEEu
 output: BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{Panel universe}
