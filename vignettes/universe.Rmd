@@ -216,7 +216,73 @@ This is useful for applying sequential restrictions on the data, equivalent to g
 -  `modeReducedDim()` will launch an app with multiple reduced dimension plots.
 This is useful for examining different views of large high-dimensional datasets (e.g., single-cell studies).
 
-# Session information
+# Contributing to `r Biocpkg("iSEEu")`
+
+If you want to contribute to the development of the `r Biocpkg("iSEEu")` package, here is a quick step-by-step guide:
+
+- Fork the `iSEEu` repository from GitHub (https://github.com/iSEE/iSEEu) and clone it locally.
+
+```
+git clone https://github.com/[your_github_username]/iSEEu.git
+```
+
+- Add the desired new files - start from the `R` folder, then document via `roxygen2` - and push to your fork. 
+  As an example you can check out to understand how things are supposed to work, there are several modes already defined in the `R/` directory. 
+  A typical contribution could include e.g. a function defining an `r Biocpkg("iSEE")` mode, named `modeXXX`, where `XXX` provides a clear representation of the purpose of the mode. 
+  Please place each mode in a file of its own, with the same name as the function. 
+  The function should be documented (including an example), and any required packages should be added to the `DESCRIPTION` file. 
+  
+- Once your `mode`/function is done, consider adding some information in the package.
+  Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder). Also add yourself as a contributor (`ctb`) to the `DESCRIPTION` file.
+
+- Make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies.
+  The `r Biocpkg("iSEE")` core team will evaluate the contribution and get back to you!
+
+That's pretty much it!
+
+#### Using example data sets {-}
+
+Example data sets can often be obtained from an `r Biocpkg("ExperimentHub")` package (e.g. from the `r Biocpkg("scRNAseq")` package for single-cell RNA-sequencing data), and should not be added to the `r Biocpkg("iSEEu")` package.
+  
+#### Documenting, testing, coding style and conventions {-}
+
+- If possible, please consider adding an example in the dedicated Roxygen preamble to show how to run each function
+- If possible, consider adding one or more unit tests - we use the `testthat` framework
+
+We do follow some guidelines regarding the names given to variables, please abide to these for consistency with the rest of the codebase.
+Here are a few pointers:
+
+- Keep the indentation as it is in the initial functions already available (4-spaces indentation).
+- If writing text (e.g. in the vignette), please use one sentence per line - this makes `git diff` operations easier to check.
+- When choosing variable names, try to keep the consistency with what already is existing:
+  - `camelCase` for modes and other functions
+  - `.function_name` for internals
+  - `PanelClassName` for panels
+  - `.genericFunction` for the API
+  - `.scope1.scope2.name` for variable names in the cached info
+
+If you intend to understand more in depth the internals of the `r Biocpkg("iSEE")` framework, consider checking out the bookdown resource we put together at https://isee.github.io/iSEE-book/
+
+#### Looking for constants within `r Biocpkg("iSEE")` {-}
+
+Many of the "global" variables that are used in several places in `r Biocpkg("iSEE")` are defined in the [constants.R](https://github.com/iSEE/iSEE/blob/master/R/constants.R) script in `r Biocpkg("iSEE")`. 
+We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. 
+To access a constant, use `iSEE:::.constantName`. 
+
+#### What if I need a custom panel type? {-}
+
+In addition to the eight standard panel types, custom panels are easily accommodated within `r Biocpkg("iSEE")` applications. 
+For a guide, see the corresponding [vignette](https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html). 
+For examples, see [this repo](https://github.com/iSEE/iSEE_custom).
+
+#### Where can I find a comprehensive introduction to `r Biocpkg("iSEE")`? {-}
+
+The `r Biocpkg("iSEE")` package contains several vignettes detailing the main functionality. 
+You can also take a look at this [workshop](https://kevinrue.github.io/iSEEWorkshop2019/index.html). 
+A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available [here](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/).
+
+
+# Session information {-}
 
 ```{r}
 sessionInfo()
