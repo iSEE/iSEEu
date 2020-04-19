@@ -1,8 +1,23 @@
 ---
 title: Universe of iSEE panels
 author:
+- name: Kevin Rue-Albrecht
+  affiliation: 
+  - &id1 Kennedy Institute of Rheumatology, University of Oxford,
+    Headington, Oxford OX3 7FY, UK.
+  email: kevin.rue-albrecht@kennedy.ox.ac.uk
+- name: Federico Marini
+  affiliation: 
+  - &id2 Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz
+  - Center for Thrombosis and Hemostasis (CTH), Mainz
+  email: marinif@uni-mainz.de
+- name: Charlotte Soneson
+  affiliation: 
+  - &id3 Friedrich Miescher Institute for Biomedical Research, Basel
+  - SIB Swiss Institute of Bioinformatics
+  email: charlottesoneson@gmail.com
 - name: Aaron Lun
-  email: infinite.monkeys.with.keyboards@gmail.com
+  email: infinite.monkeys.with.keyboards@gmail.com  
 date: "`r BiocStyle::doc_date()`"
 package: iSEE
 output: BiocStyle::html_document
