@@ -1,3 +1,7 @@
+# iSEEu 0.99.8
+
+* Trigger new build on the single package builder.
+
 # iSEEu 0.99.7
 
 * Replace `!=""` by `nzchar()`.
