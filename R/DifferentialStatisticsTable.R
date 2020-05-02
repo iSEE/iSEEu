@@ -228,7 +228,7 @@ setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
         }
     }
 
-    list(commands=commands, contents=envir$tab)
+    commands 
 })
 
 #' @export
