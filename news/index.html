@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -119,37 +123,92 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/iSEE/iSEEu/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="iseeu-0-99-0" class="section level1">
-<h1 class="page-header">
-<a href="#iseeu-0-99-0" class="anchor"></a>iSEEu 0.99.0</h1>
+    <div id="iseeu-0998" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.8">
+<a href="#iseeu-0998" class="anchor"></a>iSEEu 0.99.8</h1>
 <ul>
-<li>Added panel <code>DifferentialStatisticsTable</code>
-</li>
-<li>Added panel <code>DynamicReducedDimensionPlot</code>
-</li>
-<li>Added panel <code>GeneSetTable</code>
-</li>
-<li>Added panel <code>MAPlot</code>
-</li>
-<li>Added panel <code>ReducedDimensionHexPlot</code>
-</li>
-<li>Added panel <code>VolcanoPlot</code>
-</li>
-<li>Added mode <code>modeEmpty</code>
-</li>
-<li>Added mode <code>modeGating</code>
-</li>
-<li>Added mode <code>modeReducedDim</code>
-</li>
+<li>Trigger new build on the single package builder.</li>
 </ul>
 </div>
-    <div id="iseeu-0-1-0" class="section level1">
-<h1 class="page-header">
-<a href="#iseeu-0-1-0" class="anchor"></a>iSEEu 0.1.0</h1>
+    <div id="iseeu-0997" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.7">
+<a href="#iseeu-0997" class="anchor"></a>iSEEu 0.99.7</h1>
+<ul>
+<li>Replace <code>!=""</code> by <code><a href="https://rdrr.io/r/base/nchar.html">nzchar()</a></code>.</li>
+<li>Use 4-space indent.</li>
+<li>Add info on how to contribute to iSEEu, including coding style.</li>
+</ul>
+</div>
+    <div id="iseeu-0996" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.6">
+<a href="#iseeu-0996" class="anchor"></a>iSEEu 0.99.6</h1>
+<ul>
+<li>Trigger new build on the single package builder.</li>
+</ul>
+</div>
+    <div id="iseeu-0995" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.5">
+<a href="#iseeu-0995" class="anchor"></a>iSEEu 0.99.5</h1>
+<ul>
+<li>Add more suggested packages.</li>
+<li>Add screenshot images to the vignette.</li>
+<li>More realistic examples in the vignette.</li>
+<li>Fix <code>GeneSetTable</code> to acknowledge initial value of <code>"Selected"</code>.</li>
+</ul>
+</div>
+    <div id="iseeu-0994" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.4">
+<a href="#iseeu-0994" class="anchor"></a>iSEEu 0.99.4</h1>
+<ul>
+<li>Fix to GitHub action <code>R-CMD-check</code>.</li>
+</ul>
+</div>
+    <div id="iseeu-0993" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.3">
+<a href="#iseeu-0993" class="anchor"></a>iSEEu 0.99.3</h1>
+<ul>
+<li>Set up GitHub action <code>R-CMD-check</code>.</li>
+<li>Remove Travis CI <code>covr</code> code coverage and <code>pkgdown</code> site deployment.</li>
+<li>Fix man page warning.</li>
+</ul>
+</div>
+    <div id="iseeu-0992" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.2">
+<a href="#iseeu-0992" class="anchor"></a>iSEEu 0.99.2</h1>
+<ul>
+<li>Create observer for <code>"Assay"</code> in <code>DiffStatTable</code>.</li>
+<li>Update NEWS.</li>
+</ul>
+</div>
+    <div id="iseeu-0991" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.1">
+<a href="#iseeu-0991" class="anchor"></a>iSEEu 0.99.1</h1>
+<ul>
+<li>Trigger new build on the single package builder.</li>
+</ul>
+</div>
+    <div id="iseeu-0990" class="section level1">
+<h1 class="page-header" data-toc-text="0.99.0">
+<a href="#iseeu-0990" class="anchor"></a>iSEEu 0.99.0</h1>
+<ul>
+<li>Added panel <code>DifferentialStatisticsTable</code>.</li>
+<li>Added panel <code>DynamicReducedDimensionPlot</code>.</li>
+<li>Added panel <code>GeneSetTable</code>.</li>
+<li>Added panel <code>MAPlot</code>.</li>
+<li>Added panel <code>ReducedDimensionHexPlot</code>.</li>
+<li>Added panel <code>VolcanoPlot</code>.</li>
+<li>Added mode <code>modeEmpty</code>.</li>
+<li>Added mode <code>modeGating</code>.</li>
+<li>Added mode <code>modeReducedDim</code>.</li>
+</ul>
+</div>
+    <div id="iseeu-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#iseeu-010" class="anchor"></a>iSEEu 0.1.0</h1>
 <ul>
 <li>
 <code>iSEEu</code> is officially born!</li>
@@ -157,14 +216,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#iseeu-0-99-0">0.99.0</a></li>
-        <li><a href="#iseeu-0-1-0">0.1.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -176,7 +231,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
