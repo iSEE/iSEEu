@@ -22,14 +22,15 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a `"ReducedDimensionHexPlot"` entry containing `valid.assay.names`.
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a `"ReducedDimensionHexPlot"` entry containing
+#' `valid.colData.names`, a character vector of names of columns that are valid (i.e., contain atomic values);
+#' `discrete.colData.names`, a character vector of names for columns with discrete atomic values;
+#' and `continuous.colData.names`, a character vector of names of columns with continuous atomic values.
 #' This will also call the equivalent [ColumnDotPlot-class] method.
-#' \item \code{\link{.refineParameters}(x, se)} returns `x` after calling the equivalent \linkS4class{ColumnDotPlot} method for further refinements to `x`.
 #' }
 #'
 #' For defining the interface:
 #' \itemize{
-#' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
 #' \item \code{\link{.fullName}(x)} will return `"Hexagonal reduced dimension plot"`.
 #' \item \code{\link{.hideInterface}(x, field)} will return `TRUE` for `field="Downsample"` as downsampling is not applicable to this panel that summarizes all data points in each hexagonal bin;
@@ -49,12 +50,6 @@
 #' \item \code{\link{.generateDotPlot}(x, envir)} will return a list with `plot`, a [ggplot2::ggplot()] object; and `commands`, a character vector of commands to produce that object when evaluated inside `envir`.
 #' }
 #'
-#' For handling multiple selections:
-#' \itemize{
-#' \item \code{\link{.multiSelectionInvalidated}(x)} is directly inherited from the [Panel-class] and will always return `FALSE`,
-#' as changes in the upstream selection of points does not alter the coordinates of `x`.
-#' }
-#'
 #' @docType methods
 #' @aliases ReducedDimensionHexPlot ReducedDimensionHexPlot-class
 #' initialize,ReducedDimensionHexPlot-method
@@ -62,11 +57,11 @@
 #' .panelColor,ReducedDimensionHexPlot-method
 #' .cacheCommonInfo,ReducedDimensionHexPlot-method
 #' .createObservers,ReducedDimensionHexPlot-method
+#' .hideInterface,ReducedDimensionHexPlot-method
 #' .defineVisualShapeInterface,ReducedDimensionHexPlot-method
 #' .defineVisualSizeInterface,ReducedDimensionHexPlot-method
 #' .defineVisualOtherInterface,ReducedDimensionHexPlot-method
 #' .generateDotPlot,ReducedDimensionHexPlot-method
-#' .hideInterface,ReducedDimensionHexPlot-method
 #'
 #' @examples
 #' library(scRNAseq)

@@ -9,11 +9,11 @@
 \alias{.panelColor,ReducedDimensionHexPlot-method}
 \alias{.cacheCommonInfo,ReducedDimensionHexPlot-method}
 \alias{.createObservers,ReducedDimensionHexPlot-method}
+\alias{.hideInterface,ReducedDimensionHexPlot-method}
 \alias{.defineVisualShapeInterface,ReducedDimensionHexPlot-method}
 \alias{.defineVisualSizeInterface,ReducedDimensionHexPlot-method}
 \alias{.defineVisualOtherInterface,ReducedDimensionHexPlot-method}
 \alias{.generateDotPlot,ReducedDimensionHexPlot-method}
-\alias{.hideInterface,ReducedDimensionHexPlot-method}
 \title{The ReducedDimensionHexPlot class}
 \description{
 The ReducedDimensionHexPlot is a \linkS4class{ReducedDimensionPlot} subclass that is dedicated to creating a reduced dimension plot summarising data points in hexagonal bins.
@@ -43,14 +43,15 @@ Refer to the documentation for each method for more details on the remaining arg
 
 For setting up data values:
 \itemize{
-\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"ReducedDimensionHexPlot"} entry containing \code{valid.assay.names}.
+\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"ReducedDimensionHexPlot"} entry containing
+\code{valid.colData.names}, a character vector of names of columns that are valid (i.e., contain atomic values);
+\code{discrete.colData.names}, a character vector of names for columns with discrete atomic values;
+and \code{continuous.colData.names}, a character vector of names of columns with continuous atomic values.
 This will also call the equivalent \linkS4class{ColumnDotPlot} method.
-\item \code{\link{.refineParameters}(x, se)} returns \code{x} after calling the equivalent \linkS4class{ColumnDotPlot} method for further refinements to \code{x}.
 }
 
 For defining the interface:
 \itemize{
-\item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
 \item \code{\link{.fullName}(x)} will return \code{"Hexagonal reduced dimension plot"}.
 \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="Downsample"} as downsampling is not applicable to this panel that summarizes all data points in each hexagonal bin;
@@ -68,12 +69,6 @@ For monitoring reactive expressions:
 For creating the plot:
 \itemize{
 \item \code{\link{.generateDotPlot}(x, envir)} will return a list with \code{plot}, a \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object; and \code{commands}, a character vector of commands to produce that object when evaluated inside \code{envir}.
-}
-
-For handling multiple selections:
-\itemize{
-\item \code{\link{.multiSelectionInvalidated}(x)} is directly inherited from the \linkS4class{Panel} and will always return \code{FALSE},
-as changes in the upstream selection of points does not alter the coordinates of \code{x}.
 }
 }
 
