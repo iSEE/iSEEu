@@ -281,9 +281,9 @@ If you intend to understand more in depth the internals of the `r Biocpkg("iSEE"
 
 #### Looking for constants within `r Biocpkg("iSEE")` {-}
 
-Many of the "global" variables that are used in several places in `r Biocpkg("iSEE")` are defined in the [constants.R](https://github.com/iSEE/iSEE/blob/master/R/constants.R) script in `r Biocpkg("iSEE")`. 
-We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. 
-To access a constant, use `iSEE:::.constantName`. 
+Many of the "global" variables that are used in several places in `r Biocpkg("iSEE")` are defined in the [constants.R](https://github.com/iSEE/iSEE/blob/master/R/constants.R) script in `r Biocpkg("iSEE")`.
+We suggest to refer to those constants by their actual value rather than their internal variable name in downstream panel code.
+Both constant variable names and values may change at any time, but we will only announce changes to the constant value.
 
 #### What if I need a custom panel type? {-}
 
