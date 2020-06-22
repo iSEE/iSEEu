@@ -1,40 +1,58 @@
 #' The ReducedDimensionHexPlot class
 #'
-#' The ReducedDimensionHexPlot is a \linkS4class{ReducedDimensionPlot} subclass that is dedicated to creating a reduced dimension plot summarisign data points in hexagonal bins.
+#' The ReducedDimensionHexPlot is a [ReducedDimensionPlot-class] subclass that is dedicated to creating a reduced dimension plot summarising data points in hexagonal bins.
 #'
 #' @section Slot overview:
 #' The following slots control the parameters used in the visualization:
 #' \itemize{
-#' \item \code{BinResolution}, a numeric positive scalar specifying the number of hexagonal bins in both vertical and horizontal directions.
+#' \item `BinResolution`, a numeric positive scalar specifying the number of hexagonal bins in both vertical and horizontal directions.
 #' Defaults to 100.
 #' }
 #'
-#' In addition, this class inherits all slots from its parent \linkS4class{ReducedDimensionPlot},
-#' \linkS4class{ColumnDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
+#' In addition, this class inherits all slots from its parent [ReducedDimensionPlot-class],
+#' [ColumnDotPlot-class], [DotPlot-class] and [Panel-class] classes.
 #'
 #' @section Constructor:
-#' \code{ReducedDimensionHexPlot(...)} creates an instance of a ReducedDimensionHexPlot class,
-#' where any slot and its value can be passed to \code{...} as a named argument.
+#' `ReducedDimensionHexPlot(...)` creates an instance of a ReducedDimensionHexPlot class,
+#' where any slot and its value can be passed to `...` as a named argument.
 #'
 #' @section Supported methods:
-#' In the following code snippets, \code{x} is an instance of a \linkS4class{ReducedDimensionHexPlot} class.
+#' In the following code snippets, `x` is an instance of a [ReducedDimensionHexPlot-class] class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
+#'
+#' For setting up data values:
+#' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a `"ReducedDimensionHexPlot"` entry containing `valid.assay.names`.
+#' This will also call the equivalent [ColumnDotPlot-class] method.
+#' \item \code{\link{.refineParameters}(x, se)} returns `x` after calling the equivalent \linkS4class{ColumnDotPlot} method for further refinements to `x`.
+#' }
 #'
 #' For defining the interface:
 #' \itemize{
+#' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="Downsample"},
-#' otherwise it will call the \linkS4class{ReducedDimensionPlot} method.
+#' \item \code{\link{.fullName}(x)} will return `"Hexagonal reduced dimension plot"`.
+#' \item \code{\link{.hideInterface}(x, field)} will return `TRUE` for `field="Downsample"` as downsampling is not applicable to this panel that summarizes all data points in each hexagonal bin;
+#' otherwise this function will call the [ReducedDimensionPlot-class] method.
+#' \item \code{\link{.defineVisualShapeInterface}(x)} will return `NULL` for this panel, as the shape aesthetic is not applicable to this panel that does not display individual data points.
+#' \item \code{\link{.defineVisualSizeInterface}(x)} overrides the equivalent method inherited from all parents classes and will return instead an HTML tag definition that contains a user input controlling the number of hexagonal bins in both vertical and horizontal directions.
+#' \item \code{\link{.defineVisualOtherInterface}(x)} will return `NULL`, as there are no additional visual parameters for this panel.
 #' }
 #'
 #' For monitoring reactive expressions:
 #' \itemize{
-#' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{ReducedDimensionPlot} method.
+#' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the [ReducedDimensionPlot-class] method.
 #' }
 #'
-#' For defining the panel name:
+#' For creating the plot:
 #' \itemize{
-#' \item \code{\link{.fullName}(x)} will return \code{"Hexagonal reduced dimension plot"}.
+#' \item \code{\link{.generateDotPlot}(x, envir)} will return a list with `plot`, a [ggplot2::ggplot()] object; and `commands`, a character vector of commands to produce that object when evaluated inside `envir`.
+#' }
+#'
+#' For handling multiple selections:
+#' \itemize{
+#' \item \code{\link{.multiSelectionInvalidated}(x)} is directly inherited from the [Panel-class] and will always return `FALSE`,
+#' as changes in the upstream selection of points does not alter the coordinates of `x`.
 #' }
 #'
 #' @docType methods
