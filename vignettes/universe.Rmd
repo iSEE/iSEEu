@@ -297,7 +297,6 @@ The `r Biocpkg("iSEE")` package contains several vignettes detailing the main fu
 You can also take a look at this [workshop](https://iSEE.github.io/iSEEWorkshop2019/index.html). 
 A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available [here](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/).
 
-
 # Session information {-}
 
 ```{r}
