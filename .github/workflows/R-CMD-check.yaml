@@ -8,71 +8,55 @@ on:
   schedule:
     - cron: '0 8 * * 5'
 
-name: R-CMD-check
+name: build_check_deploy
 
 jobs:
-  R-CMD-check:
-    runs-on: ${{ matrix.config.os }}
-    container: ${{ matrix.config.image }}
-
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }} - ${{ matrix.config.bioc }} - ${{ matrix.config.image }})
-
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - { os: windows-latest, r: 'release', bioc: '3.11'}
-          - { os: macOS-latest, r: 'release', bioc: '3.11'}
-          - { os: macOS-latest, r: 'release', bioc: 'devel'}
-          - { os: ubuntu-16.04, r: 'release', bioc: '3.11', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - { os: ubuntu-latest, r: 'release', image: 'bioconductor/bioconductor_docker:devel'}
-          - { os: ubuntu-latest, r: 'release', image: 'bioconductor/bioconductor_docker:RELEASE_3_11'}
-
+  build_check_deploy:
+    runs-on: ubuntu-latest
+    container: bioconductor/bioconductor_docker:devel
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      CRAN: ${{ matrix.config.cran }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v2
+      # Source: https://github.com/lcolladotor/derfinder/blob/master/.github/workflows/check-bioc.yml#L117
+      - name: Install latest git
+        run: |
+          ## git version provided
+          git --version
+          ## to be able to install software properties
+          sudo apt-get update -y
+          ## to be able to use add-apt-repository
+          sudo apt-get install software-properties-common -y
+          ## to use stable releases of git that are already in a PPA at
+          ## https://launchpad.net/~git-core/+archive/ubuntu/candidate
+          sudo add-apt-repository ppa:git-core/candidate -y
+          ## Update
+          sudo apt-get update -y
+          ## Upgrade git and other tools
+          sudo apt-get upgrade -y
+          ## latest git version
+          git --version
+        shell: bash {0}
 
-      - name: Set up R
-        uses: r-lib/actions/setup-r@master
-        if: matrix.config.image == null
+      - name: Checkout
+        uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
         with:
-          r-version: ${{ matrix.config.r }}
-
-      - name: Set up pandoc
-        uses: r-lib/actions/setup-pandoc@master
-        if: matrix.config.image == null
-
-      - name: Install remotes
-        run: |
-          install.packages('remotes')
-        shell: Rscript {0}
-
-      - name: Set BiocManager version
-        if: matrix.config.image == null
-        run: |
-          install.packages('BiocManager')
-          BiocManager::install(version = "${{ matrix.config.bioc }}", ask = FALSE)
-        shell: Rscript {0}
+          persist-credentials: false
 
       - name: Query dependencies
         run: |
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE, repos = c(getOption('repos'), BiocManager::repositories())), 'depends.Rds', version = 2)
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}
 
       - name: Cache R packages
-        if: runner.os != 'Windows' && matrix.config.image == null
         uses: actions/cache@v1
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ matrix.config.r }}-bioc-${{ matrix.config.bioc }}-${{ hashFiles('depends.Rds') }}
-          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-bioc-${{ matrix.config.bioc }}-
+          path: /usr/local/lib/R/site-library
+          key: ${{ runner.os }}-r-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-r-1-
 
+      # This lets us augment with additional dependencies
       - name: Install system dependencies
         if: runner.os == 'Linux'
         env:
@@ -81,26 +65,18 @@ jobs:
           Rscript -e "remotes::install_github('r-hub/sysreqs')"
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
-          sudo apt-get update && sudo apt-get -y install libcurl4-openssl-dev
+          sudo apt-get install -y libglpk-dev
 
       - name: Install dependencies
         run: |
-          local_deps <- remotes::local_package_deps(dependencies = TRUE)
-          deps <- remotes::dev_package_deps(dependencies = TRUE, repos = BiocManager::repositories())
-          BiocManager::install(local_deps[local_deps %in% deps$package[deps$diff != 0]], Ncpu = 2L)
-          BiocManager::install("Rtsne", Ncpu = 2L)
-          remotes::install_cran('rcmdcheck', Ncpu = 2L)
-        shell: Rscript {0}
-
-      - name: Session info
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
+          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), Ncpu = 2L)
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
 
       - name: BiocCheck
@@ -109,12 +85,14 @@ jobs:
           BiocCheck::BiocCheck(".")
         shell: Rscript {0}
 
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@master
+      - name: Publish to Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
+          name: docker.pkg.github.com/${{ github.repository }}/master:latest
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
 
       - name: Show testthat output
         if: always()
@@ -129,14 +107,33 @@ jobs:
           path: check
 
       - name: Test coverage
-        if: matrix.config.os == 'macOS-latest' && matrix.config.r == 'release'
         run: |
           install.packages("covr")
           covr::codecov(token = "${{secrets.CODECOV_TOKEN}}")
         shell: Rscript {0}
 
-      - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && matrix.config.os == 'macOS-latest' && matrix.config.r == 'release' && matrix.config.bioc == 'devel'
+      - name: Build pkgdown
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          R CMD INSTALL .
-          Rscript -e "remotes::install_dev('pkgdown'); pkgdown::deploy_to_branch(new_process = FALSE)"
+           PATH=$PATH:$HOME/bin/ Rscript -e 'BiocManager::install("pkgdown"); pkgdown::build_site(".")'
+
+      # deploy needs rsync? Seems so.
+      - name: Install deploy dependencies
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          apt-get update && apt-get -y install rsync
+
+      - name: Deploy 🚀
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs # The folder the action should deploy.
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}

@@ -3,7 +3,7 @@
 <!-- badges: start -->
 
 [![Travis build status](https://travis-ci.com/iSEE/iSEEu.svg?branch=master)](https://travis-ci.com/iSEE/iSEEu)
-[![R build status](https://github.com/iSEE/iSEEu/workflows/R-CMD-check/badge.svg)](https://github.com/iSEE/iSEEu/actions)
+[![R build status](https://github.com/iSEE/iSEEu/workflows/build_check_deploy/badge.svg)](https://github.com/iSEE/iSEEu/actions)
 <!-- badges: end -->
 
 The `iSEEu` package contains material and code that extends the `iSEE` package (https://github.com/iSEE/iSEE).
