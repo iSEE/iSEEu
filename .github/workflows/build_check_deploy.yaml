@@ -1,7 +1,7 @@
 on:
   push:
-    branches:
-      - master
+  #  branches:
+  #    - master
   pull_request:
     branches:
       - master
@@ -86,10 +86,10 @@ jobs:
         shell: Rscript {0}
 
       - name: Publish to Registry
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        #if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: docker.pkg.github.com/${{ github.repository }}/master:latest
+          name: docker.pkg.github.com/${{ github.repository }}/iseeu:latest
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
