@@ -4,6 +4,7 @@
 
 [![Travis build status](https://travis-ci.com/iSEE/iSEEu.svg?branch=master)](https://travis-ci.com/iSEE/iSEEu)
 [![R build status](https://github.com/iSEE/iSEEu/workflows/build_check_deploy/badge.svg)](https://github.com/iSEE/iSEEu/actions)
+[![Codecov test coverage](https://codecov.io/gh/iSEE/iSEEu/branch/master/graph/badge.svg)](https://codecov.io/gh/iSEE/iSEEu?branch=master)
 <!-- badges: end -->
 
 The `iSEEu` package contains material and code that extends the `iSEE` package (https://github.com/iSEE/iSEE).

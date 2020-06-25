@@ -60,7 +60,8 @@ Suggests:
     htmltools,
     Rtsne,
     uwot,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    covr
 URL: https://github.com/iSEE/iSEEu
 BugReports: https://github.com/iSEE/iSEEu/issues
 biocViews: ImmunoOncology, Visualization, GUI, DimensionReduction, 
