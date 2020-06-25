@@ -197,34 +197,30 @@ unless no selection is made, in which case <code>NULL</code> is returned.</p></l
 which is set to the number of features in <code>se</code>.</p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>scRNAseq</span>)
-<span class='kw'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span>(location=<span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-06-11</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://bioconductor.org/packages/scater'>scater</a></span>)
-<span class='kw'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scuttle/man/logNormCounts.html'>logNormCounts</a></span>(<span class='kw'>sce</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span>(<span class='kw'>location</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-06-11</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/reexports.html'>logNormCounts</a></span>(<span class='no'>sce</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>scran</span>)
-<span class='fu'>rowData</span>(<span class='kw'>sce</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'>rowData</span>(<span class='kw'>sce</span>), <span class='fu'><a href='https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html'>modelGeneVarWithSpikes</a></span>(<span class='kw'>sce</span>, <span class='st'>"ERCC"</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scran</span>)
+<span class='fu'>rowData</span>(<span class='no'>sce</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'>rowData</span>(<span class='no'>sce</span>), <span class='fu'><a href='https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html'>modelGeneVarWithSpikes</a></span>(<span class='no'>sce</span>, <span class='st'>"ERCC"</span>))
 
 <span class='co'># This defaults to 'org.Hs.eg.db' with 'ENTREZID'.</span>
 <span class='fu'>.setOrganism</span>(<span class='st'>"org.Mm.eg.db"</span>)
 <span class='fu'>.setIdentifierType</span>(<span class='st'>"ENSEMBL"</span>)
-<span class='kw'>gst</span> <span class='op'>&lt;-</span> <span class='fu'>GeneSetTable</span>(PanelId=<span class='fl'>1L</span>)
+<span class='no'>gst</span> <span class='kw'>&lt;-</span> <span class='fu'>GeneSetTable</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>)
 
-<span class='kw'>rdp</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataPlot</span>(RowSelectionSource=<span class='st'>"GeneSetTable1"</span>,
-    SelectionEffect=<span class='st'>"Color"</span>,
-    XAxis=<span class='st'>"Row data"</span>, XAxisRowData=<span class='st'>"mean"</span>, YAxis=<span class='st'>"total"</span>)
+<span class='no'>rdp</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataPlot</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"GeneSetTable1"</span>,
+    <span class='kw'>SelectionEffect</span><span class='kw'>=</span><span class='st'>"Color"</span>,
+    <span class='kw'>XAxis</span><span class='kw'>=</span><span class='st'>"Row data"</span>, <span class='kw'>XAxisRowData</span><span class='kw'>=</span><span class='st'>"mean"</span>, <span class='kw'>YAxis</span><span class='kw'>=</span><span class='st'>"total"</span>)
 
-<span class='kw'>rdt</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataTable</span>(RowSelectionSource=<span class='st'>"GeneSetTable1"</span>)
+<span class='no'>rdt</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataTable</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"GeneSetTable1"</span>)
 
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-    <span class='fu'>iSEE</span>(<span class='kw'>sce</span>, initial=<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>gst</span>, <span class='kw'>rdp</span>, <span class='kw'>rdt</span>))
-}
-</div></pre>
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+    <span class='fu'>iSEE</span>(<span class='no'>sce</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>gst</span>, <span class='no'>rdp</span>, <span class='no'>rdt</span>))
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -240,7 +236,7 @@ which is set to the number of features in <code>se</code>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

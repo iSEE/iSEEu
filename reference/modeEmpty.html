@@ -133,7 +133,7 @@
     <p>This mode launches an app that does not display any panel.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>modeEmpty</span>(<span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>modeEmpty</span>(<span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,14 +193,13 @@ Users can then use the <code>"Organize panels"</code> widget to select panels to
 #&gt; colnames: NULL
 #&gt; colData names(0):
 #&gt; reducedDimNames(0):
-#&gt; altExpNames(0):</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='kw'>sce</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"G"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='kw'>sce</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"C"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>)
+#&gt; altExpNames(0):</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>sce</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"G"</span>, <span class='fl'>1</span>:<span class='fl'>200</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>sce</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"C"</span>, <span class='fl'>1</span>:<span class='fl'>100</span>)
 
-<span class='kw'>app</span> <span class='op'>&lt;-</span> <span class='fu'>modeEmpty</span>(<span class='kw'>sce</span>)
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-  <span class='kw'>shiny</span>::<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span>(<span class='kw'>app</span>, port=<span class='fl'>1234</span>)
-}
-</div></pre>
+<span class='no'>app</span> <span class='kw'>&lt;-</span> <span class='fu'>modeEmpty</span>(<span class='no'>sce</span>)
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+  <span class='kw pkg'>shiny</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span>(<span class='no'>app</span>, <span class='kw'>port</span><span class='kw'>=</span><span class='fl'>1234</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -216,7 +215,7 @@ Users can then use the <code>"Organize panels"</code> widget to select panels to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
