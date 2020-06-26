@@ -17,5 +17,3 @@ RUN Rscript -e "BiocManager::install('iSEEu', version = 'devel')"
 WORKDIR /iseeu
 RUN git clone https://github.com/iSEE/iSEEu.git
 RUN R CMD INSTALL iSEEu
-
-CMD R
