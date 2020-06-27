@@ -4,16 +4,10 @@ MAINTAINER kevinrue67@gmail.com
 LABEL authors="kevinrue67@gmail.com" \
     description="Docker image containing the iSEEu package."
 
-# Set the working directory to /app
-WORKDIR /app
+WORKDIR /home/rstudio/iseeu
 
-# Copy the current directory contents into the container at /app
-ADD . /app
+COPY --chown=rstudio:rstudio . /home/rstudio/iseeu
 
-# Install iSEE and dependencies
-RUN Rscript -e "BiocManager::install('iSEEu', version = 'devel')"
+ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
 
-# Install the latest iSEE from GitHub branch master.
-WORKDIR /iseeu
-RUN git clone https://github.com/iSEE/iSEEu.git
-RUN R CMD INSTALL iSEEu
+RUN Rscript -e "devtools::install('.', dependencies=TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE)"
