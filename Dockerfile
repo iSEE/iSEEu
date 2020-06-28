@@ -1,4 +1,4 @@
-FROM docker.pkg.github.com/isee/isee/isee:latest
+FROM iseedevelopers/isee:latest
 
 MAINTAINER kevinrue67@gmail.com
 LABEL authors="kevinrue67@gmail.com" \
