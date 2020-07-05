@@ -68,7 +68,7 @@ For creating the table:
 \itemize{
 \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir},
 based on the \code{mode="show"} output of \code{\link{.getGeneSetCommands}}.
-It will also return the commands required to do so.
+It will also return the commands required to do so and the name of the variable corresponding to said data.frame.
 \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
 will add a \code{\link{datatable}} widget to the output,
 which is used to render the aforementioned data.frame.
