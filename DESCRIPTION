@@ -67,6 +67,6 @@ BugReports: https://github.com/iSEE/iSEEu/issues
 biocViews: ImmunoOncology, Visualization, GUI, DimensionReduction, 
     FeatureExtraction, Clustering, Transcription, 
     GeneExpression, Transcriptomics, SingleCell, CellBasedAssays
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

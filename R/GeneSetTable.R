@@ -44,7 +44,7 @@
 #' \itemize{
 #' \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir},
 #' based on the \code{mode="show"} output of \code{\link{.getGeneSetCommands}}.
-#' It will also return the commands required to do so.
+#' It will also return the commands required to do so and the name of the variable corresponding to said data.frame.
 #' \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
 #' will add a \code{\link{datatable}} widget to the output,
 #' which is used to render the aforementioned data.frame.
@@ -191,7 +191,8 @@ setMethod(".generateOutput", "GeneSetTable", function(x, se, ..., all_memory, al
     eval(parse(text=commands), envir=envir)
     list(
         commands=list(commands),
-        contents=list(table=envir$tab, available=nrow(se))
+        contents=list(table=envir$tab, available=nrow(se)),
+        varname="tab"
     )
 })
 
@@ -263,7 +264,6 @@ setMethod(".renderOutput", "GeneSetTable", function(x, se, ..., output, pObjects
 
         t.out <- .retrieveOutput(panel_name, se, pObjects, rObjects)
         full_tab <- t.out$contents$table
-        pObjects$varname[[panel_name]] <- "tab"
 
         chosen <- param_choices[["Selected"]]
         search <- param_choices[["Search"]]
