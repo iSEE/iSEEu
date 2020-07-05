@@ -264,7 +264,6 @@ setMethod(".renderOutput", "GeneSetTable", function(x, se, ..., output, pObjects
 
         t.out <- .retrieveOutput(panel_name, se, pObjects, rObjects)
         full_tab <- t.out$contents$table
-        pObjects$varname[[panel_name]] <- "tab"
 
         chosen <- param_choices[["Selected"]]
         search <- param_choices[["Search"]]
