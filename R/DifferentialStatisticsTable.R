@@ -166,7 +166,7 @@ setMethod(".defineDataInterface", "DifferentialStatisticsTable", function(x, se,
             choices=cached$valid.assay.names,
             selected=x[["Assay"]]),
         selectInput(paste0(plot_name, "_ExtraFields"),
-            label="Assay", multiple=TRUE,
+            label="Extra fields", multiple=TRUE,
             choices=cached$valid.rowdata.names,
             selected=x[["ExtraFields"]])
     )
