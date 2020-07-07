@@ -14,6 +14,8 @@
 #' This can be \code{"t"} (default), \code{"wilcox"} or \code{"binom"}.
 #' \item \code{Assay}, string indicating the assay to use for testing.
 #' Defaults to the first named assay in the SummarizedExperiment.
+#' \item \code{ExtraFields}, a character vector containing names of \code{\link{rowData}} columns to be included in the table.
+#' Defaults to an empty vector.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowTable},
@@ -29,11 +31,13 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry containing \code{valid.assay.names}.
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry 
+#' containing \code{valid.assay.names} and \code{valid.rowdata.names}.
 #' This will also call the equivalent \linkS4class{RowTable} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
 #' This will also call the equivalent \linkS4class{RowTable} method for further refinements to \code{x}.
 #' If valid assay names are not available, \code{NULL} is returned instead.
+#' Any \code{"ExtraFields"} are intersected with the valid \code{rowData} names.
 #' }
 #'
 #' For defining the interface:
@@ -92,7 +96,7 @@ NULL
 
 #' @export
 setClass("DifferentialStatisticsTable", contains="RowTable",
-    slots=c(LogFC="numeric", TestMethod="character", Assay="character"))
+    slots=c(LogFC="numeric", TestMethod="character", Assay="character", ExtraFields="character"))
 
 #' @importFrom S4Vectors setValidity2
 setValidity2("DifferentialStatisticsTable", function(object) {
@@ -110,6 +114,10 @@ setValidity2("DifferentialStatisticsTable", function(object) {
         msg <- c(msg, "'Assay' must be a single string")
     }
 
+    if (any(is.na(object[["ExtraFields"]]))) {
+        msg <- c(msg, "'ExtraFields' should contain non-NA strings")
+    }
+
     if (length(msg)) {
         return(msg)
     }
@@ -123,13 +131,27 @@ DifferentialStatisticsTable <- function(...) {
 }
 
 #' @export
-setMethod("initialize", "DifferentialStatisticsTable", function(.Object, LogFC=0, TestMethod="t", Assay=NA_character_, ...)
-    callNextMethod(.Object, LogFC=LogFC, ColumnSelectionType="Union", TestMethod=TestMethod, Assay=Assay, ...))
+setMethod("initialize", "DifferentialStatisticsTable", 
+    function(.Object, LogFC=0, TestMethod="t", ExtraFields=character(0), ...)
+{
+    args <- list(LogFC=LogFC, TestMethod=TestMethod, ExtraFields=ExtraFields, ...)
+
+    args <- .emptyDefault(args, field="Assay", 
+        default=iSEEOptions$get("assay")[1])
+
+    args <- .emptyDefault(args, field="ColumnSelectionDynamicSource", 
+        default=iSEEOptions$get("selection.dynamic.multiple"))
+    args[["ColumnSelectionType"]] <- "Union"
+
+    do.call(callNextMethod, c(list(.Object), args))
+})
 
 #' @export
 #' @importFrom shiny numericInput selectInput
 setMethod(".defineDataInterface", "DifferentialStatisticsTable", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
+    cached <- .getCachedCommonInfo(se, "DifferentialStatisticsTable")
+
     list(
         numericInput(paste0(plot_name, "_LogFC"),
             label="Log-FC threshold",
@@ -141,13 +163,17 @@ setMethod(".defineDataInterface", "DifferentialStatisticsTable", function(x, se,
             selected=x[["TestMethod"]]),
         selectInput(paste0(plot_name, "_Assay"),
             label="Assay",
-            choices=.getCachedCommonInfo(se, "DifferentialStatisticsTable")$valid.assay.names,
-            selected=x[["Assay"]])
+            choices=cached$valid.assay.names,
+            selected=x[["Assay"]]),
+        selectInput(paste0(plot_name, "_ExtraFields"),
+            label="Assay", multiple=TRUE,
+            choices=cached$valid.rowdata.names,
+            selected=x[["ExtraFields"]])
     )
 })
 
 #' @export
-#' @importFrom SummarizedExperiment assayNames
+#' @importFrom SummarizedExperiment assayNames rowData
 setMethod(".cacheCommonInfo", "DifferentialStatisticsTable", function(x, se) {
     if (!is.null(.getCachedCommonInfo(se, "DifferentialStatisticsTable"))) {
         return(se)
@@ -157,7 +183,12 @@ setMethod(".cacheCommonInfo", "DifferentialStatisticsTable", function(x, se) {
 
     named_assays <- assayNames(se)
     named_assays <- named_assays[nzchar(named_assays)]
-    .setCachedCommonInfo(se, "DifferentialStatisticsTable", valid.assay.names=named_assays)
+
+    rdata <- rowData(se)
+    valid_rd <- .findAtomicFields(rdata)
+
+    .setCachedCommonInfo(se, "DifferentialStatisticsTable", 
+        valid.assay.names=named_assays, valid.rowdata.names=valid_rd)
 })
 
 #' @export
@@ -168,7 +199,9 @@ setMethod(".refineParameters", "DifferentialStatisticsTable", function(x, se) {
         return(NULL)
     }
 
-    valid.choices <- .getCachedCommonInfo(se, "DifferentialStatisticsTable")$valid.assay.names
+    cached <- .getCachedCommonInfo(se, "DifferentialStatisticsTable")
+
+    valid.choices <- cached$valid.assay.names
     if (length(valid.choices)==0L) {
         warning(sprintf("no valid 'Assay' detected for '%s'", class(x)[1]))
         return(NULL)
@@ -176,6 +209,9 @@ setMethod(".refineParameters", "DifferentialStatisticsTable", function(x, se) {
     if (is.na(x[["Assay"]])) {
         x[["Assay"]] <- valid.choices[1]
     }
+
+    valid.choices <- cached$valid.rowdata.names
+    x[["ExtraFields"]] <- intersect(x[["ExtraFields"]], valid.choices)
 
     x
 })
@@ -191,14 +227,20 @@ setMethod(".createObservers", "DifferentialStatisticsTable",
     .createUnprotectedParameterObservers(plot_name,
         fields=c("LogFC", "TestMethod", "Assay"),
         input=input, pObjects=pObjects, rObjects=rObjects)
+
+    # This can change the order of the columns, so we should flush selections.
+    # We set 'ignoreNULL=FALSE' so as to respond to an empty list.
+    .createProtectedParameterObservers(plot_name,
+        fields=c("ExtraFields"), ignoreNULL=FALSE,
+        input=input, pObjects=pObjects, rObjects=rObjects)
 })
 
 #' @export
 setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
-    empty <- "tab <- data.frame(Top=integer(0), p.value=numeric(0), FDR=numeric(0));"
+    extras <- x[["ExtraFields"]] 
 
     if (!exists("col_selected", envir, inherits=FALSE) || !"active" %in% names(envir$col_selected)) {
-        commands <- empty
+        commands <- .spawn_empty_cmds(extras)
         eval(parse(text=commands), envir=envir)
     } else {
         if (length(envir$col_selected)<2L) {
@@ -214,13 +256,19 @@ setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
 
         # Check that there actually are two groups, otherwise this bit fails hard.
         if (length(unique(envir$.grouping)) < 2L) {
-            commands <- empty
+            commands <- .spawn_empty_cmds(extras)
             eval(parse(text=commands), envir=envir)
         } else {
+            if (length(extras)) {
+                row.anno <- paste0(",\n    row.data=", .define_extra_data(extras))
+            } else {
+                row.anno <- ""
+            }
+
             stat.cmds <- c(
                 sprintf(".de.stats <- scran::findMarkers(assay(se, %s)%s, .grouping,
-    direction='up', lfc=%s, test.type=%s)",
-                    deparse(x[["Assay"]]), subsettor, x[["LogFC"]], deparse(x[["TestMethod"]])),
+    direction='up', lfc=%s, test.type=%s%s)",
+                    deparse(x[["Assay"]]), subsettor, x[["LogFC"]], deparse(x[["TestMethod"]]), row.anno),
                 "tab <- as.data.frame(.de.stats[['active']]);"
             )
             eval(parse(text=stat.cmds), envir=envir)
@@ -230,6 +278,18 @@ setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
 
     commands 
 })
+
+.define_extra_data <- function(extras, subset="") {
+    sprintf("rowData(se)[%s,%s,drop=FALSE]", subset, paste(deparse(extras), collapse=""))
+}
+
+.spawn_empty_cmds <- function(extras) {
+    empty <- "tab <- data.frame(Top=integer(0), p.value=numeric(0), FDR=numeric(0));"
+    if (length(extras)) {
+        empty <- c(empty, sprintf("tab <- cbind(as.data.frame(%s), tab);", .define_extra_data(extras, subset="0")))
+    }
+    empty
+}
 
 #' @export
 setMethod(".hideInterface", "DifferentialStatisticsTable", function(x, field) {

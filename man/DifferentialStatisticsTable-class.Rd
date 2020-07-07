@@ -30,6 +30,8 @@ Defaults to zero.
 This can be \code{"t"} (default), \code{"wilcox"} or \code{"binom"}.
 \item \code{Assay}, string indicating the assay to use for testing.
 Defaults to the first named assay in the SummarizedExperiment.
+\item \code{ExtraFields}, a character vector containing names of \code{\link{rowData}} columns to be included in the table.
+Defaults to an empty vector.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{RowTable},
@@ -49,11 +51,13 @@ Refer to the documentation for each method for more details on the remaining arg
 
 For setting up data values:
 \itemize{
-\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry containing \code{valid.assay.names}.
+\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry
+containing \code{valid.assay.names} and \code{valid.rowdata.names}.
 This will also call the equivalent \linkS4class{RowTable} method.
 \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
 This will also call the equivalent \linkS4class{RowTable} method for further refinements to \code{x}.
 If valid assay names are not available, \code{NULL} is returned instead.
+Any \code{"ExtraFields"} are intersected with the valid \code{rowData} names.
 }
 
 For defining the interface:

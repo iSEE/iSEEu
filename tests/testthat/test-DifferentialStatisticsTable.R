@@ -23,7 +23,7 @@ test_that("DifferentialStatisticsTable interface definition works correctly", {
 
 test_that("DifferentialStatisticsTable caching and refinement works correctly", {
     x <- DifferentialStatisticsTable()
-    expect_identical(x[["Assay"]], NA_character_)
+    expect_identical(x[["Assay"]], "logcounts")
 
     expect_warning(x2 <- .refineParameters(x, se), "no valid")
     expect_identical(x2, NULL)
@@ -60,4 +60,33 @@ test_that("DifferentialStatisticsTable generates the table correctly", {
     out <- .generateTable(x, env)
     expect_identical(nrow(env$tab), nrow(se))
     expect_identical(ncol(env$tab), past+1L)
+})
+
+test_that("DifferentialStatisticsTable responds correctly to extra fields", {
+    env <- new.env()
+    env$col_selected <- list()
+    rowData(se)$Symbol <- sprintf("GENE_%i", seq_len(nrow(se)))
+    env$se <- se
+
+    x <- DifferentialStatisticsTable(ExtraFields="Symbol2")
+    se <- .cacheCommonInfo(x, se)
+    x <- .refineParameters(x, se)
+    expect_identical(x[["ExtraFields"]], character(0))
+
+    out <- .generateTable(x, env)
+    expect_false("Symbol" %in% colnames(env$tab))
+    env$col_selected <- list(active=letters[1:2])
+    out <- .generateTable(x, env)
+    expect_false("Symbol" %in% colnames(env$tab))
+
+    x <- DifferentialStatisticsTable(ExtraFields="Symbol")
+    x <- .refineParameters(x, se)
+    expect_identical(x[["ExtraFields"]], "Symbol")
+
+    env$col_selected <- list()
+    out <- .generateTable(x, env)
+    expect_true("Symbol" %in% colnames(env$tab))
+    env$col_selected <- list(active=letters[1:2])
+    out <- .generateTable(x, env)
+    expect_true("Symbol" %in% colnames(env$tab))
 })
