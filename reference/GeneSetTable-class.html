@@ -141,9 +141,12 @@ This usually requires some set-up with <code>.setIdentifierType</code> and relat
 
     
 
-<p>The following slots control the thresholds used in the visualization:</p><ul>
+<p>The following slots control the type of gene sets to show:</p><ul>
 <li><p><code>Type</code>, string specifying the type of gene set collection to show.
 Defaults to <code>"GO"</code>.</p></li>
+</ul>
+
+<p>The following slots control the table selections:</p><ul>
 <li><p><code>Selected</code>, a string containing the name of the currently selected gene set.
 Defaults to <code>""</code>, i.e., no selection.</p></li>
 <li><p><code>Search</code>, a string containing the regular expression for the global search.
@@ -163,7 +166,7 @@ where any slot and its value can be passed to <code>...</code> as a named argume
 
     
 
-<p>In the following code snippets, <code>x</code> is an instance of a DifferentialStatisticsTable class.
+<p>In the following code snippets, <code>x</code> is an instance of a GeneSetTable class.
 Refer to the documentation for each method for more details on the remaining arguments.</p>
 <p>For defining the interface:</p><ul>
 <li><p><code>.defineDataInterface(x, se, select_info)</code> returns a list of interface elements for manipulating all slots described above.</p></li>
@@ -171,6 +174,7 @@ Refer to the documentation for each method for more details on the remaining arg
 <li><p><code>.fullName(x)</code> will return <code>"Gene set table"</code>.</p></li>
 <li><p><code>.hideInterface(x)</code> will return <code>TRUE</code> for UI elements related to multiple selections,
 otherwise calling the method for Panel.</p></li>
+<li><p><code>.defineOutput(x)</code> will return a HTML element containing a <code>datatable</code> widget.</p></li>
 </ul>
 
 <p>For monitoring reactive expressions:</p><ul>
