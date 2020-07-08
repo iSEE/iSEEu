@@ -4,10 +4,14 @@
 #' This usually requires some set-up with \code{\link{.setIdentifierType}} and related functions, see Examples.
 #'
 #' @section Slot overview:
-#' The following slots control the thresholds used in the visualization:
+#' The following slots control the type of gene sets to show:
 #' \itemize{
 #' \item \code{Type}, string specifying the type of gene set collection to show.
 #' Defaults to \code{"GO"}.
+#' }
+#'
+#' The following slots control the table selections:
+#' \itemize{
 #' \item \code{Selected}, a string containing the name of the currently selected gene set.
 #' Defaults to \code{""}, i.e., no selection.
 #' \item \code{Search}, a string containing the regular expression for the global search.
@@ -23,7 +27,7 @@
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
-#' In the following code snippets, \code{x} is an instance of a \linkS4class{DifferentialStatisticsTable} class.
+#' In the following code snippets, \code{x} is an instance of a \linkS4class{GeneSetTable} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
 #'
 #' For defining the interface:
@@ -33,6 +37,7 @@
 #' \item \code{\link{.fullName}(x)} will return \code{"Gene set table"}.
 #' \item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple selections,
 #' otherwise calling the method for \linkS4class{Panel}.
+#' \item \code{\link{.defineOutput}(x)} will return a HTML element containing a \code{\link{datatable}} widget.
 #' }
 #'
 #' For monitoring reactive expressions:
@@ -156,7 +161,7 @@ setMethod(".panelColor", "GeneSetTable", function(x) "#BB00FF")
 
 #' @export
 #' @importFrom DT dataTableOutput
-setMethod(".defineOutput", "GeneSetTable", function(x, ...) {
+setMethod(".defineOutput", "GeneSetTable", function(x) {
     panel_name <- .getEncodedName(x)
     dataTableOutput(panel_name)
 })
