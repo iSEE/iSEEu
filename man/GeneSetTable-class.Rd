@@ -57,6 +57,7 @@ For defining the interface:
 \item \code{\link{.fullName}(x)} will return \code{"Gene set table"}.
 \item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple selections,
 otherwise calling the method for \linkS4class{Panel}.
+\item \code{\link{.defineOutput}(x)} will return a HTML element containing a \code{\link{datatable}} widget.
 }
 
 For monitoring reactive expressions:
