@@ -28,6 +28,8 @@
 #' 
 #' @seealso
 #' \linkS4class{FeatureSetTable}, where the commands are intended for use.
+#'
+#' \code{\link{.setFeatureSetCommands}}, to use the commands globally.
 #' @export
 createGeneSetCommands <- function(collections=c("GO", "KEGG"), organism="org.Hs.eg.db", identifier="ENTREZID") {
     init <- retrieve <- list()

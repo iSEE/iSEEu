@@ -16,7 +16,8 @@
 #' }
 #'
 #' The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed within the \code{iSEE} application.
-#' If not supplied to the constructor, they default to the output fields of \code{\link{createGeneSetCommands}}.
+#' If not supplied to the constructor, they default to the fields of the output of \code{\link{.getFeatureSetCommands}}.
+#' If these are also \code{NULL}, they fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
 #'
 #' The following slots control the selections:
 #' \itemize{
@@ -178,8 +179,12 @@ setMethod("initialize", "FeatureSetTable",
 {
     args <- list(..., Collection=Collection, Selected=Selected, Search=Search, SearchColumns=SearchColumns)
 
-    if (is.null(args$CreateCollections) && is.null(args$RetrieveSet)) {
-        stuff <- createFeatureSetCommands()
+    no.cmds <- function(x) is.null(x$CreateCollections) && is.null(x$RetrieveSet)
+    if (no.cmds(args)) {
+        stuff <- getFeatureSetCommands()
+        if (no.cmds(stuff)) {
+            stuff <- createGeneSetCommands()                        
+        }
         args$CreateCollections <- stuff$CreateCollections
         args$RetrieveSet <- stuff$RetrieveSet
     }

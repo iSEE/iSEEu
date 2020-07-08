@@ -41,6 +41,8 @@ cat(out$RetrieveSet['GO'], "\n")
 }
 \seealso{
 \linkS4class{FeatureSetTable}, where the commands are intended for use.
+
+\code{\link{.setFeatureSetCommands}}, to use the commands globally.
 }
 \author{
 Aaron Lun

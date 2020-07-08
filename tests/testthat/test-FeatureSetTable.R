@@ -66,3 +66,18 @@ test_that("createGeneSetCommands works as expected", {
     eval(parse(text=cmds$RetrieveSet[2]), envir=env)
     expect_type(env$selected, "character")
 })
+
+test_that("FeatureSetCommands constructor interacts with globals", {
+    out <- FeatureSetTable()
+    expect_identical(names(out[["CreateCollections"]]), c("GO", "KEGG"))
+    expect_identical(names(out[["RetrieveSet"]]), c("GO", "KEGG"))
+
+    # Overriding the globals.
+    old <- getFeatureSetCommands()
+    setFeatureSetCommands(list(RetrieveSet=c(A="1"), CreateCollections=c(A="1")))
+    out <- FeatureSetTable()
+    expect_identical(names(out[["CreateCollections"]]), "A")
+    expect_identical(names(out[["RetrieveSet"]]), "A")
+
+    setFeatureSetCommands(old)
+})
