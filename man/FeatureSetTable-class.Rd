@@ -120,9 +120,8 @@ sce <- logNormCounts(sce)
 library(scran)
 rowData(sce) <- cbind(rowData(sce), modelGeneVarWithSpikes(sce, "ERCC"))
 
-# This defaults to 'org.Hs.eg.db' with 'ENTREZID'.
-cmds <- createGeneSetCommands(organism="org.Mm.eg.db", 
-    identifier="ENTREZID")
+cmds <- createGeneSetCommands(collections="GO",
+    organism="org.Mm.eg.db", identifier="ENSEMBL")
 gst <- FeatureSetTable(PanelId=1L, RetrieveSet=cmds$RetrieveSet,
     CreateCollections=cmds$CreateCollections)
 
