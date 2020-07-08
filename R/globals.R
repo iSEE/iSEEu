@@ -19,9 +19,9 @@
 #' see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{.createGeneSetCommands}} for details.
 #'
 #' @return 
-#' \code{.getFeatureSetCommands} returns the current global feature set commands.
+#' \code{getFeatureSetCommands} returns the current global feature set commands.
 #'
-#' \code{.setFeatureSetCommands} will set the current global feature set commands and return \code{NULL} invisibly.
+#' \code{setFeatureSetCommands} will set the current global feature set commands and return \code{NULL} invisibly.
 #'
 #' @details
 #' By setting these values, all subsequent constructions of \linkS4class{FeatureSetTable} will have the same set of commands in their \code{"CreateCollections"} and \code{"RetrieveSet"} slots.
@@ -34,9 +34,9 @@
 #' \code{\link{createGeneSetCommands}}, for one method of generating \code{value}.
 #'
 #' @examples
-#' old <- .getFeatureSetCommands()
+#' old <- getFeatureSetCommands()
 #'
-#' new.cmds <- .createGeneSetCommands(organism="org.Mm.eg.db", 
+#' new.cmds <- createGeneSetCommands(organism="org.Mm.eg.db", 
 #'     identifier="SYMBOL")
 #' setFeatureSetCommands(new.cmds)
 #'

@@ -16,9 +16,9 @@ Vectors should contain R commands to create collections and retrieve sets;
 see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{.createGeneSetCommands}} for details.}
 }
 \value{
-\code{.getFeatureSetCommands} returns the current global feature set commands.
+\code{getFeatureSetCommands} returns the current global feature set commands.
 
-\code{.setFeatureSetCommands} will set the current global feature set commands and return \code{NULL} invisibly.
+\code{setFeatureSetCommands} will set the current global feature set commands and return \code{NULL} invisibly.
 }
 \description{
 Get or set the commands to define the global collection of feature sets.
@@ -29,9 +29,9 @@ This allows users to easily customize all \linkS4class{FeatureSetTable} paramete
 Note that it only applies during the construction of the \linkS4class{FeatureSetTable} and has no effect on the \code{iSEE} application once it starts.
 }
 \examples{
-old <- .getFeatureSetCommands()
+old <- getFeatureSetCommands()
 
-new.cmds <- .createGeneSetCommands(organism="org.Mm.eg.db", 
+new.cmds <- createGeneSetCommands(organism="org.Mm.eg.db", 
     identifier="SYMBOL")
 setFeatureSetCommands(new.cmds)
 
