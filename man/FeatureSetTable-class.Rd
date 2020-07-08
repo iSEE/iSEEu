@@ -38,7 +38,7 @@ as well as the \code{se} variable containing the input SummarizedExperiment obje
 }
 
 The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed within the \code{iSEE} application.
-If not supplied to the constructor, they default to the fields of the output of \code{\link{.getFeatureSetCommands}}.
+If not supplied to the constructor, they default to the fields of the output of \code{\link{getFeatureSetCommands}}.
 If these are also \code{NULL}, they fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
 
 The following slots control the selections:

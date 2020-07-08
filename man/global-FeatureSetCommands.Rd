@@ -40,7 +40,7 @@ getFeatureSetCommands()
 setFeatureSetCommands(old) 
 }
 \seealso{
-\code{\link{.createGeneSetCommands}}, for one way of generating \code{value}.
+\code{\link{createGeneSetCommands}}, for one method of generating \code{value}.
 }
 \author{
 Aaron Lun

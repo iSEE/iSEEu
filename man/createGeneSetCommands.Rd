@@ -30,11 +30,11 @@ which extracts both direct and indirect children of each term.
 A description for each GO term is extracted using the \pkg{GO.db} package.
 
 Mappings of genes to KEGG pathway are extracted from the organism package using the \code{"PATH"} term.
-Unfortunately, this is not particularly up-to-date due to the ridiculous licensing around KEGG terms.
+Unfortunately, this is not up to date due to the licensing around KEGG terms.
 Descriptions for each pathway are extracted from \url{http://rest.kegg.jp/list/pathway}.
 }
 \examples{
-out <- createFeatureSetCommands()
+out <- createGeneSetCommands()
 cat(out$CreateCollections['GO'], "\n")
 cat(out$RetrieveSet['GO'], "\n")
 
@@ -42,7 +42,7 @@ cat(out$RetrieveSet['GO'], "\n")
 \seealso{
 \linkS4class{FeatureSetTable}, where the commands are intended for use.
 
-\code{\link{.setFeatureSetCommands}}, to use the commands globally.
+\code{\link{setFeatureSetCommands}}, to use the commands globally.
 }
 \author{
 Aaron Lun

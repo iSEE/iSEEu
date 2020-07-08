@@ -31,7 +31,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \code{\link{.createGeneSetCommands}}, for one way of generating \code{value}.
+#' \code{\link{createGeneSetCommands}}, for one method of generating \code{value}.
 #'
 #' @examples
 #' old <- .getFeatureSetCommands()
