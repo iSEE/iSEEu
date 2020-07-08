@@ -242,7 +242,7 @@ setMethod(".refineParameters", "FeatureSetTable", function(x, se) {
 })
 
 #' @export
-setMethod(".fullName", "FeatureSetTable", function(x) "Gene set table")
+setMethod(".fullName", "FeatureSetTable", function(x) "Feature set table")
 
 #' @export
 setMethod(".panelColor", "FeatureSetTable", function(x) "#BB00FF")
@@ -355,6 +355,9 @@ setMethod(".renderOutput", "FeatureSetTable", function(x, se, ..., output, pObje
     output[[panel_name]] <- renderDataTable({
         .trackUpdate(panel_name, rObjects)
         param_choices <- pObjects$memory[[panel_name]]
+
+        # See comments in ?iSEE:::.create_table_output.
+        force(rObjects$rerendered)
 
         t.out <- .retrieveOutput(panel_name, se, pObjects, rObjects)
         full_tab <- t.out$contents$table
