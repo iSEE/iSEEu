@@ -197,21 +197,24 @@ app <- iSEE(sce, initial=list(red.panel, diff.panel))
 SCREENSHOT("screenshots/diffstat.png")
 ```
 
-# Gene set table
+# Feature set table
 
-The `GeneSetTable()` class is a bit unusual in that its rows do not correspond to any dimension of the `SummarizedExperiment`.
-Rather, each row is a gene set (e.g., from GO or KEGG) that, upon click, transmits a multiple row selection to other panels.
-The multiple selection consists of all genes in the chosen gene set,
+The `FeatureSetTable()` class is a bit unusual in that its rows do not correspond to any dimension of the `SummarizedExperiment`.
+Rather, each row is a feature set (e.g., from GO or KEGG) that, upon click, transmits a multiple row selection to other panels.
+The multiple selection consists of all rows in the chosen feature set,
 allowing users to identify the positions of all genes in a pathway of interest on, say, a volcano plot.
 This is also a rare example of a panel that only transmits and does not receive any selections from other panels.
 
 ```{r}
-.setIdentifierType("ENSEMBL")
-gset.tab <- GeneSetTable(Selected="GO:0002576", 
-    Search="platelet", PanelWidth=6L)
+set.commands <- createGeneSetCommands(identifier="ENSEMBL")
+
+gset.tab <- FeatureSetTable(#Selected="GO:0002576", 
+    Search="platelet", PanelWidth=6L,
+    CreateCollections=set.commands$CreateCollections,
+    RetrieveSet=set.commands$RetrieveSet)
 
 # This volcano plot will highlight the genes in the selected gene set.
-vol.panel <- VolcanoPlot(RowSelectionSource="GeneSetTable1",
+vol.panel <- VolcanoPlot(RowSelectionSource="FeatureSetTable1",
     SelectionEffect="Color", PanelWidth=6L)
 
 app <- iSEE(airway, initial=list(gset.tab, vol.panel))

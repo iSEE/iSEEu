@@ -68,6 +68,7 @@ NULL
 #' @export
 #' @rdname utils-geneset
 .getIdentifierType <- function() {
+    .Deprecated(new="getFeatureSetCommands")
     global <- getOption("iSEEu_gene_set_id", NULL)
     if (is.null(global)) {
         "ENTREZID"
@@ -79,6 +80,7 @@ NULL
 #' @export
 #' @rdname utils-geneset
 .setIdentifierType <- function(value) {
+    .Deprecated(new="setFeatureSetCommands")
     options(iSEEu_gene_set_id=value)
     invisible(NULL)
 }
@@ -86,6 +88,7 @@ NULL
 #' @export
 #' @rdname utils-geneset
 .getOrganism <- function() {
+    .Deprecated(new="getFeatureSetCommands")
     global <- getOption("iSEEu_gene_set_species", NULL)
     if (is.null(global)) {
         "org.Hs.eg.db"
@@ -97,6 +100,7 @@ NULL
 #' @export
 #' @rdname utils-geneset
 .setOrganism <- function(value) {
+    .Deprecated(new="setFeatureSetCommands")
     options(iSEEu_gene_set_species=value)
     invisible(NULL)
 }
@@ -104,6 +108,7 @@ NULL
 #' @export
 #' @rdname utils-geneset
 .getGeneSetCommands <- function(collection, mode) {
+    .Deprecated(new="getFeatureSetCommands")
     global <- getOption("iSEEu_gene_set_commands", NULL)[[collection]]
     if (!is.null(global)) {
         return(global[[mode]])
@@ -149,6 +154,7 @@ NULL
 #' @export
 #' @rdname utils-geneset
 .setGeneSetCommands <- function(value) {
+    .Deprecated(new="setFeatureSetCommands")
     options(iSEEu_gene_set_commands=value)
     invisible(NULL)
 }
