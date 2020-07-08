@@ -6,7 +6,7 @@ dimnames(se) <- list(1:nrow(se), letters[seq_len(ncol(se))])
 
 test_that("FeatureSetTable constructor works as expected", {
     out <- FeatureSetTable()
-    expect_error(FeatureSetTable(Type=character(0)), "single string")
+    expect_error(FeatureSetTable(Collection=character(0)), "single string")
     expect_error(FeatureSetTable(Selected=character(0)), "single string")
     expect_error(FeatureSetTable(Search=character(0)), "single string")
 })
@@ -34,8 +34,8 @@ test_that("FeatureSetTable implements multiple selection methods correctly", {
     expect_identical(.multiSelectionDimension(out), "row")
     expect_identical(.multiSelectionActive(out), NULL)
 
-    out <- FeatureSetTable(Selected="BLAH")
-    expect_match(.multiSelectionCommands(out, NULL), "BLAH")
+    out <- FeatureSetTable(Collection="GO", Selected="BLAH")
+    expect_true(any(grepl("BLAH", .multiSelectionCommands(out, NULL))))
     expect_identical(.multiSelectionActive(out), "BLAH")
 
     expect_identical(.multiSelectionClear(out)[["Selected"]], "")
