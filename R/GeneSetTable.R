@@ -1,7 +1,7 @@
 #' Gene set table
 #'
 #' A table where each row is a gene set and can be clicked to transmit a multiple feature selection to another panel.
-#' This usually requires some set-up with \code{\link{.setIdentifierType}} and related functions, see Examples.
+#' This has been deprecated in favor of the simpler \linkS4class{FeatureSetTable}.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
@@ -146,6 +146,7 @@ setMethod("initialize", "GeneSetTable", function(.Object, Type="GO", Selected=""
 #' @export
 #' @importFrom methods new
 GeneSetTable <- function(...) {
+    .Deprecated(new="FeatureSetTable")
     new("GeneSetTable", ...)
 }
 
