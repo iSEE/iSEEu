@@ -7,7 +7,6 @@
 \alias{initialize,MAPlot-method}
 \alias{.refineParameters,MAPlot-method}
 \alias{.defineDataInterface,MAPlot-method}
-\alias{.cacheCommonInfo,MAPlot-method}
 \alias{.createObservers,MAPlot-method}
 \alias{.hideInterface,MAPlot-method}
 \alias{.fullName,MAPlot-method}
@@ -30,13 +29,25 @@ Users are expected to load relevant statistics into the \code{\link{rowData}} of
 The following slots control the thresholds used in the visualization:
 \itemize{
 \item \code{PValueField}, a string specifying the field of \code{\link{rowData}} containing the p-values.
-See \code{?\link{.getAcceptablePValueFields}} for more details.
 \item \code{PValueThreshold}, a numeric scalar in (0, 1] specifying the threshold to use on the (adjusted) p-value.
 Defaults to 0.05.
 \item \code{LogFCThreshold}, a non-negative numeric scalar specifying the threshold to use on the log-fold change.
 Defaults to 0.
 \item \code{PValueCorrection}, a string specifying the multiple testing correction to apply.
 Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
+}
+
+The following slots control the choice of columns in the user interface:
+\itemize{
+\item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
+Defaults to \code{\link{getPValueFields}}.
+This cannot be changed after the application has started.
+\item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
+Defaults to \code{\link{getLogFCFields}}.
+This cannot be changed after the application has started.
+\item \code{AveAbFields}, a character vector specifying the names of all columns containing average abundances.
+Defaults to \code{\link{getAveAbFields}}.
+This cannot be changed after the application has started.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -56,21 +67,17 @@ Refer to the documentation for each method for more details on the remaining arg
 
 For setting up data values:
 \itemize{
-\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names}, \code{ave.rowData.names} and \code{lfc.rowData.names}.
-Each of these is a character vector of permissible names for p-values, average abundances and log-fold changes, respectively;
-see \code{?\link{.getAcceptablePValueFields}} for details.
-This will also call the equivalent \linkS4class{RowDataPlot} method.
 \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
-If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
+If valid p-value, abundance and log-fold change fields are not available, \code{NULL} is returned instead.
 }
 
 For defining the interface:
 \itemize{
 \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-\item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable average abundance-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.getAcceptableAveAbFields}}.
-\item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.getAcceptableLogFCFields}}.
+\item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable average abundance-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis.
+\item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis.
 \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 otherwise it will call the \linkS4class{RowDataPlot} method.
 \item \code{\link{.fullName}(x)} will return \code{"MA plot"}.

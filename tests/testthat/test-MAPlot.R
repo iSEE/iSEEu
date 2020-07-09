@@ -17,21 +17,6 @@ test_that("MAPlot constructor works", {
     expect_error(MAPlot(PValueCorrection='stuff'), "must be in")
 })
 
-test_that("MAPlot common caching works correctly", {
-    x <- MAPlot()
-    se2 <- .cacheCommonInfo(x, se)
-
-    cached <- .getCachedCommonInfo(se2, "MAPlot")
-    expect_identical(cached$pval.rowData.names, "PValue")
-    expect_identical(cached$ave.rowData.names, "AveExpr")
-    expect_identical(cached$lfc.rowData.names, "LogFC")
-
-    expect_true(!is.null(.getCachedCommonInfo(se2, "RowDotPlot")))
-
-    # Should be a no-op.
-    expect_identical(se2, .cacheCommonInfo(x, se2))
-})
-
 test_that("MAPlot refinement works correctly", {
     x <- MAPlot()
     expect_identical(x[["XAxis"]], "None")

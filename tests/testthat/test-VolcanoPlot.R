@@ -15,20 +15,6 @@ test_that("VolcanoPlot constructor works", {
     expect_error(VolcanoPlot(PValueCorrection='stuff'), "must be in")
 })
 
-test_that("VolcanoPlot common caching works correctly", {
-    x <- VolcanoPlot()
-    se2 <- .cacheCommonInfo(x, se)
-
-    cached <- .getCachedCommonInfo(se2, "VolcanoPlot")
-    expect_identical(cached$pval.rowData.names, "PValue")
-    expect_identical(cached$lfc.rowData.names, "LogFC")
-
-    expect_true(!is.null(.getCachedCommonInfo(se2, "RowDotPlot")))
-
-    # Should be a no-op.
-    expect_identical(se2, .cacheCommonInfo(x, se2))
-})
-
 test_that("VolcanoPlot refinement works correctly", {
     x <- VolcanoPlot()
     expect_identical(x[["XAxis"]], "None")

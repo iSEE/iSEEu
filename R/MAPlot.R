@@ -8,13 +8,25 @@
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
 #' \item \code{PValueField}, a string specifying the field of \code{\link{rowData}} containing the p-values.
-#' See \code{?\link{.getAcceptablePValueFields}} for more details.
 #' \item \code{PValueThreshold}, a numeric scalar in (0, 1] specifying the threshold to use on the (adjusted) p-value.
 #' Defaults to 0.05.
 #' \item \code{LogFCThreshold}, a non-negative numeric scalar specifying the threshold to use on the log-fold change.
 #' Defaults to 0.
 #' \item \code{PValueCorrection}, a string specifying the multiple testing correction to apply.
 #' Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
+#' }
+#'
+#' The following slots control the choice of columns in the user interface:
+#' \itemize{
+#' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
+#' Defaults to \code{\link{getPValueFields}}.
+#' This cannot be changed after the application has started.
+#' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
+#' Defaults to \code{\link{getLogFCFields}}.
+#' This cannot be changed after the application has started.
+#' \item \code{AveAbFields}, a character vector specifying the names of all columns containing average abundances.
+#' Defaults to \code{\link{getAveAbFields}}.
+#' This cannot be changed after the application has started.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -30,21 +42,17 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names}, \code{ave.rowData.names} and \code{lfc.rowData.names}.
-#' Each of these is a character vector of permissible names for p-values, average abundances and log-fold changes, respectively;
-#' see \code{?\link{.getAcceptablePValueFields}} for details.
-#' This will also call the equivalent \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
-#' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
+#' If valid p-value, abundance and log-fold change fields are not available, \code{NULL} is returned instead.
 #' }
 #'
 #' For defining the interface:
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable average abundance-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.getAcceptableAveAbFields}}.
-#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.getAcceptableLogFCFields}}.
+#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable average abundance-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis.
+#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis.
 #' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 #' otherwise it will call the \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.fullName}(x)} will return \code{"MA plot"}.
@@ -75,7 +83,6 @@
 #' initialize,MAPlot-method
 #' .refineParameters,MAPlot-method
 #' .defineDataInterface,MAPlot-method
-#' .cacheCommonInfo,MAPlot-method
 #' .createObservers,MAPlot-method
 #' .hideInterface,MAPlot-method
 #' .fullName,MAPlot-method
@@ -87,9 +94,6 @@
 #' .colorByNoneDotPlotField,MAPlot-method
 #' .colorByNoneDotPlotScale,MAPlot-method
 #' .generateDotPlot,MAPlot-method
-#' .cacheCommonInfo,MAPlot-method
-#' .createObservers,MAPlot-method
-#' .hideInterface,MAPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -113,7 +117,8 @@ NULL
 
 #' @export
 setClass("MAPlot", contains="RowDataPlot",
-    slots=c(PValueField="character", PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character"))
+    slots=c(PValueField="character", PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
+        PValueFields="character", LogFCFields="character", AveAbFields="character"))
 
 #' @export
 setMethod(".fullName", "MAPlot", function(x) "MA plot")
@@ -125,8 +130,16 @@ setMethod(".panelColor", "MAPlot", function(x) "#666600")
 setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
     PValueThreshold=0.05, LogFCThreshold=0, PValueCorrection="BH", ...)
 {
-    callNextMethod(.Object, PValueField=PValueField, PValueThreshold=PValueThreshold,
+    args <- list(PValueField=PValueField, PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
+
+    args <- .emptyDefault(args, "PValueFields", getPValueFields())
+
+    args <- .emptyDefault(args, "LogFCFields", getLogFCFields())
+
+    args <- .emptyDefault(args, "AveAbFields", getAveAbFields())
+
+    do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
@@ -144,19 +157,10 @@ setValidity2("MAPlot", function(object) {
         msg <- c(msg, "'PValueField' must be a single string")
     }
 
-    p <- object[["PValueThreshold"]]
-    if (length(p)!=1 || p <= 0 || p > 1) {
-        msg <- c(msg, "'PValueThreshold' must be a numeric scalar in (0, 1]")
-    }
+    msg <- c(msg, .define_de_validity(object))
 
-    lfc <- object[["LogFCThreshold"]]
-    if (length(lfc)!=1 || lfc < 0) {
-        msg <- c(msg, "'LogFCThreshold' must be a non-negative numeric scalar")
-    }
-
-    corr <- object[["PValueCorrection"]]
-    if (length(corr)!=1 || !corr %in% p.adjust.methods) {
-        msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
+    if (any(is.na(object[["AveAbFields"]]))) {
+        msg <- c(msg, "'AveAbFields' should contain non-NA strings")
     }
 
     if (length(msg)) msg else TRUE
@@ -170,50 +174,36 @@ setMethod(".refineParameters", "MAPlot", function(x, se) {
         return(NULL)
     }
 
-    x[["XAxis"]] <- "Row data"
+    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    pallowed <- .getCachedCommonInfo(se, "MAPlot")$pval.rowData.names
-    if (length(pallowed)==0L) {
-        warning(sprintf("no valid 'PValueField' detected for '%s'", class(x)[1]))
+    x <- .update_de_field_choices(x, "PValueFields", all.cont, msg="p-value")
+    if (is.null(x)) {
         return(NULL)
     }
+    x <- .update_chosen_de_field(x, "PValueField", "PValueFields")
 
-    field <- x[["PValueField"]]
-    if (is.na(field) || !field %in% pallowed) {
-        x[["PValueField"]] <- pallowed[1]
+    x <- .update_de_field_choices(x, "LogFCFields", all.cont, msg="log-FC")
+    if (is.null(x)) {
+        return(NULL)
     }
+    x <- .update_chosen_de_field(x, "YAxis", "LogFCFields")
 
+    x <- .update_de_field_choices(x, "AveAbFields", all.cont, msg="average abundance")
+    if (is.null(x)) {
+        return(NULL)
+    }
+    x <- .update_chosen_de_field(x, "XAxisRowData", "AveAbFields")
+
+    x[["XAxis"]] <- "Row data"
     x
 })
 
-#' @export
-setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
-    if (!is.null(.getCachedCommonInfo(se, "MAPlot"))) {
-        return(se)
-    }
-
-    se <- callNextMethod()
-
-    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
-    pfields <- intersect(all.cont, .getAcceptablePValueFields())
-    afields <- intersect(all.cont, .getAcceptableAveAbFields())
-    lfields <- intersect(all.cont, .getAcceptableLogFCFields())
-
-    .setCachedCommonInfo(se, "MAPlot",
-        pval.rowData.names=pfields,
-        ave.rowData.names=afields,
-        lfc.rowData.names=lfields)
-})
 
 #' @export
-setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) {
-    .getCachedCommonInfo(se, "MAPlot")$ave.rowData.names
-})
+setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) x[["AveAbFields"]])
 
 #' @export
-setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) {
-    .getCachedCommonInfo(se, "MAPlot")$lfc.rowData.names
-})
+setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) x[["LogFCFields"]])
 
 #' @export
 #' @importFrom shiny numericInput selectInput
@@ -227,7 +217,7 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
             selectInput(input_FUN("PValueField"),
                 label="P-value field:",
                 selected=x[["PValueField"]],
-                choices=.getCachedCommonInfo(se, "MAPlot")$pval.rowData.names),
+                choices=x[["PValueFields"]]),
             numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
             numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",

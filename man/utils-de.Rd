@@ -37,6 +37,7 @@ The setter functions will define the set of acceptable fields and return \code{N
 \description{
 Set or get the acceptable fields to use for all \linkS4class{Panel} instances related to differential expression,
 including \linkS4class{VolcanoPlot} and \linkS4class{MAPlot}.
+These functions are now deprecated.
 }
 \examples{
 old <- .getAcceptablePValueFields()

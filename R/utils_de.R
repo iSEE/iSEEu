@@ -2,6 +2,7 @@
 #'
 #' Set or get the acceptable fields to use for all \linkS4class{Panel} instances related to differential expression,
 #' including \linkS4class{VolcanoPlot} and \linkS4class{MAPlot}.
+#' These functions are now deprecated.
 #'
 #' @param value Character vector of acceptable fields (usually in the \code{\link{rowData}}) for a given statistic.
 #'
@@ -32,48 +33,45 @@ NULL
 #' @export
 #' @rdname utils-de
 .getAcceptablePValueFields <- function() {
-    .acceptable_template("PValue", c("PValue", "p.value", "pval"))
+    .Deprecated(new="getPValueFields")
+    getPValueFields()
 }
 
 #' @export
 #' @rdname utils-de
 .getAcceptableLogFCFields <- function() {
-    .acceptable_template("LogFC", c("logFC", "LogFC"))
+    .Deprecated(new="getLogFCFields")
+    getLogFCFields()
 }
 
 #' @export
 #' @rdname utils-de
 .getAcceptableAveAbFields <- function() {
-    .acceptable_template("AveAb", c("AveExpr", "logCPM"))
-}
-
-.acceptable_template <- function(field, defaults) {
-    global <- getOption(paste0("iSEEu_de_acceptable_", tolower(field)), NULL)
-    if (is.null(global)) {
-        defaults
-    } else {
-        global
-    }
+    .Deprecated(new="getAveAbFields")
+    getAveAbFields()
 }
 
 #' @export
 #' @rdname utils-de
 .setAcceptablePValueFields <- function(value) {
-    options(iSEEu_de_acceptable_pvalue=value)
+    .Deprecated(new="setPValueFields")
+    setPValueFields(value)
     invisible(NULL)
 }
 
 #' @export
 #' @rdname utils-de
 .setAcceptableLogFCFields <- function(value) {
-    options(iSEEu_de_acceptable_logfc=value)
+    .Deprecated(new="setLogFCFields")
+    setLogFCFields(value)
     invisible(NULL)
 }
 
 #' @export
 #' @rdname utils-de
 .setAcceptableAveAbFields <- function(value) {
-    options(iSEEu_de_acceptable_aveab=value)
+    .Deprecated(new="setAveAbFields")
+    setAveAbFields(value)
     invisible(NULL)
 }
 
@@ -101,4 +99,50 @@ NULL
         sprintf(".de_status <- .de_status * sign(%s) + 2L;", lfc),
         "plot.data$IsSig <- c('down', 'none', 'up')[.de_status];"
     )
+}
+
+.define_de_validity <- function(object) {
+    msg <- character(0)
+
+    p <- object[["PValueThreshold"]]
+    if (length(p)!=1 || p <= 0 || p > 1) {
+        msg <- c(msg, "'PValueThreshold' must be a numeric scalar in (0, 1]")
+    }
+
+    lfc <- object[["LogFCThreshold"]]
+    if (length(lfc)!=1 || lfc < 0) {
+        msg <- c(msg, "'LogFCThreshold' must be a non-negative numeric scalar")
+    }
+
+    corr <- object[["PValueCorrection"]]
+    if (length(corr)!=1 || !corr %in% p.adjust.methods) {
+        msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
+    }
+
+    if (any(is.na(object[["PValueFields"]]))) {
+        msg <- c(msg, "'PValueFields' should contain non-NA strings")
+    }
+
+    if (any(is.na(object[["LogFCFields"]]))) {
+        msg <- c(msg, "'LogFCFields' should contain non-NA strings")
+    }
+
+    msg
+}
+
+.update_de_field_choices <- function(x, choices, all.names, msg) {
+    fields <- intersect(all.names, x[[choices]])
+    if (length(fields)==0) {
+        warning(sprintf("no valid %s fields for '%s'", msg, class(x)[1]))
+        return(NULL)
+    }
+    x[[choices]] <- fields
+    x
+}
+
+.update_chosen_de_field <- function(x, field, choices) {
+    if (!x[[field]] %in% x[[choices]]) {
+        x[[field]] <- x[[choices]][1]
+    }
+    x
 }
