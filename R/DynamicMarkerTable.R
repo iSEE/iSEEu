@@ -1,12 +1,12 @@
-#' Differential statistics table
+#' Dynamic marker table
 #'
-#' A table that dynamically computes differential statistics based on a selected subset of samples.
+#' A table that dynamically identifies marker genes for a selected subset of samples.
 #' Comparisons are made between the active selection in the transmitting panel
 #' and (i) all non-selected points, if no saved selections are available;
 #' or (ii) each subset of points in each saved selection.
 #'
 #' @section Slot overview:
-#' The following slots control the thresholds used in the visualization:
+#' The following slots control the test procedure:
 #' \itemize{
 #' \item \code{LogFC}, a numeric scalar indicating the log-fold change threshold to test against.
 #' Defaults to zero.
@@ -14,24 +14,29 @@
 #' This can be \code{"t"} (default), \code{"wilcox"} or \code{"binom"}.
 #' \item \code{Assay}, string indicating the assay to use for testing.
 #' Defaults to the first named assay in the SummarizedExperiment.
+#' }
+#' 
+#' The following slots control the rendered table:
+#' \itemize{
 #' \item \code{ExtraFields}, a character vector containing names of \code{\link{rowData}} columns to be included in the table.
-#' Defaults to an empty vector.
+#' Defaults to the output of \code{\link{getTableExtraFields}}.
+#' This cannot be changed once the application starts.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowTable},
 #' \linkS4class{Table} and \linkS4class{Panel} classes.
 #'
 #' @section Constructor:
-#' \code{DifferentialStatisticsTable(...)} creates an instance of a DifferentialStatisticsTable class,
+#' \code{DynamicMarkerTable(...)} creates an instance of a DynamicMarkerTable class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
-#' In the following code snippets, \code{x} is an instance of a \linkS4class{DifferentialStatisticsTable} class.
+#' In the following code snippets, \code{x} is an instance of a \linkS4class{DynamicMarkerTable} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DifferentialStatisticsTable"} entry 
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DynamicMarkerTable"} entry 
 #' containing \code{valid.assay.names} and \code{valid.rowdata.names}.
 #' This will also call the equivalent \linkS4class{RowTable} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
@@ -44,7 +49,7 @@
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.fullName}(x)} will return \code{"Differential statistics table"}.
+#' \item \code{\link{.fullName}(x)} will return \code{"Dynamic marker table"}.
 #' \item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections,
 #' otherwise calling the method for \linkS4class{RowTable}.
 #' }
@@ -69,37 +74,38 @@
 #' sce <- runPCA(sce, ncomponents=4)
 #' sce <- runTSNE(sce)
 #'
-#' dst <- DifferentialStatisticsTable(PanelId=1L, PanelWidth=8L,
+#' dst <- DynamicMarkerTable(PanelId=1L, PanelWidth=8L,
 #'     ColumnSelectionSource="ReducedDimensionPlot1")
 #'
 #' rdp <- ReducedDimensionPlot(PanelId=1L,
-#'     ColorByFeatureSource="DifferentialStatisticsTable1")
+#'     ColorByFeatureSource="DynamicMarkerTable1")
 #'
 #' if (interactive()) {
 #'     iSEE(sce, initial=list(rdp, dst))
 #' }
 #'
-#' @name DifferentialStatisticsTable-class
-#' @aliases DifferentialStatisticsTable DifferentialStatisticsTable-class
-#' initialize,DifferentialStatisticsTable-method
-#' .fullName,DifferentialStatisticsTable-method
-#' .panelColor,DifferentialStatisticsTable-method
-#' .defineDataInterface,DifferentialStatisticsTable-method
-#' .hideInterface,DifferentialStatisticsTable-method
-#' .generateTable,DifferentialStatisticsTable-method
-#' .createObservers,DifferentialStatisticsTable-method
-#' .cacheCommonInfo,DifferentialStatisticsTable-method
-#' .refineParameters,DifferentialStatisticsTable-method
-#' .multiSelectionInvalidated,DifferentialStatisticsTable-method
-#' .hideInterface,DifferentialStatisticsTable-method
+#' @name DynamicMarkerTable-class
+#' @aliases DynamicMarkerTable DynamicMarkerTable-class
+#' DifferentialStatisticsTable
+#' initialize,DynamicMarkerTable-method
+#' .fullName,DynamicMarkerTable-method
+#' .panelColor,DynamicMarkerTable-method
+#' .defineDataInterface,DynamicMarkerTable-method
+#' .hideInterface,DynamicMarkerTable-method
+#' .generateTable,DynamicMarkerTable-method
+#' .createObservers,DynamicMarkerTable-method
+#' .cacheCommonInfo,DynamicMarkerTable-method
+#' .refineParameters,DynamicMarkerTable-method
+#' .multiSelectionInvalidated,DynamicMarkerTable-method
+#' .hideInterface,DynamicMarkerTable-method
 NULL
 
 #' @export
-setClass("DifferentialStatisticsTable", contains="RowTable",
+setClass("DynamicMarkerTable", contains="RowTable",
     slots=c(LogFC="numeric", TestMethod="character", Assay="character", ExtraFields="character"))
 
 #' @importFrom S4Vectors setValidity2
-setValidity2("DifferentialStatisticsTable", function(object) {
+setValidity2("DynamicMarkerTable", function(object) {
     msg <- character(0)
 
     if (length(val <- object[["LogFC"]])!=1L || val < 0) {
@@ -125,32 +131,39 @@ setValidity2("DifferentialStatisticsTable", function(object) {
 })
 
 #' @export
-#' @importFrom methods new
-DifferentialStatisticsTable <- function(...) {
-    new("DifferentialStatisticsTable", ...)
+DynamicMarkerTable <- function(...) {
+    new("DynamicMarkerTable", ...)
 }
 
 #' @export
-setMethod("initialize", "DifferentialStatisticsTable", 
-    function(.Object, LogFC=0, TestMethod="t", ExtraFields=character(0), ...)
+DifferentialStatisticsTable <- function(...) {
+    .Deprecated(new="DynamicMarkerTable")
+    new("DynamicMarkerTable", ...)
+}
+
+#' @export
+setMethod("initialize", "DynamicMarkerTable", 
+    function(.Object, LogFC=0, TestMethod="t", ...)
 {
-    args <- list(LogFC=LogFC, TestMethod=TestMethod, ExtraFields=ExtraFields, ...)
+    args <- list(LogFC=LogFC, TestMethod=TestMethod, ...)
 
     args <- .emptyDefault(args, field="Assay", 
         default=iSEEOptions$get("assay")[1])
 
+    args <- .emptyDefault(args, field="ExtraFields", 
+        default=getTableExtraFields())
+
     args <- .emptyDefault(args, field="ColumnSelectionDynamicSource", 
         default=iSEEOptions$get("selection.dynamic.multiple"))
-    args[["ColumnSelectionType"]] <- "Union"
 
     do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
 #' @importFrom shiny numericInput selectInput
-setMethod(".defineDataInterface", "DifferentialStatisticsTable", function(x, se, select_info) {
+setMethod(".defineDataInterface", "DynamicMarkerTable", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
-    cached <- .getCachedCommonInfo(se, "DifferentialStatisticsTable")
+    cached <- .getCachedCommonInfo(se, "DynamicMarkerTable")
 
     list(
         numericInput(paste0(plot_name, "_LogFC"),
@@ -164,18 +177,14 @@ setMethod(".defineDataInterface", "DifferentialStatisticsTable", function(x, se,
         selectInput(paste0(plot_name, "_Assay"),
             label="Assay",
             choices=cached$valid.assay.names,
-            selected=x[["Assay"]]),
-        selectInput(paste0(plot_name, "_ExtraFields"),
-            label="Extra fields", multiple=TRUE,
-            choices=cached$valid.rowdata.names,
-            selected=x[["ExtraFields"]])
+            selected=x[["Assay"]])
     )
 })
 
 #' @export
 #' @importFrom SummarizedExperiment assayNames rowData
-setMethod(".cacheCommonInfo", "DifferentialStatisticsTable", function(x, se) {
-    if (!is.null(.getCachedCommonInfo(se, "DifferentialStatisticsTable"))) {
+setMethod(".cacheCommonInfo", "DynamicMarkerTable", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "DynamicMarkerTable"))) {
         return(se)
     }
 
@@ -187,19 +196,19 @@ setMethod(".cacheCommonInfo", "DifferentialStatisticsTable", function(x, se) {
     rdata <- rowData(se)
     valid_rd <- .findAtomicFields(rdata)
 
-    .setCachedCommonInfo(se, "DifferentialStatisticsTable", 
+    .setCachedCommonInfo(se, "DynamicMarkerTable", 
         valid.assay.names=named_assays, valid.rowdata.names=valid_rd)
 })
 
 #' @export
 #' @importFrom methods callNextMethod
-setMethod(".refineParameters", "DifferentialStatisticsTable", function(x, se) {
+setMethod(".refineParameters", "DynamicMarkerTable", function(x, se) {
     x <- callNextMethod()
     if (is.null(x)) {
         return(NULL)
     }
 
-    cached <- .getCachedCommonInfo(se, "DifferentialStatisticsTable")
+    cached <- .getCachedCommonInfo(se, "DynamicMarkerTable")
 
     valid.choices <- cached$valid.assay.names
     if (length(valid.choices)==0L) {
@@ -213,11 +222,14 @@ setMethod(".refineParameters", "DifferentialStatisticsTable", function(x, se) {
     valid.choices <- cached$valid.rowdata.names
     x[["ExtraFields"]] <- intersect(x[["ExtraFields"]], valid.choices)
 
+    # It can't be anything else, really.
+    x[["ColumnSelectionType"]] <- "Union"
+
     x
 })
 
 #' @export
-setMethod(".createObservers", "DifferentialStatisticsTable",
+setMethod(".createObservers", "DynamicMarkerTable",
     function(x, se, input, session, pObjects, rObjects)
 {
     callNextMethod()
@@ -227,16 +239,10 @@ setMethod(".createObservers", "DifferentialStatisticsTable",
     .createUnprotectedParameterObservers(plot_name,
         fields=c("LogFC", "TestMethod", "Assay"),
         input=input, pObjects=pObjects, rObjects=rObjects)
-
-    # This can change the order of the columns, so we should flush selections.
-    # We set 'ignoreNULL=FALSE' so as to respond to an empty list.
-    .createProtectedParameterObservers(plot_name,
-        fields=c("ExtraFields"), ignoreNULL=FALSE,
-        input=input, pObjects=pObjects, rObjects=rObjects)
 })
 
 #' @export
-setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
+setMethod(".generateTable", "DynamicMarkerTable", function(x, envir) {
     extras <- x[["ExtraFields"]] 
 
     if (!exists("col_selected", envir, inherits=FALSE) || !"active" %in% names(envir$col_selected)) {
@@ -292,7 +298,7 @@ setMethod(".generateTable", "DifferentialStatisticsTable", function(x, envir) {
 }
 
 #' @export
-setMethod(".hideInterface", "DifferentialStatisticsTable", function(x, field) {
+setMethod(".hideInterface", "DynamicMarkerTable", function(x, field) {
     if (field %in% c("RowSelectionSource", "RowSelectionType", "RowSelectionSaved", "RowSelectionDynamicSource")) {
         TRUE
     } else if (field %in% "ColumnSelectionSource") {
@@ -303,7 +309,7 @@ setMethod(".hideInterface", "DifferentialStatisticsTable", function(x, field) {
 })
 
 #' @export
-setMethod(".fullName", "DifferentialStatisticsTable", function(x) "Differential statistics table")
+setMethod(".fullName", "DynamicMarkerTable", function(x) "Dynamic marker table")
 
 #' @export
-setMethod(".panelColor", "DifferentialStatisticsTable", function(x) "#B73CE4")
+setMethod(".panelColor", "DynamicMarkerTable", function(x) "#B73CE4")

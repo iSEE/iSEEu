@@ -46,11 +46,48 @@
 #' @export
 #' @rdname global-FeatureSetCommands
 getFeatureSetCommands <- function() {
-    .globals$get("FeatureSetTable_commands")
+    .globals$get("FeatureSetCommands")
 }
 
 #' @export
 #' @rdname global-FeatureSetCommands
 setFeatureSetCommands <- function(value) {
-    .globals$set("FeatureSetTable_commands", value)
+    .globals$set("FeatureSetCommands", value)
+}
+
+#' Global extra table fields
+#'
+#' Get or set the names of the extra \code{\link{rowData}} or \code{\link{colData}} fields to include in a table. 
+#'
+#' @param value A character vector containing the names of extra fields to include.
+#'
+#' @return
+#' \code{getTableExtraFields} returns the current global extra table fields.
+#'
+#' \code{setTableExtraFields} will set the current global extra table fields and return \code{NULL} invisibly.
+#'
+#' @details
+#' By setting these values, all subsequent constructions of \linkS4class{DynamicMarkerTable} will have the same set of extra fields specified in their \code{"ExtraFields"} slot.
+#' This allows users to easily customize all \linkS4class{DynamicMarkerTable} parameters at once.
+#' Note that it only applies during the construction of the \linkS4class{DynamicMarkerTable} and has no effect on the \code{iSEE} application once it starts.
+#'
+#' @author Aaron Lun
+#'
+#' @examples
+#' old <- getTableExtraFields()
+#'
+#' setTableExtraFields(LETTERS)
+#' getTableExtraFields()
+#'
+#' setTableExtraFields(old)
+#' @export
+#' @rdname global-TableExtraFields
+getTableExtraFields <- function() {
+    .globals$get("TableExtraFields")
+}
+
+#' @export
+#' @rdname global-TableExtraFields
+setTableExtraFields <- function(value) {
+    .globals$set("TableExtraFields", value)
 }
