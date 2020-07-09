@@ -24,9 +24,8 @@
 #' \code{setFeatureSetCommands} will set the current global feature set commands and return \code{NULL} invisibly.
 #'
 #' @details
-#' By setting these values, all subsequent constructions of \linkS4class{FeatureSetTable} will have the same set of commands in their \code{"CreateCollections"} and \code{"RetrieveSet"} slots.
-#' This allows users to easily customize all \linkS4class{FeatureSetTable} parameters at once.
-#' Note that it only applies during the construction of the \linkS4class{FeatureSetTable} and has no effect on the \code{iSEE} application once it starts.
+#' These utilities allow users to easily set the feature set commands for all \linkS4class{FeatureSetTable}s at once.
+#' Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
 #'
 #' @author Aaron Lun
 #'
@@ -67,9 +66,8 @@ setFeatureSetCommands <- function(value) {
 #' \code{setTableExtraFields} will set the current global extra table fields and return \code{NULL} invisibly.
 #'
 #' @details
-#' By setting these values, all subsequent constructions of \linkS4class{DynamicMarkerTable} will have the same set of extra fields specified in their \code{"ExtraFields"} slot.
-#' This allows users to easily customize all \linkS4class{DynamicMarkerTable} parameters at once.
-#' Note that it only applies during the construction of the \linkS4class{DynamicMarkerTable} and has no effect on the \code{iSEE} application once it starts.
+#' These utilities allow users to easily set the extra table fields for all \linkS4class{DynamicMarkerTable}s at once.
+#' Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
 #'
 #' @author Aaron Lun
 #'
@@ -107,6 +105,10 @@ setTableExtraFields <- function(value) {
 #'
 #' The corresponding setters set the global column names for each statistic and return \code{NULL} invisibly.
 #' 
+#' @details
+#' These utilities allow users to easily set the acceptable fields for all \linkS4class{VolcanoPlot}s and \linkS4class{MAPlot}s at once.
+#' Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
+#'
 #' @author Aaron Lun
 #'
 #' @seealso
