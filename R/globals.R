@@ -91,3 +91,78 @@ getTableExtraFields <- function() {
 setTableExtraFields <- function(value) {
     .globals$set("TableExtraFields", value)
 }
+
+#' Global DE fields
+#'
+#' Get or set the names of \code{\link{rowData}} columns related to a differential expression analysis.
+#'
+#' @param value A character vector containing the names of acceptable columns for each statistic.
+#'
+#' @return
+#' \code{getPValueFields} returns the acceptable column names for p-values.
+#'
+#' \code{getLogFCFields} returns the acceptable column names for log-fold changes.
+#' 
+#' \code{getAveAbFields} returns the acceptable column names for the average abundances.
+#'
+#' The corresponding setters set the global column names for each statistic and return \code{NULL} invisibly.
+#' 
+#' @author Aaron Lun
+#'
+#' @seealso
+#' \linkS4class{VolcanoPlot} and \linkS4class{MAPlot}, which are affected by these globals.
+#'
+#' @examples
+#' old <- getPValueFields()
+#'
+#' setPValueFields(LETTERS)
+#' getPValueFields()
+#'
+#' setPValueFields(old)
+#' @export
+#' @rdname globals-PValueFields
+getPValueFields <- function() {
+    .acceptable_template("PValueFields", c("PValue", "p.value", "pval"))
+}
+
+#' @export
+#' @rdname globals-PValueFields
+getLogFCFields <- function() {
+    .acceptable_template("LogFCFields", c("logFC", "LogFC"))
+}
+
+#' @export
+#' @rdname globals-PValueFields
+getAveAbFields <- function() {
+    .acceptable_template("AveAbFields", c("AveExpr", "logCPM"))
+}
+
+.acceptable_template <- function(field, defaults) {
+    global <- .globals$get(field)
+    if (is.null(global)) {
+        defaults
+    } else {
+        global
+    }
+}
+
+#' @export
+#' @rdname globals-PValueFields
+setPValueFields <- function(value) {
+    .globals$set(PValueFields=value)
+    invisible(NULL)
+}
+
+#' @export
+#' @rdname globals-PValueFields
+setLogFCFields <- function(value) {
+    .globals$set(LogFCFields=value)
+    invisible(NULL)
+}
+
+#' @export
+#' @rdname globals-PValueFields
+setAveAbFields <- function(value) {
+    .globals$set(AveAbFields=value)
+    invisible(NULL)
+}

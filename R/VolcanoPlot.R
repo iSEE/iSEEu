@@ -15,6 +15,16 @@
 #' Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
 #' }
 #'
+#' The following slots control the choice of columns in the user interface:
+#' \itemize{
+#' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
+#' Defaults to \code{\link{getPValueFields}}.
+#' This cannot be changed after the application has started.
+#' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
+#' Defaults to \code{\link{getLogFCFields}}.
+#' This cannot be changed after the application has started.
+#' }
+#'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
 #' \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
@@ -28,10 +38,6 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"MAPlot"} entry containing \code{pval.rowData.names} and \code{lfc.rowData.names}.
-#' Each of these is a character vector of permissible names for p-values and log-fold changes, respectively;
-#' see \code{?\link{.getAcceptablePValueFields}} for details.
-#' This will also call the equivalent \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
@@ -41,8 +47,8 @@
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis, see \code{?\link{.getAcceptableLogFCFields}}.
-#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis, see \code{?\link{.getAcceptablePValueFields}}.
+#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis.
+#' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis.
 #' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 #' otherwise it will call the \linkS4class{RowDataPlot} method.
 #' \item \code{\link{.fullName}(x)} will return \code{"Volcano plot"}.
@@ -72,7 +78,6 @@
 #' @aliases VolcanoPlot VolcanoPlot-class
 #' initialize,VolcanoPlot-method
 #' .refineParameters,VolcanoPlot-method
-#' .cacheCommonInfo,VolcanoPlot-method
 #' .defineDataInterface,VolcanoPlot-method
 #' .createObservers,VolcanoPlot-method
 #' .hideInterface,VolcanoPlot-method
@@ -85,9 +90,6 @@
 #' .colorByNoneDotPlotField,VolcanoPlot-method
 #' .colorByNoneDotPlotScale,VolcanoPlot-method
 #' .generateDotPlot,VolcanoPlot-method
-#' .cacheCommonInfo,VolcanoPlot-method
-#' .createObservers,VolcanoPlot-method
-#' .hideInterface,VolcanoPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -112,7 +114,8 @@ NULL
 
 #' @export
 setClass("VolcanoPlot", contains="RowDataPlot",
-    slots=c(PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character"))
+    slots=c(PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
+        PValueFields="character", LogFCFields="character"))
 
 #' @export
 setMethod(".fullName", "VolcanoPlot", function(x) "Volcano plot")
@@ -124,8 +127,14 @@ setMethod(".panelColor", "VolcanoPlot", function(x) "#DEAE10")
 setMethod("initialize", "VolcanoPlot", function(.Object, PValueThreshold=0.05,
     LogFCThreshold=0, PValueCorrection="BH", ...)
 {
-    callNextMethod(.Object, PValueThreshold=PValueThreshold,
+    args <- list(PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
+       
+    args <- .emptyDefault(args, "PValueFields", getPValueFields())
+
+    args <- .emptyDefault(args, "LogFCFields", getLogFCFields())
+
+    do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
@@ -136,23 +145,7 @@ VolcanoPlot <- function(...) {
 
 #' @importFrom stats p.adjust.methods
 setValidity2("VolcanoPlot", function(object) {
-    msg <- character(0)
-
-    p <- object[["PValueThreshold"]]
-    if (length(p)!=1 || p <= 0 || p > 1) {
-        msg <- c(msg, "'PValueThreshold' must be a numeric scalar in (0, 1]")
-    }
-
-    lfc <- object[["LogFCThreshold"]]
-    if (length(lfc)!=1 || lfc < 0) {
-        msg <- c(msg, "'LogFCThreshold' must be a non-negative numeric scalar")
-    }
-
-    corr <- object[["PValueCorrection"]]
-    if (length(corr)!=1 || !corr %in% p.adjust.methods) {
-        msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
-    }
-
+    msg <- .define_de_validity(object)
     if (length(msg)) msg else TRUE
 })
 
@@ -164,36 +157,29 @@ setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
         return(NULL)
     }
 
+    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+
+    x <- .update_de_field_choices(x, "LogFCFields", all.cont, msg="log-FC")
+    if (is.null(x)) {
+        return(NULL)
+    }
+    x <- .update_chosen_de_field(x, "XAxisRowData", "LogFCFields")
+
+    x <- .update_de_field_choices(x, "PValueFields", all.cont, msg="p-value")
+    if (is.null(x)) {
+        return(NULL)
+    }
+    x <- .update_chosen_de_field(x, "YAxis", "PValueFields")
+
     x[["XAxis"]] <- "Row data"
     x
 })
 
 #' @export
-setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
-    if (!is.null(.getCachedCommonInfo(se, "VolcanoPlot"))) {
-        return(se)
-    }
-
-    se <- callNextMethod()
-
-    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
-    pfields <- intersect(all.cont, .getAcceptablePValueFields())
-    lfields <- intersect(all.cont, .getAcceptableLogFCFields())
-
-    .setCachedCommonInfo(se, "VolcanoPlot",
-        pval.rowData.names=pfields,
-        lfc.rowData.names=lfields)
-})
+setMethod(".allowableXAxisChoices", "VolcanoPlot", function(x, se) x[["LogFCFields"]])
 
 #' @export
-setMethod(".allowableXAxisChoices", "VolcanoPlot", function(x, se) {
-    .getCachedCommonInfo(se, "VolcanoPlot")$lfc.rowData.names
-})
-
-#' @export
-setMethod(".allowableYAxisChoices", "VolcanoPlot", function(x, se) {
-    .getCachedCommonInfo(se, "VolcanoPlot")$pval.rowData.names
-})
+setMethod(".allowableYAxisChoices", "VolcanoPlot", function(x, se) x[["PValueFields"]])
 
 #' @export
 #' @importFrom shiny numericInput selectInput
