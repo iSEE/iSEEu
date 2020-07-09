@@ -36,6 +36,10 @@ The corresponding setters set the global column names for each statistic and ret
 \description{
 Get or set the names of \code{\link{rowData}} columns related to a differential expression analysis.
 }
+\details{
+These utilities allow users to easily set the acceptable fields for all \linkS4class{VolcanoPlot}s and \linkS4class{MAPlot}s at once.
+Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
+}
 \examples{
 old <- getPValueFields()
 

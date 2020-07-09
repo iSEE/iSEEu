@@ -21,9 +21,8 @@ setTableExtraFields(value)
 Get or set the names of the extra \code{\link{rowData}} or \code{\link{colData}} fields to include in a table.
 }
 \details{
-By setting these values, all subsequent constructions of \linkS4class{DynamicMarkerTable} will have the same set of extra fields specified in their \code{"ExtraFields"} slot.
-This allows users to easily customize all \linkS4class{DynamicMarkerTable} parameters at once.
-Note that it only applies during the construction of the \linkS4class{DynamicMarkerTable} and has no effect on the \code{iSEE} application once it starts.
+These utilities allow users to easily set the extra table fields for all \linkS4class{DynamicMarkerTable}s at once.
+Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
 }
 \examples{
 old <- getTableExtraFields()

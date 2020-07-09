@@ -24,9 +24,8 @@ see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{.createG
 Get or set the commands to define the global collection of feature sets.
 }
 \details{
-By setting these values, all subsequent constructions of \linkS4class{FeatureSetTable} will have the same set of commands in their \code{"CreateCollections"} and \code{"RetrieveSet"} slots.
-This allows users to easily customize all \linkS4class{FeatureSetTable} parameters at once.
-Note that it only applies during the construction of the \linkS4class{FeatureSetTable} and has no effect on the \code{iSEE} application once it starts.
+These utilities allow users to easily set the feature set commands for all \linkS4class{FeatureSetTable}s at once.
+Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
 }
 \examples{
 old <- getFeatureSetCommands()
