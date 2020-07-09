@@ -1,4 +1,4 @@
-# library(iSEEu); library(testthat); source("setup-sce.R"); source("test-panel_ReducedDimensionHexPlot.R")
+# library(iSEEu); library(testthat); source("setup-sce.R"); source("test-ReducedDimensionHexPlot.R")
 
 context("ReducedDimensionHexPlot")
 
@@ -91,7 +91,7 @@ test_that(".generateOutput works", {
     all_contents <- list()
 
     out <- .generateOutput(x, sce, all_memory = all_memory, all_contents = all_contents)
-    expect_named(out, c("commands", "contents", "plot"))
+    expect_named(out, c("commands", "contents", "plot", "varname"))
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
@@ -106,7 +106,7 @@ test_that("faceting works", {
     all_contents <- list()
 
     out <- .generateOutput(x, sce, all_memory = all_memory, all_contents = all_contents)
-    expect_named(out, c("commands", "contents", "plot"))
+    expect_named(out, c("commands", "contents", "plot", "varname"))
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
@@ -124,7 +124,7 @@ test_that("coloring by feature name works", {
     all_contents <- list()
 
     out <- .generateOutput(x, sce, all_memory = all_memory, all_contents = all_contents)
-    expect_named(out, c("commands", "contents", "plot"))
+    expect_named(out, c("commands", "contents", "plot", "varname"))
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
@@ -139,7 +139,7 @@ test_that("coloring by sample name works", {
     all_contents <- list()
 
     out <- .generateOutput(x, sce, all_memory = all_memory, all_contents = all_contents)
-    expect_named(out, c("commands", "contents", "plot"))
+    expect_named(out, c("commands", "contents", "plot", "varname"))
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
@@ -154,7 +154,7 @@ test_that("coloring by discrete covariate works", {
     all_contents <- list()
 
     out <- .generateOutput(x, sce, all_memory = all_memory, all_contents = all_contents)
-    expect_named(out, c("commands", "contents", "plot"))
+    expect_named(out, c("commands", "contents", "plot", "varname"))
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
@@ -169,7 +169,7 @@ test_that("zoom works", {
     all_contents <- list()
 
     out <- .generateOutput(x, sce, all_memory = all_memory, all_contents = all_contents)
-    expect_named(out, c("commands", "contents", "plot"))
+    expect_named(out, c("commands", "contents", "plot", "varname"))
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
