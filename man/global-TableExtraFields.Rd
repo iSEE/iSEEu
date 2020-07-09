@@ -18,7 +18,7 @@ setTableExtraFields(value)
 \code{setTableExtraFields} will set the current global extra table fields and return \code{NULL} invisibly.
 }
 \description{
-Get or set the names of the extra \code{\link{rowData}} or \code{\link{colData}} fields to include in a table.
+Get or set the names of the extra fields to include in a table.
 }
 \details{
 These utilities allow users to easily set the extra table fields for all \linkS4class{DynamicMarkerTable}s at once.

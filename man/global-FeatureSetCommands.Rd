@@ -13,7 +13,7 @@ setFeatureSetCommands(value)
 \item{value}{A list of two character vectors named \code{"CreateCollections"} and \code{"RetrieveSet"}.
 Both vectors should be of the same length and have the same names.
 Vectors should contain R commands to create collections and retrieve sets;
-see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{.createGeneSetCommands}} for details.}
+see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{createGeneSetCommands}} for details.}
 }
 \value{
 \code{getFeatureSetCommands} returns the current global feature set commands.

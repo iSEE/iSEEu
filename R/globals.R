@@ -16,7 +16,7 @@
 #' @param value A list of two character vectors named \code{"CreateCollections"} and \code{"RetrieveSet"}.
 #' Both vectors should be of the same length and have the same names.
 #' Vectors should contain R commands to create collections and retrieve sets;
-#' see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{.createGeneSetCommands}} for details.
+#' see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{createGeneSetCommands}} for details.
 #'
 #' @return 
 #' \code{getFeatureSetCommands} returns the current global feature set commands.
@@ -56,7 +56,7 @@ setFeatureSetCommands <- function(value) {
 
 #' Global extra table fields
 #'
-#' Get or set the names of the extra \code{\link{rowData}} or \code{\link{colData}} fields to include in a table. 
+#' Get or set the names of the extra fields to include in a table. 
 #'
 #' @param value A character vector containing the names of extra fields to include.
 #'
@@ -151,20 +151,20 @@ getAveAbFields <- function() {
 #' @export
 #' @rdname globals-PValueFields
 setPValueFields <- function(value) {
-    .globals$set(PValueFields=value)
+    .globals$set("PValueFields", value)
     invisible(NULL)
 }
 
 #' @export
 #' @rdname globals-PValueFields
 setLogFCFields <- function(value) {
-    .globals$set(LogFCFields=value)
+    .globals$set("LogFCFields", value)
     invisible(NULL)
 }
 
 #' @export
 #' @rdname globals-PValueFields
 setAveAbFields <- function(value) {
-    .globals$set(AveAbFields=value)
+    .globals$set("AveAbFields", value)
     invisible(NULL)
 }
