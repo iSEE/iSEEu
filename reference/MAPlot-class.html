@@ -74,7 +74,7 @@ Users are expected to load relevant statistics into the rowData of a SummarizedE
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -144,14 +144,25 @@ Users are expected to load relevant statistics into the <code>rowData</code> of 
     
 
 <p>The following slots control the thresholds used in the visualization:</p><ul>
-<li><p><code>PValueField</code>, a string specifying the field of <code>rowData</code> containing the p-values.
-See <code>?.getAcceptablePValueFields</code> for more details.</p></li>
+<li><p><code>PValueField</code>, a string specifying the field of <code>rowData</code> containing the p-values.</p></li>
 <li><p><code>PValueThreshold</code>, a numeric scalar in (0, 1] specifying the threshold to use on the (adjusted) p-value.
 Defaults to 0.05.</p></li>
 <li><p><code>LogFCThreshold</code>, a non-negative numeric scalar specifying the threshold to use on the log-fold change.
 Defaults to 0.</p></li>
 <li><p><code>PValueCorrection</code>, a string specifying the multiple testing correction to apply.
 Defaults to <code>"BH"</code>, but can take any value from <code><a href='https://rdrr.io/r/stats/p.adjust.html'>p.adjust.methods</a></code>.</p></li>
+</ul>
+
+<p>The following slots control the choice of columns in the user interface:</p><ul>
+<li><p><code>PValueFields</code>, a character vector specifying the names of all columns containing p-values.
+Defaults to <code>getPValueFields</code>.
+This cannot be changed after the application has started.</p></li>
+<li><p><code>LogFCFields</code>, a character vector specifying the names of all columns containing log-fold changes.
+Defaults to <code>getLogFCFields</code>.
+This cannot be changed after the application has started.</p></li>
+<li><p><code>AveAbFields</code>, a character vector specifying the names of all columns containing average abundances.
+Defaults to <code>getAveAbFields</code>.
+This cannot be changed after the application has started.</p></li>
 </ul>
 
 <p>In addition, this class inherits all slots from its parent RowDataPlot,
@@ -169,20 +180,16 @@ where any slot and its value can be passed to <code>...</code> as a named argume
 <p>In the following code snippets, <code>x</code> is an instance of a RowDataPlot class.
 Refer to the documentation for each method for more details on the remaining arguments.</p>
 <p>For setting up data values:</p><ul>
-<li><p><code>.cacheCommonInfo(x)</code> adds a <code>"MAPlot"</code> entry containing <code>pval.rowData.names</code>, <code>ave.rowData.names</code> and <code>lfc.rowData.names</code>.
-Each of these is a character vector of permissible names for p-values, average abundances and log-fold changes, respectively;
-see <code>?.getAcceptablePValueFields</code> for details.
-This will also call the equivalent RowDataPlot method.</p></li>
 <li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>XAxis="Row data"</code>.
 This will also call the equivalent RowDataPlot method for further refinements to <code>x</code>.
-If valid p-value and log-fold change fields are not available, <code>NULL</code> is returned instead.</p></li>
+If valid p-value, abundance and log-fold change fields are not available, <code>NULL</code> is returned instead.</p></li>
 </ul>
 
 <p>For defining the interface:</p><ul>
 <li><p><code>.defineDataInterface(x, se, select_info)</code> returns a list of interface elements for manipulating all slots described above.</p></li>
 <li><p><code>.panelColor(x)</code> will return the specified default color for this panel class.</p></li>
-<li><p><code>.allowableXAxisChoices(x, se)</code> returns a character vector specifying the acceptable average abundance-related variables in <code>rowData(se)</code> that can be used as choices for the x-axis, see <code>?.getAcceptableAveAbFields</code>.</p></li>
-<li><p><code>.allowableYAxisChoices(x, se)</code> returns a character vector specifying the acceptable log-fold change-related variables in <code>rowData(se)</code> that can be used as choices for the y-axis, see <code>?.getAcceptableLogFCFields</code>.</p></li>
+<li><p><code>.allowableXAxisChoices(x, se)</code> returns a character vector specifying the acceptable average abundance-related variables in <code>rowData(se)</code> that can be used as choices for the x-axis.</p></li>
+<li><p><code>.allowableYAxisChoices(x, se)</code> returns a character vector specifying the acceptable log-fold change-related variables in <code>rowData(se)</code> that can be used as choices for the y-axis.</p></li>
 <li><p><code>.hideInterface(x, field)</code> will return <code>TRUE</code> for <code>field="XAxis"</code>,
 otherwise it will call the RowDataPlot method.</p></li>
 <li><p><code>.fullName(x)</code> will return <code>"MA plot"</code>.</p></li>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • iSEEu</title>
+<title>Create gene set commands — createGeneSetCommands • iSEEu</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Create gene set commands — createGeneSetCommands" />
+<meta property="og:description" content="Create the commands required to populate FeatureSetTables with commonly used gene sets." />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -123,121 +124,70 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/iSEE/iSEEu/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Create gene set commands</h1>
+    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/createGeneSetCommands.R'><code>R/createGeneSetCommands.R</code></a></small>
+    <div class="hidden name"><code>createGeneSetCommands.Rd</code></div>
     </div>
 
-    <div id="iseeu-112" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.2">
-<a href="#iseeu-112" class="anchor"></a>iSEEu 1.1.2</h1>
-<ul>
-<li>Replaced <code>GeneSetTable</code> with the more general <code>FeatureSetTable</code>. Improved handling of arbitrary feature sets.</li>
-<li>Renamed <code>DifferentialStatisticsTable</code> to the more appropriate <code>DynamicMarkerTable</code>. Support inclusion of extra fields from the <code>rowData</code>.</li>
-<li>Global parameters now only affect construction of <code>MAPlot</code>s and <code>VolcanoPlot</code>s.</li>
-</ul>
-</div>
-    <div id="iseeu-111" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.1">
-<a href="#iseeu-111" class="anchor"></a>iSEEu 1.1.1</h1>
-<ul>
-<li>Improved documentation of the <code>ReducedDimensionHexPlot</code> methods.</li>
-</ul>
-</div>
-    <div id="iseeu-0998" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.8">
-<a href="#iseeu-0998" class="anchor"></a>iSEEu 0.99.8</h1>
-<ul>
-<li>Trigger new build on the single package builder.</li>
-</ul>
-</div>
-    <div id="iseeu-0997" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.7">
-<a href="#iseeu-0997" class="anchor"></a>iSEEu 0.99.7</h1>
-<ul>
-<li>Replace <code>!=""</code> by <code><a href="https://rdrr.io/r/base/nchar.html">nzchar()</a></code>.</li>
-<li>Use 4-space indent.</li>
-<li>Add info on how to contribute to iSEEu, including coding style.</li>
-</ul>
-</div>
-    <div id="iseeu-0996" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.6">
-<a href="#iseeu-0996" class="anchor"></a>iSEEu 0.99.6</h1>
-<ul>
-<li>Trigger new build on the single package builder.</li>
-</ul>
-</div>
-    <div id="iseeu-0995" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.5">
-<a href="#iseeu-0995" class="anchor"></a>iSEEu 0.99.5</h1>
-<ul>
-<li>Add more suggested packages.</li>
-<li>Add screenshot images to the vignette.</li>
-<li>More realistic examples in the vignette.</li>
-<li>Fix <code>GeneSetTable</code> to acknowledge initial value of <code>"Selected"</code>.</li>
-</ul>
-</div>
-    <div id="iseeu-0994" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.4">
-<a href="#iseeu-0994" class="anchor"></a>iSEEu 0.99.4</h1>
-<ul>
-<li>Fix to GitHub action <code>R-CMD-check</code>.</li>
-</ul>
-</div>
-    <div id="iseeu-0993" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.3">
-<a href="#iseeu-0993" class="anchor"></a>iSEEu 0.99.3</h1>
-<ul>
-<li>Set up GitHub action <code>R-CMD-check</code>.</li>
-<li>Remove Travis CI <code>covr</code> code coverage and <code>pkgdown</code> site deployment.</li>
-<li>Fix man page warning.</li>
-</ul>
-</div>
-    <div id="iseeu-0992" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.2">
-<a href="#iseeu-0992" class="anchor"></a>iSEEu 0.99.2</h1>
-<ul>
-<li>Create observer for <code>"Assay"</code> in <code>DiffStatTable</code>.</li>
-<li>Update NEWS.</li>
-</ul>
-</div>
-    <div id="iseeu-0991" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.1">
-<a href="#iseeu-0991" class="anchor"></a>iSEEu 0.99.1</h1>
-<ul>
-<li>Trigger new build on the single package builder.</li>
-</ul>
-</div>
-    <div id="iseeu-0990" class="section level1">
-<h1 class="page-header" data-toc-text="0.99.0">
-<a href="#iseeu-0990" class="anchor"></a>iSEEu 0.99.0</h1>
-<ul>
-<li>Added panel <code>DifferentialStatisticsTable</code>.</li>
-<li>Added panel <code>DynamicReducedDimensionPlot</code>.</li>
-<li>Added panel <code>GeneSetTable</code>.</li>
-<li>Added panel <code>MAPlot</code>.</li>
-<li>Added panel <code>ReducedDimensionHexPlot</code>.</li>
-<li>Added panel <code>VolcanoPlot</code>.</li>
-<li>Added mode <code>modeEmpty</code>.</li>
-<li>Added mode <code>modeGating</code>.</li>
-<li>Added mode <code>modeReducedDim</code>.</li>
-</ul>
-</div>
-    <div id="iseeu-010" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#iseeu-010" class="anchor"></a>iSEEu 0.1.0</h1>
-<ul>
-<li>
-<code>iSEEu</code> is officially born!</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>Create the commands required to populate FeatureSetTables with commonly used gene sets.</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>createGeneSetCommands</span>(
+  <span class='kw'>collections</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"GO"</span>, <span class='st'>"KEGG"</span>),
+  <span class='kw'>organism</span> <span class='kw'>=</span> <span class='st'>"org.Hs.eg.db"</span>,
+  <span class='kw'>identifier</span> <span class='kw'>=</span> <span class='st'>"ENTREZID"</span>
+)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>collections</th>
+      <td><p>Character vectors specifying the gene set collections of interest.</p></td>
+    </tr>
+    <tr>
+      <th>organism</th>
+      <td><p>String containing the <span class="pkg">org.*.eg.db</span> package to use to extract mappings of gene sets to gene IDs.</p></td>
+    </tr>
+    <tr>
+      <th>identifier</th>
+      <td><p>String specifying the identifier to use to extract IDs for the organism package.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of character vectors describing how to create collections and retrieve gene sets.
+These can be used as arguments for the <code>FeatureSetTable</code> constructor.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>GO terms are extracted using the <code>"GOALL"</code> mode,
+which extracts both direct and indirect children of each term.
+A description for each GO term is extracted using the <span class="pkg">GO.db</span> package.</p>
+<p>Mappings of genes to KEGG pathway are extracted from the organism package using the <code>"PATH"</code> term.
+Unfortunately, this is not up to date due to the licensing around KEGG terms.
+Descriptions for each pathway are extracted from <a href='http://rest.kegg.jp/list/pathway'>http://rest.kegg.jp/list/pathway</a>.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>FeatureSetTable, where the commands are intended for use.</p>
+<p><code>setFeatureSetCommands</code>, to use the commands globally.</p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'>createGeneSetCommands</span>()
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>out</span>$<span class='no'>CreateCollections</span>[<span class='st'>'GO'</span>], <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; .all_terms &lt;- AnnotationDbi::keys(org.Hs.eg.db::org.Hs.eg.db, keytype='GOALL');
+#&gt; tab &lt;- AnnotationDbi::select(GO.db::GO.db, keys=.all_terms, columns='TERM');
+#&gt; rownames(tab) &lt;- tab$GOID;
+#&gt; tab$GOID &lt;- NULL; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>out</span>$<span class='no'>RetrieveSet</span>[<span class='st'>'GO'</span>], <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; .genes_in_set &lt;- tryCatch(AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, keys=.set_id, keytype='GOALL',
+#&gt;    column="ENTREZID")[,"ENTREZID"], error=function(e) character(0));
+#&gt; selected &lt;- intersect(rownames(se), .genes_in_set) </div><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 

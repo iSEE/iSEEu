@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gene set table — GeneSetTable-class • iSEEu</title>
+<title>Feature set table — FeatureSetTable-class • iSEEu</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Gene set table — GeneSetTable-class" />
-<meta property="og:description" content="A table where each row is a gene set and can be clicked to transmit a multiple feature selection to another panel.
-This has been deprecated in favor of the simpler FeatureSetTable." />
+<meta property="og:title" content="Feature set table — FeatureSetTable-class" />
+<meta property="og:description" content="A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel." />
 
 
 
@@ -125,14 +124,13 @@ This has been deprecated in favor of the simpler FeatureSetTable." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Gene set table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/GeneSetTable.R'><code>R/GeneSetTable.R</code></a></small>
-    <div class="hidden name"><code>GeneSetTable-class.Rd</code></div>
+    <h1>Feature set table</h1>
+    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/FeatureSetTable.R'><code>R/FeatureSetTable.R</code></a></small>
+    <div class="hidden name"><code>FeatureSetTable-class.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A table where each row is a gene set and can be clicked to transmit a multiple feature selection to another panel.
-This has been deprecated in favor of the simpler FeatureSetTable.</p>
+    <p>A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.</p>
     </div>
 
 
@@ -141,12 +139,21 @@ This has been deprecated in favor of the simpler FeatureSetTable.</p>
 
     
 
-<p>The following slots control the type of gene sets to show:</p><ul>
-<li><p><code>Type</code>, string specifying the type of gene set collection to show.
-Defaults to <code>"GO"</code>.</p></li>
+<p>The following slots control the feature sets in use:</p><ul>
+<li><p><code>Collection</code>, string specifying the type of feature set collection to show.
+Defaults to the first set.</p></li>
+<li><p><code>CreateCollections</code>, a named character vector where each entry is named after a feature set collection.
+Each entry should be a string containing R commands to define a data.frame named <code>tab</code>, where each row is a feature set and the row names are the names of those sets.</p></li>
+<li><p><code>RetrieveSet</code>, a named character vector where each entry is named after a feature set collection.
+Each entry should be a string containing R commands to define a character vector named <code>selected</code> containing the identity of all rows of the SummarizedExperiment in the set of interest.
+(These commands can assume that a <code>.set_id</code> variable is present containing the name of the chosen feature set,
+as well as the <code>se</code> variable containing the input SummarizedExperiment object.)</p></li>
 </ul>
 
-<p>The following slots control the table selections:</p><ul>
+<p>The <code>CreateCollections</code> and <code>RetrieveSet</code> parameters cannot be changed within the <code>iSEE</code> application.
+If not supplied to the constructor, they default to the fields of the output of <code>getFeatureSetCommands</code>.
+If these are also <code>NULL</code>, they fall back to the output of <code>createGeneSetCommands</code> with default parameters.</p>
+<p>The following slots control the selections:</p><ul>
 <li><p><code>Selected</code>, a string containing the name of the currently selected gene set.
 Defaults to <code>""</code>, i.e., no selection.</p></li>
 <li><p><code>Search</code>, a string containing the regular expression for the global search.
@@ -160,14 +167,22 @@ Defaults to an empty character vector, i.e., no search.</p></li>
 
     
 
-<p><code>GeneSetTable(...)</code> creates an instance of a GeneSetTable class,
+<p><code>FeatureSetTable(...)</code> creates an instance of a FeatureSetTable class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
     
 
-<p>In the following code snippets, <code>x</code> is an instance of a GeneSetTable class.
+<p>In the following code snippets, <code>x</code> is an instance of a FeatureSetTable class.
 Refer to the documentation for each method for more details on the remaining arguments.</p>
+<p>For setting up data values:</p><ul>
+<li><p><code>.cacheCommonInfo(x)</code> adds a <code>"FeatureSetTable"</code> entry containing <code>available.sets</code>, a named list of DataFrames containing information about the individual gene sets for each collection.
+This will also call the equivalent Panel method.</p></li>
+<li><p><code>.refineParameters(x, se)</code> replaces <code>NA</code> values in <code>Collection</code> with the first valid collection.
+It also replaces <code>NA</code> values for <code>Selected</code> with the first valid set in the chosen collection.
+This will also call the equivalent Panel method.</p></li>
+</ul>
+
 <p>For defining the interface:</p><ul>
 <li><p><code>.defineDataInterface(x, se, select_info)</code> returns a list of interface elements for manipulating all slots described above.</p></li>
 <li><p><code>.panelColor(x)</code> will return the specified default color for this panel class.</p></li>
@@ -182,8 +197,7 @@ otherwise calling the method for Panel.</p></li>
 </ul>
 
 <p>For creating the table:</p><ul>
-<li><p><code>.generateOutput(x, envir)</code> will create a data.frame of gene set descriptions in <code>envir</code>,
-based on the <code>mode="show"</code> output of <code>.getGeneSetCommands</code>.
+<li><p><code>.generateOutput(x, envir)</code> will create a data.frame of gene set descriptions in <code>envir</code>, based on the contents of <code>x[["CreateCollections"]]</code>.
 It will also return the commands required to do so and the name of the variable corresponding to said data.frame.</p></li>
 <li><p><code>.renderOutput(x, se, ..., output, pObjects, rObjects)</code>
 will add a <code>datatable</code> widget to the output,
@@ -192,7 +206,7 @@ which is used to render the aforementioned data.frame.</p></li>
 
 <p>For controlling the multiple selections:</p><ul>
 <li><p><code>.multiSelectionDimension(x)</code> returns <code>"row"</code>.</p></li>
-<li><p><code>.multiSelectionCommands(x, index)</code> returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the <code>mode="extract"</code> output of <code>.getGeneSetCommands</code>.
+<li><p><code>.multiSelectionCommands(x, index)</code> returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the contents of <code>x[["RetrieveSet"]]</code>.
 <code>index</code> is ignored.</p></li>
 <li><p><code>.multiSelectionActive(x)</code> returns the name of the currently selected gene set,
 unless no selection is made, in which case <code>NULL</code> is returned.</p></li>
@@ -204,26 +218,23 @@ which is set to the number of features in <code>se</code>.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span>(<span class='kw'>location</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-07-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-07-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span>(<span class='kw'>location</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-07-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-07-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)
 <span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/reexports.html'>logNormCounts</a></span>(<span class='no'>sce</span>)
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scran</span>)
 <span class='fu'>rowData</span>(<span class='no'>sce</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'>rowData</span>(<span class='no'>sce</span>), <span class='fu'><a href='https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html'>modelGeneVarWithSpikes</a></span>(<span class='no'>sce</span>, <span class='st'>"ERCC"</span>))
 
-<span class='co'># This defaults to 'org.Hs.eg.db' with 'ENTREZID'.</span>
-<span class='fu'>.setOrganism</span>(<span class='st'>"org.Mm.eg.db"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setOrganism' is deprecated.</span>
-#&gt; <span class='warning'>Use 'setFeatureSetCommands' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='fu'>.setIdentifierType</span>(<span class='st'>"ENSEMBL"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setIdentifierType' is deprecated.</span>
-#&gt; <span class='warning'>Use 'setFeatureSetCommands' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='no'>gst</span> <span class='kw'>&lt;-</span> <span class='fu'>GeneSetTable</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'GeneSetTable' is deprecated.</span>
-#&gt; <span class='warning'>Use 'FeatureSetTable' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'>
-<span class='no'>rdp</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataPlot</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"GeneSetTable1"</span>,
+<span class='no'>cmds</span> <span class='kw'>&lt;-</span> <span class='fu'>createGeneSetCommands</span>(<span class='kw'>collections</span><span class='kw'>=</span><span class='st'>"GO"</span>,
+    <span class='kw'>organism</span><span class='kw'>=</span><span class='st'>"org.Mm.eg.db"</span>, <span class='kw'>identifier</span><span class='kw'>=</span><span class='st'>"ENSEMBL"</span>)
+<span class='no'>gst</span> <span class='kw'>&lt;-</span> <span class='fu'>FeatureSetTable</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>, <span class='kw'>RetrieveSet</span><span class='kw'>=</span><span class='no'>cmds</span>$<span class='no'>RetrieveSet</span>,
+    <span class='kw'>CreateCollections</span><span class='kw'>=</span><span class='no'>cmds</span>$<span class='no'>CreateCollections</span>)
+
+<span class='no'>rdp</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataPlot</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"FeatureSetTable1"</span>,
     <span class='kw'>SelectionEffect</span><span class='kw'>=</span><span class='st'>"Color"</span>,
     <span class='kw'>XAxis</span><span class='kw'>=</span><span class='st'>"Row data"</span>, <span class='kw'>XAxisRowData</span><span class='kw'>=</span><span class='st'>"mean"</span>, <span class='kw'>YAxis</span><span class='kw'>=</span><span class='st'>"total"</span>)
 
-<span class='no'>rdt</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataTable</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"GeneSetTable1"</span>)
+<span class='no'>rdt</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataTable</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"FeatureSetTable1"</span>)
 
 <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
     <span class='fu'>iSEE</span>(<span class='no'>sce</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>gst</span>, <span class='no'>rdp</span>, <span class='no'>rdt</span>))

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dynamic reduced dimension plot — DynamicReducedDimensionPlot-class • iSEEu</title>
+<title>Dynamic marker table — DynamicMarkerTable-class • iSEEu</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,11 @@
 
 
 
-<meta property="og:title" content="Dynamic reduced dimension plot — DynamicReducedDimensionPlot-class" />
-<meta property="og:description" content="A dimensionality reduction plot that dynamically recomputes the coordinates for the samples,
-based on the selected subset of samples (and possibly features) in transmitting panels.
-All samples in active and saved multiple selections are used here." />
+<meta property="og:title" content="Dynamic marker table — DynamicMarkerTable-class" />
+<meta property="og:description" content="A table that dynamically identifies marker genes for a selected subset of samples.
+Comparisons are made between the active selection in the transmitting panel
+and (i) all non-selected points, if no saved selections are available;
+or (ii) each subset of points in each saved selection." />
 
 
 
@@ -126,15 +127,16 @@ All samples in active and saved multiple selections are used here." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Dynamic reduced dimension plot</h1>
-    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/DynamicReducedDimensionPlot.R'><code>R/DynamicReducedDimensionPlot.R</code></a></small>
-    <div class="hidden name"><code>DynamicReducedDimensionPlot-class.Rd</code></div>
+    <h1>Dynamic marker table</h1>
+    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/DynamicMarkerTable.R'><code>R/DynamicMarkerTable.R</code></a></small>
+    <div class="hidden name"><code>DynamicMarkerTable-class.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dimensionality reduction plot that dynamically recomputes the coordinates for the samples,
-based on the selected subset of samples (and possibly features) in transmitting panels.
-All samples in active and saved multiple selections are used here.</p>
+    <p>A table that dynamically identifies marker genes for a selected subset of samples.
+Comparisons are made between the active selection in the transmitting panel
+and (i) all non-selected points, if no saved selections are available;
+or (ii) each subset of points in each saved selection.</p>
     </div>
 
 
@@ -143,73 +145,78 @@ All samples in active and saved multiple selections are used here.</p>
 
     
 
-<p>The following slots control the thresholds used in the visualization:</p><ul>
-<li><p><code>Type</code>, a string specifying the type of dimensionality reduction method to use.
-This can be <code>"PCA"</code> (default), <code>"TSNE"</code> or <code>"UMAP"</code>,
-which uses the relevant functions from the <span class="pkg">scater</span> package.</p></li>
-<li><p><code>NGenes</code>, an integer scalar specifying the number of highly variable genes to use in the dimensionality reduction.
-Only used if an explicit selection of features is not made in the app.
-Defaults to 1000.</p></li>
-<li><p><code>Assay</code>, string indicating the assay to use for the calculations.
+<p>The following slots control the test procedure:</p><ul>
+<li><p><code>LogFC</code>, a numeric scalar indicating the log-fold change threshold to test against.
+Defaults to zero.</p></li>
+<li><p><code>TestMethod</code>, string indicating the test to use (based on the <code>findMarkers</code> function from <span class="pkg">scran</span>).
+This can be <code>"t"</code> (default), <code>"wilcox"</code> or <code>"binom"</code>.</p></li>
+<li><p><code>Assay</code>, string indicating the assay to use for testing.
 Defaults to the first named assay in the SummarizedExperiment.</p></li>
 </ul>
 
-<p>In addition, this class inherits all slots from its parent ColumnDotPlot,
-DotPlot and Panel classes.</p>
+<p>The following slots control the rendered table:</p><ul>
+<li><p><code>ExtraFields</code>, a character vector containing names of <code>rowData</code> columns to be included in the table.
+Defaults to the output of <code>getTableExtraFields</code>.
+This cannot be changed once the application starts.</p></li>
+</ul>
+
+<p>In addition, this class inherits all slots from its parent RowTable,
+Table and Panel classes.</p>
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
 
     
 
-<p><code>DynamicReducedDimensionPlot(...)</code> creates an instance of a DynamicReducedDimensionPlot class,
+<p><code>DynamicMarkerTable(...)</code> creates an instance of a DynamicMarkerTable class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
     
 
-<p>In the following code snippets, <code>x</code> is an instance of a DynamicReducedDimensionPlot class.
+<p>In the following code snippets, <code>x</code> is an instance of a DynamicMarkerTable class.
 Refer to the documentation for each method for more details on the remaining arguments.</p>
 <p>For setting up data values:</p><ul>
-<li><p><code>.cacheCommonInfo(x)</code> adds a <code>"DynamicReducedDimensionPlot"</code> entry containing <code>valid.assay.names</code>.
-This will also call the equivalent ColumnDotPlot method.</p></li>
+<li><p><code>.cacheCommonInfo(x)</code> adds a <code>"DynamicMarkerTable"</code> entry
+containing <code>valid.assay.names</code> and <code>valid.rowdata.names</code>.
+This will also call the equivalent RowTable method.</p></li>
 <li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>"Assay"</code> to the first valid value.
-This will also call the equivalent ColumnDotPlot method for further refinements to <code>x</code>.
-If valid assay names are not available, <code>NULL</code> is returned instead.</p></li>
+This will also call the equivalent RowTable method for further refinements to <code>x</code>.
+If valid assay names are not available, <code>NULL</code> is returned instead.
+Any <code>"ExtraFields"</code> are intersected with the valid <code>rowData</code> names.</p></li>
 </ul>
 
 <p>For defining the interface:</p><ul>
 <li><p><code>.defineDataInterface(x, se, select_info)</code> returns a list of interface elements for manipulating all slots described above.</p></li>
 <li><p><code>.panelColor(x)</code> will return the specified default color for this panel class.</p></li>
-<li><p><code>.fullName(x)</code> will return <code>"Dynamic reduced dimension plot"</code>.</p></li>
+<li><p><code>.fullName(x)</code> will return <code>"Dynamic marker table"</code>.</p></li>
+<li><p><code>.hideInterface(x)</code> will return <code>TRUE</code> for UI elements related to multiple row selections,
+otherwise calling the method for RowTable.</p></li>
 </ul>
 
 <p>For monitoring reactive expressions:</p><ul>
-<li><p><code>.createObservers(x, se, input, session, pObjects, rObjects)</code> sets up observers for all new slots described above, as well as in the parent classes via the ColumnDotPlot method.</p></li>
+<li><p><code>.createObservers(x, se, input, session, pObjects, rObjects)</code> sets up observers for all new slots described above, as well as in the parent classes via the RowTable method.</p></li>
 </ul>
 
-<p>For creating the plot:</p><ul>
-<li><p><code>.generateDotPlotData(x, envir)</code> will create a data.frame of newly computed coordinates in <code>envir</code>.
-The method will return the commands required to do so as well as a list of labels.</p></li>
-</ul>
-
-<p>For handling multiple selections:</p><ul>
-<li><p><code>.multiSelectionInvalidated(x)</code> will always return <code>TRUE</code>,
-as any change in the upstream selection of points will alter the coordinates and invalidate any brush/lasso on <code>x</code>.</p></li>
+<p>For creating the table:</p><ul>
+<li><p><code>.generateTable(x, envir)</code> will create a data.frame of newly computed statistics in <code>envir</code>.
+The method will return the commands required to do so.</p></li>
 </ul>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)
-
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-07-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/reexports.html'>logNormCounts</a></span>(<span class='no'>sce</span>, <span class='kw'>exprs_values</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='warning'>Warning: package ‘ggplot2’ was built under R version 4.0.1</span></div><div class='input'>
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>using temporary cache /tmp/RtmpApa7VW/BiocFileCache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-07-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/reexports.html'>logNormCounts</a></span>(<span class='no'>sce</span>, <span class='kw'>exprs_values</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)
 <span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/runPCA.html'>runPCA</a></span>(<span class='no'>sce</span>, <span class='kw'>ncomponents</span><span class='kw'>=</span><span class='fl'>4</span>)
 <span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/runTSNE.html'>runTSNE</a></span>(<span class='no'>sce</span>)
 
-<span class='no'>drdp</span> <span class='kw'>&lt;-</span> <span class='fu'>DynamicReducedDimensionPlot</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>, <span class='kw'>Assay</span><span class='kw'>=</span><span class='st'>"logcounts"</span>,
+<span class='no'>dst</span> <span class='kw'>&lt;-</span> <span class='fu'>DynamicMarkerTable</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>, <span class='kw'>PanelWidth</span><span class='kw'>=</span><span class='fl'>8L</span>,
     <span class='kw'>ColumnSelectionSource</span><span class='kw'>=</span><span class='st'>"ReducedDimensionPlot1"</span>)
 
+<span class='no'>rdp</span> <span class='kw'>&lt;-</span> <span class='fu'>ReducedDimensionPlot</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>,
+    <span class='kw'>ColorByFeatureSource</span><span class='kw'>=</span><span class='st'>"DynamicMarkerTable1"</span>)
+
 <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-    <span class='fu'>iSEE</span>(<span class='no'>sce</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>ReducedDimensionPlot</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>), <span class='no'>drdp</span>))
+    <span class='fu'>iSEE</span>(<span class='no'>sce</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>rdp</span>, <span class='no'>dst</span>))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
