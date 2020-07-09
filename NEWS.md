@@ -1,3 +1,15 @@
+# iSEEu 1.1.2
+
+* Replaced `GeneSetTable` with the more general `FeatureSetTable`.
+  Improved handling of arbitrary feature sets.
+* Renamed `DifferentialStatisticsTable` to the more appropriate `DynamicMarkerTable`.
+  Support inclusion of extra fields from the `rowData`.
+* Global parameters now only affect construction of `MAPlot`s and `VolcanoPlot`s.
+
+# iSEEu 1.1.1
+
+* Improved documentation of the `ReducedDimensionHexPlot` methods.
+
 # iSEEu 0.99.8
 
 * Trigger new build on the single package builder.
