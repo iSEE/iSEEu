@@ -20,11 +20,11 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Defaults to \code{NA}, indicating that all continuous \code{\link{rowData}} columns may contain p-values.
-#' This cannot be changed after the application has started.
+#' Set to all columns with names starting with any of the strings in \code{\link{getPValueFields}}.
+#' This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Defaults to \code{NA}, indicating that all continuous \code{\link{rowData}} fields may contain p-values.
-#' This cannot be changed after the application has started.
+#' Set to all columns with names starting with any of the strings in \code{\link{getLogFCFields}}.
+#' This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -40,7 +40,11 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
+#' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+#' This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing
+#' the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
+#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}
+#' as well as \code{"PValueFields"} and \code{"LogFCFields"} to their corresponding cached vectors.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
 #' }
@@ -79,6 +83,7 @@
 #' @docType methods
 #' @aliases LogFCLogFCPlot LogFCLogFCPlot-class
 #' initialize,LogFCLogFCPlot-method
+#' .cacheCommonInfo,LogFCLogFCPlot-method
 #' .refineParameters,LogFCLogFCPlot-method
 #' .defineDataInterface,LogFCLogFCPlot-method
 #' .createObservers,LogFCLogFCPlot-method
@@ -104,9 +109,7 @@
 #' 
 #' if (interactive()) {
 #'     iSEE(se, initial=list(LogFCLogFCPlot(XAxisRowData="LogFC1", YAxis="LogFC2",
-#'         XPValueField="PValue1", YPValueField="PValue2",
-#'         PValueFields=c("PValue1", "PValue2"),
-#'         LogFCFields=c("LogFC1", "LogFC2"))))
+#'         XPValueField="PValue1", YPValueField="PValue2")))
 #' }
 #'
 #' @author Aaron Lun
@@ -138,9 +141,8 @@ setMethod("initialize", "LogFCLogFCPlot", function(.Object,
         PValueThreshold=PValueThreshold, LogFCThreshold=LogFCThreshold, 
         PValueCorrection=PValueCorrection, ...)
 
-    args <- .emptyDefault(args, "PValueFields", getPValueFields())
-
-    args <- .emptyDefault(args, "LogFCFields", getLogFCFields())
+    args <- .emptyDefault(args, "PValueFields", NA_character_)
+    args <- .emptyDefault(args, "LogFCFields", NA_character_)
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -172,35 +174,47 @@ setValidity2("LogFCLogFCPlot", function(object) {
 
 #' @export
 #' @importFrom methods callNextMethod
-setMethod(".refineParameters", "LogFCLogFCPlot", function(x, se) {
-    x <- callNextMethod() # Do this first to trigger warnings from base classes.
-    if (is.null(x)) {
-        return(NULL)
-    }
+setMethod(".cacheCommonInfo", "LogFCLogFCPlot", function(x, se) {
+    se <- callNextMethod()
 
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    x <- .emptyDefault(x, "PValueFields", all.cont)
-    x <- .emptyDefault(x, "LogFCFields", all.cont)
+    p.fields <- getPValueFields()
+    p.okay <- lapply(p.fields, grepl, x=all.cont)
+    p.okay <- Reduce(`|`, p.okay)
 
-    x <- .update_de_field_choices(x, "PValueFields", all.cont, msg="p-value")
+    lfc.fields <- getLogFCFields()
+    lfc.okay <- lapply(lfc.fields, grepl, x=all.cont)
+    lfc.okay <- Reduce(`|`, lfc.okay)
+
+    .setCachedCommonInfo(se, "LogFCLogFCPlot",
+        valid.p.fields=all.cont[p.okay],
+        valid.lfc.fields=all.cont[lfc.okay])
+})
+
+#' @export
+#' @importFrom methods callNextMethod
+setMethod(".refineParameters", "LogFCLogFCPlot", function(x, se) {
+    # We MUST store this information in the class, as the memory should describe the 
+    # full state of the app. We can't rely on global variables or the cached commons
+    # because they don't get captured by serialization of the memory.
+    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "LogFCLogFCPlot")$valid.lfc.fields
+    x[["PValueFields"]] <- .getCachedCommonInfo(se, "LogFCLogFCPlot")$valid.p.fields
+
+    x <- callNextMethod() # Trigger warnings from base classes.
     if (is.null(x)) {
         return(NULL)
     }
+
     x <- .update_chosen_de_field(x, "XPValueField", "PValueFields")
     x <- .update_chosen_de_field(x, "YPValueField", "PValueFields")
 
-    x <- .update_de_field_choices(x, "LogFCFields", all.cont, msg="log-FC")
-    if (is.null(x)) {
-        return(NULL)
-    }
     x <- .update_chosen_de_field(x, "YAxis", "LogFCFields")
-    x <- .update_chosen_de_field(x, "XAxis", "LogFCFields")
+    x <- .update_chosen_de_field(x, "XAxisRowData", "LogFCFields")
 
     x[["XAxis"]] <- "Row data"
     x
 })
-
 
 #' @export
 setMethod(".allowableXAxisChoices", "LogFCLogFCPlot", function(x, se) x[["LogFCFields"]])
