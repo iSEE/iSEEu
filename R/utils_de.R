@@ -101,7 +101,7 @@ NULL
     )
 }
 
-.define_de_validity <- function(object) {
+.define_de_validity <- function(object, allow.na.fields=FALSE) {
     msg <- character(0)
 
     p <- object[["PValueThreshold"]]
@@ -119,11 +119,11 @@ NULL
         msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
     }
 
-    if (any(is.na(object[["PValueFields"]]))) {
+    if (!allow.na.fields && any(is.na(object[["PValueFields"]]))) {
         msg <- c(msg, "'PValueFields' should contain non-NA strings")
     }
 
-    if (any(is.na(object[["LogFCFields"]]))) {
+    if (!allow.na.fields && any(is.na(object[["LogFCFields"]]))) {
         msg <- c(msg, "'LogFCFields' should contain non-NA strings")
     }
 

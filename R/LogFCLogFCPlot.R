@@ -1,13 +1,14 @@
 #' The LogFCLogFCPlot class
 #'
-#' The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.
-#' It retrieves the log-fold change and average abundance and creates a row-based plot where each point represents a feature.
+#' The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a scatter plot of two log-fold changes.
+#' Each axis contains the log-fold change for a differential expression analysis and each point represents a feature.
 #' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
-#' \item \code{PValueField}, a string specifying the field of \code{\link{rowData}} containing the p-values.
+#' \item \code{XPValueField}, a string specifying the field of \code{\link{rowData}} containing the p-values for the x-axis comparison.
+#' \item \code{YPValueField}, a string specifying the field of \code{\link{rowData}} containing the p-values for the y-axis comparison.
 #' \item \code{PValueThreshold}, a numeric scalar in (0, 1] specifying the threshold to use on the (adjusted) p-value.
 #' Defaults to 0.05.
 #' \item \code{LogFCThreshold}, a non-negative numeric scalar specifying the threshold to use on the log-fold change.
@@ -19,10 +20,10 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Defaults to \code{\link{getPValueFields}}.
+#' Defaults to \code{NA}, indicating that all continuous \code{\link{rowData}} columns may contain p-values.
 #' This cannot be changed after the application has started.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Defaults to \code{\link{getLogFCFields}}.
+#' Defaults to \code{NA}, indicating that all continuous \code{\link{rowData}} fields may contain p-values.
 #' This cannot be changed after the application has started.
 #' }
 #'
@@ -41,18 +42,18 @@
 #' \itemize{
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
-#' If valid p-value, abundance and log-fold change fields are not available, \code{NULL} is returned instead.
+#' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
 #' }
 #'
 #' For defining the interface:
 #' \itemize{
 #' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable average abundance-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis.
+#' \item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis.
 #' \item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis.
 #' \item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 #' otherwise it will call the \linkS4class{RowDataPlot} method.
-#' \item \code{\link{.fullName}(x)} will return \code{"MA plot"}.
+#' \item \code{\link{.fullName}(x)} will return \code{"LogFC-logFC plot"}.
 #' }
 #'
 #' For monitoring reactive expressions:
@@ -63,8 +64,8 @@
 #' For creating the plot:
 #' \itemize{
 #' \item \code{\link{.generateDotPlotData}(x, envir)} will create a data.frame of row metadata variables in \code{envir}.
-#' This should contain average abundances on the x-axis and log-fold changes on the y-axis,
-#' in addition to an extra field specifying whether or not the feature was considered to be significantly up or down.
+#' This contains the two sets of log-fold changes on both axes,
+#' plus an extra field specifying whether or not the feature was considered to be significantly up or down.
 #' The method will return the commands required to do so as well as a list of labels.
 #' \item \code{\link{.prioritizeDotPlotData}(x, envir)} will create variables in \code{envir} marking the priority of points.
 #' Significant features receive higher priority (i.e., are plotted over their non-significant counterparts) and are less aggressively downsampled when \code{Downsample=TRUE}.
@@ -123,7 +124,7 @@ setClass("LogFCLogFCPlot", contains="RowDataPlot",
         PValueFields="character", LogFCFields="character"))
 
 #' @export
-setMethod(".fullName", "LogFCLogFCPlot", function(x) "Log-FC-log-FC plot")
+setMethod(".fullName", "LogFCLogFCPlot", function(x) "LogFC-logFC plot")
 
 #' @export
 setMethod(".panelColor", "LogFCLogFCPlot", function(x) "#770055")
@@ -164,7 +165,7 @@ setValidity2("LogFCLogFCPlot", function(object) {
         msg <- c(msg, "'XPValueField' must be a single string")
     }
 
-    msg <- c(msg, .define_de_validity(object))
+    msg <- c(msg, .define_de_validity(object, allow.na.fields=TRUE))
 
     if (length(msg)) msg else TRUE
 })
@@ -178,6 +179,9 @@ setMethod(".refineParameters", "LogFCLogFCPlot", function(x, se) {
     }
 
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+
+    x <- .emptyDefault(x, "PValueFields", all.cont)
+    x <- .emptyDefault(x, "LogFCFields", all.cont)
 
     x <- .update_de_field_choices(x, "PValueFields", all.cont, msg="p-value")
     if (is.null(x)) {
@@ -213,6 +217,7 @@ setMethod(".defineDataInterface", "LogFCLogFCPlot", function(x, se, select_info)
 
     c(callNextMethod(),
         list(
+            hr(),
             selectInput(input_FUN("YPValueField"),
                 label="P-value field (Y-axis):",
                 selected=x[["YPValueField"]],
@@ -221,6 +226,7 @@ setMethod(".defineDataInterface", "LogFCLogFCPlot", function(x, se, select_info)
                 label="P-value field (X-axis):",
                 selected=x[["XPValueField"]],
                 choices=x[["PValueFields"]]),
+            hr(),
             numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
             numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
@@ -257,7 +263,8 @@ setMethod(".generateDotPlotData", "LogFCLogFCPlot", function(x, envir) {
     extra_cmds <- c(
         .define_de_status(x, "plot.data$X", x.pvals, varname=".de_status_x"),
         .define_de_status(x, "plot.data$Y", y.pvals, varname=".de_status_y"),
-        "plot.data$IsSig <- c('none', 'x-only', 'y-only', 'both')[1 + (.de_status_x!=2) + 2 * (.de_status_y!=2)];"
+        "plot.data$IsSig <- c('none', 'x-only', 'y-only', 'both')[1 + (.de_status_x!=2) + 2 * (.de_status_y!=2)];",
+        ".freq_status <- tabulate(1 + (.de_status_x - 1) + 3 * (.de_status_y - 1), nbins=9);"
     )
 
     eval(parse(text=extra_cmds), envir)
@@ -281,7 +288,14 @@ setMethod(".colorByNoneDotPlotField", "LogFCLogFCPlot", function(x) "IsSig")
 
 #' @export
 setMethod(".colorByNoneDotPlotScale", "LogFCLogFCPlot", function(x) 
-    "scale_color_manual(values=c(none='grey', `x-only`='#f65058', `y-only`='#28334a', both='#fbcd22'), name='Outcome') +")
+    "scale_color_manual(values=c(none='grey', `x-only`='#f65058', `y-only`='#28334a', both='#fbcd22'), name='Outcome',
+    labels=setNames(
+        c(
+            sprintf('None (%s)', .freq_status[5]),
+            paste(sprintf('X-axis %s (%s)', c('down', 'up'), .freq_status[c(4,6)]), collapse='\n'),
+            paste(sprintf('Y-axis %s (%s)', c('down', 'up'), .freq_status[c(2,8)]), collapse='\n'),
+            paste(sprintf('X-axis %s, Y-axis %s (%s)', rep(c('down', 'up'), each=2), rep(c('down', 'up'), 2), .freq_status[c(1,7,3,9)]), collapse='\n')
+        ), c('none', 'x-only', 'y-only', 'both'))) +")
 
 #' @export
 #' @importFrom ggplot2 geom_hline
