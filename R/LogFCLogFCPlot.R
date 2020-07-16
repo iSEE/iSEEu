@@ -1,6 +1,6 @@
-#' The MAPlot class
+#' The LogFCLogFCPlot class
 #'
-#' The MAPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.
+#' The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.
 #' It retrieves the log-fold change and average abundance and creates a row-based plot where each point represents a feature.
 #' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
 #'
@@ -24,16 +24,13 @@
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
 #' Defaults to \code{\link{getLogFCFields}}.
 #' This cannot be changed after the application has started.
-#' \item \code{AveAbFields}, a character vector specifying the names of all columns containing average abundances.
-#' Defaults to \code{\link{getAveAbFields}}.
-#' This cannot be changed after the application has started.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
 #' \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
 #' @section Constructor:
-#' \code{MAPlot(...)} creates an instance of a MAPlot class,
+#' \code{LogFCLogFCPlot(...)} creates an instance of a LogFCLogFCPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
 #' @section Supported methods:
@@ -79,32 +76,36 @@
 #' }
 #'
 #' @docType methods
-#' @aliases MAPlot MAPlot-class
-#' initialize,MAPlot-method
-#' .refineParameters,MAPlot-method
-#' .defineDataInterface,MAPlot-method
-#' .createObservers,MAPlot-method
-#' .hideInterface,MAPlot-method
-#' .fullName,MAPlot-method
-#' .panelColor,MAPlot-method
-#' .generateDotPlotData,MAPlot-method
-#' .allowableXAxisChoices,MAPlot-method
-#' .allowableYAxisChoices,MAPlot-method
-#' .prioritizeDotPlotData,MAPlot-method
-#' .colorByNoneDotPlotField,MAPlot-method
-#' .colorByNoneDotPlotScale,MAPlot-method
-#' .generateDotPlot,MAPlot-method
+#' @aliases LogFCLogFCPlot LogFCLogFCPlot-class
+#' initialize,LogFCLogFCPlot-method
+#' .refineParameters,LogFCLogFCPlot-method
+#' .defineDataInterface,LogFCLogFCPlot-method
+#' .createObservers,LogFCLogFCPlot-method
+#' .hideInterface,LogFCLogFCPlot-method
+#' .fullName,LogFCLogFCPlot-method
+#' .panelColor,LogFCLogFCPlot-method
+#' .generateDotPlotData,LogFCLogFCPlot-method
+#' .allowableXAxisChoices,LogFCLogFCPlot-method
+#' .allowableYAxisChoices,LogFCLogFCPlot-method
+#' .prioritizeDotPlotData,LogFCLogFCPlot-method
+#' .colorByNoneDotPlotField,LogFCLogFCPlot-method
+#' .colorByNoneDotPlotScale,LogFCLogFCPlot-method
+#' .generateDotPlot,LogFCLogFCPlot-method
 #'
 #' @examples
 #' # Making up some results:
 #' se <- SummarizedExperiment(matrix(rnorm(10000), 1000, 10))
 #' rownames(se) <- paste0("GENE_", seq_len(nrow(se)))
-#' rowData(se)$PValue <- runif(nrow(se))
-#' rowData(se)$LogFC <- rnorm(nrow(se))
-#' rowData(se)$AveExpr <- rnorm(nrow(se))
-#'
+#' rowData(se)$PValue1 <- runif(nrow(se))
+#' rowData(se)$LogFC1 <- rnorm(nrow(se))
+#' rowData(se)$PValue2 <- runif(nrow(se))
+#' rowData(se)$LogFC2 <- rnorm(nrow(se))
+#' 
 #' if (interactive()) {
-#'     iSEE(se, initial=list(MAPlot()))
+#'     iSEE(se, initial=list(LogFCLogFCPlot(XAxisRowData="LogFC1", YAxis="LogFC2",
+#'         XPValueField="PValue1", YPValueField="PValue2",
+#'         PValueFields=c("PValue1", "PValue2"),
+#'         LogFCFields=c("LogFC1", "LogFC2"))))
 #' }
 #'
 #' @author Aaron Lun
@@ -112,63 +113,65 @@
 #' @seealso
 #' \link{RowDataPlot}, for the base class.
 #'
-#' @name MAPlot-class
+#' @name LogFCLogFCPlot-class
 NULL
 
 #' @export
-setClass("MAPlot", contains="RowDataPlot",
-    slots=c(PValueField="character", PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
-        PValueFields="character", LogFCFields="character", AveAbFields="character"))
+setClass("LogFCLogFCPlot", contains="RowDataPlot",
+    slots=c(YPValueField="character", XPValueField="character",
+        PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
+        PValueFields="character", LogFCFields="character"))
 
 #' @export
-setMethod(".fullName", "MAPlot", function(x) "MA plot")
+setMethod(".fullName", "LogFCLogFCPlot", function(x) "Log-FC-log-FC plot")
 
 #' @export
-setMethod(".panelColor", "MAPlot", function(x) "#666600")
+setMethod(".panelColor", "LogFCLogFCPlot", function(x) "#770055")
 
 #' @export
-setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
+setMethod("initialize", "LogFCLogFCPlot", function(.Object, 
+    YPValueField=NA_character_, XPValueField=NA_character_,
     PValueThreshold=0.05, LogFCThreshold=0, PValueCorrection="BH", ...)
 {
-    args <- list(PValueField=PValueField, PValueThreshold=PValueThreshold,
-        LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
+    args <- list(YPValueField=YPValueField, XPValueField=XPValueField,
+        PValueThreshold=PValueThreshold, LogFCThreshold=LogFCThreshold, 
+        PValueCorrection=PValueCorrection, ...)
 
     args <- .emptyDefault(args, "PValueFields", getPValueFields())
 
     args <- .emptyDefault(args, "LogFCFields", getLogFCFields())
-
-    args <- .emptyDefault(args, "AveAbFields", getAveAbFields())
 
     do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
 #' @importFrom methods new
-MAPlot <- function(...) {
-    new("MAPlot", ...)
+LogFCLogFCPlot <- function(...) {
+    new("LogFCLogFCPlot", ...)
 }
 
 #' @importFrom stats p.adjust.methods
-setValidity2("MAPlot", function(object) {
+setValidity2("LogFCLogFCPlot", function(object) {
     msg <- character(0)
 
-    field <- object[["PValueField"]]
+    field <- object[["YPValueField"]]
     if (length(field)!=1) {
         msg <- c(msg, "'PValueField' must be a single string")
     }
 
-    msg <- c(msg, .define_de_validity(object))
-
-    if (any(is.na(object[["AveAbFields"]]))) {
-        msg <- c(msg, "'AveAbFields' should contain non-NA strings")
+    field <- object[["XPValueField"]]
+    if (length(field)!=1) {
+        msg <- c(msg, "'XPValueField' must be a single string")
     }
+
+    msg <- c(msg, .define_de_validity(object))
 
     if (length(msg)) msg else TRUE
 })
 
 #' @export
 #' @importFrom methods callNextMethod
-setMethod(".refineParameters", "MAPlot", function(x, se) {
+setMethod(".refineParameters", "LogFCLogFCPlot", function(x, se) {
     x <- callNextMethod() # Do this first to trigger warnings from base classes.
     if (is.null(x)) {
         return(NULL)
@@ -180,19 +183,15 @@ setMethod(".refineParameters", "MAPlot", function(x, se) {
     if (is.null(x)) {
         return(NULL)
     }
-    x <- .update_chosen_de_field(x, "PValueField", "PValueFields")
+    x <- .update_chosen_de_field(x, "XPValueField", "PValueFields")
+    x <- .update_chosen_de_field(x, "YPValueField", "PValueFields")
 
     x <- .update_de_field_choices(x, "LogFCFields", all.cont, msg="log-FC")
     if (is.null(x)) {
         return(NULL)
     }
     x <- .update_chosen_de_field(x, "YAxis", "LogFCFields")
-
-    x <- .update_de_field_choices(x, "AveAbFields", all.cont, msg="average abundance")
-    if (is.null(x)) {
-        return(NULL)
-    }
-    x <- .update_chosen_de_field(x, "XAxisRowData", "AveAbFields")
+    x <- .update_chosen_de_field(x, "XAxis", "LogFCFields")
 
     x[["XAxis"]] <- "Row data"
     x
@@ -200,23 +199,27 @@ setMethod(".refineParameters", "MAPlot", function(x, se) {
 
 
 #' @export
-setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) x[["AveAbFields"]])
+setMethod(".allowableXAxisChoices", "LogFCLogFCPlot", function(x, se) x[["LogFCFields"]])
 
 #' @export
-setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) x[["LogFCFields"]])
+setMethod(".allowableYAxisChoices", "LogFCLogFCPlot", function(x, se) x[["LogFCFields"]])
 
 #' @export
 #' @importFrom shiny numericInput selectInput
 #' @importFrom stats p.adjust.methods
-setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
+setMethod(".defineDataInterface", "LogFCLogFCPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
     input_FUN <- function(field) paste0(plot_name, "_", field)
 
     c(callNextMethod(),
         list(
-            selectInput(input_FUN("PValueField"),
-                label="P-value field:",
-                selected=x[["PValueField"]],
+            selectInput(input_FUN("YPValueField"),
+                label="P-value field (Y-axis):",
+                selected=x[["YPValueField"]],
+                choices=x[["PValueFields"]]),
+            selectInput(input_FUN("XPValueField"),
+                label="P-value field (X-axis):",
+                selected=x[["XPValueField"]],
                 choices=x[["PValueFields"]]),
             numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
@@ -229,28 +232,33 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
 })
 
 #' @export
-setMethod(".hideInterface", "MAPlot", function(x, field) {
+setMethod(".hideInterface", "LogFCLogFCPlot", function(x, field) {
     if (field == "XAxis") TRUE else callNextMethod()
 })
 
 #' @export
-setMethod(".createObservers", "MAPlot", function(x, se, input, session, pObjects, rObjects) {
+setMethod(".createObservers", "LogFCLogFCPlot", function(x, se, input, session, pObjects, rObjects) {
     callNextMethod()
 
     plot_name <- .getEncodedName(x)
 
     .createUnprotectedParameterObservers(plot_name,
-        fields=c("PValueThreshold", "LogFCThreshold", "PValueCorrection"),
+        fields=c("XPValueField", "YPValueField", 
+             "PValueThreshold", "LogFCThreshold", "PValueCorrection"),
         input=input, pObjects=pObjects, rObjects=rObjects)
 })
 
 #' @export
-setMethod(".generateDotPlotData", "MAPlot", function(x, envir) {
+setMethod(".generateDotPlotData", "LogFCLogFCPlot", function(x, envir) {
     output <- callNextMethod()
 
-    pval.field <- sprintf("rowData(se)[[%s]]", deparse(x[["PValueField"]]))
-    extra_cmds <- .define_de_status(x, lfc="plot.data$Y", pval=pval.field)
-    extra_cmds <- c(extra_cmds, "plot.data$IsSig <- c('down', 'none', 'up')[.de_status];")
+    x.pvals <- sprintf("rowData(se)[[%s]]", deparse(x[["XPValueField"]]))
+    y.pvals <- sprintf("rowData(se)[[%s]]", deparse(x[["YPValueField"]]))
+    extra_cmds <- c(
+        .define_de_status(x, "plot.data$X", x.pvals, varname=".de_status_x"),
+        .define_de_status(x, "plot.data$Y", y.pvals, varname=".de_status_y"),
+        "plot.data$IsSig <- c('none', 'x-only', 'y-only', 'both')[1 + (.de_status_x!=2) + 2 * (.de_status_y!=2)];"
+    )
 
     eval(parse(text=extra_cmds), envir)
     output$commands <- c(output$commands, extra_cmds)
@@ -259,25 +267,35 @@ setMethod(".generateDotPlotData", "MAPlot", function(x, envir) {
 })
 
 #' @export
-setMethod(".prioritizeDotPlotData", "MAPlot", function(x, envir) .define_de_priority(envir))
+setMethod(".prioritizeDotPlotData", "LogFCLogFCPlot", function(x, envir) { 
+    cmds <- c(
+        ".rescaled <- c(none=1, `x-only`=2, `y-only`=2, both=3);",
+        ".priority <- factor(plot.data$IsSig, names(.rescaled), ordered=TRUE);"
+    )
+    eval(parse(text=cmds), envir)
+    list(commands=cmds, rescaled=TRUE)
+})
 
 #' @export
-setMethod(".colorByNoneDotPlotField", "MAPlot", function(x) "IsSig")
+setMethod(".colorByNoneDotPlotField", "LogFCLogFCPlot", function(x) "IsSig")
 
 #' @export
-setMethod(".colorByNoneDotPlotScale", "MAPlot", function(x) .de_color_scale)
+setMethod(".colorByNoneDotPlotScale", "LogFCLogFCPlot", function(x) 
+    "scale_color_manual(values=c(none='grey', `x-only`='#f65058', `y-only`='#28334a', both='#fbcd22'), name='Outcome') +")
 
 #' @export
 #' @importFrom ggplot2 geom_hline
-setMethod(".generateDotPlot", "MAPlot", function(x, labels, envir) {
+setMethod(".generateDotPlot", "LogFCLogFCPlot", function(x, labels, envir) {
     output <- callNextMethod()
 
-    # Adding the horizontal lines.
+    # Adding the lines.
     extras <- "dot.plot <- dot.plot +"
     lfc <- x[["LogFCThreshold"]]
     if (lfc > 0) {
         # No idea why I need ggplot2:: here, but it just can't find it otherwise.
-        extras <- c(extras, sprintf("ggplot2::geom_hline(yintercept=c(-1, 1)*%s, color=\"darkgreen\", linetype=\"dashed\")", lfc))
+        extras <- c(extras, 
+              sprintf("ggplot2::geom_hline(yintercept=c(-1, 1)*%s, color=\"darkgreen\", linetype=\"dashed\") +", lfc),
+              sprintf("ggplot2::geom_vline(xintercept=c(-1, 1)*%s, color=\"darkgreen\", linetype=\"dashed\")", lfc))
     }
 
     if (length(extras) > 1) {

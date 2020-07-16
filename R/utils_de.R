@@ -89,15 +89,15 @@ NULL
 }
 
 #' @importFrom stats p.adjust
-.define_de_status <- function(x, lfc, pval) {
+.define_de_status <- function(x, lfc, pval, varname=".de_status") {
     c(
         sprintf(
-            ".de_status <- p.adjust(%s, method=%s) <= %s & abs(%s) >= %s;",
+            "%s <- p.adjust(%s, method=%s) <= %s & abs(%s) >= %s;",
+            varname, 
             pval, deparse(x[["PValueCorrection"]]), deparse(x[["PValueThreshold"]]), 
             lfc, deparse(x[["LogFCThreshold"]])
         ),
-        sprintf(".de_status <- .de_status * sign(%s) + 2L;", lfc),
-        "plot.data$IsSig <- c('down', 'none', 'up')[.de_status];"
+        sprintf("%s <- %s * sign(%s) + 2L;", varname, varname, lfc)
     )
 }
 

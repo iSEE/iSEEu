@@ -222,6 +222,7 @@ setMethod(".generateDotPlotData", "VolcanoPlot", function(x, envir) {
 
     extra_cmds <- c(
         .define_de_status(x, lfc="plot.data$X", pval="plot.data$Y"),
+        "plot.data$IsSig <- c('down', 'none', 'up')[.de_status];",
         "plot.data$Y <- -log10(plot.data$Y)"
     )
     eval(parse(text=extra_cmds), envir)
