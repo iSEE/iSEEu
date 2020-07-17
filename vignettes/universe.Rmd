@@ -160,12 +160,12 @@ app <- iSEE(sce, initial=list(red.panel, dyn.panel))
 SCREENSHOT("screenshots/dynreddim.png")
 ```
 
-The `DifferentialStatisticsTable` class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel.
+The `DynamicMarkerTable` class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel.
 If only the active selection exists in the transmitting panel, a comparison is performed between the points in that selection and all unselected points.
 If saved selections are present, pairwise comparisons between the active selection and each saved selection is performed and the results are combined into a single table using the `findMarkers()` function from `r Biocpkg("scran")`.
 
 ```{r}
-diff.panel <- DifferentialStatisticsTable(PanelWidth=8L, Assay="logcounts",
+diff.panel <- DynamicMarkerTable(PanelWidth=8L, Assay="logcounts",
     ColumnSelectionSource="ReducedDimensionPlot1",)
 
 # Recycling the reduced dimension panel above, adding a saved selection to
@@ -206,12 +206,10 @@ allowing users to identify the positions of all genes in a pathway of interest o
 This is also a rare example of a panel that only transmits and does not receive any selections from other panels.
 
 ```{r}
-set.commands <- createGeneSetCommands(identifier="ENSEMBL")
+setFeatureSetCommands(createGeneSetCommands(identifier="ENSEMBL"))
 
-gset.tab <- FeatureSetTable(#Selected="GO:0002576", 
-    Search="platelet", PanelWidth=6L,
-    CreateCollections=set.commands$CreateCollections,
-    RetrieveSet=set.commands$RetrieveSet)
+gset.tab <- FeatureSetTable(Selected="GO:0002576", 
+    Search="platelet", PanelWidth=6L)
 
 # This volcano plot will highlight the genes in the selected gene set.
 vol.panel <- VolcanoPlot(RowSelectionSource="FeatureSetTable1",
@@ -221,7 +219,7 @@ app <- iSEE(airway, initial=list(gset.tab, vol.panel))
 ```
 
 ```{r, echo=FALSE}
-SCREENSHOT("screenshots/geneset.png")
+SCREENSHOT("screenshots/geneset.png", delay=30)
 ```
 
 # App modes
