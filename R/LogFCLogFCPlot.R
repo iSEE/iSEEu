@@ -312,13 +312,13 @@ setMethod(".colorByNoneDotPlotField", "LogFCLogFCPlot", function(x) "IsSig")
 
 #' @export
 setMethod(".colorByNoneDotPlotScale", "LogFCLogFCPlot", function(x) 
-    "scale_color_manual(values=c(none='grey', `x-only`='#f65058', `y-only`='#28334a', both='#fbcd22'), name='Outcome',
+    "scale_color_manual(values=c(none='grey', `x-only`='#fc766a', `y-only`='#2da8d8', both='#2a2b2d'), name='Outcome',
     labels=setNames(
         c(
             sprintf('None (%s)', .freq_status[5]),
-            paste(sprintf('X-axis %s (%s)', c('down', 'up'), .freq_status[c(4,6)]), collapse='\n'),
-            paste(sprintf('Y-axis %s (%s)', c('down', 'up'), .freq_status[c(2,8)]), collapse='\n'),
-            paste(sprintf('X-axis %s, Y-axis %s (%s)', rep(c('down', 'up'), each=2), rep(c('down', 'up'), 2), .freq_status[c(1,7,3,9)]), collapse='\n')
+            paste(sprintf('X %s 0 (%s)', c('<', '>'), .freq_status[c(4,6)]), collapse='\n'),
+            paste(sprintf('Y %s 0 (%s)', c('<', '>'), .freq_status[c(2,8)]), collapse='\n'),
+            paste(sprintf('X %s 0, Y %s 0 (%s)', rep(c('<', '>'), each=2), rep(c('<', '>'), 2), .freq_status[c(1,7,3,9)]), collapse='\n')
         ), c('none', 'x-only', 'y-only', 'both'))) +")
 
 #' @export
