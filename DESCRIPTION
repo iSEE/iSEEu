@@ -54,6 +54,7 @@ Suggests:
     AnnotationDbi,
     org.Hs.eg.db,
     GO.db,
+    KEGGREST,
     knitr,
     rmarkdown,
     BiocStyle,
