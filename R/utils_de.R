@@ -89,19 +89,19 @@ NULL
 }
 
 #' @importFrom stats p.adjust
-.define_de_status <- function(x, lfc, pval) {
+.define_de_status <- function(x, lfc, pval, varname=".de_status") {
     c(
         sprintf(
-            ".de_status <- p.adjust(%s, method=%s) <= %s & abs(%s) >= %s;",
+            "%s <- p.adjust(%s, method=%s) <= %s & abs(%s) >= %s;",
+            varname, 
             pval, deparse(x[["PValueCorrection"]]), deparse(x[["PValueThreshold"]]), 
             lfc, deparse(x[["LogFCThreshold"]])
         ),
-        sprintf(".de_status <- .de_status * sign(%s) + 2L;", lfc),
-        "plot.data$IsSig <- c('down', 'none', 'up')[.de_status];"
+        sprintf("%s <- %s * sign(%s) + 2L;", varname, varname, lfc)
     )
 }
 
-.define_de_validity <- function(object) {
+.define_de_validity <- function(object, allow.na.fields=FALSE) {
     msg <- character(0)
 
     p <- object[["PValueThreshold"]]
@@ -119,11 +119,11 @@ NULL
         msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
     }
 
-    if (any(is.na(object[["PValueFields"]]))) {
+    if (!allow.na.fields && any(is.na(object[["PValueFields"]]))) {
         msg <- c(msg, "'PValueFields' should contain non-NA strings")
     }
 
-    if (any(is.na(object[["LogFCFields"]]))) {
+    if (!allow.na.fields && any(is.na(object[["LogFCFields"]]))) {
         msg <- c(msg, "'LogFCFields' should contain non-NA strings")
     }
 

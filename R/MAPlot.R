@@ -250,6 +250,7 @@ setMethod(".generateDotPlotData", "MAPlot", function(x, envir) {
 
     pval.field <- sprintf("rowData(se)[[%s]]", deparse(x[["PValueField"]]))
     extra_cmds <- .define_de_status(x, lfc="plot.data$Y", pval=pval.field)
+    extra_cmds <- c(extra_cmds, "plot.data$IsSig <- c('down', 'none', 'up')[.de_status];")
 
     eval(parse(text=extra_cmds), envir)
     output$commands <- c(output$commands, extra_cmds)
