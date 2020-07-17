@@ -206,9 +206,16 @@ setMethod(".refineParameters", "LogFCLogFCPlot", function(x, se) {
         return(NULL)
     }
 
+    if (length(x[["PValueFields"]])==0L) {
+        warning("no valid p-value fields for '", class(x)[1], "'")
+        return(NULL)
+    }
+
     x <- .update_chosen_de_field(x, "XPValueField", "PValueFields")
     x <- .update_chosen_de_field(x, "YPValueField", "PValueFields")
 
+    # TODO: check whether this should happen by default in RowDataPlot when it
+    # sees the .allowed*XAxisFields().
     x <- .update_chosen_de_field(x, "YAxis", "LogFCFields")
     x <- .update_chosen_de_field(x, "XAxisRowData", "LogFCFields")
 
@@ -223,7 +230,7 @@ setMethod(".allowableXAxisChoices", "LogFCLogFCPlot", function(x, se) x[["LogFCF
 setMethod(".allowableYAxisChoices", "LogFCLogFCPlot", function(x, se) x[["LogFCFields"]])
 
 #' @export
-#' @importFrom shiny numericInput selectInput
+#' @importFrom shiny numericInput selectInput hr
 #' @importFrom stats p.adjust.methods
 setMethod(".defineDataInterface", "LogFCLogFCPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
