@@ -1,3 +1,9 @@
+# iSEEu 1.1.3
+
+* Overhauled handling of global parameters for greater consistency.
+* Added the `LogFCLogFCPlot` to plot two DE comparisons against each other.
+* Switched to KEGGREST to get the names of pathways.
+
 # iSEEu 1.1.2
 
 * Replaced `GeneSetTable` with the more general `FeatureSetTable`.
