@@ -57,8 +57,8 @@ createGeneSetCommands <- function(collections=c("GO", "KEGG"), organism="org.Hs.
     if ("KEGG" %in% collections) {
          init[["KEGG"]] <- paste( 
             sprintf(init.format, "PATH"),
-            "tab <- read.delim('http://rest.kegg.jp/list/pathway', header=FALSE);",
-            "colnames(tab) <- c('ID', 'Description');",
+            "tab <- KEGGREST::keggList('pathway');",
+            "tab <- data.frame(ID=names(tab), Description=tab);",
             "rownames(tab) <- sub('path:map', '', tab$ID);",
             "tab <- tab[intersect(rownames(tab), .all_terms),];",
             sep="\n")
