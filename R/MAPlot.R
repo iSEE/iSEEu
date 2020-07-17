@@ -223,7 +223,7 @@ setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) x[["AveAbFields"]]
 setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) x[["LogFCFields"]])
 
 #' @export
-#' @importFrom shiny numericInput selectInput
+#' @importFrom shiny numericInput selectInput hr
 #' @importFrom stats p.adjust.methods
 setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
@@ -235,6 +235,7 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
                 label="P-value field:",
                 selected=x[["PValueField"]],
                 choices=x[["PValueFields"]]),
+            hr(),
             numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
             numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
@@ -257,7 +258,7 @@ setMethod(".createObservers", "MAPlot", function(x, se, input, session, pObjects
     plot_name <- .getEncodedName(x)
 
     .createUnprotectedParameterObservers(plot_name,
-        fields=c("PValueThreshold", "LogFCThreshold", "PValueCorrection"),
+        fields=c("PValueField", "PValueThreshold", "LogFCThreshold", "PValueCorrection"),
         input=input, pObjects=pObjects, rObjects=rObjects)
 })
 

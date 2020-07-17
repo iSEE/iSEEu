@@ -199,7 +199,7 @@ setMethod(".allowableXAxisChoices", "VolcanoPlot", function(x, se) x[["LogFCFiel
 setMethod(".allowableYAxisChoices", "VolcanoPlot", function(x, se) x[["PValueFields"]])
 
 #' @export
-#' @importFrom shiny numericInput selectInput
+#' @importFrom shiny numericInput selectInput hr
 #' @importFrom stats p.adjust.methods
 setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
@@ -207,6 +207,7 @@ setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
 
     c(callNextMethod(),
         list(
+            hr(),
             numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
             numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
