@@ -153,9 +153,9 @@ setValidity2("FeatureSetTable", function(object) {
 
     cre.cmds <- object[["CreateCollections"]]
     ret.cmds <- object[["RetrieveSet"]]
-    if (!identical(cre.cmds, NA_character_) && identical(ret.cmds, NA_character_)) {
+    if (!.needs_filling(cre.cmds) && !.needs_filling(ret.cmds)) {
         nms <- names(cre.cmds)
-        if (!is.na(nms) && (is.null(nms) || anyDuplicated(nms))) {
+        if (is.null(nms) || anyDuplicated(nms)) {
             msg <- c(msg, "names of 'CreateCollections' must be non-NULL and unique")
         }
         if (!identical(nms, names(ret.cmds))) {
@@ -209,7 +209,7 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
     # commands of the first encountered FeatureSetTable in .refineParameters.
     cre.cmds <- x[["CreateCollections"]]
     ret.cmds <- x[["RetrieveSet"]]
-    if (identical(.collcmds, NA_character_) || identical(.retcmds, NA_character_)) {
+    if (.needs_filling(cre.cmds) || .needs_filling(ret.cmds)) {
         stuff <- getFeatureSetCommands()
         if (is.null(stuff)) {
             stuff <- createGeneSetCommands()
@@ -218,7 +218,7 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
         ret.cmds <- stuff$RetrieveSet
     }
 
-    created <- lapply(.collcmds, function(code) {
+    created <- lapply(cre.cmds, function(code) {
         env <- new.env()
         eval(parse(text=code), envir=env)
         env$tab
@@ -232,16 +232,15 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
 
 #' @export
 setMethod(".refineParameters", "FeatureSetTable", function(x, se) {
+    x[["CreateCollections"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$create.collections.cmds
+    x[["RetrieveSet"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$retrieve.set.cmds
+    validObject(x)
+
     x <- callNextMethod()
     if (is.null(x)) {
         return(NULL)
     }
 
-    # See comments in .cacheCommonInfo.
-    x[["CreateCollections"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$create.collections.cmds
-    x[["RetrieveSet"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$retrieve.set.cmds
-    validObject(x)
-    
     all.sets <- .getCachedCommonInfo(se, "FeatureSetTable")$available.sets
     if (length(all.sets)==0) {
         warning(sprintf("no feature sets specified for '%s'", class(x)[1]))

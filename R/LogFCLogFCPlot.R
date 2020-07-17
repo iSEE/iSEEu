@@ -40,6 +40,8 @@
 #'
 #' For setting up data values:
 #' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+#' This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}
 #' as well as \code{"PValueFields"} and \code{"LogFCFields"} to their corresponding cached vectors.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
@@ -80,6 +82,7 @@
 #' @docType methods
 #' @aliases LogFCLogFCPlot LogFCLogFCPlot-class
 #' initialize,LogFCLogFCPlot-method
+#' .cacheCommonInfo,LogFCLogFCPlot-method
 #' .refineParameters,LogFCLogFCPlot-method
 #' .defineDataInterface,LogFCLogFCPlot-method
 #' .createObservers,LogFCLogFCPlot-method
@@ -155,7 +158,7 @@ setValidity2("LogFCLogFCPlot", function(object) {
 
     field <- object[["YPValueField"]]
     if (length(field)!=1) {
-        msg <- c(msg, "'PValueField' must be a single string")
+        msg <- c(msg, "'YPValueField' must be a single string")
     }
 
     field <- object[["XPValueField"]]
@@ -169,20 +172,42 @@ setValidity2("LogFCLogFCPlot", function(object) {
 })
 
 #' @export
-#' @importFrom methods callNextMethod
-setMethod(".refineParameters", "LogFCLogFCPlot", function(x, se) {
+setMethod(".cacheCommonInfo", "LogFCLogFCPlot", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "LogFCLogFCPlot"))) {
+        return(se)
+    }
+
+    se <- callNextMethod()
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    # Do NOT be tempted to move this into .cacheCommonInfo,
-    # as then you will have to explain to downstream developers
-    # why they cannot use these global-responsive cached fields.
-    p.okay <- lapply(getPValueFields(), grepl, x=all.cont)
+    # We determine the valid fields from the first encountered instance of the
+    # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
+    # constants. (We actually ensure that this is the case by forcibly setting
+    # them in .refineParameters later.)
+    acceptable.p <- x[["PValueFields"]]
+    if (.needs_filling(acceptable.p)) {
+        acceptable.p <- getPValueFields()
+    }
+    p.okay <- lapply(acceptable.p, grepl, x=all.cont)
     p.okay <- Reduce(`|`, p.okay)
-    x <- .update_global_field_choices(x, "PValueFields", all.cont[p.okay])
 
-    lfc.okay <- lapply(getLogFCFields(), grepl, x=all.cont)
+    acceptable.lfc <- x[["LogFCFields"]]
+    if (.needs_filling(acceptable.lfc)) {
+        acceptable.lfc <- getLogFCFields()
+    }
+    lfc.okay <- lapply(acceptable.lfc, grepl, x=all.cont)
     lfc.okay <- Reduce(`|`, lfc.okay)
-    x <- .update_global_field_choices(x, "LogFCFields", all.cont[lfc.okay])
+
+    .setCachedCommonInfo(se, "LogFCLogFCPlot",
+        valid.p.fields=all.cont[p.okay],
+        valid.lfc.fields=all.cont[lfc.okay])
+})
+
+#' @export
+#' @importFrom methods callNextMethod
+setMethod(".refineParameters", "LogFCLogFCPlot", function(x, se) {
+    x[["PValueFields"]] <- .getCachedCommonInfo(se, "LogFCLogFCPlot")$valid.p.fields
+    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "LogFCLogFCPlot")$valid.lfc.fields
 
     x <- callNextMethod() # Trigger warnings from base classes.
     if (is.null(x)) {

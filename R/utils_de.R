@@ -122,48 +122,7 @@ NULL
     msg
 }
 
-
-#' Update global field choices
-#'
-#' Update the global-responsive acceptable choices for a particular field of a \linkS4class{Panel} class.
-#'
-#' @param x A \linkS4class{Panel} object.
-#' @param field String specifying the name of the class-constant slot holding the acceptable values.
-#' @param choices Character vector containing the current acceptable values, usually defined in a manner that responds to globals.
-#'
-#' @details
-#' We use globals to set class-wide parameters in an efficient and reliable manner (well, relative to manual synchronization).
-#' Our task is to (i) respond to globals within an R session while (ii) ensuring that the memory is enough to reproduce an app.
-#' This means that any globals must act \emph{through} the memory, otherwise they are lost in a new session where the globals are not set.
-#' 
-#' The solution is to:
-#' \enumerate{
-#' \item Set the contents of the \code{field} to \code{NA_character_} in the constructor for \code{x}.
-#' \item Define the \dQuote{current valid} choices in \code{\link{.refineParameters}} for \code{x}.
-#' \item Replace any \code{NA_character_} value with the current valid choices in \code{\link{.refineParameters}}.
-#' Non-\code{NA} values are \emph{NOT} replaced. 
-#' }
-#' 
-#' In standard use, the \code{field} slot will ultimately be set to the current valid choices.
-#' This is achieved for all instances of a class and will only change at \code{\link{iSEE}} runtime by modifying the global parameters.
-#' However, should we serialize the memory and reload it in a new R session, the same application state can be restored.
-#' Here, the effect of the original globals is captured in the non-\code{NA} \code{field} slot, even if the globals of the new session are different.
-#'
-#' This requires some discipline to not use the cached information about the global state in any other methods.
-#' It also doesn't protect against people modifying \code{x} via \code{[[<-} after construction.
-#' Such people are, in general, assumed to know what they are doing.
-#'
-#' @author Aaron Lun
-#'
-#' @return \code{x}, possibly after setting the \code{field} slot to \code{choices}.
-#'
-#' @rdname INTERNAL_update_global_field_choices
-.update_global_field_choices <- function(x, field, choices) {
-    if (identical(NA_character_, x[[field]])) {
-        x[[field]] <- choices
-    }
-    x
-}
+.needs_filling <- function(value) identical(value, NA_character_)
 
 .update_chosen_de_field <- function(x, field, choices) {
     if (!x[[field]] %in% x[[choices]]) {

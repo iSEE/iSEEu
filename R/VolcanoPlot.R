@@ -36,6 +36,8 @@
 #'
 #' For setting up data values:
 #' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+#' This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
@@ -75,6 +77,7 @@
 #' @docType methods
 #' @aliases VolcanoPlot VolcanoPlot-class
 #' initialize,VolcanoPlot-method
+#' .cacheCommonInfo,VolcanoPlot-method
 #' .refineParameters,VolcanoPlot-method
 #' .defineDataInterface,VolcanoPlot-method
 #' .createObservers,VolcanoPlot-method
@@ -147,11 +150,38 @@ setValidity2("VolcanoPlot", function(object) {
 })
 
 #' @export
+setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "VolcanoPlot"))) {
+        return(se)
+    }
+
+    se <- callNextMethod()
+    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+
+    # We determine the valid fields from the first encountered instance of the
+    # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
+    # constants. (We actually ensure that this is the case by forcibly setting
+    # them in .refineParameters later.)
+    acceptable.p <- x[["PValueFields"]]
+    if (.needs_filling(acceptable.p)) {
+        acceptable.p <- getPValueFields()
+    }
+
+    acceptable.lfc <- x[["LogFCFields"]]
+    if (.needs_filling(acceptable.lfc)) {
+        acceptable.lfc <- getLogFCFields()
+    }
+
+    .setCachedCommonInfo(se, "VolcanoPlot",
+        valid.lfc.fields=intersect(acceptable.lfc, all.cont),
+        valid.p.fields=intersect(acceptable.p, all.cont))
+})
+
+#' @export
 #' @importFrom methods callNextMethod
 setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
-    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
-    x <- .update_global_field_choices(x, "LogFCFields", .intersect(getLogFCFields(), all.cont))
-    x <- .update_global_field_choices(x, "PValueFields", intersect(getPValueFields(), all.cont))
+    x[["PValueFields"]] <- .getCachedCommonInfo(se, "VolcanoPlot")$valid.p.fields
+    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "VolcanoPlot")$valid.lfc.fields
 
     x <- callNextMethod() # Trigger warnings from base classes.
     if (is.null(x)) {

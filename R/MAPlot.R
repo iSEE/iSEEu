@@ -39,6 +39,8 @@
 #'
 #' For setting up data values:
 #' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+#' This includes \code{"valid.p.fields"}, \code{"valid.ab.fields"} and \code{"valid.lfc.fields"}, which are character vectors containing the names of valid \code{\link{rowData}} columns for the p-values, average abundances and log-fold changes, respectively.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value, abundance and log-fold change fields are not available, \code{NULL} is returned instead.
@@ -78,6 +80,7 @@
 #' @docType methods
 #' @aliases MAPlot MAPlot-class
 #' initialize,MAPlot-method
+#' .cacheCommonInfo,MAPlot-method
 #' .refineParameters,MAPlot-method
 #' .defineDataInterface,MAPlot-method
 #' .createObservers,MAPlot-method
@@ -158,12 +161,45 @@ setValidity2("MAPlot", function(object) {
 })
 
 #' @export
+setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "MAPlot"))) {
+        return(se)
+    }
+
+    se <- callNextMethod()
+    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+
+    # We determine the valid fields from the first encountered instance of the
+    # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
+    # constants. (We actually ensure that this is the case by forcibly setting
+    # them in .refineParameters later.)
+    acceptable.p <- x[["PValueFields"]]
+    if (.needs_filling(acceptable.p)) {
+        acceptable.p <- getPValueFields()
+    }
+
+    acceptable.lfc <- x[["LogFCFields"]]
+    if (.needs_filling(acceptable.lfc)) {
+        acceptable.lfc <- getLogFCFields()
+    }
+
+    acceptable.ab <- x[["AveAbFields"]]
+    if (.needs_filling(acceptable.ab)) {
+        acceptable.ab <- getAveAbFields()
+    }
+
+    .setCachedCommonInfo(se, "MAPlot",
+        valid.lfc.fields=intersect(acceptable.lfc, all.cont),
+        valid.p.fields=intersect(acceptable.p, all.cont),
+        valid.ab.fields=intersect(acceptable.ab, all.cont))
+})
+
+#' @export
 #' @importFrom methods callNextMethod
 setMethod(".refineParameters", "MAPlot", function(x, se) {
-    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
-    x <- .update_global_field_choices(x, "PValueFields", intersect(getPValueFields(), all.cont))
-    x <- .update_global_field_choices(x, "LogFCFields", intersect(getLogFCFields(), all.cont))
-    x <- .update_global_field_choices(x, "AveAbFields", intersect(getAveAbFields(), all.cont))
+    x[["PValueFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.p.fields
+    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.lfc.fields
+    x[["AveAbFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.ab.fields
 
     x <- callNextMethod() # Do this first to trigger warnings from base classes.
     if (is.null(x)) {
