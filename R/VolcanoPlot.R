@@ -18,11 +18,9 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Defaults to \code{\link{getPValueFields}}.
-#' This cannot be changed after the application has started.
+#' Set to \code{\link{getPValueFields}}, and cannot be changed after the application has started.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Defaults to \code{\link{getLogFCFields}}.
-#' This cannot be changed after the application has started.
+#' Set to \code{\link{getLogFCFields}}, and cannot be changed after the application has started.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -129,10 +127,9 @@ setMethod("initialize", "VolcanoPlot", function(.Object, PValueThreshold=0.05,
 {
     args <- list(PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
-       
-    args <- .emptyDefault(args, "PValueFields", getPValueFields())
 
-    args <- .emptyDefault(args, "LogFCFields", getLogFCFields())
+    args$PValueFields <- NA_character_
+    args$LogFCFields <- NA_character_
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -152,24 +149,14 @@ setValidity2("VolcanoPlot", function(object) {
 #' @export
 #' @importFrom methods callNextMethod
 setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
-    x <- callNextMethod() # Do this first to trigger warnings from base classes.
-    if (is.null(x)) {
-        return(NULL)
-    }
-
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+    x <- .update_global_field_choices(x, "LogFCFields", .intersect(getLogFCFields(), all.cont))
+    x <- .update_global_field_choices(x, "PValueFields", intersect(getPValueFields(), all.cont))
 
-    x <- .update_de_field_choices(x, "LogFCFields", all.cont, msg="log-FC")
+    x <- callNextMethod() # Trigger warnings from base classes.
     if (is.null(x)) {
         return(NULL)
     }
-    x <- .update_chosen_de_field(x, "XAxisRowData", "LogFCFields")
-
-    x <- .update_de_field_choices(x, "PValueFields", all.cont, msg="p-value")
-    if (is.null(x)) {
-        return(NULL)
-    }
-    x <- .update_chosen_de_field(x, "YAxis", "PValueFields")
 
     x[["XAxis"]] <- "Row data"
     x

@@ -81,8 +81,8 @@ NULL
 
 .define_de_priority <- function(envir) {
     cmds <- c(
-        ".priority <- factor(plot.data$IsSig, c('none', 'down', 'up'), ordered=TRUE);",
-        ".rescaled <- c(none=1, down=2, up=2);"
+        ".rescaled <- c(none=1, down=2, up=2);",
+        ".priority <- factor(plot.data$IsSig, names(.rescaled), ordered=TRUE);"
     )
     eval(parse(text=cmds), envir)
     list(commands=cmds, rescaled=TRUE)
@@ -119,24 +119,49 @@ NULL
         msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
     }
 
-    if (!allow.na.fields && any(is.na(object[["PValueFields"]]))) {
-        msg <- c(msg, "'PValueFields' should contain non-NA strings")
-    }
-
-    if (!allow.na.fields && any(is.na(object[["LogFCFields"]]))) {
-        msg <- c(msg, "'LogFCFields' should contain non-NA strings")
-    }
-
     msg
 }
 
-.update_de_field_choices <- function(x, choices, all.names, msg) {
-    fields <- intersect(all.names, x[[choices]])
-    if (length(fields)==0) {
-        warning(sprintf("no valid %s fields for '%s'", msg, class(x)[1]))
-        return(NULL)
+
+#' Update global field choices
+#'
+#' Update the global-responsive acceptable choices for a particular field of a \linkS4class{Panel} class.
+#'
+#' @param x A \linkS4class{Panel} object.
+#' @param field String specifying the name of the class-constant slot holding the acceptable values.
+#' @param choices Character vector containing the current acceptable values, usually defined in a manner that responds to globals.
+#'
+#' @details
+#' We use globals to set class-wide parameters in an efficient and reliable manner (well, relative to manual synchronization).
+#' Our task is to (i) respond to globals within an R session while (ii) ensuring that the memory is enough to reproduce an app.
+#' This means that any globals must act \emph{through} the memory, otherwise they are lost in a new session where the globals are not set.
+#' 
+#' The solution is to:
+#' \enumerate{
+#' \item Set the contents of the \code{field} to \code{NA_character_} in the constructor for \code{x}.
+#' \item Define the \dQuote{current valid} choices in \code{\link{.refineParameters}} for \code{x}.
+#' \item Replace any \code{NA_character_} value with the current valid choices in \code{\link{.refineParameters}}.
+#' Non-\code{NA} values are \emph{NOT} replaced. 
+#' }
+#' 
+#' In standard use, the \code{field} slot will ultimately be set to the current valid choices.
+#' This is achieved for all instances of a class and will only change at \code{\link{iSEE}} runtime by modifying the global parameters.
+#' However, should we serialize the memory and reload it in a new R session, the same application state can be restored.
+#' Here, the effect of the original globals is captured in the non-\code{NA} \code{field} slot, even if the globals of the new session are different.
+#'
+#' This requires some discipline to not use the cached information about the global state in any other methods.
+#' It also doesn't protect against people modifying \code{x} via \code{[[<-} after construction.
+#' Such people are, in general, assumed to know what they are doing.
+#'
+#' @author Aaron Lun
+#'
+#' @return \code{x}, possibly after setting the \code{field} slot to \code{choices}.
+#'
+#' @rdname INTERNAL_update_global_field_choices
+.update_global_field_choices <- function(x, field, choices) {
+    if (identical(NA_character_, x[[field]])) {
+        x[[field]] <- choices
     }
-    x[[choices]] <- fields
     x
 }
 

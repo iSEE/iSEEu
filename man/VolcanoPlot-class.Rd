@@ -39,11 +39,9 @@ Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.method
 The following slots control the choice of columns in the user interface:
 \itemize{
 \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-Defaults to \code{\link{getPValueFields}}.
-This cannot be changed after the application has started.
+Set to \code{\link{getPValueFields}}, and cannot be changed after the application has started.
 \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-Defaults to \code{\link{getLogFCFields}}.
-This cannot be changed after the application has started.
+Set to \code{\link{getLogFCFields}}, and cannot be changed after the application has started.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
