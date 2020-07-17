@@ -18,11 +18,9 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Defaults to \code{\link{getPValueFields}}.
-#' This cannot be changed after the application has started.
+#' Set to \code{\link{getPValueFields}}, and cannot be changed after the application has started.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Defaults to \code{\link{getLogFCFields}}.
-#' This cannot be changed after the application has started.
+#' Set to \code{\link{getLogFCFields}}, and cannot be changed after the application has started.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -38,6 +36,8 @@
 #'
 #' For setting up data values:
 #' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+#' This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
@@ -77,6 +77,7 @@
 #' @docType methods
 #' @aliases VolcanoPlot VolcanoPlot-class
 #' initialize,VolcanoPlot-method
+#' .cacheCommonInfo,VolcanoPlot-method
 #' .refineParameters,VolcanoPlot-method
 #' .defineDataInterface,VolcanoPlot-method
 #' .createObservers,VolcanoPlot-method
@@ -129,10 +130,9 @@ setMethod("initialize", "VolcanoPlot", function(.Object, PValueThreshold=0.05,
 {
     args <- list(PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
-       
-    args <- .emptyDefault(args, "PValueFields", getPValueFields())
 
-    args <- .emptyDefault(args, "LogFCFields", getLogFCFields())
+    args$PValueFields <- NA_character_
+    args$LogFCFields <- NA_character_
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -150,26 +150,43 @@ setValidity2("VolcanoPlot", function(object) {
 })
 
 #' @export
-#' @importFrom methods callNextMethod
-setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
-    x <- callNextMethod() # Do this first to trigger warnings from base classes.
-    if (is.null(x)) {
-        return(NULL)
+setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "VolcanoPlot"))) {
+        return(se)
     }
 
+    se <- callNextMethod()
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    x <- .update_de_field_choices(x, "LogFCFields", all.cont, msg="log-FC")
-    if (is.null(x)) {
-        return(NULL)
+    # We determine the valid fields from the first encountered instance of the
+    # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
+    # constants. (We actually ensure that this is the case by forcibly setting
+    # them in .refineParameters later.)
+    acceptable.p <- x[["PValueFields"]]
+    if (.needs_filling(acceptable.p)) {
+        acceptable.p <- getPValueFields()
     }
-    x <- .update_chosen_de_field(x, "XAxisRowData", "LogFCFields")
 
-    x <- .update_de_field_choices(x, "PValueFields", all.cont, msg="p-value")
+    acceptable.lfc <- x[["LogFCFields"]]
+    if (.needs_filling(acceptable.lfc)) {
+        acceptable.lfc <- getLogFCFields()
+    }
+
+    .setCachedCommonInfo(se, "VolcanoPlot",
+        valid.lfc.fields=intersect(acceptable.lfc, all.cont),
+        valid.p.fields=intersect(acceptable.p, all.cont))
+})
+
+#' @export
+#' @importFrom methods callNextMethod
+setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
+    x[["PValueFields"]] <- .getCachedCommonInfo(se, "VolcanoPlot")$valid.p.fields
+    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "VolcanoPlot")$valid.lfc.fields
+
+    x <- callNextMethod() # Trigger warnings from base classes.
     if (is.null(x)) {
         return(NULL)
     }
-    x <- .update_chosen_de_field(x, "YAxis", "PValueFields")
 
     x[["XAxis"]] <- "Row data"
     x

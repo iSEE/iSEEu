@@ -37,9 +37,10 @@ Each entry should be a string containing R commands to define a character vector
 as well as the \code{se} variable containing the input SummarizedExperiment object.)
 }
 
-The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed within the \code{iSEE} application.
-If not supplied to the constructor, they default to the fields of the output of \code{\link{getFeatureSetCommands}}.
-If these are also \code{NULL}, they fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
+The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed inside the \code{iSEE} application.
+In fact, they cannot even be set in the constructor as they are global to all FeatureSetTable instances.
+Rather, they are always set to the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
+If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
 
 The following slots control the selections:
 \itemize{

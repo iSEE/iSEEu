@@ -5,6 +5,7 @@
 \alias{VolcanoPlot-class}
 \alias{VolcanoPlot}
 \alias{initialize,VolcanoPlot-method}
+\alias{.cacheCommonInfo,VolcanoPlot-method}
 \alias{.refineParameters,VolcanoPlot-method}
 \alias{.defineDataInterface,VolcanoPlot-method}
 \alias{.createObservers,VolcanoPlot-method}
@@ -39,11 +40,9 @@ Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.method
 The following slots control the choice of columns in the user interface:
 \itemize{
 \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-Defaults to \code{\link{getPValueFields}}.
-This cannot be changed after the application has started.
+Set to \code{\link{getPValueFields}}, and cannot be changed after the application has started.
 \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-Defaults to \code{\link{getLogFCFields}}.
-This cannot be changed after the application has started.
+Set to \code{\link{getLogFCFields}}, and cannot be changed after the application has started.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -63,6 +62,8 @@ Refer to the documentation for each method for more details on the remaining arg
 
 For setting up data values:
 \itemize{
+\item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
 \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.

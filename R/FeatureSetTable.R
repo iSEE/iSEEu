@@ -15,9 +15,10 @@
 #' as well as the \code{se} variable containing the input SummarizedExperiment object.)
 #' }
 #'
-#' The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed within the \code{iSEE} application.
-#' If not supplied to the constructor, they default to the fields of the output of \code{\link{getFeatureSetCommands}}.
-#' If these are also \code{NULL}, they fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
+#' The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed inside the \code{iSEE} application.
+#' In fact, they cannot even be set in the constructor as they are global to all FeatureSetTable instances.
+#' Rather, they are always set to the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
+#' If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
 #'
 #' The following slots control the selections:
 #' \itemize{
@@ -150,13 +151,16 @@ setValidity2("FeatureSetTable", function(object) {
         msg <- c(msg, "'Collection' should be a single string")
     }
 
-    nms <- names(object[["CreateCollections"]])
-    if (is.null(nms) || anyDuplicated(nms)) {
-        msg <- c(msg, "names of 'CreateCollections' must be non-NULL and unique")
-    }
-
-    if (!identical(nms, names(object[["RetrieveSet"]]))) {
-        msg <- c(msg, "names of 'CreateCollections' and 'RetrieveSet' must be identical")
+    cre.cmds <- object[["CreateCollections"]]
+    ret.cmds <- object[["RetrieveSet"]]
+    if (!.needs_filling(cre.cmds) && !.needs_filling(ret.cmds)) {
+        nms <- names(cre.cmds)
+        if (is.null(nms) || anyDuplicated(nms)) {
+            msg <- c(msg, "names of 'CreateCollections' must be non-NULL and unique")
+        }
+        if (!identical(nms, names(ret.cmds))) {
+            msg <- c(msg, "names of 'CreateCollections' and 'RetrieveSet' must be identical")
+        }
     }
 
     if (!isSingleString(object[["Selected"]])) {
@@ -179,15 +183,8 @@ setMethod("initialize", "FeatureSetTable",
 {
     args <- list(..., Collection=Collection, Selected=Selected, Search=Search, SearchColumns=SearchColumns)
 
-    no.cmds <- function(x) is.null(x$CreateCollections) && is.null(x$RetrieveSet)
-    if (no.cmds(args)) {
-        stuff <- getFeatureSetCommands()
-        if (no.cmds(stuff)) {
-            stuff <- createGeneSetCommands()                        
-        }
-        args$CreateCollections <- stuff$CreateCollections
-        args$RetrieveSet <- stuff$RetrieveSet
-    }
+    args$CreateCollections <- NA_character_
+    args$RetrieveSet <- NA_character_
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -206,22 +203,44 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
 
     se <- callNextMethod()
 
-    created <- lapply(x[["CreateCollections"]], function(code) {
+    # NOTE: these fields are assumed to be globals, so it's okay to use their
+    # values when caching the common values. We also store the commands that we
+    # ended up choosing, with the plan to force all FeatureSetTables to use the
+    # commands of the first encountered FeatureSetTable in .refineParameters.
+    cre.cmds <- x[["CreateCollections"]]
+    ret.cmds <- x[["RetrieveSet"]]
+    if (.needs_filling(cre.cmds) || .needs_filling(ret.cmds)) {
+        stuff <- getFeatureSetCommands()
+        if (is.null(stuff)) {
+            stuff <- createGeneSetCommands()
+        }
+        cre.cmds <- stuff$CreateCollections
+        ret.cmds <- stuff$RetrieveSet
+    }
+
+    created <- lapply(cre.cmds, function(code) {
         env <- new.env()
         eval(parse(text=code), envir=env)
         env$tab
     })
 
-    .setCachedCommonInfo(se, "FeatureSetTable", available.sets=created)
+    .setCachedCommonInfo(se, "FeatureSetTable", 
+        available.sets=created,
+        create.collections.cmds=cre.cmds,
+        retrieve.set.cmds=ret.cmds)
 })
 
 #' @export
 setMethod(".refineParameters", "FeatureSetTable", function(x, se) {
+    x[["CreateCollections"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$create.collections.cmds
+    x[["RetrieveSet"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$retrieve.set.cmds
+    validObject(x)
+
     x <- callNextMethod()
     if (is.null(x)) {
         return(NULL)
     }
-    
+
     all.sets <- .getCachedCommonInfo(se, "FeatureSetTable")$available.sets
     if (length(all.sets)==0) {
         warning(sprintf("no feature sets specified for '%s'", class(x)[1]))

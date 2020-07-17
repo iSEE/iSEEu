@@ -67,8 +67,7 @@ Refer to the documentation for each method for more details on the remaining arg
 For setting up data values:
 \itemize{
 \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
-This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing
-the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
+This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
 \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}
 as well as \code{"PValueFields"} and \code{"LogFCFields"} to their corresponding cached vectors.
 This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.

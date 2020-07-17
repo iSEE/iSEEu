@@ -81,8 +81,8 @@ NULL
 
 .define_de_priority <- function(envir) {
     cmds <- c(
-        ".priority <- factor(plot.data$IsSig, c('none', 'down', 'up'), ordered=TRUE);",
-        ".rescaled <- c(none=1, down=2, up=2);"
+        ".rescaled <- c(none=1, down=2, up=2);",
+        ".priority <- factor(plot.data$IsSig, names(.rescaled), ordered=TRUE);"
     )
     eval(parse(text=cmds), envir)
     list(commands=cmds, rescaled=TRUE)
@@ -119,26 +119,10 @@ NULL
         msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
     }
 
-    if (!allow.na.fields && any(is.na(object[["PValueFields"]]))) {
-        msg <- c(msg, "'PValueFields' should contain non-NA strings")
-    }
-
-    if (!allow.na.fields && any(is.na(object[["LogFCFields"]]))) {
-        msg <- c(msg, "'LogFCFields' should contain non-NA strings")
-    }
-
     msg
 }
 
-.update_de_field_choices <- function(x, choices, all.names, msg) {
-    fields <- intersect(all.names, x[[choices]])
-    if (length(fields)==0) {
-        warning(sprintf("no valid %s fields for '%s'", msg, class(x)[1]))
-        return(NULL)
-    }
-    x[[choices]] <- fields
-    x
-}
+.needs_filling <- function(value) identical(value, NA_character_)
 
 .update_chosen_de_field <- function(x, field, choices) {
     if (!x[[field]] %in% x[[choices]]) {

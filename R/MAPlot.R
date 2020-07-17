@@ -19,14 +19,11 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Defaults to \code{\link{getPValueFields}}.
-#' This cannot be changed after the application has started.
+#' Set to \code{\link{getPValueFields}}, and cannot be changed after the application has started.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Defaults to \code{\link{getLogFCFields}}.
-#' This cannot be changed after the application has started.
+#' Set to \code{\link{getLogFCFields}}, and cannot be changed after the application has started.
 #' \item \code{AveAbFields}, a character vector specifying the names of all columns containing average abundances.
-#' Defaults to \code{\link{getAveAbFields}}.
-#' This cannot be changed after the application has started.
+#' Set to \code{\link{getAveAbFields}}, and cannot be changed after the application has started.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -42,6 +39,8 @@
 #'
 #' For setting up data values:
 #' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+#' This includes \code{"valid.p.fields"}, \code{"valid.ab.fields"} and \code{"valid.lfc.fields"}, which are character vectors containing the names of valid \code{\link{rowData}} columns for the p-values, average abundances and log-fold changes, respectively.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value, abundance and log-fold change fields are not available, \code{NULL} is returned instead.
@@ -81,6 +80,7 @@
 #' @docType methods
 #' @aliases MAPlot MAPlot-class
 #' initialize,MAPlot-method
+#' .cacheCommonInfo,MAPlot-method
 #' .refineParameters,MAPlot-method
 #' .defineDataInterface,MAPlot-method
 #' .createObservers,MAPlot-method
@@ -133,11 +133,9 @@ setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
     args <- list(PValueField=PValueField, PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
 
-    args <- .emptyDefault(args, "PValueFields", getPValueFields())
-
-    args <- .emptyDefault(args, "LogFCFields", getLogFCFields())
-
-    args <- .emptyDefault(args, "AveAbFields", getAveAbFields())
+    args$PValueFields <- NA_character_
+    args$AveAbFields <- NA_character_
+    args$LogFCFields <- NA_character_
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -159,45 +157,64 @@ setValidity2("MAPlot", function(object) {
 
     msg <- c(msg, .define_de_validity(object))
 
-    if (any(is.na(object[["AveAbFields"]]))) {
-        msg <- c(msg, "'AveAbFields' should contain non-NA strings")
+    if (length(msg)) msg else TRUE
+})
+
+#' @export
+setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
+    if (!is.null(.getCachedCommonInfo(se, "MAPlot"))) {
+        return(se)
     }
 
-    if (length(msg)) msg else TRUE
+    se <- callNextMethod()
+    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
+
+    # We determine the valid fields from the first encountered instance of the
+    # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
+    # constants. (We actually ensure that this is the case by forcibly setting
+    # them in .refineParameters later.)
+    acceptable.p <- x[["PValueFields"]]
+    if (.needs_filling(acceptable.p)) {
+        acceptable.p <- getPValueFields()
+    }
+
+    acceptable.lfc <- x[["LogFCFields"]]
+    if (.needs_filling(acceptable.lfc)) {
+        acceptable.lfc <- getLogFCFields()
+    }
+
+    acceptable.ab <- x[["AveAbFields"]]
+    if (.needs_filling(acceptable.ab)) {
+        acceptable.ab <- getAveAbFields()
+    }
+
+    .setCachedCommonInfo(se, "MAPlot",
+        valid.lfc.fields=intersect(acceptable.lfc, all.cont),
+        valid.p.fields=intersect(acceptable.p, all.cont),
+        valid.ab.fields=intersect(acceptable.ab, all.cont))
 })
 
 #' @export
 #' @importFrom methods callNextMethod
 setMethod(".refineParameters", "MAPlot", function(x, se) {
+    x[["PValueFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.p.fields
+    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.lfc.fields
+    x[["AveAbFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.ab.fields
+
     x <- callNextMethod() # Do this first to trigger warnings from base classes.
     if (is.null(x)) {
         return(NULL)
     }
 
-    all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
-
-    x <- .update_de_field_choices(x, "PValueFields", all.cont, msg="p-value")
-    if (is.null(x)) {
+    if (length(x[["PValueFields"]])==0L) {
+        warning("no valid p-value fields for '", class(x)[1], "'")
         return(NULL)
     }
     x <- .update_chosen_de_field(x, "PValueField", "PValueFields")
 
-    x <- .update_de_field_choices(x, "LogFCFields", all.cont, msg="log-FC")
-    if (is.null(x)) {
-        return(NULL)
-    }
-    x <- .update_chosen_de_field(x, "YAxis", "LogFCFields")
-
-    x <- .update_de_field_choices(x, "AveAbFields", all.cont, msg="average abundance")
-    if (is.null(x)) {
-        return(NULL)
-    }
-    x <- .update_chosen_de_field(x, "XAxisRowData", "AveAbFields")
-
     x[["XAxis"]] <- "Row data"
     x
 })
-
 
 #' @export
 setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) x[["AveAbFields"]])
