@@ -1,3 +1,8 @@
+# iSEEu 1.1.4
+
+* Generalized the DE-related globals to work as patterns rather directly specifying the acceptable names.
+* Align `DynamicMarkerTable`'s treatment of `getTableExtraFields()` with the globals strategy.
+
 # iSEEu 1.1.3
 
 * Overhauled handling of global parameters for greater consistency.
