@@ -33,45 +33,45 @@ NULL
 #' @export
 #' @rdname utils-de
 .getAcceptablePValueFields <- function() {
-    .Deprecated(new="getPValueFields")
-    getPValueFields()
+    .Deprecated(new="getPValuePattern")
+    getPValuePattern()
 }
 
 #' @export
 #' @rdname utils-de
 .getAcceptableLogFCFields <- function() {
-    .Deprecated(new="getLogFCFields")
-    getLogFCFields()
+    .Deprecated(new="getLogFCPattern")
+    getLogFCPattern()
 }
 
 #' @export
 #' @rdname utils-de
 .getAcceptableAveAbFields <- function() {
-    .Deprecated(new="getAveAbFields")
-    getAveAbFields()
+    .Deprecated(new="getAveAbPattern")
+    getAveAbPattern()
 }
 
 #' @export
 #' @rdname utils-de
 .setAcceptablePValueFields <- function(value) {
-    .Deprecated(new="setPValueFields")
-    setPValueFields(value)
+    .Deprecated(new="setPValuePattern")
+    setPValuePattern(value)
     invisible(NULL)
 }
 
 #' @export
 #' @rdname utils-de
 .setAcceptableLogFCFields <- function(value) {
-    .Deprecated(new="setLogFCFields")
-    setLogFCFields(value)
+    .Deprecated(new="setLogFCPattern")
+    setLogFCPattern(value)
     invisible(NULL)
 }
 
 #' @export
 #' @rdname utils-de
 .setAcceptableAveAbFields <- function(value) {
-    .Deprecated(new="setAveAbFields")
-    setAveAbFields(value)
+    .Deprecated(new="setAveAbPattern")
+    setAveAbPattern(value)
     invisible(NULL)
 }
 
@@ -136,7 +136,7 @@ NULL
         provided <- globals
         okay <- logical(length(available))
         for (x in provided) {
-            okay <- okay | grepl(x, available, fixed=TRUE)==x
+            okay <- okay | grepl(x, available, fixed=TRUE)
         } 
         available[okay]
     } else {
