@@ -21,8 +21,9 @@ setTableExtraFields(value)
 Get or set the names of the extra fields to include in a table.
 }
 \details{
-These utilities allow users to easily set the extra table fields for all \linkS4class{DynamicMarkerTable}s at once.
-Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
+These utilities allow users to easily set the feature set commands for all \linkS4class{DynamicMarkerTable}s at once.
+Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
+and (ii) if the first \linkS4class{DynamicMarkerTable} does not have an existing values in the \code{"TableExtraFields"} slots.
 }
 \examples{
 old <- getTableExtraFields()
