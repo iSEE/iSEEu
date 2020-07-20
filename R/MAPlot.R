@@ -19,11 +19,14 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Set to \code{\link{getPValueFields}}, and cannot be changed after the application has started.
+#' Set to all continuous columns with names starting with any of the strings in \code{\link{getPValueFields}}.
+#' This cannot be changed after the application has started.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Set to \code{\link{getLogFCFields}}, and cannot be changed after the application has started.
+#' Set to all continuous columns with names starting with any of the strings in \code{\link{getLogFCFields}}.
+#' This cannot be changed after the application has started.
 #' \item \code{AveAbFields}, a character vector specifying the names of all columns containing average abundances.
-#' Set to \code{\link{getAveAbFields}}, and cannot be changed after the application has started.
+#' Set to all continuous columns with names starting with any of the strings in \code{\link{getAveAbFields}}.
+#' This cannot be changed after the application has started.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -173,25 +176,14 @@ setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
     # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
     # constants. (We actually ensure that this is the case by forcibly setting
     # them in .refineParameters later.)
-    acceptable.p <- x[["PValueFields"]]
-    if (.needs_filling(acceptable.p)) {
-        acceptable.p <- getPValueFields()
-    }
-
-    acceptable.lfc <- x[["LogFCFields"]]
-    if (.needs_filling(acceptable.lfc)) {
-        acceptable.lfc <- getLogFCFields()
-    }
-
-    acceptable.ab <- x[["AveAbFields"]]
-    if (.needs_filling(acceptable.ab)) {
-        acceptable.ab <- getAveAbFields()
-    }
+    p.okay <- .match_acceptable_fields(x[["PValueFields"]], getPValueFields(), all.cont)
+    lfc.okay <- .match_acceptable_fields(x[["AveAbFields"]], getAveAbFields(), all.cont)
+    ab.okay <- .match_acceptable_fields(x[["AveAbFields"]], getAveAbFields(), all.cont)
 
     .setCachedCommonInfo(se, "MAPlot",
-        valid.lfc.fields=intersect(acceptable.lfc, all.cont),
-        valid.p.fields=intersect(acceptable.p, all.cont),
-        valid.ab.fields=intersect(acceptable.ab, all.cont))
+        valid.lfc.fields=p.okay,
+        valid.p.fields=lfc.okay,
+        valid.ab.fields=ab.okay)
 })
 
 #' @export

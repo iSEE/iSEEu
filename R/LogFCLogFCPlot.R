@@ -20,10 +20,10 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Set to all columns with names starting with any of the strings in \code{\link{getPValueFields}}.
+#' Set to all continuous columns with names starting with any of the strings in \code{\link{getPValueFields}}.
 #' This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Set to all columns with names starting with any of the strings in \code{\link{getLogFCFields}}.
+#' Set to all continuous columns with names starting with any of the strings in \code{\link{getLogFCFields}}.
 #' This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.
 #' }
 #'
@@ -184,23 +184,10 @@ setMethod(".cacheCommonInfo", "LogFCLogFCPlot", function(x, se) {
     # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
     # constants. (We actually ensure that this is the case by forcibly setting
     # them in .refineParameters later.)
-    acceptable.p <- x[["PValueFields"]]
-    if (.needs_filling(acceptable.p)) {
-        acceptable.p <- getPValueFields()
-    }
-    p.okay <- lapply(acceptable.p, grepl, x=all.cont)
-    p.okay <- Reduce(`|`, p.okay)
+    p.okay <- .match_acceptable_fields(x[["PValueFields"]], getPValueFields(), all.cont)
+    lfc.okay <- .match_acceptable_fields(x[["LogFCFields"]], getLogFCFields(), all.cont)
 
-    acceptable.lfc <- x[["LogFCFields"]]
-    if (.needs_filling(acceptable.lfc)) {
-        acceptable.lfc <- getLogFCFields()
-    }
-    lfc.okay <- lapply(acceptable.lfc, grepl, x=all.cont)
-    lfc.okay <- Reduce(`|`, lfc.okay)
-
-    .setCachedCommonInfo(se, "LogFCLogFCPlot",
-        valid.p.fields=all.cont[p.okay],
-        valid.lfc.fields=all.cont[lfc.okay])
+    .setCachedCommonInfo(se, "LogFCLogFCPlot", valid.p.fields=p.okay, valid.lfc.fields=lfc.okay)
 })
 
 #' @export

@@ -130,3 +130,16 @@ NULL
     }
     x
 }
+
+.match_acceptable_fields <- function(provided, globals, available) {
+    if (.needs_filling(provided)) {
+        provided <- globals
+        okay <- logical(length(available))
+        for (x in provided) {
+            okay <- okay | substring(available, 1, nchar(x))==x
+        } 
+        available[okay]
+    } else {
+        intersect(available, provided)
+    }
+}
