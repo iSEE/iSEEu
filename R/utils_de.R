@@ -136,7 +136,7 @@ NULL
         provided <- globals
         okay <- logical(length(available))
         for (x in provided) {
-            okay <- okay | substring(available, 1, nchar(x))==x
+            okay <- okay | grepl(x, available, fixed=TRUE)==x
         } 
         available[okay]
     } else {

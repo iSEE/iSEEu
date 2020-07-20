@@ -19,13 +19,13 @@
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
 #' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Set to all continuous columns with names starting with any of the strings in \code{\link{getPValueFields}}.
+#' Set to all continuous columns with names matching any of the strings in \code{\link{getPValuePattern}}.
 #' This cannot be changed after the application has started.
 #' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Set to all continuous columns with names starting with any of the strings in \code{\link{getLogFCFields}}.
+#' Set to all continuous columns with names matching any of the strings in \code{\link{getLogFCPattern}}.
 #' This cannot be changed after the application has started.
 #' \item \code{AveAbFields}, a character vector specifying the names of all columns containing average abundances.
-#' Set to all continuous columns with names starting with any of the strings in \code{\link{getAveAbFields}}.
+#' Set to all continuous columns with names matching any of the strings in \code{\link{getAveAbPattern}}.
 #' This cannot be changed after the application has started.
 #' }
 #'
@@ -176,13 +176,13 @@ setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
     # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
     # constants. (We actually ensure that this is the case by forcibly setting
     # them in .refineParameters later.)
-    p.okay <- .match_acceptable_fields(x[["PValueFields"]], getPValueFields(), all.cont)
-    lfc.okay <- .match_acceptable_fields(x[["AveAbFields"]], getAveAbFields(), all.cont)
-    ab.okay <- .match_acceptable_fields(x[["AveAbFields"]], getAveAbFields(), all.cont)
+    p.okay <- .match_acceptable_fields(x[["PValueFields"]], getPValuePattern(), all.cont)
+    lfc.okay <- .match_acceptable_fields(x[["LogFCFields"]], getLogFCPattern(), all.cont)
+    ab.okay <- .match_acceptable_fields(x[["AveAbFields"]], getAveAbPattern(), all.cont)
 
     .setCachedCommonInfo(se, "MAPlot",
-        valid.lfc.fields=p.okay,
-        valid.p.fields=lfc.okay,
+        valid.lfc.fields=lfc.okay,
+        valid.p.fields=p.okay,
         valid.ab.fields=ab.okay)
 })
 

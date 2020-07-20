@@ -90,53 +90,61 @@ setTableExtraFields <- function(value) {
     .globals$set("TableExtraFields", value)
 }
 
-#' Global DE fields
+#' Global DE prefixes
 #'
-#' Get or set the names of \code{\link{rowData}} columns related to a differential expression analysis.
+#' Get or set patterns for acceptable names of \code{\link{rowData}} columns related to a differential expression analysis.
 #'
-#' @param value A character vector containing the names of acceptable columns for each statistic.
+#' @param value A character vector containing the acceptable prefixes for each statistic.
 #'
 #' @return
-#' \code{getPValueFields} returns the acceptable column names for p-values.
+#' \code{getPValuePattern} returns the patterns for acceptable column names for p-values.
 #'
-#' \code{getLogFCFields} returns the acceptable column names for log-fold changes.
+#' \code{getLogFCPattern} returns the patterns for acceptable column names for log-fold changes.
 #' 
-#' \code{getAveAbFields} returns the acceptable column names for the average abundances.
+#' \code{getAveAbPattern} returns the patterns for acceptable column names for the average abundances.
 #'
-#' The corresponding setters set the global column names for each statistic and return \code{NULL} invisibly.
+#' The corresponding setters set the global parts for each statistic and return \code{NULL} invisibly.
 #' 
 #' @details
-#' These utilities allow users to easily set the acceptable fields for all \linkS4class{VolcanoPlot}s and \linkS4class{MAPlot}s at once.
-#' Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
+#' These utilities allow users to easily get and set the patterns of acceptable fields in all 
+#' \linkS4class{VolcanoPlot}s, \linkS4class{MAPlot}s and \linkS4class{LogFCLogFCPlot}s at once.
+#' Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
+#' and (ii) if the first panel of each class does not have existing values in the 
+#' \code{"PValueFields"}, \code{"LogFCFields"} or \code{"AveAbFields"} slots (which take precedence if present).
+#'
+#' Each of these global settings are treated as \emph{patterns} for partial matching.
+#' For the \code{"PValue"} pattern, columns with the names \code{"PValue.X"} and \code{"X.PValue"} will be considered acceptable matches.
+#' All partial matching must be exact - regular expressions are not supported.
 #'
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \linkS4class{VolcanoPlot} and \linkS4class{MAPlot}, which are affected by these globals.
+#' \linkS4class{VolcanoPlot}, \linkS4class{MAPlot} and \linkS4class{LogFCLogFCPlot}, 
+#' which are affected by these globals.
 #'
 #' @examples
-#' old <- getPValueFields()
+#' old <- getPValuePattern()
 #'
-#' setPValueFields(LETTERS)
-#' getPValueFields()
+#' setPValuePattern(LETTERS)
+#' getPValuePattern()
 #'
-#' setPValueFields(old)
+#' setPValuePattern(old)
 #' @export
-#' @rdname globals-PValueFields
-getPValueFields <- function() {
-    .acceptable_template("PValueFields", c("PValue", "p.value", "pval"))
+#' @rdname globals-PValuePattern
+getPValuePattern <- function() {
+    .acceptable_template("PValuePattern", c("PValue", "p.value", "pval"))
 }
 
 #' @export
-#' @rdname globals-PValueFields
-getLogFCFields <- function() {
-    .acceptable_template("LogFCFields", c("logFC", "LogFC"))
+#' @rdname globals-PValuePattern
+getLogFCPattern <- function() {
+    .acceptable_template("LogFCPattern", c("logFC", "LogFC"))
 }
 
 #' @export
-#' @rdname globals-PValueFields
-getAveAbFields <- function() {
-    .acceptable_template("AveAbFields", c("AveExpr", "logCPM"))
+#' @rdname globals-PValuePattern
+getAveAbPattern <- function() {
+    .acceptable_template("AveAbPattern", c("AveExpr", "logCPM"))
 }
 
 .acceptable_template <- function(field, defaults) {
@@ -149,22 +157,22 @@ getAveAbFields <- function() {
 }
 
 #' @export
-#' @rdname globals-PValueFields
-setPValueFields <- function(value) {
-    .globals$set("PValueFields", value)
+#' @rdname globals-PValuePattern
+setPValuePattern <- function(value) {
+    .globals$set("PValuePattern", value)
     invisible(NULL)
 }
 
 #' @export
-#' @rdname globals-PValueFields
-setLogFCFields <- function(value) {
-    .globals$set("LogFCFields", value)
+#' @rdname globals-PValuePattern
+setLogFCPattern <- function(value) {
+    .globals$set("LogFCPattern", value)
     invisible(NULL)
 }
 
 #' @export
-#' @rdname globals-PValueFields
-setAveAbFields <- function(value) {
-    .globals$set("AveAbFields", value)
+#' @rdname globals-PValuePattern
+setAveAbPattern <- function(value) {
+    .globals$set("AveAbPattern", value)
     invisible(NULL)
 }
