@@ -36,7 +36,7 @@ Defaults to the first named assay in the SummarizedExperiment.
 The following slots control the rendered table:
 \itemize{
 \item \code{ExtraFields}, a character vector containing names of \code{\link{rowData}} columns to be included in the table.
-Defaults to the output of \code{\link{getTableExtraFields}}.
+Set to the output of \code{\link{getTableExtraFields}}.
 This cannot be changed once the application starts.
 }
 

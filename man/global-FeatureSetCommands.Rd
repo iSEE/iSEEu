@@ -25,7 +25,9 @@ Get or set the commands to define the global collection of feature sets.
 }
 \details{
 These utilities allow users to easily set the feature set commands for all \linkS4class{FeatureSetTable}s at once.
-Note that they work during construction of each class instance and has no effect on the \code{iSEE} application once it starts.
+Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
+and (ii) if the first \linkS4class{FeatureSetTable} does not have an existing values in the
+\code{"CreateCollections"} or \code{"RetrieveSet"} slots.
 }
 \examples{
 old <- getFeatureSetCommands()

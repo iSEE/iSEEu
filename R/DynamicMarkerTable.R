@@ -19,7 +19,7 @@
 #' The following slots control the rendered table:
 #' \itemize{
 #' \item \code{ExtraFields}, a character vector containing names of \code{\link{rowData}} columns to be included in the table.
-#' Defaults to the output of \code{\link{getTableExtraFields}}.
+#' Set to the output of \code{\link{getTableExtraFields}}.
 #' This cannot be changed once the application starts.
 #' }
 #'
@@ -196,8 +196,14 @@ setMethod(".cacheCommonInfo", "DynamicMarkerTable", function(x, se) {
     rdata <- rowData(se)
     valid_rd <- .findAtomicFields(rdata)
 
+    extras <- x[["ExtraFields"]]
+    if (.needs_filling(extras)) {
+        extras <- getTableExtraFields() 
+    }
+
     .setCachedCommonInfo(se, "DynamicMarkerTable", 
-        valid.assay.names=named_assays, valid.rowdata.names=valid_rd)
+        valid.assay.names=named_assays, 
+        valid.rowdata.names=intersect(extras, valid_rd))
 })
 
 #' @export
@@ -219,8 +225,8 @@ setMethod(".refineParameters", "DynamicMarkerTable", function(x, se) {
         x[["Assay"]] <- valid.choices[1]
     }
 
-    valid.choices <- cached$valid.rowdata.names
-    x[["ExtraFields"]] <- intersect(x[["ExtraFields"]], valid.choices)
+    # Forcing everyone to use the same globals.
+    x[["ExtraFields"]] <- cached$valid.rowdata.names
 
     # It can't be anything else, really.
     x[["ColumnSelectionType"]] <- "Union"
