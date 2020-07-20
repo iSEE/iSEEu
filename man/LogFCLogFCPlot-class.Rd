@@ -42,10 +42,10 @@ Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.method
 The following slots control the choice of columns in the user interface:
 \itemize{
 \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-Set to all columns with names starting with any of the strings in \code{\link{getPValueFields}}.
+Set to all continuous columns with names matching any of the strings in \code{\link{getPValuePattern}}.
 This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.
 \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-Set to all columns with names starting with any of the strings in \code{\link{getLogFCFields}}.
+Set to all continuous columns with names matching any of the strings in \code{\link{getLogFCPattern}}.
 This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.
 }
 
