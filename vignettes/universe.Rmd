@@ -107,6 +107,31 @@ app <- iSEE(airway, initial=list(vol.panel))
 SCREENSHOT("screenshots/volcano.png")
 ```
 
+The `LogFCLogFCPlot` class creates a scatter plot of two log-fold changes from different DE comparisons.
+This allows us to compare DE results on the same dataset - or even from different datasets, as long as the row names are shared.
+Users can vary the significant threshold used to identify DE genes in either or both comparisons.
+This is a subclass of the `RowDataPlot` so points can be transmitted to other panels as multiple row selections.
+Instances of this class are created like:
+
+```{r}
+# Creating another comparison, this time by blocking on the cell line
+design.alt <- model.matrix(~cell + dex, y$samples)
+y.alt <- estimateDisp(y, design.alt)
+fit.alt <- glmQLFit(y.alt, design.alt)
+res.alt <- glmQLFTest(fit.alt, coef=2)
+
+tab.alt <- topTags(res.alt, n=Inf)$table
+rowData(airway) <- cbind(rowData(airway), alt=tab.alt[rownames(airway),])
+
+lfc.panel <- LogFCLogFCPlot(PanelWidth=6L, YAxis="alt.logFC", 
+    YPValueField="alt.PValue")
+app <- iSEE(airway, initial=list(lfc.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/logfclogfc.png")
+```
+
 # Dynamically recalculated panels
 
 To demonstrate, we will perform a quick analysis of a small dataset from the `r Biocpkg("scRNAseq")` package.
