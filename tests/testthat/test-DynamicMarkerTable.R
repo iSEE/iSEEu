@@ -68,9 +68,13 @@ test_that("DynamicMarkerTable responds correctly to extra fields", {
     rowData(se)$Symbol <- sprintf("GENE_%i", seq_len(nrow(se)))
     env$se <- se
 
-    x <- DynamicMarkerTable(ExtraFields="Symbol2")
-    se <- .cacheCommonInfo(x, se)
-    x <- .refineParameters(x, se)
+    # Trying to set it globally won't work.
+    x <- DynamicMarkerTable(ExtraFields="Symbol")
+    expect_identical(x[["ExtraFields"]], NA_character_)
+
+    x[["ExtraFields"]] <- "Symbol2"
+    se2 <- .cacheCommonInfo(x, se)
+    x <- .refineParameters(x, se2)
     expect_identical(x[["ExtraFields"]], character(0))
 
     out <- .generateTable(x, env)
@@ -79,8 +83,10 @@ test_that("DynamicMarkerTable responds correctly to extra fields", {
     out <- .generateTable(x, env)
     expect_false("Symbol" %in% colnames(env$tab))
 
-    x <- DynamicMarkerTable(ExtraFields="Symbol")
-    x <- .refineParameters(x, se)
+    # Trying again, this time with the correct symbols.
+    x[["ExtraFields"]] <- "Symbol"
+    se2 <- .cacheCommonInfo(x, se)
+    x <- .refineParameters(x, se2)
     expect_identical(x[["ExtraFields"]], "Symbol")
 
     env$col_selected <- list()
@@ -95,8 +101,11 @@ test_that("DynamicMarkerTable responds correctly to global extra fields", {
     old <- getTableExtraFields()
     setTableExtraFields(LETTERS)
 
+    rowData(se)$A <- 1
     x <- DynamicMarkerTable()
-    expect_identical(x[["ExtraFields"]], LETTERS)
+    se2 <- .cacheCommonInfo(x, se)
+    x <- .refineParameters(x, se2)
+    expect_identical(x[["ExtraFields"]], "A")
 
     setTableExtraFields(old)
 })

@@ -120,10 +120,6 @@ setValidity2("DynamicMarkerTable", function(object) {
         msg <- c(msg, "'Assay' must be a single string")
     }
 
-    if (any(is.na(object[["ExtraFields"]]))) {
-        msg <- c(msg, "'ExtraFields' should contain non-NA strings")
-    }
-
     if (length(msg)) {
         return(msg)
     }
@@ -150,11 +146,11 @@ setMethod("initialize", "DynamicMarkerTable",
     args <- .emptyDefault(args, field="Assay", 
         default=iSEEOptions$get("assay")[1])
 
-    args <- .emptyDefault(args, field="ExtraFields", 
-        default=getTableExtraFields())
-
     args <- .emptyDefault(args, field="ColumnSelectionDynamicSource", 
         default=iSEEOptions$get("selection.dynamic.multiple"))
+
+    # Clean out any user supplied value and force the class to use the globals.
+    args$ExtraFields <- NA_character_
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -196,6 +192,10 @@ setMethod(".cacheCommonInfo", "DynamicMarkerTable", function(x, se) {
     rdata <- rowData(se)
     valid_rd <- .findAtomicFields(rdata)
 
+    # We determine the valid fields from the first encountered instance of the
+    # class, which assumes that 'ExtraFields' is a class-wide constants. (We
+    # actually ensure that this is the case by forcibly setting them in
+    # .refineParameters later.)
     extras <- x[["ExtraFields"]]
     if (.needs_filling(extras)) {
         extras <- getTableExtraFields() 
