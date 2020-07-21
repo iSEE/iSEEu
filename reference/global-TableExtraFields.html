@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -152,8 +152,9 @@
 <p><code>setTableExtraFields</code> will set the current global extra table fields and return <code>NULL</code> invisibly.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>These utilities allow users to easily set the extra table fields for all DynamicMarkerTables at once.
-Note that they work during construction of each class instance and has no effect on the <code>iSEE</code> application once it starts.</p>
+    <p>These utilities allow users to easily set the feature set commands for all DynamicMarkerTables at once.
+Any global settings only take effect (i) during setup of the <code>iSEE</code> application
+and (ii) if the first DynamicMarkerTable does not have an existing values in the <code>"TableExtraFields"</code> slots.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>old</span> <span class='kw'>&lt;-</span> <span class='fu'>getTableExtraFields</span>()

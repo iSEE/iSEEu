@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The MAPlot class — MAPlot-class • iSEEu</title>
+<title>The LogFCLogFCPlot class — LogFCLogFCPlot-class • iSEEu</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="The MAPlot class — MAPlot-class" />
-<meta property="og:description" content="The MAPlot is a RowDataPlot subclass that is dedicated to creating a MA plot.
-It retrieves the log-fold change and average abundance and creates a row-based plot where each point represents a feature.
+<meta property="og:title" content="The LogFCLogFCPlot class — LogFCLogFCPlot-class" />
+<meta property="og:description" content="The LogFCLogFCPlot is a RowDataPlot subclass that is dedicated to creating a scatter plot of two log-fold changes.
+Each axis contains the log-fold change for a differential expression analysis and each point represents a feature.
 Users are expected to load relevant statistics into the rowData of a SummarizedExperiment." />
 
 
@@ -126,14 +126,14 @@ Users are expected to load relevant statistics into the rowData of a SummarizedE
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The MAPlot class</h1>
-    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/MAPlot.R'><code>R/MAPlot.R</code></a></small>
-    <div class="hidden name"><code>MAPlot-class.Rd</code></div>
+    <h1>The LogFCLogFCPlot class</h1>
+    <small class="dont-index">Source: <a href='https://github.com/iSEE/iSEEu/blob/master/R/LogFCLogFCPlot.R'><code>R/LogFCLogFCPlot.R</code></a></small>
+    <div class="hidden name"><code>LogFCLogFCPlot-class.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The MAPlot is a RowDataPlot subclass that is dedicated to creating a MA plot.
-It retrieves the log-fold change and average abundance and creates a row-based plot where each point represents a feature.
+    <p>The LogFCLogFCPlot is a RowDataPlot subclass that is dedicated to creating a scatter plot of two log-fold changes.
+Each axis contains the log-fold change for a differential expression analysis and each point represents a feature.
 Users are expected to load relevant statistics into the <code>rowData</code> of a SummarizedExperiment.</p>
     </div>
 
@@ -144,7 +144,8 @@ Users are expected to load relevant statistics into the <code>rowData</code> of 
     
 
 <p>The following slots control the thresholds used in the visualization:</p><ul>
-<li><p><code>PValueField</code>, a string specifying the field of <code>rowData</code> containing the p-values.</p></li>
+<li><p><code>XPValueField</code>, a string specifying the field of <code>rowData</code> containing the p-values for the x-axis comparison.</p></li>
+<li><p><code>YPValueField</code>, a string specifying the field of <code>rowData</code> containing the p-values for the y-axis comparison.</p></li>
 <li><p><code>PValueThreshold</code>, a numeric scalar in (0, 1] specifying the threshold to use on the (adjusted) p-value.
 Defaults to 0.05.</p></li>
 <li><p><code>LogFCThreshold</code>, a non-negative numeric scalar specifying the threshold to use on the log-fold change.
@@ -156,13 +157,10 @@ Defaults to <code>"BH"</code>, but can take any value from <code><a href='https:
 <p>The following slots control the choice of columns in the user interface:</p><ul>
 <li><p><code>PValueFields</code>, a character vector specifying the names of all columns containing p-values.
 Set to all continuous columns with names matching any of the strings in <code>getPValuePattern</code>.
-This cannot be changed after the application has started.</p></li>
+This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.</p></li>
 <li><p><code>LogFCFields</code>, a character vector specifying the names of all columns containing log-fold changes.
 Set to all continuous columns with names matching any of the strings in <code>getLogFCPattern</code>.
-This cannot be changed after the application has started.</p></li>
-<li><p><code>AveAbFields</code>, a character vector specifying the names of all columns containing average abundances.
-Set to all continuous columns with names matching any of the strings in <code>getAveAbPattern</code>.
-This cannot be changed after the application has started.</p></li>
+This cannot be changed after the application has started and will be constant for all LogFCLogFCPlot instances.</p></li>
 </ul>
 
 <p>In addition, this class inherits all slots from its parent RowDataPlot,
@@ -171,7 +169,7 @@ RowDotPlot, DotPlot and Panel classes.</p>
 
     
 
-<p><code>MAPlot(...)</code> creates an instance of a MAPlot class,
+<p><code>LogFCLogFCPlot(...)</code> creates an instance of a LogFCLogFCPlot class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
@@ -181,20 +179,21 @@ where any slot and its value can be passed to <code>...</code> as a named argume
 Refer to the documentation for each method for more details on the remaining arguments.</p>
 <p>For setting up data values:</p><ul>
 <li><p><code>.cacheCommonInfo(x, se)</code> returns <code>se</code> after being loaded with class-specific constants.
-This includes <code>"valid.p.fields"</code>, <code>"valid.ab.fields"</code> and <code>"valid.lfc.fields"</code>, which are character vectors containing the names of valid <code>rowData</code> columns for the p-values, average abundances and log-fold changes, respectively.</p></li>
-<li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>XAxis="Row data"</code>.
+This includes <code>"valid.p.fields"</code> and <code>"valid.lfc.fields"</code>, character vectors containing the names of valid <code>rowData</code> columns for the p-values and log-fold changes, respectively.</p></li>
+<li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>XAxis="Row data"</code>
+as well as <code>"PValueFields"</code> and <code>"LogFCFields"</code> to their corresponding cached vectors.
 This will also call the equivalent RowDataPlot method for further refinements to <code>x</code>.
-If valid p-value, abundance and log-fold change fields are not available, <code>NULL</code> is returned instead.</p></li>
+If valid p-value and log-fold change fields are not available, <code>NULL</code> is returned instead.</p></li>
 </ul>
 
 <p>For defining the interface:</p><ul>
 <li><p><code>.defineDataInterface(x, se, select_info)</code> returns a list of interface elements for manipulating all slots described above.</p></li>
 <li><p><code>.panelColor(x)</code> will return the specified default color for this panel class.</p></li>
-<li><p><code>.allowableXAxisChoices(x, se)</code> returns a character vector specifying the acceptable average abundance-related variables in <code>rowData(se)</code> that can be used as choices for the x-axis.</p></li>
+<li><p><code>.allowableXAxisChoices(x, se)</code> returns a character vector specifying the acceptable log-fold change-related variables in <code>rowData(se)</code> that can be used as choices for the x-axis.</p></li>
 <li><p><code>.allowableYAxisChoices(x, se)</code> returns a character vector specifying the acceptable log-fold change-related variables in <code>rowData(se)</code> that can be used as choices for the y-axis.</p></li>
 <li><p><code>.hideInterface(x, field)</code> will return <code>TRUE</code> for <code>field="XAxis"</code>,
 otherwise it will call the RowDataPlot method.</p></li>
-<li><p><code>.fullName(x)</code> will return <code>"MA plot"</code>.</p></li>
+<li><p><code>.fullName(x)</code> will return <code>"LogFC-logFC plot"</code>.</p></li>
 </ul>
 
 <p>For monitoring reactive expressions:</p><ul>
@@ -203,8 +202,8 @@ otherwise it will call the RowDataPlot method.</p></li>
 
 <p>For creating the plot:</p><ul>
 <li><p><code>.generateDotPlotData(x, envir)</code> will create a data.frame of row metadata variables in <code>envir</code>.
-This should contain average abundances on the x-axis and log-fold changes on the y-axis,
-in addition to an extra field specifying whether or not the feature was considered to be significantly up or down.
+This contains the two sets of log-fold changes on both axes,
+plus an extra field specifying whether or not the feature was considered to be significantly up or down.
 The method will return the commands required to do so as well as a list of labels.</p></li>
 <li><p><code>.prioritizeDotPlotData(x, envir)</code> will create variables in <code>envir</code> marking the priority of points.
 Significant features receive higher priority (i.e., are plotted over their non-significant counterparts) and are less aggressively downsampled when <code>Downsample=TRUE</code>.
@@ -223,12 +222,14 @@ This is to be used for coloring when <code>ColorBy="None"</code>.</p></li>
     <pre class="examples"><div class='input'><span class='co'># Making up some results:</span>
 <span class='no'>se</span> <span class='kw'>&lt;-</span> <span class='fu'>SummarizedExperiment</span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10000</span>), <span class='fl'>1000</span>, <span class='fl'>10</span>))
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>se</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"GENE_"</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>)))
-<span class='fu'>rowData</span>(<span class='no'>se</span>)$<span class='no'>PValue</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>))
-<span class='fu'>rowData</span>(<span class='no'>se</span>)$<span class='no'>LogFC</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>))
-<span class='fu'>rowData</span>(<span class='no'>se</span>)$<span class='no'>AveExpr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>))
+<span class='fu'>rowData</span>(<span class='no'>se</span>)$<span class='no'>PValue1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>))
+<span class='fu'>rowData</span>(<span class='no'>se</span>)$<span class='no'>LogFC1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>))
+<span class='fu'>rowData</span>(<span class='no'>se</span>)$<span class='no'>PValue2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>))
+<span class='fu'>rowData</span>(<span class='no'>se</span>)$<span class='no'>LogFC2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>se</span>))
 
 <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-    <span class='fu'>iSEE</span>(<span class='no'>se</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>MAPlot</span>()))
+    <span class='fu'>iSEE</span>(<span class='no'>se</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>LogFCLogFCPlot</span>(<span class='kw'>XAxisRowData</span><span class='kw'>=</span><span class='st'>"LogFC1"</span>, <span class='kw'>YAxis</span><span class='kw'>=</span><span class='st'>"LogFC2"</span>,
+        <span class='kw'>XPValueField</span><span class='kw'>=</span><span class='st'>"PValue1"</span>, <span class='kw'>YPValueField</span><span class='kw'>=</span><span class='st'>"PValue2"</span>)))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
