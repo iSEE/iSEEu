@@ -209,7 +209,6 @@ setMethod(".createObservers", "ReducedDimensionHexPlot", function(x, se, input, 
 #' @export
 #' @importMethodsFrom iSEE .generateDotPlot
 #' @importFrom iSEE .addFacets .buildAes .buildLabs
-#' @importFrom ggplot2 geom_hex
 setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, envir) {
     plot_data <- envir$plot.data
     is_subsetted <- exists("plot.data.all", envir=envir, inherits=FALSE)
@@ -289,11 +288,14 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
     return(unlist(plot_cmds))
 }
 
+#' @importFrom ggplot2 geom_hex stat_summary_hex coord_cartesian geom_point
 .create_hex <- function(param_choices, aes, color, size, color_discrete, is_subsetted) {
     plot_cmds <- list()
 
+    # NOTE: the 'ggplot2::' prefixing is QUITE deliberate here, as the commands
+    # are evaluated by baseline iSEE where they may not be imported.
     fallback <- sprintf(
-        "geom_hex(%s, bins = %i, alpha=%s, plot.data) +",
+        "ggplot2::geom_hex(%s, bins = %i, alpha=%s, plot.data) +",
         aes,
         as.integer(param_choices[[.plotBinResolution]]),
         param_choices[["PointAlpha"]]
@@ -305,7 +307,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
             plot_cmds[["hex"]] <- fallback
         } else {
             plot_cmds[["hex"]] <- sprintf(
-                sprintf('stat_summary_hex(%s, geom = "hex", bins = %i, fun=%s, alpha=%s, plot.data) +',
+                sprintf('ggplot2::stat_summary_hex(%s, geom = "hex", bins = %i, fun=%s, alpha=%s, plot.data) +',
                     aes,
                     as.integer(param_choices[[.plotBinResolution]]),
                     deparse("mean"),
