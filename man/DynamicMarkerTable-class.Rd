@@ -14,6 +14,7 @@
 \alias{.cacheCommonInfo,DynamicMarkerTable-method}
 \alias{.refineParameters,DynamicMarkerTable-method}
 \alias{.multiSelectionInvalidated,DynamicMarkerTable-method}
+\alias{.definePanelTour,DynamicMarkerTable-method}
 \title{Dynamic marker table}
 \description{
 A table that dynamically identifies marker genes for a selected subset of samples.
@@ -84,6 +85,11 @@ For creating the table:
 \itemize{
 \item \code{\link{.generateTable}(x, envir)} will create a data.frame of newly computed statistics in \code{envir}.
 The method will return the commands required to do so.
+}
+
+For documentation:
+\itemize{
+\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 }
 }
 

@@ -19,6 +19,7 @@
 \alias{.multiSelectionCommands,FeatureSetTable-method}
 \alias{.multiSelectionAvailable,FeatureSetTable-method}
 \alias{.multiSelectionClear,FeatureSetTable-method}
+\alias{.definePanelTour,FeatureSetTable-method}
 \title{Feature set table}
 \description{
 A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.
@@ -109,6 +110,11 @@ unless no selection is made, in which case \code{NULL} is returned.
 \item \code{\link{.multiSelectionClear}(x)} returns \code{x} but with the \code{Selected} slot replaced by an empty string.
 \item \code{\link{.multiSelectionAvailable}(x, contents)} returns \code{contents$available},
 which is set to the number of features in \code{se}.
+}
+
+For documentation:
+\itemize{
+\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 }
 }
 
