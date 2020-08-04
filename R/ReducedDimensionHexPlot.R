@@ -355,7 +355,7 @@ setMethod(".definePanelTour", "ReducedDimensionHexPlot", function(x) {
     prev[1,"intro"] <- sprintf("The <font color=\"%s\">Hexagonal reduced dimension plot</font> panel shows a dimensionality reduction result across samples where points are binned into hexagons. The color of each hexagon is proportional to the number of points contained within, which provides a more quantitative way of assessing density. It also allows for faster plotting as each point does not need to be rendered.", .getPanelColor(x))
 
     opener <- grep("_VisualChoices$", prev$element)[1]
-    prev[opener,"intro"] <- paste0(prev[opener, "intro"], "<br/><br/><strong>Action:</strong>check the <emph>Size</emph> box.") 
+    prev[opener,"intro"] <- paste0(prev[opener, "intro"], "<br/><br/><strong>Action:</strong> check the <em>Size</em> box.") 
 
     colors <- grep("_ColorBy", prev$element)[1]
     prev[colors,"intro"] <- "We can choose to color by different per-column attributes - from the column metadata, across a specific feature of an assay, or to identify a chosen sample. For continuous values, the average value across all points in each bin is shown."
