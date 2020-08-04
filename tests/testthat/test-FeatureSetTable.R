@@ -16,7 +16,7 @@ test_that("FeatureSetTable interface elements work as expected", {
     expect_match(.fullName(out), "table")
     expect_is(.fullName(out), "character")
     expect_error(.defineDataInterface(out, se, list()), NA)
-    expect_true(.hideInterface(out, "SelectBoxOpen"))
+    expect_true(.hideInterface(out, "SelectionBoxOpen"))
 })
 
 test_that("FeatureSetTable generates sensible output", {

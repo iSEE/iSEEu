@@ -270,7 +270,10 @@ setMethod(".panelColor", "FeatureSetTable", function(x) "#BB00FF")
 #' @importFrom DT dataTableOutput
 setMethod(".defineOutput", "FeatureSetTable", function(x) {
     panel_name <- .getEncodedName(x)
-    dataTableOutput(panel_name)
+    tagList(
+        dataTableOutput(panel_name),
+        hr()
+    )
 })
 
 #' @export
@@ -290,7 +293,7 @@ setMethod(".defineDataInterface", "FeatureSetTable", function(x, se, select_info
 
 #' @export
 setMethod(".hideInterface", "FeatureSetTable", function(x, field) {
-    if (field %in% "SelectBoxOpen") {
+    if (field %in% "SelectionBoxOpen") {
         TRUE
     } else {
         callNextMethod()
