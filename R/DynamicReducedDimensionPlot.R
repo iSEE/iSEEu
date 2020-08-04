@@ -193,7 +193,7 @@ setMethod(".createObservers", "DynamicReducedDimensionPlot",
     plot_name <- .getEncodedName(x)
 
     .createProtectedParameterObservers(plot_name,
-        fields=c("Type", "NGenes"),
+        fields=c("Type", "NGenes", "Assay"),
         input=input, pObjects=pObjects, rObjects=rObjects)
 })
 
