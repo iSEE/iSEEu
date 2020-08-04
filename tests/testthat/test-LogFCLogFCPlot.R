@@ -82,3 +82,7 @@ test_that("LogFCLogFCPlot dot plot generation works correctly", {
     .generateDotPlot(y, out$labels, envir)
     expect_s3_class(envir$dot.plot, "ggplot")
 })
+
+test_that("LogFCLogFCPlot generates a tour correctly", {
+    expect_s3_class(.definePanelTour(LogFCLogFCPlot()), "data.frame")
+})

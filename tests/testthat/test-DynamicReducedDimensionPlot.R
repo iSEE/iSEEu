@@ -57,3 +57,7 @@ test_that("DynamicReducedDimensionPlot generates the plotting data correctly", {
     expect_identical(nrow(env$plot.data), ncol(se))
     expect_false(all(is.na(env$plot.data$X)))
 })
+
+test_that("DynamicReducedDimensionPlot generates a tour correctly", {
+    expect_s3_class(.definePanelTour(DynamicReducedDimensionPlot()), "data.frame")
+})

@@ -109,3 +109,7 @@ test_that("DynamicMarkerTable responds correctly to global extra fields", {
 
     setTableExtraFields(old)
 })
+
+test_that("DynamicMarkerTable generates a tour correctly", {
+    expect_s3_class(.definePanelTour(DynamicMarkerTable()), "data.frame")
+})

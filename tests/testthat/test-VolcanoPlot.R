@@ -75,3 +75,11 @@ test_that("VolcanoPlot dot plot generation works correctly", {
     .generateDotPlot(y, out$labels, envir)
     expect_s3_class(envir$dot.plot, "ggplot")
 })
+
+test_that("VolcanoPlot generates a tour correctly", {
+    tour <- .definePanelTour(VolcanoPlot())
+
+    expect_s3_class(tour, "data.frame")
+
+    expect_true(any(grepl("false discovery rate", tour$intro)))
+})
