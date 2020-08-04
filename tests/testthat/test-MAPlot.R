@@ -87,5 +87,9 @@ test_that("MAPlot dot plot generation works correctly", {
 })
 
 test_that("MAPlot generates a tour correctly", {
-    expect_s3_class(.definePanelTour(MAPlot()), "data.frame")
+    tour <- .definePanelTour(MAPlot())
+
+    expect_s3_class(tour, "data.frame")
+
+    expect_true(any(grepl("false discovery rate", tour$intro)))
 })
