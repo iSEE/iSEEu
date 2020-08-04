@@ -80,6 +80,11 @@
 #' \item \code{\link{.generateDotPlot}(x, labels, envir)} returns a list containing \code{plot} and \code{commands}, using the inital \linkS4class{ColumnDataPlot} \link{ggplot} and adding horizontal lines demarcating the log-fold change threshold.
 #' }
 #'
+#' For documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' }
+#'
 #' @docType methods
 #' @aliases MAPlot MAPlot-class
 #' initialize,MAPlot-method
@@ -97,6 +102,7 @@
 #' .colorByNoneDotPlotField,MAPlot-method
 #' .colorByNoneDotPlotScale,MAPlot-method
 #' .generateDotPlot,MAPlot-method
+#' .definePanelTour,MAPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -297,4 +303,20 @@ setMethod(".generateDotPlot", "MAPlot", function(x, labels, envir) {
     }
 
     output
+})
+
+#' @export
+setMethod(".definePanelTour", "MAPlot", function(x) {
+    prev <- callNextMethod()
+    skip <- grep("VisualBoxOpen$", prev$element)
+    prev <- prev[-seq_len(skip-1),]
+
+    rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">MA plot</font> panel shows the log-fold change from a differential comparison against the average abundance. Each point here corresponds to a feature in our <code>SummarizedExperiment</code>, and the number of significantly different features in the comparisons is shown in the legend.", .getPanelColor(x))),
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        c(paste0("#", .getEncodedName(x), "_YAxis + .selectize-control"), "We can control the columns containing the log-fold changes, based on the available fields in the <code>rowData</code> of the <code>SummarizedExperiment</code>."),
+        c(paste0("#", .getEncodedName(x), "_XAxisRowData + .selectize-control"), "Similarly, we can control the columns containing the average abundance of each feature, again based on the <code>rowData</code> fields. This is generally expected to be some sort of metric on the log-scale, e.g., an average log-CPM."),
+        c(paste0("#", .getEncodedName(x), "_PValueThreshold"), "A variety of thresholds can also be tuned to define significant differences; the most relevant of these is the threshold on the false discovery rate."),
+        prev
+    )
 })

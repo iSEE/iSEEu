@@ -61,6 +61,11 @@
 #' as any change in the upstream selection of points will alter the coordinates and invalidate any brush/lasso on \code{x}.
 #' }
 #'
+#' For documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' }
+#'
 #' @author Aaron Lun
 #' @examples
 #' library(scRNAseq)
@@ -89,6 +94,7 @@
 #' .cacheCommonInfo,DynamicReducedDimensionPlot-method
 #' .refineParameters,DynamicReducedDimensionPlot-method
 #' .multiSelectionInvalidated,DynamicReducedDimensionPlot-method
+#' .definePanelTour,DynamicReducedDimensionPlot-method
 NULL
 
 #' @export
@@ -227,3 +233,15 @@ setMethod(".generateDotPlotData", "DynamicReducedDimensionPlot", function(x, env
 
 #' @export
 setMethod(".multiSelectionInvalidated", "DynamicReducedDimensionPlot", function(x) TRUE)
+
+#' @export
+setMethod(".definePanelTour", "DynamicReducedDimensionPlot", function(x) {
+    rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">Dynamic reduced dimension plot</font> panel performs dimensionality reduction on the samples selected in another panel. Each point here corresponds to a sample in our <code>SummarizedExperiment</code>.", .getPanelColor(x))),
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        c(paste0("#", .getEncodedName(x), "_Type + .selectize-control"), "We can control the type of dimensionality reduction to compute."),
+        c(paste0("#", .getEncodedName(x), "_NGenes"), "For the sake of speed, we perform the calculations on only the most highly variable features, which are identified after correcting for any mean-variance trend in the data. We can control the exact number of genes to vary the speed-signal-noise trade-off."),
+        c(paste0("#", .getEncodedName(x), "_Assay + .selectize-control"), "Similarly, we can change the assay values to be tested. We suggest using log-transformed normalized values or something equivalent."),
+        callNextMethod()
+    )
+})

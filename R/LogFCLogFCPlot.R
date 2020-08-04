@@ -79,6 +79,11 @@
 #' \item \code{\link{.generateDotPlot}(x, labels, envir)} returns a list containing \code{plot} and \code{commands}, using the inital \linkS4class{ColumnDataPlot} \link{ggplot} and adding horizontal lines demarcating the log-fold change threshold.
 #' }
 #'
+#' For documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' }
+#'
 #' @docType methods
 #' @aliases LogFCLogFCPlot LogFCLogFCPlot-class
 #' initialize,LogFCLogFCPlot-method
@@ -96,6 +101,7 @@
 #' .colorByNoneDotPlotField,LogFCLogFCPlot-method
 #' .colorByNoneDotPlotScale,LogFCLogFCPlot-method
 #' .generateDotPlot,LogFCLogFCPlot-method
+#' .definePanelTour,LogFCLogFCPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -330,4 +336,20 @@ setMethod(".generateDotPlot", "LogFCLogFCPlot", function(x, labels, envir) {
     }
 
     output
+})
+
+#' @export
+setMethod(".definePanelTour", "LogFCLogFCPlot", function(x) {
+    prev <- callNextMethod()
+    skip <- grep("VisualBoxOpen$", prev$element)
+    prev <- prev[-seq_len(skip-1),]
+
+    rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">LogFC-logFC plot</font> panel shows the log-fold change from one differential comparison against the log-fold change from another differential comparison. Each point here corresponds to a feature in our <code>SummarizedExperiment</code>, and the number of significantly different features in either or both comparisons is shown in the legend.", .getPanelColor(x))),
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        c(paste0("#", .getEncodedName(x), "_YAxis + .selectize-control"), "We can control the columns containing the log-fold changes, based on the available fields in the <code>rowData</code> of the <code>SummarizedExperiment</code>."),
+        c(paste0("#", .getEncodedName(x), "_YPValueField + .selectize-control"), "Similarly, we can control the columns containing the p-values corresponding to each of the log-fold changes, again based on the <code>rowData</code> fields."),
+        c(paste0("#", .getEncodedName(x), "_PValueThreshold"), "A variety of thresholds can also be tuned to define significant differences; the most relevant of these is the threshold on the false discovery rate."),
+        prev
+    )
 })
