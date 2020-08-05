@@ -68,7 +68,7 @@ test_that(".createObservers works", {
   x <- ReducedDimensionHexPlot(PanelId=1L)
 
   input <- new.env()
-  session <- new.env()
+  session <- NULL
   pObjects <- new.env()
   rObjects <- new.env()
 
