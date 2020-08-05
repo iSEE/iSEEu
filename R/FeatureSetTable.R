@@ -85,6 +85,11 @@
 #' which is set to the number of features in \code{se}.
 #' }
 #'
+#' For documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' }
+#'
 #' @author Aaron Lun
 #' @examples
 #' library(scRNAseq)
@@ -129,6 +134,7 @@
 #' .multiSelectionCommands,FeatureSetTable-method
 #' .multiSelectionAvailable,FeatureSetTable-method
 #' .multiSelectionClear,FeatureSetTable-method
+#' .definePanelTour,FeatureSetTable-method
 NULL
 
 #' @export
@@ -444,4 +450,16 @@ setMethod(".multiSelectionClear", "FeatureSetTable", function(x) {
 #' @export
 setMethod(".multiSelectionAvailable", "FeatureSetTable", function(x, contents) {
     contents$available
+})
+
+#' @export
+setMethod(".definePanelTour", "FeatureSetTable", function(x) {
+    collated <- rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">Feature set table</font> panel contains information about sets of features, most typically gene sets. Here, each row corresponds to a feature set, i.e., multiple rows of our original <code>SummarizedExperiment</code> object.", .getPanelColor(x))),
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this table.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        c(paste0("#", .getEncodedName(x), "_Collection + .selectize-control"), "The main option is the collection of sets to show in the table. For gene sets, this defaults to KEGG and GO collections, though one can of course put anything in there."),
+        c(paste0("#", .getEncodedName(x)), "The most interesting part about this panel is that clicking on any row of this table will transmit a multiple row selection to another panel! This is useful for exploring the results of gene set enrichment analyses where a gene set of interest can be selected to quickly highlight the position of the member genes in another plot.")
+    )
+
+    data.frame(element=collated[,1], intro=collated[,2], stringsAsFactors=FALSE)
 })

@@ -68,7 +68,7 @@ test_that(".createObservers works", {
   x <- ReducedDimensionHexPlot(PanelId=1L)
 
   input <- new.env()
-  session <- new.env()
+  session <- NULL
   pObjects <- new.env()
   rObjects <- new.env()
 
@@ -173,4 +173,16 @@ test_that("zoom works", {
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
+})
+
+test_that("ReducedDimensionHexPlot generates a tour correctly", {
+    tour <- .definePanelTour(ReducedDimensionHexPlot())
+
+    expect_s3_class(tour, "data.frame")
+
+    expect_true(any(grepl("check the .*Size.* box", tour$intro)))
+
+    expect_true(any(grepl("average value across all points", tour$intro)))
+
+    expect_true(any(grepl("bin resolution", tour$intro)))
 })

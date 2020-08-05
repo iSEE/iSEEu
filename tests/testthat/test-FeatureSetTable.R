@@ -86,3 +86,7 @@ test_that("FeatureSetCommands constructor interacts with globals", {
 
     setFeatureSetCommands(old)
 })
+
+test_that("FeatureSetTable generates a tour correctly", {
+    expect_s3_class(.definePanelTour(FeatureSetTable()), "data.frame")
+})

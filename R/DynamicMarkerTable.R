@@ -65,6 +65,11 @@
 #' The method will return the commands required to do so.
 #' }
 #'
+#' For documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' }
+#'
 #' @examples
 #' library(scRNAseq)
 #' library(scater)
@@ -98,6 +103,7 @@
 #' .refineParameters,DynamicMarkerTable-method
 #' .multiSelectionInvalidated,DynamicMarkerTable-method
 #' .hideInterface,DynamicMarkerTable-method
+#' .definePanelTour,DynamicMarkerTable-method
 NULL
 
 #' @export
@@ -173,7 +179,8 @@ setMethod(".defineDataInterface", "DynamicMarkerTable", function(x, se, select_i
         selectInput(paste0(plot_name, "_Assay"),
             label="Assay",
             choices=cached$valid.assay.names,
-            selected=x[["Assay"]])
+            selected=x[["Assay"]]),
+        callNextMethod()
     )
 })
 
@@ -319,3 +326,16 @@ setMethod(".fullName", "DynamicMarkerTable", function(x) "Dynamic marker table")
 
 #' @export
 setMethod(".panelColor", "DynamicMarkerTable", function(x) "#B73CE4")
+
+#' @export
+setMethod(".definePanelTour", "DynamicMarkerTable", function(x) {
+    rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">Dynamic marker table</font> panel performs marker detection for one or more groups of samples selected in another panel. Each row here corresponds to a feature in our <code>SummarizedExperiment</code> while the columns contain statistics for the comparisons between groups.<br/><br/>If the transmitting panel only contains one actively selected group, markers are detected by comparing the selected group against all samples outside the selection.<br/><br/>If the transmitting panel contains an actively selected group and any saved selections, marker detection is performed by comparing the active group to each of the saved selections in a pairwise manner.", .getPanelColor(x))),
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this table.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        c(paste0("#", .getEncodedName(x), "_LogFC"), "We can control the log-fold change threshold to test against..."),
+        c(paste0("#", .getEncodedName(x), "_TestMethod + .selectize-control"), "... as well as the test method to be used, i.e., t-tests (for changes in mean), Wilcoxon rank sum tests (for differences in distribution) or binomial tests (for differences in the number of non-zero elements)."),
+        c(paste0("#", .getEncodedName(x), "_Assay + .selectize-control"), "Similarly, we can change the assay values to be tested. It is generally safest to use log-transformed normalized values here."),
+        c(paste0("#", .getEncodedName(x), "_HiddenColumns + .selectize-control"), "We can also choose to hide any number of metadata fields if the table is too wide. Note that left-to-right scrolling is also enabled for wide tables."),
+        callNextMethod()
+    )
+})

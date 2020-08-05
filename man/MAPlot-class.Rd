@@ -19,6 +19,7 @@
 \alias{.colorByNoneDotPlotField,MAPlot-method}
 \alias{.colorByNoneDotPlotScale,MAPlot-method}
 \alias{.generateDotPlot,MAPlot-method}
+\alias{.definePanelTour,MAPlot-method}
 \title{The MAPlot class}
 \description{
 The MAPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.
@@ -104,6 +105,11 @@ The method will return the commands required to do this as well as a logical sca
 This is to be used for coloring when \code{ColorBy="None"}.
 \item \code{\link{.colorByNoneDotPlotScale}(x)} will return a string containing a \pkg{ggplot2} command to add a default color scale when \code{ColorBy="None"}.
 \item \code{\link{.generateDotPlot}(x, labels, envir)} returns a list containing \code{plot} and \code{commands}, using the inital \linkS4class{ColumnDataPlot} \link{ggplot} and adding horizontal lines demarcating the log-fold change threshold.
+}
+
+For documentation:
+\itemize{
+\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 }
 }
 

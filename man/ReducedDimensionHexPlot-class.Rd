@@ -14,6 +14,7 @@
 \alias{.defineVisualSizeInterface,ReducedDimensionHexPlot-method}
 \alias{.defineVisualOtherInterface,ReducedDimensionHexPlot-method}
 \alias{.generateDotPlot,ReducedDimensionHexPlot-method}
+\alias{.definePanelTour,ReducedDimensionHexPlot-method}
 \title{The ReducedDimensionHexPlot class}
 \description{
 The ReducedDimensionHexPlot is a \linkS4class{ReducedDimensionPlot} subclass that is dedicated to creating a reduced dimension plot summarising data points in hexagonal bins.
@@ -69,6 +70,11 @@ For monitoring reactive expressions:
 For creating the plot:
 \itemize{
 \item \code{\link{.generateDotPlot}(x, envir)} will return a list with \code{plot}, a \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}} object; and \code{commands}, a character vector of commands to produce that object when evaluated inside \code{envir}.
+}
+
+For documentation:
+\itemize{
+\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 }
 }
 

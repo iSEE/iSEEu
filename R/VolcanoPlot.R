@@ -76,6 +76,11 @@
 #' \item \code{\link{.generateDotPlot}(x, labels, envir)} returns a list containing \code{plot} and \code{commands}, using the inital \linkS4class{ColumnDataPlot} \link{ggplot} and adding vertical lines demarcating the log-fold change threshold.
 #' }
 #'
+#' For documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' }
+#'
 #' @docType methods
 #' @aliases VolcanoPlot VolcanoPlot-class
 #' initialize,VolcanoPlot-method
@@ -93,6 +98,7 @@
 #' .colorByNoneDotPlotField,VolcanoPlot-method
 #' .colorByNoneDotPlotScale,VolcanoPlot-method
 #' .generateDotPlot,VolcanoPlot-method
+#' .definePanelTour,VolcanoPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -272,4 +278,20 @@ setMethod(".generateDotPlot", "VolcanoPlot", function(x, labels, envir) {
     }
 
     output
+})
+
+#' @export
+setMethod(".definePanelTour", "VolcanoPlot", function(x) {
+    prev <- callNextMethod()
+    skip <- grep("VisualBoxOpen$", prev$element)
+    prev <- prev[-seq_len(skip-1),]
+
+    rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">Volcano plot</font> panel shows the (log-transformed) p-value from a differential comparison against the log-fold change. Each point here corresponds to a feature in our <code>SummarizedExperiment</code>, and the number of significantly different features in the comparisons is shown in the legend.", .getPanelColor(x))),
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        c(paste0("#", .getEncodedName(x), "_YAxis + .selectize-control"), "We can control the columns containing the p-values for all features, based on the available fields in the <code>rowData</code> of the <code>SummarizedExperiment</code>. Note that these values should not be log-transformed, as the panel will take care of that itself."),
+        c(paste0("#", .getEncodedName(x), "_XAxisRowData + .selectize-control"), "Similarly, we can control the columns containing the log-fold change of each feature, again based on the <code>rowData</code> fields."),
+        c(paste0("#", .getEncodedName(x), "_PValueThreshold"), "A variety of thresholds can also be tuned to define significant differences; the most relevant of these is the threshold on the false discovery rate."),
+        prev
+    )
 })

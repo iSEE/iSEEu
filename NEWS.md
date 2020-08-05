@@ -1,3 +1,7 @@
+# iSEEu 1.1.5
+
+* Added panel-specific tours for all panel classes via the `.definePanelTour()` generic.
+
 # iSEEu 1.1.4
 
 * Generalized the DE-related globals to work as patterns rather directly specifying the acceptable names.

@@ -12,6 +12,7 @@
 \alias{.cacheCommonInfo,DynamicReducedDimensionPlot-method}
 \alias{.refineParameters,DynamicReducedDimensionPlot-method}
 \alias{.multiSelectionInvalidated,DynamicReducedDimensionPlot-method}
+\alias{.definePanelTour,DynamicReducedDimensionPlot-method}
 \title{Dynamic reduced dimension plot}
 \description{
 A dimensionality reduction plot that dynamically recomputes the coordinates for the samples,
@@ -78,6 +79,11 @@ For handling multiple selections:
 \itemize{
 \item \code{\link{.multiSelectionInvalidated}(x)} will always return \code{TRUE},
 as any change in the upstream selection of points will alter the coordinates and invalidate any brush/lasso on \code{x}.
+}
+
+For documentation:
+\itemize{
+\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 }
 }
 
