@@ -184,6 +184,10 @@ otherwise this function will call the ReducedDimensionPlot method.</p></li>
 <li><p><code>.generateDotPlot(x, envir)</code> will return a list with <code>plot</code>, a <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot()</a></code> object; and <code>commands</code>, a character vector of commands to produce that object when evaluated inside <code>envir</code>.</p></li>
 </ul>
 
+<p>For documentation:</p><ul>
+<li><p><code>.definePanelTour(x)</code> returns an data.frame containing the steps of a panel-specific tour.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>ReducedDimensionPlot, for the base class.</p></div>
@@ -192,7 +196,7 @@ otherwise this function will call the ReducedDimensionPlot method.</p></li>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
 
 <span class='co'># Example data ----</span>
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-08-03</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "SingleCellExperiment"
+<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span>(<span class='kw'>assays</span><span class='kw'>=</span><span class='st'>"tophat_counts"</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-08-04</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>sce</span>)</div><div class='output co'>#&gt; [1] "SingleCellExperiment"
 #&gt; attr(,"package")
 #&gt; [1] "SingleCellExperiment"</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)
