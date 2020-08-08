@@ -1,13 +1,13 @@
 authors:
   Charlotte Soneson:
-    href: https://csoneson.github.io  
+    href: https://csoneson.github.io
   Federico Marini:
     href: https://federicomarini.github.io
   Kevin Rue-Albrecht:
     href: https://kevinrue.github.io
   Aaron Lun:
     href: https://LTLA.github.io
-    
+
 template:
   params:
     bootswatch: cosmo
@@ -40,4 +40,4 @@ navbar:
       href: news/index.html
     github:
       icon: fab fa-github fa-lg
-      href: https://github.com/csoneson/iSEEu
+      href: https://github.com/iSEE/iSEEu

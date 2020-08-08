@@ -1,0 +1,332 @@
+---
+title: Universe of iSEE panels
+author:
+- name: Kevin Rue-Albrecht
+  affiliation: 
+  - &id1 Kennedy Institute of Rheumatology, University of Oxford,
+    Headington, Oxford OX3 7FY, UK.
+  email: kevin.rue-albrecht@kennedy.ox.ac.uk
+- name: Federico Marini
+  affiliation: 
+  - &id2 Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz
+  - Center for Thrombosis and Hemostasis (CTH), Mainz
+  email: marinif@uni-mainz.de
+- name: Charlotte Soneson
+  affiliation: 
+  - &id3 Friedrich Miescher Institute for Biomedical Research, Basel
+  - SIB Swiss Institute of Bioinformatics
+  email: charlottesoneson@gmail.com
+- name: Aaron Lun
+  email: infinite.monkeys.with.keyboards@gmail.com  
+date: "`r BiocStyle::doc_date()`"
+package: iSEEu
+output: BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Panel universe}
+  %\VignetteEncoding{UTF-8}  
+  %\VignettePackage{iSEEu}
+  %\VignetteKeywords{GeneExpression, RNASeq, Sequencing, Visualization, QualityControl, GUI}
+  %\VignetteEngine{knitr::rmarkdown}
+bibliography: iSEEu.bib  
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(error=FALSE, warning=FALSE, message=FALSE)
+library(BiocStyle)
+```
+
+```{r, eval=!exists("SCREENSHOT"), include=FALSE}
+SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
+```
+
+# Overview
+
+The `r Biocpkg("iSEE")` package [@iSEE-2018] provides a general and flexible framework for interactively exploring `SummarizedExperiment` objects.
+However, in many cases, more specialized panels are required for effective visualization of specific data types.
+The `r Biocpkg("iSEEu")` package implements a collection of such dedicated panel classes that work directly in the `iSEE` application and can smoothly interact with other panels.
+This allows users to quickly parametrize bespoke apps for their data to address scientific questions of interest.
+We first load in the package:
+
+```{r}
+library(iSEEu)
+```
+
+All the panels described in this document can be deployed by simply passing them into the `iSEE()` function via the `initial=` argument, as shown in the following examples.
+
+# Differential expression plots
+
+To demonstrate the use of these panels,
+we will perform a differential expression analysis on the `r Biocpkg("airway")` dataset with the `r Biocpkg("edgeR")` package.
+We store the resulting statistics in the `rowData` of the `SummarizedExperiment` so that it can be accessed by `iSEE` panels.
+
+```{r}
+library(airway)
+data(airway)
+
+library(edgeR)
+y <- DGEList(assay(airway), samples=colData(airway))
+y <- y[filterByExpr(y, group=y$samples$dex),]
+y <- calcNormFactors(y)
+
+design <- model.matrix(~dex, y$samples)
+y <- estimateDisp(y, design)
+fit <- glmQLFit(y, design)
+res <- glmQLFTest(fit, coef=2)
+
+tab <- topTags(res, n=Inf)$table
+rowData(airway) <- cbind(rowData(airway), tab[rownames(airway),])
+```
+
+The `MAPlot` class creates a MA plot, i.e., with the log-fold change on the y-axis and the average expression on the x-axis.
+Features with significant differences in each direction are highlighted and counted on the legend.
+Users can vary the significance threshold and apply _ad hoc_ filters on the log-fold change.
+This is a subclass of the `RowDataPlot` so points can be transmitted to other panels as multiple row selections.
+Instances of this class are created like:
+
+```{r}
+ma.panel <- MAPlot(PanelWidth=6L)
+app <- iSEE(airway, initial=list(ma.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/ma.png")
+```
+
+The `VolcanoPlot` class creates a volcano plot with the log-fold change on the x-axis and the negative log-p-value on the y-axis.
+Features with significant differences in each direction are highlighted and counted on the legend.
+Users can vary the significance threshold and apply _ad hoc_ filters on the log-fold change.
+This is a subclass of the `RowDataPlot` so points can be transmitted to other panels as multiple row selections.
+Instances of this class are created like:
+
+```{r}
+vol.panel <- VolcanoPlot(PanelWidth=6L)
+app <- iSEE(airway, initial=list(vol.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/volcano.png")
+```
+
+The `LogFCLogFCPlot` class creates a scatter plot of two log-fold changes from different DE comparisons.
+This allows us to compare DE results on the same dataset - or even from different datasets, as long as the row names are shared.
+Users can vary the significant threshold used to identify DE genes in either or both comparisons.
+This is a subclass of the `RowDataPlot` so points can be transmitted to other panels as multiple row selections.
+Instances of this class are created like:
+
+```{r}
+# Creating another comparison, this time by blocking on the cell line
+design.alt <- model.matrix(~cell + dex, y$samples)
+y.alt <- estimateDisp(y, design.alt)
+fit.alt <- glmQLFit(y.alt, design.alt)
+res.alt <- glmQLFTest(fit.alt, coef=2)
+
+tab.alt <- topTags(res.alt, n=Inf)$table
+rowData(airway) <- cbind(rowData(airway), alt=tab.alt[rownames(airway),])
+
+lfc.panel <- LogFCLogFCPlot(PanelWidth=6L, YAxis="alt.logFC", 
+    YPValueField="alt.PValue")
+app <- iSEE(airway, initial=list(lfc.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/logfclogfc.png")
+```
+
+# Dynamically recalculated panels
+
+To demonstrate, we will perform a quick analysis of a small dataset from the `r Biocpkg("scRNAseq")` package.
+This involves computing normalized expression values and low-dimensional results using the `r Biocpkg("scater")` package.
+
+```{r}
+library(scRNAseq)
+sce <- ReprocessedAllenData(assays="tophat_counts")
+
+library(scater)
+sce <- logNormCounts(sce, exprs_values="tophat_counts")
+sce <- runPCA(sce, ncomponents=4)
+sce <- runTSNE(sce)
+```
+
+The `DynamicReducedDimensionPlot` class creates a scatter plot with a dimensionality reduction result, namely principal components analysis (PCA), $t$-stochastic neighbor embedding ($t$-SNE) or uniform manifold and approximate projection (UMAP).
+It does so dynamically on the subset of points that are selected in a transmitting panel,
+allowing users to focus on finer structure when dealing with a heterogeneous population.
+Calculations are performed using relevant functions from the `r Biocpkg("scater")` package.
+
+```{r}
+# Receives a selection from a reduced dimension plot.
+dyn.panel <- DynamicReducedDimensionPlot(Type="UMAP", Assay="logcounts",
+    ColumnSelectionSource="ReducedDimensionPlot1", PanelWidth=6L)
+
+# NOTE: users do not have to manually create this, just 
+# copy it from the "Panel Settings" of an already open app.
+red.panel <- ReducedDimensionPlot(PanelId=1L, PanelWidth=6L,
+    BrushData = list(
+        xmin = -45.943, xmax = -15.399, ymin = -58.560, 
+        ymax = 49.701, coords_css = list(xmin = 51.009, 
+            xmax = 165.009, ymin = 39.009, 
+            ymax = 422.009), coords_img = list(xmin = 66.313, 
+            xmax = 214.514, ymin = 50.712, 
+            ymax = 548.612), img_css_ratio = list(x = 1.300, 
+            y = 1.299), mapping = list(x = "X", y = "Y"), 
+        domain = list(left = -49.101, right = 57.228, 
+            bottom = -70.389, top = 53.519), 
+        range = list(left = 50.986, right = 566.922, 
+            bottom = 603.013, top = 33.155), 
+        log = list(x = NULL, y = NULL), direction = "xy", 
+        brushId = "ReducedDimensionPlot1_Brush", 
+        outputId = "ReducedDimensionPlot1"
+    )
+)
+
+app <- iSEE(sce, initial=list(red.panel, dyn.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/dynreddim.png")
+```
+
+The `DynamicMarkerTable` class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel.
+If only the active selection exists in the transmitting panel, a comparison is performed between the points in that selection and all unselected points.
+If saved selections are present, pairwise comparisons between the active selection and each saved selection is performed and the results are combined into a single table using the `findMarkers()` function from `r Biocpkg("scran")`.
+
+```{r}
+diff.panel <- DynamicMarkerTable(PanelWidth=8L, Assay="logcounts",
+    ColumnSelectionSource="ReducedDimensionPlot1",)
+
+# Recycling the reduced dimension panel above, adding a saved selection to
+# compare to the active selection.
+red.panel[["SelectionHistory"]] <- list(
+    BrushData = list(
+        xmin = 15.143, xmax = 57.228, ymin = -40.752, 
+        ymax = 25.674, coords_css = list(xmin = 279.009, 
+            xmax = 436.089, ymin = 124.009, 
+            ymax = 359.009), coords_img = list(xmin = 362.716, 
+            xmax = 566.922, ymin = 161.212, 
+            ymax = 466.712), img_css_ratio = list(x = 1.300, 
+            y = 1.299), mapping = list(x = "X", y = "Y"), 
+        domain = list(left = -49.101, right = 57.228, 
+            bottom = -70.389, top = 53.519), 
+        range = list(left = 50.986, right = 566.922, 
+            bottom = 603.013, top = 33.155), 
+        log = list(x = NULL, y = NULL), direction = "xy", 
+        brushId = "ReducedDimensionPlot1_Brush", 
+        outputId = "ReducedDimensionPlot1"
+    )
+)
+red.panel[["PanelWidth"]] <- 4L # To fit onto one line.
+
+app <- iSEE(sce, initial=list(red.panel, diff.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/diffstat.png")
+```
+
+# Feature set table
+
+The `FeatureSetTable()` class is a bit unusual in that its rows do not correspond to any dimension of the `SummarizedExperiment`.
+Rather, each row is a feature set (e.g., from GO or KEGG) that, upon click, transmits a multiple row selection to other panels.
+The multiple selection consists of all rows in the chosen feature set,
+allowing users to identify the positions of all genes in a pathway of interest on, say, a volcano plot.
+This is also a rare example of a panel that only transmits and does not receive any selections from other panels.
+
+```{r}
+setFeatureSetCommands(createGeneSetCommands(identifier="ENSEMBL"))
+
+gset.tab <- FeatureSetTable(Selected="GO:0002576", 
+    Search="platelet", PanelWidth=6L)
+
+# This volcano plot will highlight the genes in the selected gene set.
+vol.panel <- VolcanoPlot(RowSelectionSource="FeatureSetTable1",
+    SelectionEffect="Color", PanelWidth=6L)
+
+app <- iSEE(airway, initial=list(gset.tab, vol.panel))
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/geneset.png", delay=30)
+```
+
+# App modes
+
+`r Biocpkg("iSEEu")` contains a number of "modes" that allow users to conveniently load an `iSEE` instance in one of several common configurations:
+
+- `modeEmpty()` will launch an empty app, i.e., with no panels.
+This is occasionally useful to jump to the landing page where a user can then upload a `SummarizedExperiment` object.
+- `modeGating()` will launch an app with multiple feature assay panels that are linked to each other.
+This is useful for applying sequential restrictions on the data, equivalent to gating in a flow cytometry experiment.
+-  `modeReducedDim()` will launch an app with multiple reduced dimension plots.
+This is useful for examining different views of large high-dimensional datasets (e.g., single-cell studies).
+
+# Contributing to `r Biocpkg("iSEEu")`
+
+If you want to contribute to the development of the `r Biocpkg("iSEEu")` package, here is a quick step-by-step guide:
+
+- Fork the `iSEEu` repository from GitHub (https://github.com/iSEE/iSEEu) and clone it locally.
+
+```
+git clone https://github.com/[your_github_username]/iSEEu.git
+```
+
+- Add the desired new files - start from the `R` folder, then document via `roxygen2` - and push to your fork. 
+  As an example you can check out to understand how things are supposed to work, there are several modes already defined in the `R/` directory. 
+  A typical contribution could include e.g. a function defining an `r Biocpkg("iSEE")` mode, named `modeXXX`, where `XXX` provides a clear representation of the purpose of the mode. 
+  Please place each mode in a file of its own, with the same name as the function. 
+  The function should be documented (including an example), and any required packages should be added to the `DESCRIPTION` file. 
+  
+- Once your `mode`/function is done, consider adding some information in the package.
+  Some examples might be a screenshot of the mode in action (to be placed in the folder `inst/modes_img`), and a well-documented example use case (maybe an entry in the `vignettes` folder). Also add yourself as a contributor (`ctb`) to the `DESCRIPTION` file.
+
+- Make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies.
+  The `r Biocpkg("iSEE")` core team will evaluate the contribution and get back to you!
+
+That's pretty much it!
+
+#### Using example data sets {-}
+
+Example data sets can often be obtained from an `r Biocpkg("ExperimentHub")` package (e.g. from the `r Biocpkg("scRNAseq")` package for single-cell RNA-sequencing data), and should not be added to the `r Biocpkg("iSEEu")` package.
+  
+#### Documenting, testing, coding style and conventions {-}
+
+- If possible, please consider adding an example in the dedicated Roxygen preamble to show how to run each function
+- If possible, consider adding one or more unit tests - we use the `testthat` framework
+
+We do follow some guidelines regarding the names given to variables, please abide to these for consistency with the rest of the codebase.
+Here are a few pointers:
+
+- Keep the indentation as it is in the initial functions already available (4-spaces indentation).
+- If writing text (e.g. in the vignette), please use one sentence per line - this makes `git diff` operations easier to check.
+- When choosing variable names, try to keep the consistency with what already is existing:
+  - `camelCase` for modes and other functions
+  - `.function_name` for internals
+  - `PanelClassName` for panels
+  - `.genericFunction` for the API
+  - `.scope1.scope2.name` for variable names in the cached info
+
+If you intend to understand more in depth the internals of the `r Biocpkg("iSEE")` framework, consider checking out the bookdown resource we put together at https://isee.github.io/iSEE-book/
+
+#### Looking for constants within `r Biocpkg("iSEE")` {-}
+
+Many of the "global" variables that are used in several places in `r Biocpkg("iSEE")` are defined in the [constants.R](https://github.com/iSEE/iSEE/blob/master/R/constants.R) script in `r Biocpkg("iSEE")`.
+We suggest to refer to those constants by their actual value rather than their internal variable name in downstream panel code.
+Both constant variable names and values may change at any time, but we will only announce changes to the constant value.
+
+#### What if I need a custom panel type? {-}
+
+In addition to the eight standard panel types, custom panels are easily accommodated within `r Biocpkg("iSEE")` applications. 
+For a guide, see the corresponding [vignette](https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html). 
+For examples, see [this repo](https://github.com/iSEE/iSEE_custom).
+
+#### Where can I find a comprehensive introduction to `r Biocpkg("iSEE")`? {-}
+
+The `r Biocpkg("iSEE")` package contains several vignettes detailing the main functionality. 
+You can also take a look at this [workshop](https://iSEE.github.io/iSEEWorkshop2019/index.html). 
+A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available [here](http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/).
+
+# Session information {-}
+
+```{r}
+sessionInfo()
+```
+
+# References {-}

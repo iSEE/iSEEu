@@ -4,13 +4,7 @@
 \alias{modeGating}
 \title{App pre-configured to link multiple feature assay plots}
 \usage{
-modeGating(
-  se,
-  features,
-  featAssayMax = max(2, nrow(features)),
-  ...,
-  plot_width = 4
-)
+modeGating(se, features, plotAssay = NA_character_, ..., plotWidth = 4)
 }
 \arguments{
 \item{se}{An object that coercible to
@@ -20,11 +14,12 @@ modeGating(
 that define the features on the axes of the linked plots.
 Plots are serially linked from the first row to the last.}
 
-\item{featAssayMax}{Maximal number of feature assay plots in the app.}
+\item{plotAssay}{The assay (one of assayNames(se)) to use for the plots
+(character vector of length either 1 or equal to \code{nrow(features)}).}
 
 \item{...}{Additional arguments passed to \code{\link[=iSEE]{iSEE()}}.}
 
-\item{plot_width}{The grid width of linked plots (numeric vector of
+\item{plotWidth}{The grid width of linked plots (numeric vector of
 length either 1 or equal to \code{nrow(features)}}
 }
 \value{
@@ -32,10 +27,9 @@ A Shiny app object is returned.
 }
 \description{
 This mode launches a Shiny App preconfigured with multiple chain-linked
-feature expression plots is launched for interactive data exploration of the
+feature expression plots for interactive data exploration of the
 \link[SingleCellExperiment:SingleCellExperiment]{SingleCellExperiment} or
-\link[SummarizedExperiment:SummarizedExperiment]{SummarizedExperiment}
-object.
+\code{\link{SummarizedExperiment}} object.
 }
 \examples{
 library(scRNAseq)
@@ -62,8 +56,9 @@ plot_features <- data.frame(
 
 # launch the app itself ----
 
-app <- modeGating(sce, features=plot_features, featAssayMax=6)
+app <- modeGating(sce, features = plot_features)
 if (interactive()) {
   shiny::runApp(app, port=1234)
 }
+
 }

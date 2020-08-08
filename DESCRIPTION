@@ -1,31 +1,37 @@
 Package: iSEEu
 Type: Package
 Title: iSEE Universe
-Version: 0.1.0
+Version: 1.1.5
+Date: 2020-08-03
 Authors@R: 
     c(
+    person("Kevin", 
+           "Rue-Albrecht", 
+           role=c("aut", "cre"), 
+           email="kevinrue67@gmail.com", 
+           comment=c(ORCID = "0000-0003-3899-3872")),
     person("Charlotte", 
            "Soneson", 
-           role=c("aut", "cre"), 
+           role="aut", 
            email="charlottesoneson@gmail.com", 
-           comment = c(ORCID = '0000-0003-3833-2169')),
+           comment=c(ORCID = '0000-0003-3833-2169')),
     person("Federico", 
            "Marini", 
            role="aut", 
            email="marinif@uni-mainz.de", 
-           comment = c(ORCID = '0000-0003-3252-7758')),
-    person("Kevin", 
-           "Rue-Albrecht", 
-           role = "aut", 
-           email = "kevin.rue-albrecht@kennedy.ox.ac.uk", 
-           comment = c(ORCID = "0000-0003-3899-3872")),
+           comment=c(ORCID = '0000-0003-3252-7758')),
     person("Aaron", 
            "Lun", 
            role="aut", 
            email="infinite.monkeys.with.keyboards@gmail.com", 
-           comment = c(ORCID = '0000-0002-3564-4813')))
-Description: Contains a set of modes for iSEE, allowing easy configuration of 
-    iSEE applications.
+           comment=c(ORCID = '0000-0002-3564-4813')),
+    person("Michael", 
+           "Stadler", 
+           role="ctb", 
+           email="michael.stadler@fmi.ch"))
+Description: iSEEu (the iSEE universe) contains diverse functionality to extend 
+    the usage of the iSEE package, including additional classes for the panels, 
+    or modes allowing easy configuration of iSEE applications.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: 
@@ -33,17 +39,36 @@ Depends:
 Imports:
     methods,
     S4Vectors,
-    shiny
+    shiny,
+    SummarizedExperiment,
+    SingleCellExperiment,
+    ggplot2,
+    DT,
+    stats
 Suggests: 
     scRNAseq,
     scater,
+    scran,
+    airway,
+    edgeR,
+    AnnotationDbi,
+    org.Hs.eg.db,
+    GO.db,
+    KEGGREST,
     knitr,
     rmarkdown,
     BiocStyle,
     htmltools,
-    rstudioapi
-URL: https://github.com/csoneson/iSEEu
-BugReports: https://github.com/csoneson/iSEEu/issues
-RoxygenNote: 7.0.2
+    rstudioapi,
+    Rtsne,
+    uwot,
+    testthat (>= 2.1.0),
+    covr
+URL: https://github.com/iSEE/iSEEu
+BugReports: https://github.com/iSEE/iSEEu/issues
+RoxygenNote: 7.1.1
+biocViews: ImmunoOncology, Visualization, GUI, DimensionReduction, 
+    FeatureExtraction, Clustering, Transcription, 
+    GeneExpression, Transcriptomics, SingleCell, CellBasedAssays
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
