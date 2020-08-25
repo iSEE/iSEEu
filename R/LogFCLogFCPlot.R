@@ -278,10 +278,12 @@ setMethod(".generateDotPlotData", "LogFCLogFCPlot", function(x, envir) {
     x.pvals <- sprintf("rowData(se)[[%s]]", deparse(x[["XPValueField"]]))
     y.pvals <- sprintf("rowData(se)[[%s]]", deparse(x[["YPValueField"]]))
     extra_cmds <- c(
+        "",
         .define_de_status(x, "plot.data$X", x.pvals, varname=".de_status_x"),
+        "plot.data$IsSigX <- .de_status_x;\n",
         .define_de_status(x, "plot.data$Y", y.pvals, varname=".de_status_y"),
-        "plot.data$IsSig <- c('none', 'x-only', 'y-only', 'both')[1 + (.de_status_x!=2) + 2 * (.de_status_y!=2)];",
-        ".freq_status <- tabulate(1 + (.de_status_x - 1) + 3 * (.de_status_y - 1), nbins=9);"
+        "plot.data$IsSigY <- .de_status_y;\n",
+        "plot.data$IsSig <- c('none', 'x-only', 'y-only', 'both')[1 + (.de_status_x!=2) + 2 * (.de_status_y!=2)];"
     )
 
     eval(parse(text=extra_cmds), envir)
@@ -305,14 +307,18 @@ setMethod(".colorByNoneDotPlotField", "LogFCLogFCPlot", function(x) "IsSig")
 
 #' @export
 setMethod(".colorByNoneDotPlotScale", "LogFCLogFCPlot", function(x) 
-    "scale_color_manual(values=c(none='grey', `x-only`='#fc766a', `y-only`='#2da8d8', both='#2a2b2d'), name='Outcome',
-    labels=setNames(
-        c(
-            sprintf('None (%s)', .freq_status[5]),
-            paste(sprintf('X %s 0 (%s)', c('<', '>'), .freq_status[c(4,6)]), collapse='\n'),
-            paste(sprintf('Y %s 0 (%s)', c('<', '>'), .freq_status[c(2,8)]), collapse='\n'),
-            paste(sprintf('X %s 0, Y %s 0 (%s)', rep(c('<', '>'), each=2), rep(c('<', '>'), 2), .freq_status[c(1,7,3,9)]), collapse='\n')
-        ), c('none', 'x-only', 'y-only', 'both'))) +")
+    "local({
+    .freq_status <- tabulate(1 + (plot.data$IsSigX - 1) + 3 * (plot.data$IsSigY - 1), nbins=9);
+    .de_labels <- c(
+        none=sprintf('none (%s)', .freq_status[5]),
+        `x-only`=paste(sprintf('x %s 0 (%s)', c('<', '>'), .freq_status[c(4,6)]), collapse='\\n'),
+        `y-only`=paste(sprintf('y %s 0 (%s)', c('<', '>'), .freq_status[c(2,8)]), collapse='\\n'),
+        both=paste(sprintf('x %s 0, y %s 0 (%s)', rep(c('<', '>'), each=2), rep(c('<', '>'), 2), 
+            .freq_status[c(1,7,3,9)]), collapse='\\n')
+    );
+    scale_color_manual(values=c(none='grey', `x-only`='#fc766a', `y-only`='#2da8d8', both='#2a2b2d'), 
+        name='Outcome', labels=.de_labels)
+}) +")
 
 #' @export
 #' @importFrom ggplot2 geom_hline
