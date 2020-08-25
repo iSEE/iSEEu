@@ -1,3 +1,11 @@
+# iSEEu 1.1.7
+
+* Improved safety and correctness of the calculation of the number of DEGs.
+
+# iSEEu 1.1.6
+
+* Version bump to trigger reinstallation with new iSEE class definitions.
+
 # iSEEu 1.1.5
 
 * Added panel-specific tours for all panel classes via the `.definePanelTour()` generic.
