@@ -85,13 +85,13 @@ setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
 setValidity2("AggregatedDotPlot", function(object) {
     msg <- character(0)
 
-    msg <- iSEE:::.single_string_error(msg, object, 
+    msg <- .singleStringError(msg, object, 
         c(.ADPAssay, .ADPFeatNameText))
 
-    msg <- iSEE:::.multiple_choice_error(msg, object, .visualParamChoice,
+    msg <- .multipleChoiceError(msg, object, .visualParamChoice,
         c(.visualParamChoiceColorTitle, .visualParamChoiceLegendTitle))
 
-    msg <- iSEE:::.valid_logical_error(msg, object, 
+    msg <- .validLogicalError(msg, object, 
         c(.ADPCustomFeatNames, .visualParamBoxOpen))
 
     if (length(msg)) {
@@ -102,7 +102,7 @@ setValidity2("AggregatedDotPlot", function(object) {
 
 #' @export
 #' @importFrom methods callNextMethod
-#' @importFrom SummarizedExperiment assayNames
+#' @importFrom SummarizedExperiment assayNames colData
 setMethod(".cacheCommonInfo", "AggregatedDotPlot", function(x, se) {
     if (!is.null(.getCachedCommonInfo(se, "AggregatedDotPlot"))) {
         return(se)
@@ -112,12 +112,12 @@ setMethod(".cacheCommonInfo", "AggregatedDotPlot", function(x, se) {
 
     named_assays <- assayNames(se)
     named_assays <- named_assays[named_assays!=""]
-    assays_continuous <- vapply(named_assays, iSEE:::.is_assay_numeric, logical(1), se)
+    assays_continuous <- vapply(named_assays, .isAssayNumeric, logical(1), se=se)
 
     df <- colData(se)
-    coldata_displayable <- iSEE:::.findAtomicFields(df)
+    coldata_displayable <- .findAtomicFields(df)
     subdf <- df[,coldata_displayable,drop=FALSE]
-    coldata_discrete <- iSEE:::.whichGroupable(subdf)
+    coldata_discrete <- .whichGroupable(subdf)
 
     .setCachedCommonInfo(se, "AggregatedDotPlot",
         continuous.assay.names=named_assays[assays_continuous],
@@ -171,11 +171,11 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     plot_env$se <- se
     plot_env$colormap <- metadata(se)$colormap
 
-    print("FIRING!")
     all_cmds <- list()
     all_cmds$select <- .processMultiSelections(x, all_memory, all_contents, plot_env)
-    all_cmds$assay <- iSEE:::.process_heatmap_assay_values(x, se, plot_env)
-    print(x[[.ADPFeatNameText]])
+    all_cmds$assay <- .extractAssaySubmatrix(x, se, plot_env,
+        use_custom_row_slot=.ADPCustomFeatNames,
+        custom_row_text_slot=.ADPFeatNameText)
 
     # Computing the various statistics.
     coldata.names <- x[[.ADPColData]]
@@ -324,9 +324,6 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
 
     plot_name <- .getEncodedName(x)
 
-    # TODO: set up for all Panels in advance when observers are created.
-    iSEE:::.safe_reactive_init(rObjects, plot_name)
-
     # Not much point distinguishing between protected and unprotected here,
     # as there aren't any selections transmitted from this panel anyway.
     .createProtectedParameterObservers(plot_name,
@@ -341,8 +338,8 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
         by_field=iSEE:::.selectColSource, type_field=iSEE:::.selectColType, saved_field=iSEE:::.selectColSaved,
         input=input, session=session, pObjects=pObjects, rObjects=rObjects)
 
-    iSEE:::.create_modal_observers_for_dimnames(plot_name, .ADPFeatNameText, .dimnamesModalOpen,
-        se, input=input, session=session, pObjects=pObjects, rObjects=rObjects, "row")
+    .createCustomDimnamesModalObservers(plot_name, .ADPFeatNameText, .dimnamesModalOpen,
+        se, input=input, session=session, pObjects=pObjects, rObjects=rObjects, source_type="row")
 
     invisible(NULL)
 })
