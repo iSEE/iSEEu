@@ -24,6 +24,14 @@
 #' @name AggregatedDotPlot
 #' @aliases
 #' AggregatedDotPlot-class
+#' .cacheCommonInfo,AggregatedDotPlot-method
+#' .refineParameters,AggregatedDotplot-method
+#' .generateOutput,AggregatedDotPlot-method
+#' .renderOutput,AggregatedDotPlot-method
+#' .exportOutput,AggregatedDotPlot-method
+#' .defineDataInterface,AggregatedDotPlot-method
+#' .defineInterface,AggregatedDotPlot-method 
+#' .hideInterface,AggregatedDotPlot-method
 #' .panelColor,AggregatedDotPlot-method
 #' .fullName,AggregatedDotPlot-method
 #' .generateOutput,AggregatedDotPlot-method
@@ -37,16 +45,26 @@ NULL
 
 .visualParamChoice <- "VisualChoices"
 .visualParamBoxOpen <- "VisualBoxOpen"
+.ADPColorUpper <- "Color"
+
+.ADPExpressors <- "MeanNonZeroes"
+.ADPCenter <- "Center"
+.ADPScale <- "Scale"
 
 collated <- character(0)
 
 collated[.ADPAssay] <- "character"
 collated[.ADPCustomFeatNames] <- "logical"
 collated[.ADPFeatNameText] <- "character"
+collated[.ADPColData] <- "character"
 
 collated[.visualParamChoice] <- "character"
-collated[.ADPColData] <- "character"
 collated[.visualParamBoxOpen] <- "logical"
+collated[.ADPColorUpper] <- "character"
+
+collated[.ADPExpressors] <- "logical"
+collated[.ADPCenter] <- "logical"
+collated[.ADPScale] <- "logical"
 
 #' @export
 setClass("AggregatedDotPlot", contains="Panel", slots=collated)
@@ -57,6 +75,7 @@ AggregatedDotPlot <- function(...) {
 }
 
 .visualParamChoiceColorTitle <- "Color"
+.visualParamChoiceTransformTitle <- "Transform"
 .visualParamChoiceLegendTitle <- "Legend"
 
 #' @export
@@ -78,6 +97,11 @@ setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
     args <- .emptyDefault(args, .visualParamChoice, .visualParamChoiceColorTitle)
     args <- .emptyDefault(args, .visualParamBoxOpen, FALSE)
 
+    args <- .emptyDefault(args, .ADPColorUpper, "red")
+    args <- .emptyDefault(args, .ADPExpressors, FALSE)
+    args <- .emptyDefault(args, .ADPCenter, FALSE)
+    args <- .emptyDefault(args, .ADPScale, FALSE)
+
     do.call(callNextMethod, c(list(.Object), args))
 })
 
@@ -88,11 +112,25 @@ setValidity2("AggregatedDotPlot", function(object) {
     msg <- .singleStringError(msg, object, 
         c(.ADPAssay, .ADPFeatNameText))
 
+    msg <- .validStringError(msg, object, .ADPColorUpper)
+
     msg <- .multipleChoiceError(msg, object, .visualParamChoice,
-        c(.visualParamChoiceColorTitle, .visualParamChoiceLegendTitle))
+        c(
+            .visualParamChoiceColorTitle, 
+            .visualParamChoiceTransformTitle, 
+            .visualParamChoiceLegendTitle
+        )
+    )
 
     msg <- .validLogicalError(msg, object, 
-        c(.ADPCustomFeatNames, .visualParamBoxOpen))
+        c(
+            .ADPCustomFeatNames, 
+            .visualParamBoxOpen, 
+            .ADPExpressors,
+            .ADPCenter, 
+            .ADPScale
+        )
+    )
 
     if (length(msg)) {
         return(msg)
@@ -185,41 +223,64 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     } else {
         cmd <- ".group_by <- rep('all', ncol(se));"
     }
+
     computation <- c(cmd,
-        "averages <- scuttle::sumCountsAcrossCells(plot.data, .group_by, average=TRUE, store.number=NULL);",
-        "n.detected <- scuttle::numDetectedAcrossCells(plot.data, .group_by, average=TRUE);"
+        ".averages.se <- scuttle::sumCountsAcrossCells(plot.data, .group_by, average=TRUE, store.number=NULL);",
+        ".averages <- SummarizedExperiment::assay(.averages.se);",
+        ".n.detected.se <- scuttle::numDetectedAcrossCells(plot.data, .group_by, average=TRUE);",
+        ".n.detected <- SummarizedExperiment::assay(.n.detected.se);"
     )
+
+    if (x[[.ADPExpressors]] ){
+        computation <- c(computation,
+            ".averages <- .averages / .n.detected;",
+            ".averages[is.na(.averages)] <- 0;"
+        )
+    }
+
+    if (x[[.ADPCenter]]) {
+        computation <- c(computation,
+            sprintf(".averages <- t(scale(t(.averages), center=TRUE, scale=%s));", deparse(x[[.ADPScale]]))
+        )
+    }
 
     .textEval(computation, plot_env)
     all_cmds$command <- computation
 
     # Organizing in the plot.data.
     prep.cmds <- c(
-       ".levels <- do.call(paste, c(as.list(SummarizedExperiment::colData(averages)), sep=', '))",
+       ".levels <- do.call(paste, c(as.list(SummarizedExperiment::colData(.averages.se)), sep=', '))",
         "plot.data <- data.frame(
-    Feature=rep(rownames(averages), ncol(averages)), 
-    Group=rep(.levels, each=nrow(averages)),
-    Average=as.numeric(SummarizedExperiment::assay(averages)), 
-    Detected=as.numeric(SummarizedExperiment::assay(n.detected))
+    Feature=rep(rownames(.averages), ncol(.averages)), 
+    Group=rep(.levels, each=nrow(.averages)),
+    Average=as.numeric(.averages), 
+    Detected=as.numeric(.n.detected)
 )")
     .textEval(prep.cmds, plot_env)
     all_cmds$prep <- prep.cmds
 
-    .low_color <- "grey"
-    .high_color <- "red"
+    if (!x[[.ADPCenter]]) {
+        .low_color <- "grey80"
+        .high_color <- x[[.ADPColorUpper]]
+        col.cmd <- sprintf(
+            'scale_color_gradient(limits = c(0, max(plot.data$Average)), low = %s, high = %s)',
+            deparse(.low_color), deparse(.high_color)
+        )
+    } else {
+        col.cmd <- "scale_color_gradient2()"
+    }
 
     plot.cmds <- c(
         'dplot <- ggplot(plot.data)',
         'geom_point(aes_string(x = "Group", y = "Feature", size = "Detected", col = "Average"))',
         'scale_size(limits = c(0, max(plot.data$Detected)))',
-        sprintf(
-            'scale_color_gradient(limits = c(0, max(plot.data$Average)), low = %s, high = %s)',
-            deparse(.low_color), deparse(.high_color)
-        ),
+        col.cmd,
         'theme(panel.background = element_rect(fill = "white"),
     panel.grid.major = element_line(size = 0.5, colour = "grey80"),
     panel.grid.minor = element_line(size = 0.25, colour = "grey80"),
-    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))'
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+    axis.title.y = element_blank())',
+        sprintf('xlab(%s)', deparse(paste0(coldata.names, collapse=", ")))
     )
 
     plot.cmds <- paste0(plot.cmds, collapse=" +\n    ")
@@ -241,8 +302,6 @@ setMethod(".renderOutput", "AggregatedDotPlot", function(x, se, output, pObjects
         print(p.out$plot)
     })
     # nocov end
-
-
 
     callNextMethod()
 })
@@ -290,21 +349,66 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
 })
 
 #' @export
+#' @importFrom colourpicker colourInput
 setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) {
     out <- callNextMethod()
     plot_name <- .getEncodedName(x)
-
+    .input_FUN <- function(field) { paste0(plot_name, "_", field) }
+    pchoice_field <- .input_FUN(.visualParamChoice)
+    center_field <- .input_FUN(.ADPCenter)
+    
     c(
         out[1],
         list(
             collapseBox(
-                id=paste0(plot_name, "_", .visualParamBoxOpen),
+                id=.input_FUN(.visualParamBoxOpen),
                 title="Visual parameters",
                 open=x[[.visualParamBoxOpen]],
                 checkboxGroupInput(
-                    inputId=paste0(plot_name, "_", .visualParamChoice), label=NULL, inline=TRUE,
+                    inputId=pchoice_field, 
+                    label=NULL, 
+                    inline=TRUE,
                     selected=x[[.visualParamChoice]],
-                    choices=c(.visualParamChoiceColorTitle, .visualParamChoiceLegendTitle))                
+                    choices=c(
+                         .visualParamChoiceColorTitle, 
+                         .visualParamChoiceTransformTitle, 
+                         .visualParamChoiceLegendTitle)
+                ),
+                iSEE:::.conditional_on_check_group(
+                    pchoice_field, 
+                    .visualParamChoiceColorTitle,
+                    hr(),
+                    iSEE:::.conditional_on_check_solo(
+                        center_field, 
+                        on_select=FALSE,
+                        colourInput(.input_FUN(.ADPColorUpper),
+                            label="Upper color",
+                            value=x[[.ADPColorUpper]])
+                    ),
+                    iSEE:::.conditional_on_check_solo(
+                        center_field, 
+                        on_select=FALSE
+                        # TODO: add some color choices here.
+                    )
+                ),
+                iSEE:::.conditional_on_check_group(
+                    pchoice_field, 
+                    .visualParamChoiceTransformTitle,
+                    hr(),
+                    checkboxInput(.input_FUN(.ADPExpressors),
+                        label="Compute average expression over non-zero samples",
+                        value=x[[.ADPExpressors]]),
+                    checkboxInput(center_field,
+                        label="Center averages (log-FC from average)",
+                        value=x[[.ADPCenter]]),
+                    iSEE:::.conditional_on_check_solo(
+                        center_field, 
+                        on_select=TRUE,
+                        checkboxInput(.input_FUN(.ADPScale),
+                            label="Scale averages (Z-scores)",
+                            value=x[[.ADPScale]])
+                    )
+                )
             )
         ),
         out[-1] 
@@ -331,15 +435,18 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
         input=input, pObjects=pObjects, rObjects=rObjects)
 
     .createUnprotectedParameterObservers(plot_name,
-        fields=c(.ADPColData),
+        fields=c(.ADPColData, .ADPAssay, .ADPColorUpper, 
+            .ADPExpressors, .ADPCenter, .ADPScale),
         input=input, pObjects=pObjects, rObjects=rObjects, ignoreNULL = FALSE)
 
-    iSEE:::.create_multi_selection_effect_observer(plot_name,
-        by_field=iSEE:::.selectColSource, type_field=iSEE:::.selectColType, saved_field=iSEE:::.selectColSaved,
+    .createMultiSelectionEffectObserver(plot_name,
+        by_field=iSEE:::.selectColSource, 
+        type_field=iSEE:::.selectColType, 
+        saved_field=iSEE:::.selectColSaved,
         input=input, session=session, pObjects=pObjects, rObjects=rObjects)
 
-    .createCustomDimnamesModalObservers(plot_name, .ADPFeatNameText, .dimnamesModalOpen,
-        se, input=input, session=session, pObjects=pObjects, rObjects=rObjects, source_type="row")
+    .createCustomDimnamesModalObservers(plot_name, .ADPFeatNameText, .dimnamesModalOpen, se, 
+        input=input, session=session, pObjects=pObjects, rObjects=rObjects, source_type="row")
 
     invisible(NULL)
 })

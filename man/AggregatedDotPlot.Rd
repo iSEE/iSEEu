@@ -3,9 +3,16 @@
 \name{AggregatedDotPlot}
 \alias{AggregatedDotPlot}
 \alias{AggregatedDotPlot-class}
+\alias{.cacheCommonInfo,AggregatedDotPlot-method}
+\alias{.refineParameters,AggregatedDotplot-method}
+\alias{.generateOutput,AggregatedDotPlot-method}
+\alias{.renderOutput,AggregatedDotPlot-method}
+\alias{.exportOutput,AggregatedDotPlot-method}
+\alias{.defineDataInterface,AggregatedDotPlot-method}
+\alias{.defineInterface,AggregatedDotPlot-method}
+\alias{.hideInterface,AggregatedDotPlot-method}
 \alias{.panelColor,AggregatedDotPlot-method}
 \alias{.fullName,AggregatedDotPlot-method}
-\alias{.generateOutput,AggregatedDotPlot-method}
 \title{The AggregatedDotPlot class}
 \description{
 Implements an aggregated dot plot where each feature/group combination is represented by a dot.

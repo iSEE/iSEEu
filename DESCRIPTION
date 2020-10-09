@@ -44,7 +44,8 @@ Imports:
     SingleCellExperiment,
     ggplot2,
     DT,
-    stats
+    stats,
+    colourpicker
 Suggests: 
     scRNAseq,
     scater,
