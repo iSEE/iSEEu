@@ -41,7 +41,9 @@ NULL
 .ADPCustomFeatNames <- "CustomRows"
 .ADPFeatNameText <- "CustomRowsText"
 .ADPClusterFeatures <- "ClusterRows"
-.ADPColData <- "ColumnData"
+
+.ADPColDataLabel <- "ColumnDataLabel"
+.ADPColDataFacet <- "ColumnDataFacet"
 
 .visualParamChoice <- "VisualChoices"
 .visualParamBoxOpen <- "VisualBoxOpen"
@@ -56,7 +58,9 @@ collated <- character(0)
 collated[.ADPAssay] <- "character"
 collated[.ADPCustomFeatNames] <- "logical"
 collated[.ADPFeatNameText] <- "character"
-collated[.ADPColData] <- "character"
+
+collated[.ADPColDataLabel] <- "character"
+collated[.ADPColDataFacet] <- "character"
 
 collated[.visualParamChoice] <- "character"
 collated[.visualParamBoxOpen] <- "logical"
@@ -92,7 +96,8 @@ setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
         args[[.ADPFeatNameText]] <- paste(vals, collapse="\n")
     }
 
-    args <- .emptyDefault(args, .ADPColData, character(0))
+    args <- .emptyDefault(args, .ADPColDataLabel, NA_character_)
+    args <- .emptyDefault(args, .ADPColDataFacet, iSEE:::.noSelection)
 
     args <- .emptyDefault(args, .visualParamChoice, .visualParamChoiceColorTitle)
     args <- .emptyDefault(args, .visualParamBoxOpen, FALSE)
@@ -110,7 +115,13 @@ setValidity2("AggregatedDotPlot", function(object) {
     msg <- character(0)
 
     msg <- .singleStringError(msg, object, 
-        c(.ADPAssay, .ADPFeatNameText))
+        c(
+            .ADPAssay, 
+            .ADPFeatNameText,
+            .ADPColDataLabel,
+            .ADPColDataFacet
+        )
+    )
 
     msg <- .validStringError(msg, object, .ADPColorUpper)
 
@@ -189,7 +200,13 @@ setMethod(".refineParameters", "AggregatedDotPlot", function(x, se) {
     }
 
     all_coldata <- .getCachedCommonInfo(se, "AggregatedDotPlot")$discrete.colData.names
-    x[[.ADPColData]] <- intersect(x[[.ADPColData]], all_coldata)
+    if (!length(all_coldata)) {
+        warning(sprintf("no discrete 'assays' for plotting '%s'", class(x)[1]))
+        return(NULL)
+    }
+
+    x <- iSEE:::.replace_na_with_first(x, .ADPColDataLabel, all_coldata)
+    x <- iSEE:::.replace_na_with_first(x, .ADPColDataFacet, all_coldata)
 
     x
 })
@@ -216,13 +233,12 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
         custom_row_text_slot=.ADPFeatNameText)
 
     # Computing the various statistics.
-    coldata.names <- x[[.ADPColData]]
-    if (length(coldata.names)) {
-        cmd <- sprintf(".group_by <- SummarizedExperiment::colData(se)[,%s,drop=FALSE];", 
-            paste(deparse(coldata.names), collapse=""))
-    } else {
-        cmd <- ".group_by <- rep('all', ncol(se));"
-    }
+    col1 <- x[[.ADPColDataLabel]]
+    col2 <- x[[.ADPColDataFacet]]
+    use.facets <- col2!=iSEE:::.noSelection
+    coldata.names <- c(col1, if (use.facets) col2)
+    cmd <- sprintf(".group_by <- SummarizedExperiment::colData(se)[,%s,drop=FALSE];", 
+        paste(deparse(coldata.names), collapse=""))
 
     computation <- c(cmd,
         ".averages.se <- scuttle::sumCountsAcrossCells(plot.data, .group_by, average=TRUE, store.number=NULL);",
@@ -248,14 +264,20 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     all_cmds$command <- computation
 
     # Organizing in the plot.data.
+    if (use.facets) {
+        facet.cmd <- '\n    FacetRow=rep(.levels[,2], each=nrow(.averages)),'
+    } else {
+        facet.cmd <- ''
+    }
     prep.cmds <- c(
-       ".levels <- do.call(paste, c(as.list(SummarizedExperiment::colData(.averages.se)), sep=', '))",
-        "plot.data <- data.frame(
+       ".levels <- SummarizedExperiment::colData(.averages.se);",
+        sprintf("plot.data <- data.frame(
     Feature=rep(rownames(.averages), ncol(.averages)), 
-    Group=rep(.levels, each=nrow(.averages)),
+    Group=rep(.levels[,1], each=nrow(.averages)),%s
     Average=as.numeric(.averages), 
     Detected=as.numeric(.n.detected)
-)")
+)", facet.cmd)
+    )
     .textEval(prep.cmds, plot_env)
     all_cmds$prep <- prep.cmds
 
@@ -280,7 +302,8 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     panel.grid.minor = element_line(size = 0.25, colour = "grey80"),
     axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
     axis.title.y = element_blank())',
-        sprintf('xlab(%s)', deparse(paste0(coldata.names, collapse=", ")))
+        sprintf('xlab(%s)', deparse(paste0(coldata.names, collapse=", "))),
+        if (use.facets) "facet_wrap(~FacetRow, nrow=1)"
     )
 
     plot.cmds <- paste0(plot.cmds, collapse=" +\n    ")
@@ -341,10 +364,13 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
         iSEE:::.conditional_on_check_solo(
             .input_FUN(.ADPCustomFeatNames),
             on_select=TRUE,
-            actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names")),
-        selectizeInput(.input_FUN(.ADPColData), label="Column annotations:",
-            selected=x[[.ADPColData]], choices=all_coldata, multiple=TRUE,
-            options=list(plugins=list('remove_button', 'drag_drop')))
+            actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names"),
+            br(), br()
+        ),
+        selectInput(.input_FUN(.ADPColDataLabel), label="Column label:",
+            selected=x[[.ADPColDataLabel]], choices=all_coldata),
+        selectInput(.input_FUN(.ADPColDataFacet), label="Column facet:",
+            selected=x[[.ADPColDataFacet]], choices=c(iSEE:::.noSelection, all_coldata))
     )
 })
 
@@ -435,9 +461,10 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
         input=input, pObjects=pObjects, rObjects=rObjects)
 
     .createUnprotectedParameterObservers(plot_name,
-        fields=c(.ADPColData, .ADPAssay, .ADPColorUpper, 
+        fields=c(.ADPColDataLabel, .ADPColDataFacet,
+            .ADPAssay, .ADPColorUpper, 
             .ADPExpressors, .ADPCenter, .ADPScale),
-        input=input, pObjects=pObjects, rObjects=rObjects, ignoreNULL = FALSE)
+        input=input, pObjects=pObjects, rObjects=rObjects)
 
     .createMultiSelectionEffectObserver(plot_name,
         by_field=iSEE:::.selectColSource, 
