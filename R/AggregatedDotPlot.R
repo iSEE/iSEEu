@@ -2,8 +2,112 @@
 #'
 #' Implements an aggregated dot plot where each feature/group combination is represented by a dot.
 #' The color of the dot scales with the mean assay value across all samples for a given group,
-#' while the size of the dot scales with the number of non-zero values across all samples.
+#' while the size of the dot scales with the proportion of non-zero values across samples in that group.
 #'
+#' @section Slot overview:
+#' The following slots control the choice of features:
+#' \itemize{
+#' \item \code{CustomRows}, a logical scalar indicating whether custom rows in \code{CustomRowsText} should be used.
+#' If \code{TRUE}, the feature identities are extracted from the \code{CustomRowsText} slot;
+#' otherwise they are defined from a transmitted row selection.
+#' Defaults to \code{TRUE}.
+#' \item \code{CustomRowsText}, a string containing the names of the features of interest,
+#' typically corresponding to the row names of the \linkS4class{SummarizedExperiment}. 
+#' Names should be new-line separated within this string.
+#' Defaults to the name of the first row in the SummarizedExperiment.
+#' }
+#'
+#' The following slots control the specification of groups:
+#' \itemize{
+#' \item \code{ColumnDataLabel}, a string specifying the name of the \code{\link{colData}} field to use to group cells.
+#' The chosen field should correspond to a categorical factor.
+#' Defaults to the first categorical field.
+#' \item \code{ColumnDataFacet}, a string specifying the name of the \code{\link{colData}} field to use for faceting.
+#' The chosen field should correspond to a categorical factor.
+#' Defaults to \code{"---"}, i.e., no faceting.
+#' }
+#'
+#' The following slots control the choice of assay values:
+#' \itemize{
+#' \item \code{Assay}, a string specifying the name of the assay containing continuous values,
+#' to use for calculating the mean and the proportion of non-zero values.
+#' }
+#'
+#' The following slots control the visualization parameters:
+#' \itemize{
+#' \item \code{VisualBoxOpen}, a logical scalar indicating whether the visual parameter box should be open on initialization.
+#' Defaults to \code{FALSE}.
+#' \item \code{VisualChoices}, a character vector specifying the visualization options to show.
+#' Defaults to \code{"Color"} but can also include \code{"Transform"} and \code{"Legend"}.
+#' }
+#'
+#' The following slots control the transformation of the mean values:
+#' \itemize{
+#' \item \code{MeanNonZeroes}, a logical scalar indicating whether the mean should only be computed over non-zero values.
+#' Defaults to \code{FALSE}.
+#' \item \code{Center}, a logical scalar indicating whether the means for each feature should be centered across all groups.
+#' Defaults to \code{FALSE}.
+#' \item \code{Scale}, a logical scalar indicating whether the standard deviation for each feature across all groups should be scaled to unity.
+#' Defaults to \code{FALSE}.
+#' }
+#'
+#' The following slots control the color:
+#' \itemize{
+#' \item \code{Color}, a string containing the upper color to use.
+#' }
+#'
+#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+#'
+#' @section Constructor:
+#' \code{AggregatedDotPlot(...)} creates an instance of a AggregatedDotPlot class,
+#' where any slot and its value can be passed to \code{...} as a named argument.
+#'
+#' @section Supported methods:
+#' In the following code snippets, \code{x} is an instance of an AggregatedDotPlot class.
+#' Refer to the documentation for each method for more details on the remaining arguments.
+#' 
+#' For setting up data values:
+#' \itemize{
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"AggregatedDotPlot"} entry 
+#' containing \code{continuous.assay.names} and \code{discrete.colData.names}.
+#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"}, 
+#' \code{"ColumnDataLabel"} and \code{"ColumnDataFacet"} to valid values. 
+#' If continuous assays or discrete \code{\link{colData}} variables are not available, \code{NULL} is returned instead.
+#' }
+#'
+#' For defining the interface:
+#' \itemize{
+#' \item \code{\link{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
+#' mostly by calling the parent method and adding another visualization parameter box.
+#' \item \code{\link{.defineDataInterface}(x, se, select_info)} creates an interface to modify the data-related parameters,
+#' i.e., those that affect the position of the points.
+#' \item \code{\link{.defineOutput}(x)} defines the output HTML element.
+#' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
+#' \item \code{\link{.fullName}(x)} will return \code{"Aggregated dot plot"}.
+#' \item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections.
+#' }
+#'
+#' For monitoring reactive expressions:
+#' \itemize{
+#' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} will create all relevant observers for the UI elements.
+#' }
+#'
+#' For generating output:
+#' \itemize{
+#' \item \code{\link{.generateOutput}(x, se, all_memory, all_contents)} will return the aggregated dot plot as a \link{ggplot} object,
+#' along with the commands used for its creation.
+#' \item \code{\link{.renderOutput}(x, se, output, pObjects, rObjects)} will render the aggregated dot plot onto the interface.
+#' \item \code{\link{.exportOutput}(x, se, all_memory, all_contents)} will save the aggregated dot plot to a PDF file named after \code{x},
+#' returning the path to the new file.
+#' }
+#'
+#' @author Aaron Lun
+#'
+#' @seealso
+#' \linkS4class{Panel}, for the immediate parent class.
+#'
+#' \linkS4class{ComplexHeatmapPlot}, for another panel with multi-row visualization capability.
+#' 
 #' @examples
 #' library(scRNAseq)
 #'
@@ -22,10 +126,12 @@
 #' }
 #' 
 #' @name AggregatedDotPlot
+#' @docType methods
 #' @aliases
 #' AggregatedDotPlot-class
 #' .cacheCommonInfo,AggregatedDotPlot-method
 #' .refineParameters,AggregatedDotplot-method
+#' .defineOutput,AggregatedDotPlot-method
 #' .generateOutput,AggregatedDotPlot-method
 #' .renderOutput,AggregatedDotPlot-method
 #' .exportOutput,AggregatedDotPlot-method
