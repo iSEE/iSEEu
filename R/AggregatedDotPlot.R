@@ -314,7 +314,7 @@ setMethod(".refineParameters", "AggregatedDotPlot", function(x, se) {
 
     all_coldata <- .getCachedCommonInfo(se, "AggregatedDotPlot")$discrete.colData.names
     if (!length(all_coldata)) {
-        warning(sprintf("no discrete 'assays' for plotting '%s'", class(x)[1]))
+        warning(sprintf("no discrete 'colData' for plotting '%s'", class(x)[1]))
         return(NULL)
     }
 

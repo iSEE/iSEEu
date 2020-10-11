@@ -1,7 +1,10 @@
 # library(testthat); library(iSEEu); source("test-AggregatedDotPlot.R")
 
-se <- SummarizedExperiment(list(logcounts=matrix(0, 10, 4)),
-    rowData=DataFrame(PValue=runif(10), LogFC=rnorm(10), AveExpr=rnorm(10)))
+se <- SummarizedExperiment(
+    assays = list(logcounts=matrix(0, 10, 4)),
+    colData=DataFrame(
+        CellGroup = factor(rep(c(1, 2), each = 2))
+    ))
 dimnames(se) <- list(1:nrow(se), letters[seq_len(ncol(se))])
 
 test_that("DynamicMarkerTable constructor works correctly", {
@@ -22,6 +25,36 @@ test_that(".cacheCommonInfo works", {
   
   panel_cache <- metadata(se2)[["iSEE"]][["AggregatedDotPlot"]]
   expect_identical(panel_cache$continuous.assay.names, "logcounts")
-  expect_identical(panel_cache$discrete.colData.names, character(0))
+  expect_identical(panel_cache$discrete.colData.names, "CellGroup")
+  
+})
+
+test_that(".refineParameters works", {
+  
+    FUN <- selectMethod(".refineParameters", signature="AggregatedDotPlot")
+    expect_null(FUN(NULL, se))
+    
+    out <- AggregatedDotPlot()
+    se2 <- .cacheCommonInfo(out, se)
+    
+    expect_warning(.refineParameters(out, se[c(), ]), "no rows available")
+    expect_null(.refineParameters(out, se[c(), ]))
+    
+    se_discrete <- se
+    storage.mode(assay(se_discrete)) <- "character"
+    se_discrete <- .cacheCommonInfo(out, se_discrete)
+    expect_warning(.refineParameters(out, se_discrete), "no valid 'assays'")
+    expect_null(.refineParameters(out, se_discrete))
+    
+    se_colData <- se
+    se_colData$CellGroup <- seq_len(ncol(se_colData))
+    se_colData <- .cacheCommonInfo(out, se_colData)
+    expect_warning(.refineParameters(out, se_colData), "no discrete 'colData'")
+    expect_null(.refineParameters(out, se_colData))
+    
+    out2 <- .refineParameters(out, se2)
+    expect_identical(out2[["Assay"]], "logcounts")
+    expect_identical(out2[["ColumnDataLabel"]], "CellGroup")
+    expect_identical(out2[["CustomRowsText"]], "1")
   
 })
