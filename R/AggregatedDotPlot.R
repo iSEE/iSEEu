@@ -306,7 +306,7 @@ setMethod(".refineParameters", "AggregatedDotPlot", function(x, se) {
     }
 
     all_assays <- c(intersect(iSEEOptions$get("assay"), all_assays), all_assays)
-    x <- iSEE:::.replace_na_with_first(x, .ADPAssay, all_assays)
+    x <- .replaceMissingWithFirst(x, .ADPAssay, all_assays)
 
     if (is.na(x[[.ADPFeatNameText]])) {
         x[[.ADPFeatNameText]] <- rownames(se)[1]
@@ -318,8 +318,8 @@ setMethod(".refineParameters", "AggregatedDotPlot", function(x, se) {
         return(NULL)
     }
 
-    x <- iSEE:::.replace_na_with_first(x, .ADPColDataLabel, all_coldata)
-    x <- iSEE:::.replace_na_with_first(x, .ADPColDataFacet, c(iSEE:::.noSelection, all_coldata))
+    x <- .replaceMissingWithFirst(x, .ADPColDataLabel, all_coldata)
+    x <- .replaceMissingWithFirst(x, .ADPColDataFacet, c(iSEE:::.noSelection, all_coldata))
 
     x
 })
@@ -474,7 +474,7 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
             choices=all_assays, selected=x[[.ADPAssay]]),
         checkboxInput(.input_FUN(.ADPCustomFeatNames), label="Use custom rows",
             value=x[[.ADPCustomFeatNames]]),
-        iSEE:::.conditional_on_check_solo(
+        .conditionalOnCheckSolo(
             .input_FUN(.ADPCustomFeatNames),
             on_select=TRUE,
             actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names"),
@@ -513,24 +513,24 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                          .visualParamChoiceTransformTitle, 
                          .visualParamChoiceLegendTitle)
                 ),
-                iSEE:::.conditional_on_check_group(
+                .conditionalOnCheckGroup(
                     pchoice_field, 
                     .visualParamChoiceColorTitle,
                     hr(),
-                    iSEE:::.conditional_on_check_solo(
+                    .conditionalOnCheckSolo(
                         center_field, 
                         on_select=FALSE,
                         colourInput(.input_FUN(.ADPColorUpper),
                             label="Upper color",
                             value=x[[.ADPColorUpper]])
                     ),
-                    iSEE:::.conditional_on_check_solo(
+                    .conditionalOnCheckSolo(
                         center_field, 
                         on_select=FALSE
                         # TODO: add some color choices here.
                     )
                 ),
-                iSEE:::.conditional_on_check_group(
+                .conditionalOnCheckGroup(
                     pchoice_field, 
                     .visualParamChoiceTransformTitle,
                     hr(),
@@ -540,7 +540,7 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     checkboxInput(center_field,
                         label="Center averages (log-FC from average)",
                         value=x[[.ADPCenter]]),
-                    iSEE:::.conditional_on_check_solo(
+                    .conditionalOnCheckSolo(
                         center_field, 
                         on_select=TRUE,
                         checkboxInput(.input_FUN(.ADPScale),
@@ -604,18 +604,16 @@ setMethod(".hideInterface", "AggregatedDotPlot", function(x, field) {
 setMethod(".definePanelTour", "AggregatedDotPlot", function(x) {
     collated <- rbind(
         c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">AggregatedDotPlot</font> panel displays an aggregated dot plot that visualizes the mean assay value along with the proportion of non-zero values, for each of multiple features in each of multiple groups of samples. This is strictly an end-point panel, i.e., it cannot transmit to other panels.", .getPanelColor(x))),
-        iSEE:::.add_tour_step(x, iSEE:::.dataParamBoxOpen, "The <i>Data parameters</i> box shows the available parameters that can be tweaked to control the data in the aggregated dot plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        iSEE:::.add_tour_step(x, .dimnamesModalOpen, "The most relevant parameter is the choice of features to show as rows on the heatmap. This can be manually specified by entering row names of the <code>SummarizedExperiment</code> object into this modal..."),
-        iSEE:::.add_tour_step(x, .ADPCustomFeatNames, "Or it can be chained to a multiple row selection from another panel, if the <i>Custom rows</i> choice is unselected - see the <i>Selection parameters</i> later."),
-        iSEE:::.add_tour_step(x, .ADPColDataLabel, "The other key parameter is to select the column metadata field to use to define our groups of samples. This variable must be categorical, for example a cell type label.",
-            element=paste0("#", .getEncodedName(x), "_", .ADPColDataLabel, " + .selectize-control")),
-        iSEE:::.add_tour_step(x, .ADPColDataFacet, "We can also facet by another (categorical) column metadata field, if multiple such fields are of interest.",
-            element=paste0("#", .getEncodedName(x), "_", .ADPColDataFacet, " + .selectize-control")),
+        .addTourStep(x, iSEE:::.dataParamBoxOpen, "The <i>Data parameters</i> box shows the available parameters that can be tweaked to control the data in the aggregated dot plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        .addTourStep(x, .dimnamesModalOpen, "The most relevant parameter is the choice of features to show as rows on the heatmap. This can be manually specified by entering row names of the <code>SummarizedExperiment</code> object into this modal..."),
+        .addTourStep(x, .ADPCustomFeatNames, "Or it can be chained to a multiple row selection from another panel, if the <i>Custom rows</i> choice is unselected - see the <i>Selection parameters</i> later."),
+        .addTourStep(x, .ADPColDataLabel, "The other key parameter is to select the column metadata field to use to define our groups of samples. This variable must be categorical, for example a cell type label.", is_selectize=TRUE),
+        .addTourStep(x, .ADPColDataFacet, "We can also facet by another (categorical) column metadata field, if multiple such fields are of interest.", is_selectize=TRUE),
 
-        iSEE:::.add_tour_step(x, .visualParamBoxOpen, "The <i>Visual parameters</i> box shows the available visual parameters that can be tweaked in this heatmap.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        iSEE:::.add_tour_step(x, .visualParamChoice, "A large number of options are available here, so not all of them are shown by default. We can check some of the boxes here to show or hide some classes of parameters.<br/><br/><strong>Action:</strong> check the <i>Transform</i> box to expose some transformation options."),
-        iSEE:::.add_tour_step(x, .ADPExpressors, "We can choose to only compute the mean assay value for each group across the non-zero values..."),
-        iSEE:::.add_tour_step(x, .ADPCenter, "Or we can center (and scale) the means for each feature, to mimic the typical visualization for a heatmap."),
+        .addTourStep(x, .visualParamBoxOpen, "The <i>Visual parameters</i> box shows the available visual parameters that can be tweaked in this heatmap.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        .addTourStep(x, .visualParamChoice, "A large number of options are available here, so not all of them are shown by default. We can check some of the boxes here to show or hide some classes of parameters.<br/><br/><strong>Action:</strong> check the <i>Transform</i> box to expose some transformation options."),
+        .addTourStep(x, .ADPExpressors, "We can choose to only compute the mean assay value for each group across the non-zero values..."),
+        .addTourStep(x, .ADPCenter, "Or we can center (and scale) the means for each feature, to mimic the typical visualization for a heatmap."),
 
         callNextMethod()
     )
