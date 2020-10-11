@@ -13,3 +13,15 @@ test_that("initialize processes multiple custom row names", {
     out <- AggregatedDotPlot(CustomRowsText = c("H13", "H1f0", "H1fnt", "H1foo", "H1fx", "H2-Aa"))
     expect_identical(out[["CustomRowsText"]], "H13\nH1f0\nH1fnt\nH1foo\nH1fx\nH2-Aa")
 })
+
+test_that(".cacheCommonInfo works", {
+  
+  out <- AggregatedDotPlot()
+  se2 <- .cacheCommonInfo(out, se)
+  se2 <- .cacheCommonInfo(out, se2) # return se
+  
+  panel_cache <- metadata(se2)[["iSEE"]][["AggregatedDotPlot"]]
+  expect_identical(panel_cache$continuous.assay.names, "logcounts")
+  expect_identical(panel_cache$discrete.colData.names, character(0))
+  
+})
