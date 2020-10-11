@@ -31,6 +31,7 @@
 #' \itemize{
 #' \item \code{Assay}, a string specifying the name of the assay containing continuous values,
 #' to use for calculating the mean and the proportion of non-zero values.
+#' Defaults to the first valid assay name.
 #' }
 #'
 #' The following slots control the visualization parameters:
@@ -101,6 +102,11 @@
 #' returning the path to the new file.
 #' }
 #'
+#' For providing documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} will return a data.frame to be used in \pkg{rintrojs} as a panel-specific tour.
+#' }
+#'
 #' @author Aaron Lun
 #'
 #' @seealso
@@ -121,7 +127,7 @@
 #' # launch the app itself ----
 #' if (interactive()) {
 #'     iSEE(sce, initial=list(
-#'         AggregatedDotPlot(ColumnData=c("Primary.Type"))
+#'         AggregatedDotPlot(ColumnDataLabel="Primary.Type")
 #'     ))
 #' }
 #' 
@@ -141,6 +147,7 @@
 #' .panelColor,AggregatedDotPlot-method
 #' .fullName,AggregatedDotPlot-method
 #' .generateOutput,AggregatedDotPlot-method
+#' .definePanelTour,AggregatedDotPlot-method
 NULL
 
 .ADPAssay <- "Assay"
@@ -312,7 +319,7 @@ setMethod(".refineParameters", "AggregatedDotPlot", function(x, se) {
     }
 
     x <- iSEE:::.replace_na_with_first(x, .ADPColDataLabel, all_coldata)
-    x <- iSEE:::.replace_na_with_first(x, .ADPColDataFacet, all_coldata)
+    x <- iSEE:::.replace_na_with_first(x, .ADPColDataFacet, c(iSEE:::.noSelection, all_coldata))
 
     x
 })
@@ -591,4 +598,30 @@ setMethod(".hideInterface", "AggregatedDotPlot", function(x, field) {
     } else {
         callNextMethod()
     }
+})
+
+#' @export
+setMethod(".definePanelTour", "AggregatedDotPlot", function(x) {
+    collated <- rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">AggregatedDotPlot</font> panel displays an aggregated dot plot that visualizes the mean assay value along with the proportion of non-zero values, for each of multiple features in each of multiple groups of samples. This is strictly an end-point panel, i.e., it cannot transmit to other panels.", .getPanelColor(x))),
+        iSEE:::.add_tour_step(x, iSEE:::.dataParamBoxOpen, "The <i>Data parameters</i> box shows the available parameters that can be tweaked to control the data in the aggregated dot plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        iSEE:::.add_tour_step(x, .dimnamesModalOpen, "The most relevant parameter is the choice of features to show as rows on the heatmap. This can be manually specified by entering row names of the <code>SummarizedExperiment</code> object into this modal..."),
+        iSEE:::.add_tour_step(x, .ADPCustomFeatNames, "Or it can be chained to a multiple row selection from another panel, if the <i>Custom rows</i> choice is unselected - see the <i>Selection parameters</i> later."),
+        iSEE:::.add_tour_step(x, .ADPColDataLabel, "The other key parameter is to select the column metadata field to use to define our groups of samples. This variable must be categorical, for example a cell type label.",
+            element=paste0("#", .getEncodedName(x), "_", .ADPColDataLabel, " + .selectize-control")),
+        iSEE:::.add_tour_step(x, .ADPColDataFacet, "We can also facet by another (categorical) column metadata field, if multiple such fields are of interest.",
+            element=paste0("#", .getEncodedName(x), "_", .ADPColDataFacet, " + .selectize-control")),
+
+        iSEE:::.add_tour_step(x, .visualParamBoxOpen, "The <i>Visual parameters</i> box shows the available visual parameters that can be tweaked in this heatmap.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        iSEE:::.add_tour_step(x, .visualParamChoice, "A large number of options are available here, so not all of them are shown by default. We can check some of the boxes here to show or hide some classes of parameters.<br/><br/><strong>Action:</strong> check the <i>Transform</i> box to expose some transformation options."),
+        iSEE:::.add_tour_step(x, .ADPExpressors, "We can choose to only compute the mean assay value for each group across the non-zero values..."),
+        iSEE:::.add_tour_step(x, .ADPCenter, "Or we can center (and scale) the means for each feature, to mimic the typical visualization for a heatmap."),
+
+        callNextMethod()
+    )
+
+    collated[collated[,2]=="PLACEHOLDER_ROW_SELECT",2] <- "We can receive a multiple selection of rows from another panel, which is used to control the rows that are shown in this panel."
+    collated[collated[,2]=="PLACEHOLDER_COLUMN_SELECT",2] <- "We can also receive a multiple selection of columns from another panel. This is used to define the subset of samples to use in this plot - all samples outside of the selection are ignored."
+
+    collated
 })
