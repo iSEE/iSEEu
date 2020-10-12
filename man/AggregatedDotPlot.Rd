@@ -16,6 +16,9 @@
 \alias{.panelColor,AggregatedDotPlot-method}
 \alias{.fullName,AggregatedDotPlot-method}
 \alias{.definePanelTour,AggregatedDotPlot-method}
+\alias{.createObservers,AggregatedDotPlot-method}
+\alias{.refineParameters,AggregatedDotPlot-method}
+\alias{initialize,AggregatedDotPlot-method}
 \title{The AggregatedDotPlot class}
 \description{
 Implements an aggregated dot plot where each feature/group combination is represented by a dot.

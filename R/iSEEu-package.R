@@ -10,6 +10,7 @@
 #' @docType package
 #' @keywords internal
 #' @import iSEE 
+#' @import methods
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
