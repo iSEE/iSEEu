@@ -54,7 +54,14 @@
 #'
 #' The following slots control the color:
 #' \itemize{
-#' \item \code{Color}, a string containing the upper color to use.
+#' \item \code{UseCustomColormap}, a logical scalar indicating whether to use a custom color scale.
+#' Defaults to \code{FALSE}, in which case the application-wide color scale defined by \code{\link{ExperimentColorMap}} is used.
+#' \item \code{CustomColorLow}, a string specifying the low color (i.e., at an average of zero) for a custom scale.
+#' Defaults to \code{"grey"}.
+#' \item \code{CustomColorHigh}, a string specifying the high color for a custom scale.
+#' Defaults to \code{"red"}.
+#' \item \code{CenteredColormap}, a string specifying the divergent colormap to use when \code{Center} is \code{TRUE}.
+#' Defaults to \code{"blue < grey < orange"}; other choices are \code{"purple < black < yellow"}, \code{"blue < grey < red"} and \code{"green < grey < red"}.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -160,7 +167,11 @@ NULL
 
 .visualParamChoice <- "VisualChoices"
 .visualParamBoxOpen <- "VisualBoxOpen"
-.ADPColorUpper <- "Color"
+
+.ADPCustomColor <- "UseCustomColormap"
+.ADPColorLower <- "CustomColorLow"
+.ADPColorUpper <- "CustomColorHigh"
+.ADPColorCentered <- "DivergentColormap"
 
 .ADPExpressors <- "MeanNonZeroes"
 .ADPCenter <- "Center"
@@ -178,6 +189,9 @@ collated[.ADPColDataFacet] <- "character"
 collated[.visualParamChoice] <- "character"
 collated[.visualParamBoxOpen] <- "logical"
 collated[.ADPColorUpper] <- "character"
+collated[.ADPColorLower] <- "character"
+collated[.ADPColorCentered] <- "character"
+collated[.ADPCustomColor] <- "logical"
 
 collated[.ADPExpressors] <- "logical"
 collated[.ADPCenter] <- "logical"
@@ -194,6 +208,8 @@ AggregatedDotPlot <- function(...) {
 .visualParamChoiceColorTitle <- "Color"
 .visualParamChoiceTransformTitle <- "Transform"
 .visualParamChoiceLegendTitle <- "Legend"
+
+.centered_color_choices <- c("purple < black < yellow", "blue < grey < orange", "blue < grey < red", "green < grey < red")
 
 #' @export
 #' @importFrom methods callNextMethod
@@ -215,7 +231,11 @@ setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
     args <- .emptyDefault(args, .visualParamChoice, .visualParamChoiceColorTitle)
     args <- .emptyDefault(args, .visualParamBoxOpen, FALSE)
 
+    args <- .emptyDefault(args, .ADPCustomColor, FALSE)
+    args <- .emptyDefault(args, .ADPColorLower, "grey")
     args <- .emptyDefault(args, .ADPColorUpper, "red")
+    args <- .emptyDefault(args, .ADPColorCentered, .centered_color_choices[2])
+
     args <- .emptyDefault(args, .ADPExpressors, FALSE)
     args <- .emptyDefault(args, .ADPCenter, FALSE)
     args <- .emptyDefault(args, .ADPScale, FALSE)
@@ -236,7 +256,14 @@ setValidity2("AggregatedDotPlot", function(object) {
         )
     )
 
-    msg <- .validStringError(msg, object, .ADPColorUpper)
+    msg <- .validStringError(msg, object, 
+        c(
+            .ADPColorUpper,
+            .ADPColorLower
+        )
+    )
+
+    msg <- .allowableChoiceError(msg, object, .ADPColorCentered, .centered_color_choices)
 
     msg <- .multipleChoiceError(msg, object, .visualParamChoice,
         c(
@@ -250,6 +277,7 @@ setValidity2("AggregatedDotPlot", function(object) {
         c(
             .ADPCustomFeatNames, 
             .visualParamBoxOpen, 
+            .ADPCustomColor,
             .ADPExpressors,
             .ADPCenter, 
             .ADPScale
@@ -395,14 +423,25 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     all_cmds$prep <- prep.cmds
 
     if (!x[[.ADPCenter]]) {
-        .low_color <- "grey80"
-        .high_color <- x[[.ADPColorUpper]]
-        col.cmd <- sprintf(
-            'scale_color_gradient(limits = c(0, max(plot.data$Average)), low = %s, high = %s)',
-            deparse(.low_color), deparse(.high_color)
-        )
+        if (x[[.ADPCustomColor]]) {
+            col.cmd <- sprintf(
+                'scale_color_gradient(limits = c(0, max(plot.data$Average)), low = %s, high = %s)',
+                deparse(x[[.ADPColorLower]]), deparse(x[[.ADPColorUpper]])
+            )
+        } else {
+            col.cmd <- sprintf(
+                'scale_color_gradientn(limits = c(0, max(plot.data$Average)), 
+    colours=assayColorMap(colormap, %s, discrete=FALSE)(21L))', 
+                deparse(x[[.ADPAssay]])
+            )
+        }
     } else {
-        col.cmd <- "scale_color_gradient2()"
+        choice_colors <- x[[.ADPColorCentered]]
+        choice_colors <- strsplit(choice_colors, split = " < ", fixed = TRUE)[[1]]
+        col.cmd <- sprintf(
+            "scale_color_gradient2(low=%s, mid=%s, high=%s)", 
+            deparse(choice_colors[1]), deparse(choice_colors[2]), deparse(choice_colors[3])
+        )
     }
 
     plot.cmds <- c(
@@ -492,10 +531,12 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
 setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) {
     out <- callNextMethod()
     plot_name <- .getEncodedName(x)
+
     .input_FUN <- function(field) { paste0(plot_name, "_", field) }
     pchoice_field <- .input_FUN(.visualParamChoice)
     center_field <- .input_FUN(.ADPCenter)
-    
+    custom_field <- .input_FUN(.ADPCustomColor) 
+
     c(
         out[1],
         list(
@@ -517,17 +558,32 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     pchoice_field, 
                     .visualParamChoiceColorTitle,
                     hr(),
+                    checkboxInput(.input_FUN(.ADPCustomColor),
+                        label="Use custom colors",
+                        value=x[[.ADPCustomColor]]),
                     .conditionalOnCheckSolo(
                         center_field, 
                         on_select=FALSE,
-                        colourInput(.input_FUN(.ADPColorUpper),
-                            label="Upper color",
-                            value=x[[.ADPColorUpper]])
+                        .conditionalOnCheckSolo(
+                            custom_field,
+                            on_select=TRUE,
+                            colourInput(.input_FUN(.ADPColorLower),
+                                label="Lower color",
+                                value=x[[.ADPColorLower]]),
+                            colourInput(.input_FUN(.ADPColorUpper),
+                                label="Upper color",
+                                value=x[[.ADPColorUpper]])
+                        )
                     ),
                     .conditionalOnCheckSolo(
                         center_field, 
-                        on_select=FALSE
-                        # TODO: add some color choices here.
+                        on_select=TRUE,
+                        selectInput(
+                            .input_FUN(.ADPColorCentered),
+                            label="Divergent colormap",
+                            selected=x[[.ADPColorCentered]],
+                            choices=.centered_color_choices
+                        )
                     )
                 ),
                 .conditionalOnCheckGroup(
@@ -538,13 +594,13 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                         label="Compute average expression over non-zero samples",
                         value=x[[.ADPExpressors]]),
                     checkboxInput(center_field,
-                        label="Center averages (log-FC from average)",
+                        label="Center averages", 
                         value=x[[.ADPCenter]]),
                     .conditionalOnCheckSolo(
                         center_field, 
                         on_select=TRUE,
                         checkboxInput(.input_FUN(.ADPScale),
-                            label="Scale averages (Z-scores)",
+                            label="Scale averages",
                             value=x[[.ADPScale]])
                     )
                 )
@@ -575,7 +631,8 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
 
     .createUnprotectedParameterObservers(plot_name,
         fields=c(.ADPColDataLabel, .ADPColDataFacet,
-            .ADPAssay, .ADPColorUpper, 
+            .ADPAssay, 
+            .ADPColorUpper, .ADPColorLower, .ADPCustomColor, .ADPColorCentered,
             .ADPExpressors, .ADPCenter, .ADPScale),
         input=input, pObjects=pObjects, rObjects=rObjects)
 
