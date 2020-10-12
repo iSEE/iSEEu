@@ -133,9 +133,9 @@
     <p>Get or set the names of the extra fields to include in a table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getTableExtraFields</span>()
+    <pre class="usage"><span class='fu'>getTableExtraFields</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>setTableExtraFields</span>(<span class='no'>value</span>)</pre>
+<span class='fu'>setTableExtraFields</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,17 +152,22 @@
 <p><code>setTableExtraFields</code> will set the current global extra table fields and return <code>NULL</code> invisibly.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>These utilities allow users to easily set the feature set commands for all DynamicMarkerTables at once.
+    <p>These utilities allow users to easily set the feature set commands for all <a href='DynamicMarkerTable-class.html'>DynamicMarkerTable</a>s at once.
 Any global settings only take effect (i) during setup of the <code>iSEE</code> application
-and (ii) if the first DynamicMarkerTable does not have an existing values in the <code>"TableExtraFields"</code> slots.</p>
+and (ii) if the first <a href='DynamicMarkerTable-class.html'>DynamicMarkerTable</a> does not have an existing values in the <code>"TableExtraFields"</code> slots.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>old</span> <span class='kw'>&lt;-</span> <span class='fu'>getTableExtraFields</span>()
+    <pre class="examples"><div class='input'><span class='va'>old</span> <span class='op'>&lt;-</span> <span class='fu'>getTableExtraFields</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>setTableExtraFields</span>(<span class='no'>LETTERS</span>)
-<span class='fu'>getTableExtraFields</span>()</div><div class='output co'>#&gt;  [1] "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S"
+<span class='fu'>setTableExtraFields</span><span class='op'>(</span><span class='va'>LETTERS</span><span class='op'>)</span>
+<span class='fu'>getTableExtraFields</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S"
 #&gt; [20] "T" "U" "V" "W" "X" "Y" "Z"</div><div class='input'>
-<span class='fu'>setTableExtraFields</span>(<span class='no'>old</span>)</div></pre>
+<span class='fu'>setTableExtraFields</span><span class='op'>(</span><span class='va'>old</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -178,7 +183,7 @@ and (ii) if the first DynamicMarkerTable does not have an existing values in the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

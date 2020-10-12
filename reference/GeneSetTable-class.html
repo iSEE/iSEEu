@@ -132,7 +132,7 @@ This has been deprecated in favor of the simpler FeatureSetTable." />
 
     <div class="ref-description">
     <p>A table where each row is a gene set and can be clicked to transmit a multiple feature selection to another panel.
-This has been deprecated in favor of the simpler FeatureSetTable.</p>
+This has been deprecated in favor of the simpler <a href='FeatureSetTable-class.html'>FeatureSetTable</a>.</p>
     </div>
 
 
@@ -183,7 +183,7 @@ otherwise calling the method for Panel.</p></li>
 
 <p>For creating the table:</p><ul>
 <li><p><code>.generateOutput(x, envir)</code> will create a data.frame of gene set descriptions in <code>envir</code>,
-based on the <code>mode="show"</code> output of <code>.getGeneSetCommands</code>.
+based on the <code>mode="show"</code> output of <code><a href='utils-geneset.html'>.getGeneSetCommands</a></code>.
 It will also return the commands required to do so and the name of the variable corresponding to said data.frame.</p></li>
 <li><p><code>.renderOutput(x, se, ..., output, pObjects, rObjects)</code>
 will add a <code>datatable</code> widget to the output,
@@ -192,7 +192,7 @@ which is used to render the aforementioned data.frame.</p></li>
 
 <p>For controlling the multiple selections:</p><ul>
 <li><p><code>.multiSelectionDimension(x)</code> returns <code>"row"</code>.</p></li>
-<li><p><code>.multiSelectionCommands(x, index)</code> returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the <code>mode="extract"</code> output of <code>.getGeneSetCommands</code>.
+<li><p><code>.multiSelectionCommands(x, index)</code> returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the <code>mode="extract"</code> output of <code><a href='utils-geneset.html'>.getGeneSetCommands</a></code>.
 <code>index</code> is ignored.</p></li>
 <li><p><code>.multiSelectionActive(x)</code> returns the name of the currently selected gene set,
 unless no selection is made, in which case <code>NULL</code> is returned.</p></li>
@@ -201,33 +201,42 @@ unless no selection is made, in which case <code>NULL</code> is returned.</p></l
 which is set to the number of features in <code>se</code>.</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scRNAseq</span>)
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span>(<span class='kw'>location</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-08-24</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-08-24</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scater</span>)
-<span class='no'>sce</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scater/man/reexports.html'>logNormCounts</a></span>(<span class='no'>sce</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scRNAseq</span><span class='op'>)</span>
+<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span><span class='op'>(</span>location<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-10-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2020-10-02</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://bioconductor.org/packages/scater/'>scater</a></span><span class='op'>)</span>
+<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scuttle/man/logNormCounts.html'>logNormCounts</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scran</span>)
-<span class='fu'>rowData</span>(<span class='no'>sce</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'>rowData</span>(<span class='no'>sce</span>), <span class='fu'><a href='https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html'>modelGeneVarWithSpikes</a></span>(<span class='no'>sce</span>, <span class='st'>"ERCC"</span>))
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scran</span><span class='op'>)</span>
+<span class='fu'>rowData</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'>rowData</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html'>modelGeneVarWithSpikes</a></span><span class='op'>(</span><span class='va'>sce</span>, <span class='st'>"ERCC"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># This defaults to 'org.Hs.eg.db' with 'ENTREZID'.</span>
-<span class='fu'>.setOrganism</span>(<span class='st'>"org.Mm.eg.db"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setOrganism' is deprecated.</span>
+<span class='fu'><a href='utils-geneset.html'>.setOrganism</a></span><span class='op'>(</span><span class='st'>"org.Mm.eg.db"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setOrganism' is deprecated.</span>
 #&gt; <span class='warning'>Use 'setFeatureSetCommands' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='fu'>.setIdentifierType</span>(<span class='st'>"ENSEMBL"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setIdentifierType' is deprecated.</span>
+#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='fu'><a href='utils-geneset.html'>.setIdentifierType</a></span><span class='op'>(</span><span class='st'>"ENSEMBL"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setIdentifierType' is deprecated.</span>
 #&gt; <span class='warning'>Use 'setFeatureSetCommands' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='no'>gst</span> <span class='kw'>&lt;-</span> <span class='fu'>GeneSetTable</span>(<span class='kw'>PanelId</span><span class='kw'>=</span><span class='fl'>1L</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'GeneSetTable' is deprecated.</span>
+#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='va'>gst</span> <span class='op'>&lt;-</span> <span class='fu'>GeneSetTable</span><span class='op'>(</span>PanelId<span class='op'>=</span><span class='fl'>1L</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: 'GeneSetTable' is deprecated.</span>
 #&gt; <span class='warning'>Use 'FeatureSetTable' instead.</span>
 #&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'>
-<span class='no'>rdp</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataPlot</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"GeneSetTable1"</span>,
-    <span class='kw'>SelectionEffect</span><span class='kw'>=</span><span class='st'>"Color"</span>,
-    <span class='kw'>XAxis</span><span class='kw'>=</span><span class='st'>"Row data"</span>, <span class='kw'>XAxisRowData</span><span class='kw'>=</span><span class='st'>"mean"</span>, <span class='kw'>YAxis</span><span class='kw'>=</span><span class='st'>"total"</span>)
+<span class='va'>rdp</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataPlot</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"GeneSetTable1"</span>,
+    SelectionEffect<span class='op'>=</span><span class='st'>"Color"</span>,
+    XAxis<span class='op'>=</span><span class='st'>"Row data"</span>, XAxisRowData<span class='op'>=</span><span class='st'>"mean"</span>, YAxis<span class='op'>=</span><span class='st'>"total"</span><span class='op'>)</span>
 
-<span class='no'>rdt</span> <span class='kw'>&lt;-</span> <span class='fu'>RowDataTable</span>(<span class='kw'>RowSelectionSource</span><span class='kw'>=</span><span class='st'>"GeneSetTable1"</span>)
+<span class='va'>rdt</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataTable</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"GeneSetTable1"</span><span class='op'>)</span>
 
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-    <span class='fu'>iSEE</span>(<span class='no'>sce</span>, <span class='kw'>initial</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>gst</span>, <span class='no'>rdp</span>, <span class='no'>rdt</span>))
-}</div></pre>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'>iSEE</span><span class='op'>(</span><span class='va'>sce</span>, initial<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>gst</span>, <span class='va'>rdp</span>, <span class='va'>rdt</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -243,7 +252,7 @@ which is set to the number of features in <code>se</code>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

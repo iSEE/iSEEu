@@ -130,14 +130,14 @@
     </div>
 
     <div class="ref-description">
-    <p>Create the commands required to populate FeatureSetTables with commonly used gene sets.</p>
+    <p>Create the commands required to populate <a href='FeatureSetTable-class.html'>FeatureSetTable</a>s with commonly used gene sets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>createGeneSetCommands</span>(
-  <span class='kw'>collections</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"GO"</span>, <span class='st'>"KEGG"</span>),
-  <span class='kw'>organism</span> <span class='kw'>=</span> <span class='st'>"org.Hs.eg.db"</span>,
-  <span class='kw'>identifier</span> <span class='kw'>=</span> <span class='st'>"ENTREZID"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>createGeneSetCommands</span><span class='op'>(</span>
+  collections <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"GO"</span>, <span class='st'>"KEGG"</span><span class='op'>)</span>,
+  organism <span class='op'>=</span> <span class='st'>"org.Hs.eg.db"</span>,
+  identifier <span class='op'>=</span> <span class='st'>"ENTREZID"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,7 +159,7 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of character vectors describing how to create collections and retrieve gene sets.
-These can be used as arguments for the <code>FeatureSetTable</code> constructor.</p>
+These can be used as arguments for the <code><a href='FeatureSetTable-class.html'>FeatureSetTable</a></code> constructor.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>GO terms are extracted using the <code>"GOALL"</code> mode,
@@ -170,15 +170,20 @@ Unfortunately, this is not up to date due to the licensing around KEGG terms.
 Descriptions for each pathway are extracted from <a href='http://rest.kegg.jp/list/pathway'>http://rest.kegg.jp/list/pathway</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>FeatureSetTable, where the commands are intended for use.</p>
-<p><code>setFeatureSetCommands</code>, to use the commands globally.</p></div>
+    <div class='dont-index'><p><a href='FeatureSetTable-class.html'>FeatureSetTable</a>, where the commands are intended for use.</p>
+<p><code><a href='getFeatureSetCommands.html'>setFeatureSetCommands</a></code>, to use the commands globally.</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'>createGeneSetCommands</span>()
-<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>out</span>$<span class='no'>CreateCollections</span>[<span class='st'>'GO'</span>], <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; .all_terms &lt;- AnnotationDbi::keys(org.Hs.eg.db::org.Hs.eg.db, keytype='GOALL');
+    <pre class="examples"><div class='input'><span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>createGeneSetCommands</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>$</span><span class='va'>CreateCollections</span><span class='op'>[</span><span class='st'>'GO'</span><span class='op'>]</span>, <span class='st'>"\n"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; .all_terms &lt;- AnnotationDbi::keys(org.Hs.eg.db::org.Hs.eg.db, keytype='GOALL');
 #&gt; tab &lt;- AnnotationDbi::select(GO.db::GO.db, keys=.all_terms, columns='TERM');
 #&gt; rownames(tab) &lt;- tab$GOID;
-#&gt; tab$GOID &lt;- NULL; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>out</span>$<span class='no'>RetrieveSet</span>[<span class='st'>'GO'</span>], <span class='st'>"\n"</span>)</div><div class='output co'>#&gt; .genes_in_set &lt;- tryCatch(AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, keys=.set_id, keytype='GOALL',
+#&gt; tab$GOID &lt;- NULL; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>$</span><span class='va'>RetrieveSet</span><span class='op'>[</span><span class='st'>'GO'</span><span class='op'>]</span>, <span class='st'>"\n"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; .genes_in_set &lt;- tryCatch(AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, keys=.set_id, keytype='GOALL',
 #&gt;    column="ENTREZID")[,"ENTREZID"], error=function(e) character(0));
 #&gt; selected &lt;- intersect(rownames(se), .genes_in_set) </div><div class='input'>
 </div></pre>
@@ -197,7 +202,7 @@ Descriptions for each pathway are extracted from <a href='http://rest.kegg.jp/li
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

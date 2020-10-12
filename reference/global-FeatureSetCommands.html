@@ -133,9 +133,9 @@
     <p>Get or set the commands to define the global collection of feature sets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getFeatureSetCommands</span>()
+    <pre class="usage"><span class='fu'>getFeatureSetCommands</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>setFeatureSetCommands</span>(<span class='no'>value</span>)</pre>
+<span class='fu'>setFeatureSetCommands</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,7 +145,7 @@
       <td><p>A list of two character vectors named <code>"CreateCollections"</code> and <code>"RetrieveSet"</code>.
 Both vectors should be of the same length and have the same names.
 Vectors should contain R commands to create collections and retrieve sets;
-see <code>?FeatureSetTable</code> and the output of <code>createGeneSetCommands</code> for details.</p></td>
+see <code>?<a href='FeatureSetTable-class.html'>FeatureSetTable</a></code> and the output of <code><a href='createGeneSetCommands.html'>createGeneSetCommands</a></code> for details.</p></td>
     </tr>
     </table>
 
@@ -155,22 +155,26 @@ see <code>?FeatureSetTable</code> and the output of <code>createGeneSetCommands<
 <p><code>setFeatureSetCommands</code> will set the current global feature set commands and return <code>NULL</code> invisibly.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>These utilities allow users to easily set the feature set commands for all FeatureSetTables at once.
+    <p>These utilities allow users to easily set the feature set commands for all <a href='FeatureSetTable-class.html'>FeatureSetTable</a>s at once.
 Any global settings only take effect (i) during setup of the <code>iSEE</code> application
-and (ii) if the first FeatureSetTable does not have an existing values in the
+and (ii) if the first <a href='FeatureSetTable-class.html'>FeatureSetTable</a> does not have an existing values in the
 <code>"CreateCollections"</code> or <code>"RetrieveSet"</code> slots.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>createGeneSetCommands</code>, for one method of generating <code>value</code>.</p></div>
+    <div class='dont-index'><p><code><a href='createGeneSetCommands.html'>createGeneSetCommands</a></code>, for one method of generating <code>value</code>.</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>old</span> <span class='kw'>&lt;-</span> <span class='fu'>getFeatureSetCommands</span>()
+    <pre class="examples"><div class='input'><span class='va'>old</span> <span class='op'>&lt;-</span> <span class='fu'>getFeatureSetCommands</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='no'>new.cmds</span> <span class='kw'>&lt;-</span> <span class='fu'>createGeneSetCommands</span>(<span class='kw'>organism</span><span class='kw'>=</span><span class='st'>"org.Mm.eg.db"</span>,
-    <span class='kw'>identifier</span><span class='kw'>=</span><span class='st'>"SYMBOL"</span>)
-<span class='fu'>setFeatureSetCommands</span>(<span class='no'>new.cmds</span>)
+<span class='va'>new.cmds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='createGeneSetCommands.html'>createGeneSetCommands</a></span><span class='op'>(</span>organism<span class='op'>=</span><span class='st'>"org.Mm.eg.db"</span>, 
+    identifier<span class='op'>=</span><span class='st'>"SYMBOL"</span><span class='op'>)</span>
+<span class='fu'>setFeatureSetCommands</span><span class='op'>(</span><span class='va'>new.cmds</span><span class='op'>)</span>
 
-<span class='fu'>getFeatureSetCommands</span>()</div><div class='output co'>#&gt; $CreateCollections
+<span class='fu'>getFeatureSetCommands</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $CreateCollections
 #&gt;                                                                                                                                                                                                                                                                             GO 
 #&gt;                                                                 ".all_terms &lt;- AnnotationDbi::keys(org.Mm.eg.db::org.Mm.eg.db, keytype='GOALL');\ntab &lt;- AnnotationDbi::select(GO.db::GO.db, keys=.all_terms, columns='TERM');\nrownames(tab) &lt;- tab$GOID;\ntab$GOID &lt;- NULL;" 
 #&gt;                                                                                                                                                                                                                                                                           KEGG 
@@ -182,7 +186,8 @@ and (ii) if the first FeatureSetTable does not have an existing values in the
 #&gt;                                                                                                                                                                                                                                   KEGG 
 #&gt;  ".genes_in_set &lt;- tryCatch(AnnotationDbi::select(org.Mm.eg.db::org.Mm.eg.db, keys=.set_id, keytype='PATH',\n   column=\"SYMBOL\")[,\"SYMBOL\"], error=function(e) character(0));\nselected &lt;- intersect(rownames(se), .genes_in_set)" 
 #&gt; </div><div class='input'>
-<span class='fu'>setFeatureSetCommands</span>(<span class='no'>old</span>)</div></pre>
+<span class='fu'>setFeatureSetCommands</span><span class='op'>(</span><span class='va'>old</span><span class='op'>)</span> 
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -198,7 +203,7 @@ and (ii) if the first FeatureSetTable does not have an existing values in the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

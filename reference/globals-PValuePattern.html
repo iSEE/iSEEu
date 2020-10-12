@@ -133,17 +133,17 @@
     <p>Get or set patterns for acceptable names of <code>rowData</code> columns related to a differential expression analysis.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getPValuePattern</span>()
+    <pre class="usage"><span class='fu'>getPValuePattern</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>getLogFCPattern</span>()
+<span class='fu'>getLogFCPattern</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>getAveAbPattern</span>()
+<span class='fu'>getAveAbPattern</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>setPValuePattern</span>(<span class='no'>value</span>)
+<span class='fu'>setPValuePattern</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span>
 
-<span class='fu'>setLogFCPattern</span>(<span class='no'>value</span>)
+<span class='fu'>setLogFCPattern</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span>
 
-<span class='fu'>setAveAbPattern</span>(<span class='no'>value</span>)</pre>
+<span class='fu'>setAveAbPattern</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,7 +163,7 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>These utilities allow users to easily get and set the patterns of acceptable fields in all
-VolcanoPlots, MAPlots and LogFCLogFCPlots at once.
+<a href='VolcanoPlot-class.html'>VolcanoPlot</a>s, <a href='MAPlot-class.html'>MAPlot</a>s and <a href='LogFCLogFCPlot-class.html'>LogFCLogFCPlot</a>s at once.
 Any global settings only take effect (i) during setup of the <code>iSEE</code> application
 and (ii) if the first panel of each class does not have existing values in the
 <code>"PValueFields"</code>, <code>"LogFCFields"</code> or <code>"AveAbFields"</code> slots (which take precedence if present).</p>
@@ -172,16 +172,21 @@ For the <code>"PValue"</code> pattern, columns with the names <code>"PValue.X"</
 All partial matching must be exact - regular expressions are not supported.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>VolcanoPlot, MAPlot and LogFCLogFCPlot,
+    <div class='dont-index'><p><a href='VolcanoPlot-class.html'>VolcanoPlot</a>, <a href='MAPlot-class.html'>MAPlot</a> and <a href='LogFCLogFCPlot-class.html'>LogFCLogFCPlot</a>,
 which are affected by these globals.</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>old</span> <span class='kw'>&lt;-</span> <span class='fu'>getPValuePattern</span>()
+    <pre class="examples"><div class='input'><span class='va'>old</span> <span class='op'>&lt;-</span> <span class='fu'>getPValuePattern</span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='fu'>setPValuePattern</span>(<span class='no'>LETTERS</span>)
-<span class='fu'>getPValuePattern</span>()</div><div class='output co'>#&gt;  [1] "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S"
+<span class='fu'>setPValuePattern</span><span class='op'>(</span><span class='va'>LETTERS</span><span class='op'>)</span>
+<span class='fu'>getPValuePattern</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S"
 #&gt; [20] "T" "U" "V" "W" "X" "Y" "Z"</div><div class='input'>
-<span class='fu'>setPValuePattern</span>(<span class='no'>old</span>)</div></pre>
+<span class='fu'>setPValuePattern</span><span class='op'>(</span><span class='va'>old</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -197,7 +202,7 @@ which are affected by these globals.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
