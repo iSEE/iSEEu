@@ -116,5 +116,18 @@ test_that(".generateOutput works correctly", {
     y[["UseCustomColormap"]] <- TRUE 
     collated <- .generateOutput(y, se, all_memory=list(), all_contents=list())
     expect_s3_class(collated$plot, "ggplot")
+    
+    y <- x
+    y[["MeanNonZeroes"]] <- TRUE
+    collated <- .generateOutput(y, se, all_memory=list(), all_contents=list())
+    expect_s3_class(collated$plot, "ggplot")
+    expect_true(any(unlist(collated$commands) == ".averages[is.na(.averages)] <- 0;"))
 
+})
+
+test_that("renderOutput returns NULL", {
+  
+  out <- AggregatedDotPlot()
+  expect_null(.renderOutput(out, se, output = list(), pObjects = list(), rObjects = list()))
+  
 })
