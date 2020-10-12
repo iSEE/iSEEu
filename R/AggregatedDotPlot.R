@@ -558,12 +558,12 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     pchoice_field, 
                     .visualParamChoiceColorTitle,
                     hr(),
-                    checkboxInput(.input_FUN(.ADPCustomColor),
-                        label="Use custom colors",
-                        value=x[[.ADPCustomColor]]),
                     .conditionalOnCheckSolo(
                         center_field, 
                         on_select=FALSE,
+                        checkboxInput(.input_FUN(.ADPCustomColor),
+                            label="Use custom colors",
+                            value=x[[.ADPCustomColor]]),
                         .conditionalOnCheckSolo(
                             custom_field,
                             on_select=TRUE,
