@@ -73,7 +73,14 @@ Defaults to \code{FALSE}.
 
 The following slots control the color:
 \itemize{
-\item \code{Color}, a string containing the upper color to use.
+\item \code{UseCustomColormap}, a logical scalar indicating whether to use a custom color scale.
+Defaults to \code{FALSE}, in which case the application-wide color scale defined by \code{\link{ExperimentColorMap}} is used.
+\item \code{CustomColorLow}, a string specifying the low color (i.e., at an average of zero) for a custom scale.
+Defaults to \code{"grey"}.
+\item \code{CustomColorHigh}, a string specifying the high color for a custom scale.
+Defaults to \code{"red"}.
+\item \code{CenteredColormap}, a string specifying the divergent colormap to use when \code{Center} is \code{TRUE}.
+Defaults to \code{"blue < grey < orange"}; other choices are \code{"purple < black < yellow"}, \code{"blue < grey < red"} and \code{"green < grey < red"}.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
