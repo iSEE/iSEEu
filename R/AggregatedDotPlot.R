@@ -267,7 +267,9 @@ setValidity2("AggregatedDotPlot", function(object) {
             .ADPAssay,
             .ADPFeatNameText,
             .ADPColDataLabel,
-            .ADPColDataFacet
+            .ADPColDataFacet,
+            .ADPClusterDistanceFeatures,
+            .ADPClusterMethodFeatures
         )
     )
 
@@ -295,7 +297,8 @@ setValidity2("AggregatedDotPlot", function(object) {
             .ADPCustomColor,
             .ADPExpressors,
             .ADPCenter,
-            .ADPScale
+            .ADPScale,
+            .ADPClusterFeatures
         )
     )
 
