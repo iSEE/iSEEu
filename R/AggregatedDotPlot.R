@@ -155,6 +155,9 @@
 #' .fullName,AggregatedDotPlot-method
 #' .generateOutput,AggregatedDotPlot-method
 #' .definePanelTour,AggregatedDotPlot-method
+#' .createObservers,AggregatedDotPlot-method
+#' .refineParameters,AggregatedDotPlot-method
+#' initialize,AggregatedDotPlot-method
 NULL
 
 .ADPAssay <- "Assay"
@@ -361,6 +364,7 @@ setMethod(".fullName", "AggregatedDotPlot", function(x) "Aggregated dot plot")
 #' @export
 #' @importFrom SummarizedExperiment assay rowData colData
 #' @importFrom ggplot2 ggplot geom_text aes theme_void
+#' @importFrom S4Vectors metadata
 setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, all_contents) {
     # print(str(x))
     plot_env <- new.env()
@@ -499,7 +503,7 @@ setMethod(".exportOutput", "AggregatedDotPlot", function(x, se, all_memory, all_
 .dimnamesModalOpen <- "INTERNAL_modal_open"
 
 #' @export
-#' @importFrom shiny selectInput radioButtons checkboxInput actionButton
+#' @importFrom shiny selectInput radioButtons checkboxInput actionButton br
 #' @importFrom methods callNextMethod
 setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
@@ -528,6 +532,7 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
 
 #' @export
 #' @importFrom colourpicker colourInput
+#' @importFrom shiny checkboxGroupInput
 setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) {
     out <- callNextMethod()
     plot_name <- .getEncodedName(x)
