@@ -9,7 +9,7 @@ dimnames(se) <- list(1:nrow(se), letters[seq_len(ncol(se))])
 
 test_that("DynamicMarkerTable constructor works correctly", {
     out <- AggregatedDotPlot()
-    expect_error(AggregatedDotPlot(Color=1), "got class \"numeric\"")
+    expect_error(AggregatedDotPlot(CustomColorHigh=1), "got class \"numeric\"")
 })
 
 test_that("initialize processes multiple custom row names", {
@@ -57,4 +57,64 @@ test_that(".refineParameters works", {
     expect_identical(out2[["ColumnDataLabel"]], "CellGroup")
     expect_identical(out2[["CustomRowsText"]], "1")
   
+})
+
+test_that(".definePanelTour works", {
+
+    x <- AggregatedDotPlot()
+    tour <- .definePanelTour(x)
+
+    expect_s3_class(tour, "data.frame")
+    expect_identical(colnames(tour), c("element", "intro"))
+
+})
+
+test_that(".defineInterface works correctly", {
+
+    x <- AggregatedDotPlot()
+    se <- .cacheCommonInfo(x, se)
+    x <- .refineParameters(x, se)
+
+    expect_error(.defineDataInterface(x, se, list()), NA)
+
+    expect_true(.hideInterface(x, "SelectionHistory"))
+    expect_false(.hideInterface(x, "random"))
+
+})
+
+test_that("miscellaneous bits work correctly", {
+
+    x <- AggregatedDotPlot()
+    expect_identical(length(.panelColor(x)), 1L)
+    expect_identical(length(.fullName(x)), 1L)
+
+})
+
+test_that(".generateOutput works correctly", {
+
+    x <- AggregatedDotPlot()
+    se <- .cacheCommonInfo(x, se)
+    x <- .refineParameters(x, se)
+    metadata(se)$colormap <- ExperimentColorMap()
+
+    collated <- .generateOutput(x, se, all_memory=list(), all_contents=list())
+    expect_s3_class(collated$plot, "ggplot")
+
+    # Testing what happens with faceting.
+    y <- x
+    y[["ColumnDataFacet"]] <- "CellGroup"
+    collated <- .generateOutput(y, se, all_memory=list(), all_contents=list())
+    expect_s3_class(collated$plot, "ggplot")
+
+    # Testing alternative color schemes.
+    y <- x
+    y[["Center"]] <- TRUE 
+    collated <- .generateOutput(y, se, all_memory=list(), all_contents=list())
+    expect_s3_class(collated$plot, "ggplot")
+
+    y <- x
+    y[["UseCustomColormap"]] <- TRUE 
+    collated <- .generateOutput(y, se, all_memory=list(), all_contents=list())
+    expect_s3_class(collated$plot, "ggplot")
+
 })
