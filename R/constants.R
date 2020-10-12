@@ -1,0 +1,20 @@
+# Clustering parameters ----
+
+.clusterDistanceEuclidean <- "euclidean"
+.clusterDistanceMaximum <- "maximum"
+.clusterDistanceManhattan <- "manhattan"
+.clusterDistanceCanberra <- "canberra"
+.clusterDistanceBinary <- "binary"
+.clusterDistanceMinkowski <- "minkowski"
+.clusterDistancePearson <- "pearson"
+.clusterDistanceSpearman <- "spearman"
+.clusterDistanceKendall <- "kendall"
+
+.clusterMethodWardD <- "ward.D"
+.clusterMethodWardD2 <- "ward.D2"
+.clusterMethodSingle <- "single"
+.clusterMethodComplete <- "complete"
+.clusterMethodAverage <- "average"
+.clusterMethodMcquitty <- "mcquitty"
+.clusterMethodMedian <- "median"
+.clusterMethodCentroid <- "centroid"
