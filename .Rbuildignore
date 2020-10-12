@@ -11,3 +11,4 @@
 ^pkgdown$
 ^\.github$
 ^codecov\.yml$
+^Dockerfile$
