@@ -240,7 +240,7 @@ setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
     args <- .emptyDefault(args, .ADPColDataFacet, iSEE:::.noSelection)
 
     args <- .emptyDefault(args, .ADPClusterFeatures, FALSE)
-    args <- .emptyDefault(args, .ADPClusterDistanceFeatures, .clusterDistanceSpearman)
+    args <- .emptyDefault(args, .ADPClusterDistanceFeatures, .clusterDistanceEuclidean)
     args <- .emptyDefault(args, .ADPClusterMethodFeatures, .clusterMethodWardD2)
 
     args <- .emptyDefault(args, .visualParamChoice, .visualParamChoiceColorTitle)
@@ -389,6 +389,8 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     plot_env$colormap <- metadata(se)$colormap
 
     all_cmds <- list()
+    cluster_row_args <- character(0)
+
     all_cmds$select <- .processMultiSelections(x, all_memory, all_contents, plot_env)
     all_cmds$assay <- .extractAssaySubmatrix(x, se, plot_env,
         use_custom_row_slot=.ADPCustomFeatNames,
@@ -422,6 +424,17 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
         )
     }
 
+    # Row clustering.
+    if (x[[.ADPClusterFeatures]]) {
+        computation <- c(computation, "",
+            sprintf(".averages_dist <- dist(.averages, method = %s);", deparse(x[[.ADPClusterDistanceFeatures]])),
+            sprintf(".averages_hclust <- hclust(.averages_dist, method = %s);", deparse(x[[.ADPClusterMethodFeatures]])),
+            ".rownames_ordered <- rev(rownames(.averages)[.averages_hclust$order]);"
+        )
+    } else {
+        computation <- c(computation, "", ".rownames_ordered <- rev(rownames(.averages))")
+    }
+
     .textEval(computation, plot_env)
     all_cmds$command <- computation
 
@@ -434,7 +447,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     prep.cmds <- c(
        ".levels <- SummarizedExperiment::colData(.averages.se);",
         sprintf("plot.data <- data.frame(
-    Feature=rep(rownames(.averages), ncol(.averages)),
+    Feature=factor(rep(rownames(.averages), ncol(.averages)), .rownames_ordered),
     Group=rep(.levels[,1], each=nrow(.averages)),%s
     Average=as.numeric(.averages),
     Detected=as.numeric(.n.detected)
@@ -548,19 +561,14 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
             actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names"),
             br(), br()
         ),
-        selectInput(.input_FUN(.ADPColDataLabel), label="Column label:",
-            selected=x[[.ADPColDataLabel]], choices=all_coldata),
-        selectInput(.input_FUN(.ADPColDataFacet), label="Column facet:",
-            selected=x[[.ADPColDataFacet]], choices=c(iSEE:::.noSelection, all_coldata)),
         ABLEFUN(checkboxInput(.input_FUN(.ADPClusterFeatures), label="Cluster rows",
             value=x[[.ADPClusterFeatures]])),
         .conditionalOnCheckSolo(
             .input_FUN(.ADPClusterFeatures),
             on_select=TRUE,
             ABLEFUN(selectInput(.input_FUN(.ADPClusterDistanceFeatures), label="Clustering distance for rows",
-                choices=c(.clusterDistanceEuclidean, .clusterDistancePearson, .clusterDistanceSpearman,
-                    .clusterDistanceManhattan, .clusterDistanceMaximum, .clusterDistanceCanberra,
-                    .clusterDistanceBinary, .clusterDistanceMinkowski, .clusterDistanceKendall),
+                choices=c(.clusterDistanceEuclidean,  .clusterDistanceMaximum, .clusterDistanceManhattan,
+                    .clusterDistanceCanberra, .clusterDistanceBinary, .clusterDistanceMinkowski),
                 selected=x[[.ADPClusterDistanceFeatures]])),
             ABLEFUN(selectInput(.input_FUN(.ADPClusterMethodFeatures), label="Clustering method for rows",
                 choices=c(.clusterMethodWardD, .clusterMethodWardD2, .clusterMethodSingle, .clusterMethodComplete,
@@ -568,7 +576,11 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
                     "mcquitty (= WPGMA)"=.clusterMethodMcquitty,
                     "median (= WPGMC)"=.clusterMethodMedian,
                     "centroid (= UPGMC)"=.clusterMethodCentroid),
-                selected=x[[.ADPClusterMethodFeatures]])))
+                selected=x[[.ADPClusterMethodFeatures]]))),
+        selectInput(.input_FUN(.ADPColDataLabel), label="Column label:",
+            selected=x[[.ADPColDataLabel]], choices=all_coldata),
+        selectInput(.input_FUN(.ADPColDataFacet), label="Column facet:",
+            selected=x[[.ADPColDataFacet]], choices=c(iSEE:::.noSelection, all_coldata))
     )
 })
 
@@ -673,7 +685,10 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
     # Not much point distinguishing between protected and unprotected here,
     # as there aren't any selections transmitted from this panel anyway.
     .createProtectedParameterObservers(plot_name,
-        fields=c(.ADPCustomFeatNames),
+        fields=c(.ADPCustomFeatNames,
+            .ADPClusterFeatures,
+            .ADPClusterDistanceFeatures,
+            .ADPClusterMethodFeatures),
         input=input, pObjects=pObjects, rObjects=rObjects)
 
     .createUnprotectedParameterObservers(plot_name,
