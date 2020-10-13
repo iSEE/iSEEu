@@ -542,14 +542,6 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
     all_assays <- .getCachedCommonInfo(se, "AggregatedDotPlot")$continuous.assay.names
     all_coldata <- .getCachedCommonInfo(se, "AggregatedDotPlot")$discrete.colData.names
 
-    assay_name <- x[[.ADPAssay]]
-    assay_discrete <- assay_name %in% .getCachedCommonInfo(se, "ComplexHeatmapPlot")$discrete.assay.names
-    ABLEFUN <- if (assay_discrete) {
-        disabled
-    } else {
-        identity
-    }
-
     list(
         selectInput(.input_FUN(.ADPAssay), label="Assay choice",
             choices=all_assays, selected=x[[.ADPAssay]]),
@@ -561,22 +553,22 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
             actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names"),
             br(), br()
         ),
-        ABLEFUN(checkboxInput(.input_FUN(.ADPClusterFeatures), label="Cluster rows (on Average)",
-            value=x[[.ADPClusterFeatures]])),
+        checkboxInput(.input_FUN(.ADPClusterFeatures), label="Cluster rows (on Average)",
+            value=x[[.ADPClusterFeatures]]),
         .conditionalOnCheckSolo(
             .input_FUN(.ADPClusterFeatures),
             on_select=TRUE,
-            ABLEFUN(selectInput(.input_FUN(.ADPClusterDistanceFeatures), label="Clustering distance for rows",
+            selectInput(.input_FUN(.ADPClusterDistanceFeatures), label="Clustering distance for rows",
                 choices=c(.clusterDistanceEuclidean,  .clusterDistanceMaximum, .clusterDistanceManhattan,
                     .clusterDistanceCanberra, .clusterDistanceBinary, .clusterDistanceMinkowski),
-                selected=x[[.ADPClusterDistanceFeatures]])),
-            ABLEFUN(selectInput(.input_FUN(.ADPClusterMethodFeatures), label="Clustering method for rows",
+                selected=x[[.ADPClusterDistanceFeatures]]),
+            selectInput(.input_FUN(.ADPClusterMethodFeatures), label="Clustering method for rows",
                 choices=c(.clusterMethodWardD, .clusterMethodWardD2, .clusterMethodSingle, .clusterMethodComplete,
                     "average (= UPGMA)"=.clusterMethodAverage,
                     "mcquitty (= WPGMA)"=.clusterMethodMcquitty,
                     "median (= WPGMC)"=.clusterMethodMedian,
                     "centroid (= UPGMC)"=.clusterMethodCentroid),
-                selected=x[[.ADPClusterMethodFeatures]]))),
+                selected=x[[.ADPClusterMethodFeatures]])),
         selectInput(.input_FUN(.ADPColDataLabel), label="Column label:",
             selected=x[[.ADPColDataLabel]], choices=all_coldata),
         selectInput(.input_FUN(.ADPColDataFacet), label="Column facet:",
