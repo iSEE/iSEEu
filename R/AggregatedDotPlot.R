@@ -424,19 +424,34 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
         )
     }
 
+    .textEval(computation, plot_env)
+    all_cmds$command <- computation
+
     # Row clustering.
+    unclustered_cmds <- c(".rownames_ordered <- rev(rownames(.averages))")
     if (x[[.ADPClusterFeatures]]) {
-        computation <- c(computation, "",
+        clustering_cmds <- c(
             sprintf(".averages_dist <- dist(.averages, method = %s);", deparse(x[[.ADPClusterDistanceFeatures]])),
             sprintf(".averages_hclust <- hclust(.averages_dist, method = %s);", deparse(x[[.ADPClusterMethodFeatures]])),
             ".rownames_ordered <- rev(rownames(.averages)[.averages_hclust$order]);"
         )
+        clustering_cmds <- tryCatch(
+            {
+                .textEval(clustering_cmds, plot_env)
+                clustering_cmds
+            },
+            error = function(e) {
+                showNotification(sprintf("%s<br/>Clustering skipped.", e), type = "error", duration = 5)
+                clustering_cmds <- unclustered_cmds
+                .textEval(clustering_cmds, plot_env)
+                clustering_cmds
+            }
+        )
     } else {
-        computation <- c(computation, "", ".rownames_ordered <- rev(rownames(.averages))")
+        clustering_cmds <- clustering_cmds
     }
 
-    .textEval(computation, plot_env)
-    all_cmds$command <- computation
+    all_cmds$clustering <- clustering_cmds
 
     # Organizing in the plot.data.
     if (use.facets) {
