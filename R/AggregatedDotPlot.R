@@ -441,7 +441,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
                 clustering_cmds
             },
             error = function(e) {
-                showNotification(sprintf("%s<br/>Clustering skipped.", e), type = "error", duration = 5)
+                showNotification(sprintf("%s\n\nClustering skipped.", e), type = "error", duration = 5)
                 clustering_cmds <- unclustered_cmds
                 .textEval(clustering_cmds, plot_env)
                 clustering_cmds
