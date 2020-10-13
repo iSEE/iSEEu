@@ -448,7 +448,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
             }
         )
     } else {
-        clustering_cmds <- clustering_cmds
+        clustering_cmds <- unclustered_cmds
     }
 
     all_cmds$clustering <- clustering_cmds
