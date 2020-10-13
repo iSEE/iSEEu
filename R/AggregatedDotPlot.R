@@ -561,7 +561,7 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
             actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names"),
             br(), br()
         ),
-        ABLEFUN(checkboxInput(.input_FUN(.ADPClusterFeatures), label="Cluster rows",
+        ABLEFUN(checkboxInput(.input_FUN(.ADPClusterFeatures), label="Cluster rows (on Average)",
             value=x[[.ADPClusterFeatures]])),
         .conditionalOnCheckSolo(
             .input_FUN(.ADPClusterFeatures),
