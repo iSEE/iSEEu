@@ -12,7 +12,7 @@
 #' otherwise they are defined from a transmitted row selection.
 #' Defaults to \code{TRUE}.
 #' \item \code{CustomRowsText}, a string containing the names of the features of interest,
-#' typically corresponding to the row names of the \linkS4class{SummarizedExperiment}. 
+#' typically corresponding to the row names of the \linkS4class{SummarizedExperiment}.
 #' Names should be new-line separated within this string.
 #' Defaults to the name of the first row in the SummarizedExperiment.
 #' }
@@ -73,13 +73,13 @@
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of an AggregatedDotPlot class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
-#' 
+#'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"AggregatedDotPlot"} entry 
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"AggregatedDotPlot"} entry
 #' containing \code{continuous.assay.names} and \code{discrete.colData.names}.
-#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"}, 
-#' \code{"ColumnDataLabel"} and \code{"ColumnDataFacet"} to valid values. 
+#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"},
+#' \code{"ColumnDataLabel"} and \code{"ColumnDataFacet"} to valid values.
 #' If continuous assays or discrete \code{\link{colData}} variables are not available, \code{NULL} is returned instead.
 #' }
 #'
@@ -120,7 +120,7 @@
 #' \linkS4class{Panel}, for the immediate parent class.
 #'
 #' \linkS4class{ComplexHeatmapPlot}, for another panel with multi-row visualization capability.
-#' 
+#'
 #' @examples
 #' library(scRNAseq)
 #'
@@ -130,14 +130,14 @@
 #'
 #' library(scater)
 #' sce <- logNormCounts(sce, exprs_values="tophat_counts")
-#' 
+#'
 #' # launch the app itself ----
 #' if (interactive()) {
 #'     iSEE(sce, initial=list(
 #'         AggregatedDotPlot(ColumnDataLabel="Primary.Type")
 #'     ))
 #' }
-#' 
+#'
 #' @name AggregatedDotPlot
 #' @docType methods
 #' @aliases
@@ -149,7 +149,7 @@
 #' .renderOutput,AggregatedDotPlot-method
 #' .exportOutput,AggregatedDotPlot-method
 #' .defineDataInterface,AggregatedDotPlot-method
-#' .defineInterface,AggregatedDotPlot-method 
+#' .defineInterface,AggregatedDotPlot-method
 #' .hideInterface,AggregatedDotPlot-method
 #' .panelColor,AggregatedDotPlot-method
 #' .fullName,AggregatedDotPlot-method
@@ -180,6 +180,10 @@ NULL
 .ADPCenter <- "Center"
 .ADPScale <- "Scale"
 
+.ADPClusterFeatures <- "ClusterRows"
+.ADPClusterDistanceFeatures <- "ClusterRowsDistance"
+.ADPClusterMethodFeatures <- "ClusterRowsMethod"
+
 collated <- character(0)
 
 collated[.ADPAssay] <- "character"
@@ -199,6 +203,10 @@ collated[.ADPCustomColor] <- "logical"
 collated[.ADPExpressors] <- "logical"
 collated[.ADPCenter] <- "logical"
 collated[.ADPScale] <- "logical"
+
+collated[.ADPClusterFeatures] <- "logical"
+collated[.ADPClusterDistanceFeatures] <- "character"
+collated[.ADPClusterMethodFeatures] <- "character"
 
 #' @export
 setClass("AggregatedDotPlot", contains="Panel", slots=collated)
@@ -231,6 +239,10 @@ setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
     args <- .emptyDefault(args, .ADPColDataLabel, NA_character_)
     args <- .emptyDefault(args, .ADPColDataFacet, iSEE:::.noSelection)
 
+    args <- .emptyDefault(args, .ADPClusterFeatures, FALSE)
+    args <- .emptyDefault(args, .ADPClusterDistanceFeatures, .clusterDistanceEuclidean)
+    args <- .emptyDefault(args, .ADPClusterMethodFeatures, .clusterMethodWardD2)
+
     args <- .emptyDefault(args, .visualParamChoice, .visualParamChoiceColorTitle)
     args <- .emptyDefault(args, .visualParamBoxOpen, FALSE)
 
@@ -250,16 +262,18 @@ setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
 setValidity2("AggregatedDotPlot", function(object) {
     msg <- character(0)
 
-    msg <- .singleStringError(msg, object, 
+    msg <- .singleStringError(msg, object,
         c(
-            .ADPAssay, 
+            .ADPAssay,
             .ADPFeatNameText,
             .ADPColDataLabel,
-            .ADPColDataFacet
+            .ADPColDataFacet,
+            .ADPClusterDistanceFeatures,
+            .ADPClusterMethodFeatures
         )
     )
 
-    msg <- .validStringError(msg, object, 
+    msg <- .validStringError(msg, object,
         c(
             .ADPColorUpper,
             .ADPColorLower
@@ -270,20 +284,21 @@ setValidity2("AggregatedDotPlot", function(object) {
 
     msg <- .multipleChoiceError(msg, object, .visualParamChoice,
         c(
-            .visualParamChoiceColorTitle, 
-            .visualParamChoiceTransformTitle, 
+            .visualParamChoiceColorTitle,
+            .visualParamChoiceTransformTitle,
             .visualParamChoiceLegendTitle
         )
     )
 
-    msg <- .validLogicalError(msg, object, 
+    msg <- .validLogicalError(msg, object,
         c(
-            .ADPCustomFeatNames, 
-            .visualParamBoxOpen, 
+            .ADPCustomFeatNames,
+            .visualParamBoxOpen,
             .ADPCustomColor,
             .ADPExpressors,
-            .ADPCenter, 
-            .ADPScale
+            .ADPCenter,
+            .ADPScale,
+            .ADPClusterFeatures
         )
     )
 
@@ -371,9 +386,11 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     # print(str(x))
     plot_env <- new.env()
     plot_env$se <- se
-    plot_env$colormap <- metadata(se)$colormap
+    plot_env$colormap <- .getCachedCommonInfo(se, ".internal")$colormap
 
     all_cmds <- list()
+    cluster_row_args <- character(0)
+
     all_cmds$select <- .processMultiSelections(x, all_memory, all_contents, plot_env)
     all_cmds$assay <- .extractAssaySubmatrix(x, se, plot_env,
         use_custom_row_slot=.ADPCustomFeatNames,
@@ -384,7 +401,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     col2 <- x[[.ADPColDataFacet]]
     use.facets <- col2!=iSEE:::.noSelection
     coldata.names <- c(col1, if (use.facets) col2)
-    cmd <- sprintf(".group_by <- SummarizedExperiment::colData(se)[,%s,drop=FALSE];", 
+    cmd <- sprintf(".group_by <- SummarizedExperiment::colData(se)[,%s,drop=FALSE];",
         paste(deparse(coldata.names), collapse=""))
 
     computation <- c(cmd,
@@ -410,6 +427,33 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     .textEval(computation, plot_env)
     all_cmds$command <- computation
 
+    # Row clustering.
+    unclustered_cmds <- c(".rownames_ordered <- rev(rownames(.averages))")
+    if (x[[.ADPClusterFeatures]]) {
+        clustering_cmds <- c(
+            sprintf(".averages_dist <- dist(.averages, method = %s);", deparse(x[[.ADPClusterDistanceFeatures]])),
+            sprintf(".averages_hclust <- hclust(.averages_dist, method = %s);", deparse(x[[.ADPClusterMethodFeatures]])),
+            ".rownames_ordered <- rev(rownames(.averages)[.averages_hclust$order]);"
+        )
+        clustering_cmds <- tryCatch(
+            {
+                .textEval(clustering_cmds, plot_env)
+                clustering_cmds
+            },
+            error = function(e) {
+                showNotification(sprintf("%s\n\nClustering skipped.", e), type = "error", duration = 5)
+                clustering_cmds <- unclustered_cmds
+                .textEval(clustering_cmds, plot_env)
+                clustering_cmds
+            }
+        )
+    } else {
+        .textEval(unclustered_cmds, plot_env)
+        clustering_cmds <- unclustered_cmds
+    }
+
+    all_cmds$clustering <- clustering_cmds
+
     # Organizing in the plot.data.
     if (use.facets) {
         facet.cmd <- '\n    FacetRow=rep(.levels[,2], each=nrow(.averages)),'
@@ -419,9 +463,9 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     prep.cmds <- c(
        ".levels <- SummarizedExperiment::colData(.averages.se);",
         sprintf("plot.data <- data.frame(
-    Feature=rep(rownames(.averages), ncol(.averages)), 
+    Feature=factor(rep(rownames(.averages), ncol(.averages)), .rownames_ordered),
     Group=rep(.levels[,1], each=nrow(.averages)),%s
-    Average=as.numeric(.averages), 
+    Average=as.numeric(.averages),
     Detected=as.numeric(.n.detected)
 )", facet.cmd)
     )
@@ -436,8 +480,8 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
             )
         } else {
             col.cmd <- sprintf(
-                'scale_color_gradientn(limits = c(0, max(plot.data$Average)), 
-    colours=assayColorMap(colormap, %s, discrete=FALSE)(21L))', 
+                'scale_color_gradientn(limits = c(0, max(plot.data$Average)),
+    colours=assayColorMap(colormap, %s, discrete=FALSE)(21L))',
                 deparse(x[[.ADPAssay]])
             )
         }
@@ -445,7 +489,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
         choice_colors <- x[[.ADPColorCentered]]
         choice_colors <- strsplit(choice_colors, split = " < ", fixed = TRUE)[[1]]
         col.cmd <- sprintf(
-            "scale_color_gradient2(low=%s, mid=%s, high=%s)", 
+            "scale_color_gradient2(low=%s, mid=%s, high=%s)",
             deparse(choice_colors[1]), deparse(choice_colors[2]), deparse(choice_colors[3])
         )
     }
@@ -466,7 +510,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
 
     plot.cmds <- paste0(plot.cmds, collapse=" +\n    ")
     plot_out <- .textEval(plot.cmds, plot_env)
-    all_cmds$plot <- plot.cmds 
+    all_cmds$plot <- plot.cmds
 
     list(commands=all_cmds, contents=plot_env$plot.data, plot=plot_out, varname="dplot")
 })
@@ -525,6 +569,22 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
             actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names"),
             br(), br()
         ),
+        checkboxInput(.input_FUN(.ADPClusterFeatures), label="Cluster rows (on Average)",
+            value=x[[.ADPClusterFeatures]]),
+        .conditionalOnCheckSolo(
+            .input_FUN(.ADPClusterFeatures),
+            on_select=TRUE,
+            selectInput(.input_FUN(.ADPClusterDistanceFeatures), label="Clustering distance for rows",
+                choices=c(.clusterDistanceEuclidean,  .clusterDistanceMaximum, .clusterDistanceManhattan,
+                    .clusterDistanceCanberra, .clusterDistanceBinary, .clusterDistanceMinkowski),
+                selected=x[[.ADPClusterDistanceFeatures]]),
+            selectInput(.input_FUN(.ADPClusterMethodFeatures), label="Clustering method for rows",
+                choices=c(.clusterMethodWardD, .clusterMethodWardD2, .clusterMethodSingle, .clusterMethodComplete,
+                    "average (= UPGMA)"=.clusterMethodAverage,
+                    "mcquitty (= WPGMA)"=.clusterMethodMcquitty,
+                    "median (= WPGMC)"=.clusterMethodMedian,
+                    "centroid (= UPGMC)"=.clusterMethodCentroid),
+                selected=x[[.ADPClusterMethodFeatures]])),
         selectInput(.input_FUN(.ADPColDataLabel), label="Column label:",
             selected=x[[.ADPColDataLabel]], choices=all_coldata),
         selectInput(.input_FUN(.ADPColDataFacet), label="Column facet:",
@@ -542,7 +602,7 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
     .input_FUN <- function(field) { paste0(plot_name, "_", field) }
     pchoice_field <- .input_FUN(.visualParamChoice)
     center_field <- .input_FUN(.ADPCenter)
-    custom_field <- .input_FUN(.ADPCustomColor) 
+    custom_field <- .input_FUN(.ADPCustomColor)
 
     c(
         out[1],
@@ -552,21 +612,21 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                 title="Visual parameters",
                 open=x[[.visualParamBoxOpen]],
                 checkboxGroupInput(
-                    inputId=pchoice_field, 
-                    label=NULL, 
+                    inputId=pchoice_field,
+                    label=NULL,
                     inline=TRUE,
                     selected=x[[.visualParamChoice]],
                     choices=c(
-                         .visualParamChoiceColorTitle, 
-                         .visualParamChoiceTransformTitle, 
+                         .visualParamChoiceColorTitle,
+                         .visualParamChoiceTransformTitle,
                          .visualParamChoiceLegendTitle)
                 ),
                 .conditionalOnCheckGroup(
-                    pchoice_field, 
+                    pchoice_field,
                     .visualParamChoiceColorTitle,
                     hr(),
                     .conditionalOnCheckSolo(
-                        center_field, 
+                        center_field,
                         on_select=FALSE,
                         checkboxInput(.input_FUN(.ADPCustomColor),
                             label="Use custom colors",
@@ -583,7 +643,7 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                         )
                     ),
                     .conditionalOnCheckSolo(
-                        center_field, 
+                        center_field,
                         on_select=TRUE,
                         selectInput(
                             .input_FUN(.ADPColorCentered),
@@ -594,17 +654,17 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     )
                 ),
                 .conditionalOnCheckGroup(
-                    pchoice_field, 
+                    pchoice_field,
                     .visualParamChoiceTransformTitle,
                     hr(),
                     checkboxInput(.input_FUN(.ADPExpressors),
                         label="Compute average expression over non-zero samples",
                         value=x[[.ADPExpressors]]),
                     checkboxInput(center_field,
-                        label="Center averages", 
+                        label="Center averages",
                         value=x[[.ADPCenter]]),
                     .conditionalOnCheckSolo(
-                        center_field, 
+                        center_field,
                         on_select=TRUE,
                         checkboxInput(.input_FUN(.ADPScale),
                             label="Scale averages",
@@ -613,7 +673,7 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                 )
             )
         ),
-        out[-1] 
+        out[-1]
     )
 })
 
@@ -633,23 +693,26 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
     # Not much point distinguishing between protected and unprotected here,
     # as there aren't any selections transmitted from this panel anyway.
     .createProtectedParameterObservers(plot_name,
-        fields=c(.ADPCustomFeatNames),
+        fields=c(.ADPCustomFeatNames,
+            .ADPClusterFeatures,
+            .ADPClusterDistanceFeatures,
+            .ADPClusterMethodFeatures),
         input=input, pObjects=pObjects, rObjects=rObjects)
 
     .createUnprotectedParameterObservers(plot_name,
         fields=c(.ADPColDataLabel, .ADPColDataFacet,
-            .ADPAssay, 
+            .ADPAssay,
             .ADPColorUpper, .ADPColorLower, .ADPCustomColor, .ADPColorCentered,
             .ADPExpressors, .ADPCenter, .ADPScale),
         input=input, pObjects=pObjects, rObjects=rObjects)
 
     .createMultiSelectionEffectObserver(plot_name,
-        by_field=iSEE:::.selectColSource, 
-        type_field=iSEE:::.selectColType, 
+        by_field=iSEE:::.selectColSource,
+        type_field=iSEE:::.selectColType,
         saved_field=iSEE:::.selectColSaved,
         input=input, session=session, pObjects=pObjects, rObjects=rObjects)
 
-    .createCustomDimnamesModalObservers(plot_name, .ADPFeatNameText, .dimnamesModalOpen, se, 
+    .createCustomDimnamesModalObservers(plot_name, .ADPFeatNameText, .dimnamesModalOpen, se,
         input=input, session=session, pObjects=pObjects, rObjects=rObjects, source_type="row")
 
     invisible(NULL)
