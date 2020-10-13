@@ -386,7 +386,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     # print(str(x))
     plot_env <- new.env()
     plot_env$se <- se
-    plot_env$colormap <- metadata(se)$colormap
+    plot_env$colormap <- .getCachedCommonInfo(se, ".internal")$colormap
 
     all_cmds <- list()
     cluster_row_args <- character(0)
@@ -448,6 +448,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
             }
         )
     } else {
+        .textEval(unclustered_cmds, plot_env)
         clustering_cmds <- unclustered_cmds
     }
 
