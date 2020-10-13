@@ -1,3 +1,7 @@
+# iSEEu 1.1.8
+
+* Added the `AggregatedDotPlot` panel to show marker-based dot plots.
+
 # iSEEu 1.1.7
 
 * Improved safety and correctness of the calculation of the number of DEGs.
