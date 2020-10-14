@@ -382,6 +382,7 @@ setMethod(".fullName", "AggregatedDotPlot", function(x) "Aggregated dot plot")
 #' theme element_rect element_line element_text element_blank xlab facet_wrap
 #' scale_color_gradient scale_color_gradientn scale_color_gradient2
 #' @importFrom S4Vectors metadata
+#' @importFrom shiny showNotification
 setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, all_contents) {
     # print(str(x))
     plot_env <- new.env()

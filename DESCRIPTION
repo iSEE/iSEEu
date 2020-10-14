@@ -57,6 +57,7 @@ Suggests:
     GO.db,
     KEGGREST,
     knitr,
+    igraph,
     rmarkdown,
     BiocStyle,
     htmltools,
