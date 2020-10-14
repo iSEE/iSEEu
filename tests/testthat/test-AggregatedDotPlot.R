@@ -1,4 +1,4 @@
-# library(testthat); library(iSEEu); source("test-AggregatedDotPlot.R")
+# library(testthat); library(iSEEu); source("setup-mimic_live_app.R"); source("test-AggregatedDotPlot.R")
 
 context("AggregatedDotPlot")
 
@@ -101,7 +101,7 @@ test_that(".generateOutput works correctly", {
     x <- AggregatedDotPlot()
     se <- .cacheCommonInfo(x, se)
     x <- .refineParameters(x, se)
-    metadata(se)$colormap <- ExperimentColorMap()
+    se <- iSEE:::.set_colormap(se, ExperimentColorMap())
 
     collated <- .generateOutput(x, se, all_memory=list(), all_contents=list())
     expect_s3_class(collated$plot, "ggplot")
@@ -144,8 +144,9 @@ test_that(".exportOutput handles AggregatedDotPlot", {
     se2 <- .cacheCommonInfo(AggregatedDotPlot1, se)
     AggregatedDotPlot1 <- .refineParameters(AggregatedDotPlot1, se2)
     memory <- list(AggregatedDotPlot1=AggregatedDotPlot1)
+
     pObjects <- mimic_live_app(se, memory) # read from iSEE... iSEE.utils package?
-    metadata(se2)$colormap <- ExperimentColorMap()
+    se2 <- iSEE:::.set_colormap(se2, ExperimentColorMap())
 
     out <- .exportOutput(memory$AggregatedDotPlot1, se2, memory, pObjects$contents)
     expect_identical(out, "AggregatedDotPlot1.pdf")
