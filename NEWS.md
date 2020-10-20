@@ -1,3 +1,7 @@
+# iSEEu 1.1.9
+
+* Ensure that global parameters only affect panels during construction.
+
 # iSEEu 1.1.8
 
 * Added the `AggregatedDotPlot` panel to show marker-based dot plots.
