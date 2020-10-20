@@ -74,7 +74,7 @@ Users are expected to load relevant statistics into the rowData of a SummarizedE
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.9</span>
       </span>
     </div>
 
@@ -154,15 +154,9 @@ Defaults to <code>"BH"</code>, but can take any value from <code><a href='https:
 </ul>
 
 <p>The following slots control the choice of columns in the user interface:</p><ul>
-<li><p><code>PValueFields</code>, a character vector specifying the names of all columns containing p-values.
-Set to all continuous columns with names matching any of the strings in <code><a href='getPValuePattern.html'>getPValuePattern</a></code>.
-This cannot be changed after the application has started.</p></li>
-<li><p><code>LogFCFields</code>, a character vector specifying the names of all columns containing log-fold changes.
-Set to all continuous columns with names matching any of the strings in <code><a href='getPValuePattern.html'>getLogFCPattern</a></code>.
-This cannot be changed after the application has started.</p></li>
-<li><p><code>AveAbFields</code>, a character vector specifying the names of all columns containing average abundances.
-Set to all continuous columns with names matching any of the strings in <code><a href='getPValuePattern.html'>getAveAbPattern</a></code>.
-This cannot be changed after the application has started.</p></li>
+<li><p><code>PValuePattern</code>, a character vector specifying the patterns of all potential columns containing p-values, see <code><a href='getPValuePattern.html'>getPValuePattern</a></code>.</p></li>
+<li><p><code>LogFCPattern</code>, a character vector specifying the patterns of all potential columns containing log-fold changes, see <code><a href='getPValuePattern.html'>getLogFCPattern</a></code>.</p></li>
+<li><p><code>AveAbPattern</code>, a character vector specifying the patterns of all potential columns containing average abundances, see <code><a href='getPValuePattern.html'>getAveAbPattern</a></code>.</p></li>
 </ul>
 
 <p>In addition, this class inherits all slots from its parent RowDataPlot,
@@ -173,6 +167,10 @@ RowDotPlot, DotPlot and Panel classes.</p>
 
 <p><code>MAPlot(...)</code> creates an instance of a MAPlot class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
+<p>Initial values for <code>PValuePattern</code>, <code>AveAbPattern</code> and <code>LogFCPattern</code> are set to the outputs of <code><a href='getPValuePattern.html'>getPValuePattern</a></code>, <code><a href='getPValuePattern.html'>getAveAbPattern</a></code> and <code><a href='getPValuePattern.html'>getLogFCPattern</a></code>, respectively.
+These parameters are considered to be global constants and cannot be changed inside the running <code>iSEE</code> application.
+Similarly, it is not possible for multiple MAPlots in the same application to have different values for these slots;
+within the app, all values are set to those of the first encountered MAPlot to ensure consistency.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
     
@@ -182,7 +180,7 @@ Refer to the documentation for each method for more details on the remaining arg
 <p>For setting up data values:</p><ul>
 <li><p><code>.cacheCommonInfo(x, se)</code> returns <code>se</code> after being loaded with class-specific constants.
 This includes <code>"valid.p.fields"</code>, <code>"valid.ab.fields"</code> and <code>"valid.lfc.fields"</code>, which are character vectors containing the names of valid <code>rowData</code> columns for the p-values, average abundances and log-fold changes, respectively.</p></li>
-<li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>XAxis="Row data"</code>.
+<li><p><code>.refineParameters(x, se)</code> returns <code>x</code> after setting <code>XAxis="Row data"</code> and the various <code>*Pattern</code> fields to their cached values.
 This will also call the equivalent RowDataPlot method for further refinements to <code>x</code>.
 If valid p-value, abundance and log-fold change fields are not available, <code>NULL</code> is returned instead.</p></li>
 </ul>

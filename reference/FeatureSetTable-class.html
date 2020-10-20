@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.9</span>
       </span>
     </div>
 
@@ -150,10 +150,6 @@ Each entry should be a string containing R commands to define a character vector
 as well as the <code>se</code> variable containing the input SummarizedExperiment object.)</p></li>
 </ul>
 
-<p>The <code>CreateCollections</code> and <code>RetrieveSet</code> parameters cannot be changed inside the <code>iSEE</code> application.
-In fact, they cannot even be set in the constructor as they are global to all FeatureSetTable instances.
-Rather, they are always set to the fields of the same name in the output of <code><a href='getFeatureSetCommands.html'>getFeatureSetCommands</a></code>.
-If these fields are also <code>NULL</code>, we fall back to the output of <code><a href='createGeneSetCommands.html'>createGeneSetCommands</a></code> with default parameters.</p>
 <p>The following slots control the selections:</p><ul>
 <li><p><code>Selected</code>, a string containing the name of the currently selected gene set.
 Defaults to <code>""</code>, i.e., no selection.</p></li>
@@ -170,6 +166,11 @@ Defaults to an empty character vector, i.e., no search.</p></li>
 
 <p><code>FeatureSetTable(...)</code> creates an instance of a FeatureSetTable class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
+<p>Initial values for <code>CreateCollections</code> and <code>RetrieveSet</code> are taken from the fields of the same name in the output of <code><a href='getFeatureSetCommands.html'>getFeatureSetCommands</a></code>.
+If these fields are also <code>NULL</code>, we fall back to the output of <code><a href='createGeneSetCommands.html'>createGeneSetCommands</a></code> with default parameters.
+These parameters are considered to be global constants and cannot be changed inside the running <code>iSEE</code> application.
+Similarly, it is not possible for multiple FeatureSetTables in the same application to have different values for these slots;
+within the app, all values are set to those of the first encountered FeatureSetTable to ensure consistency.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
     
@@ -236,8 +237,8 @@ which is set to the number of features in <code>se</code>.</p></li>
 
 <span class='va'>cmds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='createGeneSetCommands.html'>createGeneSetCommands</a></span><span class='op'>(</span>collections<span class='op'>=</span><span class='st'>"GO"</span>,
     organism<span class='op'>=</span><span class='st'>"org.Mm.eg.db"</span>, identifier<span class='op'>=</span><span class='st'>"ENSEMBL"</span><span class='op'>)</span>
-<span class='va'>gst</span> <span class='op'>&lt;-</span> <span class='fu'>FeatureSetTable</span><span class='op'>(</span>PanelId<span class='op'>=</span><span class='fl'>1L</span>, RetrieveSet<span class='op'>=</span><span class='va'>cmds</span><span class='op'>$</span><span class='va'>RetrieveSet</span>,
-    CreateCollections<span class='op'>=</span><span class='va'>cmds</span><span class='op'>$</span><span class='va'>CreateCollections</span><span class='op'>)</span>
+<span class='fu'><a href='getFeatureSetCommands.html'>setFeatureSetCommands</a></span><span class='op'>(</span><span class='va'>cmds</span><span class='op'>)</span>
+<span class='va'>gst</span> <span class='op'>&lt;-</span> <span class='fu'>FeatureSetTable</span><span class='op'>(</span>PanelId<span class='op'>=</span><span class='fl'>1L</span><span class='op'>)</span>
 
 <span class='va'>rdp</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataPlot</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"FeatureSetTable1"</span>,
     SelectionEffect<span class='op'>=</span><span class='st'>"Color"</span>,
