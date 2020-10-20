@@ -10,11 +10,11 @@ test_that("MAPlot constructor works", {
 
     expect_error(MAPlot(PValueField=character(0)), "must be a single string")
 
-    expect_error(MAPlot(LogFCThreshold=numeric(0)), "must be a non-negative numeric scalar")
+    expect_error(MAPlot(LogFCThreshold=numeric(0)), "should be a numeric scalar")
 
-    expect_error(MAPlot(PValueThreshold=numeric(0)), "must be a numeric scalar")
+    expect_error(MAPlot(PValueThreshold=numeric(0)), "should be a numeric scalar")
 
-    expect_error(MAPlot(PValueCorrection='stuff'), "must be in")
+    expect_error(MAPlot(PValueCorrection='stuff'), "should be one of")
 })
 
 test_that("MAPlot refinement works correctly", {

@@ -8,11 +8,11 @@ dimnames(se) <- list(1:nrow(se), letters[seq_len(ncol(se))])
 test_that("VolcanoPlot constructor works", {
     expect_s4_class(VolcanoPlot(), "VolcanoPlot")
 
-    expect_error(VolcanoPlot(LogFCThreshold=numeric(0)), "must be a non-negative numeric scalar")
+    expect_error(VolcanoPlot(LogFCThreshold=numeric(0)), "should be a numeric scalar")
 
-    expect_error(VolcanoPlot(PValueThreshold=numeric(0)), "must be a numeric scalar")
+    expect_error(VolcanoPlot(PValueThreshold=numeric(0)), "should be a numeric scalar")
 
-    expect_error(VolcanoPlot(PValueCorrection='stuff'), "must be in")
+    expect_error(VolcanoPlot(PValueCorrection='stuff'), "should be one of")
 })
 
 test_that("VolcanoPlot refinement works correctly", {

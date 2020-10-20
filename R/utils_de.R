@@ -106,45 +106,24 @@ NULL
     )
 }
 
-.define_de_validity <- function(object, allow.na.fields=FALSE) {
+.define_de_validity <- function(object, patterns) {
     msg <- character(0)
 
     p <- object[["PValueThreshold"]]
-    if (length(p)!=1 || p <= 0 || p > 1) {
-        msg <- c(msg, "'PValueThreshold' must be a numeric scalar in (0, 1]")
-    }
-
-    lfc <- object[["LogFCThreshold"]]
-    if (length(lfc)!=1 || lfc < 0) {
-        msg <- c(msg, "'LogFCThreshold' must be a non-negative numeric scalar")
-    }
-
-    corr <- object[["PValueCorrection"]]
-    if (length(corr)!=1 || !corr %in% p.adjust.methods) {
-        msg <- c(msg, "'PValueCorrection' must be in 'p.adjust.methods'")
-    }
+    msg <- .validNumberError(msg, object, "PValueThreshold", lower=0, upper=1)
+    msg <- .validNumberError(msg, object, "LogFCThreshold", lower=0, upper=Inf)
+    msg <- .allowableChoiceError(msg, object, "PValueCorrection", p.adjust.methods)
 
     msg
 }
 
 .needs_filling <- function(value) identical(value, NA_character_)
 
-.update_chosen_de_field <- function(x, field, choices) {
-    if (!x[[field]] %in% x[[choices]]) {
-        x[[field]] <- x[[choices]][1]
-    }
-    x
-}
-
-.match_acceptable_fields <- function(provided, globals, available) {
-    if (.needs_filling(provided)) {
-        provided <- globals
-        okay <- logical(length(available))
-        for (x in provided) {
-            okay <- okay | grepl(x, available, fixed=TRUE)
-        } 
-        available[okay]
-    } else {
-        intersect(available, provided)
-    }
+.match_acceptable_fields <- function(globals, available) {
+    provided <- globals
+    okay <- logical(length(available))
+    for (x in provided) {
+        okay <- okay | grepl(x, available, fixed=TRUE)
+    } 
+    available[okay]
 }

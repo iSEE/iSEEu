@@ -15,11 +15,6 @@
 #' as well as the \code{se} variable containing the input SummarizedExperiment object.)
 #' }
 #'
-#' The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed inside the \code{iSEE} application.
-#' In fact, they cannot even be set in the constructor as they are global to all FeatureSetTable instances.
-#' Rather, they are always set to the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
-#' If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
-#'
 #' The following slots control the selections:
 #' \itemize{
 #' \item \code{Selected}, a string containing the name of the currently selected gene set.
@@ -35,6 +30,12 @@
 #' @section Constructor:
 #' \code{FeatureSetTable(...)} creates an instance of a FeatureSetTable class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
+#'
+#' Initial values for \code{CreateCollections} and \code{RetrieveSet} are taken from the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
+#' If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
+#' These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
+#' Similarly, it is not possible for multiple FeatureSetTables in the same application to have different values for these slots;
+#' within the app, all values are set to those of the first encountered FeatureSetTable to ensure consistency.
 #'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{FeatureSetTable} class.
@@ -103,8 +104,8 @@
 #'
 #' cmds <- createGeneSetCommands(collections="GO",
 #'     organism="org.Mm.eg.db", identifier="ENSEMBL")
-#' gst <- FeatureSetTable(PanelId=1L, RetrieveSet=cmds$RetrieveSet,
-#'     CreateCollections=cmds$CreateCollections)
+#' setFeatureSetCommands(cmds)
+#' gst <- FeatureSetTable(PanelId=1L)
 #'
 #' rdp <- RowDataPlot(RowSelectionSource="FeatureSetTable1",
 #'     SelectionEffect="Color",
@@ -153,28 +154,16 @@ setClass("FeatureSetTable", contains="Panel",
 setValidity2("FeatureSetTable", function(object) {
     msg <- character(0)
 
-    if (length(object[["Collection"]])!=1) {
-        msg <- c(msg, "'Collection' should be a single string")
-    }
+    msg <- .singleStringError(msg, object, c("Collection", "Selected", "Search"))
 
     cre.cmds <- object[["CreateCollections"]]
     ret.cmds <- object[["RetrieveSet"]]
-    if (!.needs_filling(cre.cmds) && !.needs_filling(ret.cmds)) {
-        nms <- names(cre.cmds)
-        if (is.null(nms) || anyDuplicated(nms)) {
-            msg <- c(msg, "names of 'CreateCollections' must be non-NULL and unique")
-        }
-        if (!identical(nms, names(ret.cmds))) {
-            msg <- c(msg, "names of 'CreateCollections' and 'RetrieveSet' must be identical")
-        }
+    nms <- names(cre.cmds)
+    if (is.null(nms) || anyDuplicated(nms)) {
+        msg <- c(msg, "names of 'CreateCollections' must be non-NULL and unique")
     }
-
-    if (!isSingleString(object[["Selected"]])) {
-        msg <- c(msg, "'Selected' should be a single string")
-    }
-
-    if (!isSingleString(object[["Search"]])) {
-        msg <- c(msg, "'Search' should be a single string")
+    if (!identical(nms, names(ret.cmds))) {
+        msg <- c(msg, "names of 'CreateCollections' and 'RetrieveSet' must be identical")
     }
 
     if (length(msg)) {
@@ -189,8 +178,13 @@ setMethod("initialize", "FeatureSetTable",
 {
     args <- list(..., Collection=Collection, Selected=Selected, Search=Search, SearchColumns=SearchColumns)
 
-    args$CreateCollections <- NA_character_
-    args$RetrieveSet <- NA_character_
+    stuff <- getFeatureSetCommands()
+    if (is.null(stuff)) {
+        stuff <- createGeneSetCommands()
+    }
+
+    args$CreateCollections <- stuff$CreateCollections
+    args$RetrieveSet <- stuff$RetrieveSet
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -210,19 +204,11 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
     se <- callNextMethod()
 
     # NOTE: these fields are assumed to be globals, so it's okay to use their
-    # values when caching the common values. We also store the commands that we
-    # ended up choosing, with the plan to force all FeatureSetTables to use the
-    # commands of the first encountered FeatureSetTable in .refineParameters.
+    # values when caching the common values.  The plan is to use
+    # .refineParameters to force all FeatureSetTables to use the commands of
+    # the first encountered FeatureSetTable.
     cre.cmds <- x[["CreateCollections"]]
     ret.cmds <- x[["RetrieveSet"]]
-    if (.needs_filling(cre.cmds) || .needs_filling(ret.cmds)) {
-        stuff <- getFeatureSetCommands()
-        if (is.null(stuff)) {
-            stuff <- createGeneSetCommands()
-        }
-        cre.cmds <- stuff$CreateCollections
-        ret.cmds <- stuff$RetrieveSet
-    }
 
     created <- lapply(cre.cmds, function(code) {
         env <- new.env()

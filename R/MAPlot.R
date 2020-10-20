@@ -18,15 +18,9 @@
 #'
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
-#' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Set to all continuous columns with names matching any of the strings in \code{\link{getPValuePattern}}.
-#' This cannot be changed after the application has started.
-#' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Set to all continuous columns with names matching any of the strings in \code{\link{getLogFCPattern}}.
-#' This cannot be changed after the application has started.
-#' \item \code{AveAbFields}, a character vector specifying the names of all columns containing average abundances.
-#' Set to all continuous columns with names matching any of the strings in \code{\link{getAveAbPattern}}.
-#' This cannot be changed after the application has started.
+#' \item \code{PValuePattern}, a character vector specifying the patterns of all potential columns containing p-values, see \code{\link{getPValuePattern}}.
+#' \item \code{LogFCPattern}, a character vector specifying the patterns of all potential columns containing log-fold changes, see \code{\link{getLogFCPattern}}.
+#' \item \code{AveAbPattern}, a character vector specifying the patterns of all potential columns containing average abundances, see \code{\link{getAveAbPattern}}.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -36,6 +30,11 @@
 #' \code{MAPlot(...)} creates an instance of a MAPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
+#' Initial values for \code{PValuePattern}, \code{AveAbPattern} and \code{LogFCPattern} are set to the outputs of \code{\link{getPValuePattern}}, \code{\link{getAveAbPattern}} and \code{\link{getLogFCPattern}}, respectively.
+#' These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
+#' Similarly, it is not possible for multiple MAPlots in the same application to have different values for these slots;
+#' within the app, all values are set to those of the first encountered MAPlot to ensure consistency.
+#'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
@@ -44,7 +43,7 @@
 #' \itemize{
 #' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
 #' This includes \code{"valid.p.fields"}, \code{"valid.ab.fields"} and \code{"valid.lfc.fields"}, which are character vectors containing the names of valid \code{\link{rowData}} columns for the p-values, average abundances and log-fold changes, respectively.
-#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
+#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"} and the various \code{*Pattern} fields to their cached values.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value, abundance and log-fold change fields are not available, \code{NULL} is returned instead.
 #' }
@@ -127,7 +126,7 @@ NULL
 #' @export
 setClass("MAPlot", contains="RowDataPlot",
     slots=c(PValueField="character", PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
-        PValueFields="character", LogFCFields="character", AveAbFields="character"))
+        PValuePattern="character", LogFCPattern="character", AveAbPattern="character"))
 
 #' @export
 setMethod(".fullName", "MAPlot", function(x) "MA plot")
@@ -142,9 +141,9 @@ setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
     args <- list(PValueField=PValueField, PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
 
-    args$PValueFields <- NA_character_
-    args$AveAbFields <- NA_character_
-    args$LogFCFields <- NA_character_
+    args$PValuePattern <- getPValuePattern()
+    args$AveAbPattern <- getAveAbPattern()
+    args$LogFCPattern <- getLogFCPattern()
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -164,7 +163,7 @@ setValidity2("MAPlot", function(object) {
         msg <- c(msg, "'PValueField' must be a single string")
     }
 
-    msg <- c(msg, .define_de_validity(object))
+    msg <- c(msg, .define_de_validity(object, patterns=c("PValuePattern", "LogFCPattern", "AveAbPattern")))
 
     if (length(msg)) msg else TRUE
 })
@@ -178,13 +177,13 @@ setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
     se <- callNextMethod()
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    # We determine the valid fields from the first encountered instance of the
-    # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
-    # constants. (We actually ensure that this is the case by forcibly setting
-    # them in .refineParameters later.)
-    p.okay <- .match_acceptable_fields(x[["PValueFields"]], getPValuePattern(), all.cont)
-    lfc.okay <- .match_acceptable_fields(x[["LogFCFields"]], getLogFCPattern(), all.cont)
-    ab.okay <- .match_acceptable_fields(x[["AveAbFields"]], getAveAbPattern(), all.cont)
+    # NOTE: these fields are assumed to be globals, so it's okay to use their
+    # values when caching the common values.  The plan is to use
+    # .refineParameters to force all MAPlots to use the fields defined by
+    # the patterns of the first encountered MAPlot.
+    p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
+    lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
+    ab.okay <- .match_acceptable_fields(x[["AveAbPattern"]], all.cont)
 
     .setCachedCommonInfo(se, "MAPlot",
         valid.lfc.fields=lfc.okay,
@@ -195,30 +194,28 @@ setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
 #' @export
 #' @importFrom methods callNextMethod
 setMethod(".refineParameters", "MAPlot", function(x, se) {
-    x[["PValueFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.p.fields
-    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.lfc.fields
-    x[["AveAbFields"]] <- .getCachedCommonInfo(se, "MAPlot")$valid.ab.fields
-
     x <- callNextMethod() # Do this first to trigger warnings from base classes.
     if (is.null(x)) {
         return(NULL)
     }
 
-    if (length(x[["PValueFields"]])==0L) {
+    p.fields <- .getCachedCommonInfo(se, "MAPlot")$valid.p.fields
+    if (length(p.fields)==0L) {
         warning("no valid p-value fields for '", class(x)[1], "'")
         return(NULL)
     }
-    x <- .update_chosen_de_field(x, "PValueField", "PValueFields")
+
+    x <- .replaceMissingWithFirst(x, "PValueField", p.fields)
 
     x[["XAxis"]] <- "Row data"
     x
 })
 
 #' @export
-setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) x[["AveAbFields"]])
+setMethod(".allowableXAxisChoices", "MAPlot", function(x, se) .getCachedCommonInfo(se, "MAPlot")$valid.ab.fields)
 
 #' @export
-setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) x[["LogFCFields"]])
+setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) .getCachedCommonInfo(se, "MAPlot")$valid.lfc.fields)
 
 #' @export
 #' @importFrom shiny numericInput selectInput hr
@@ -232,7 +229,7 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
             selectInput(input_FUN("PValueField"),
                 label="P-value field:",
                 selected=x[["PValueField"]],
-                choices=x[["PValueFields"]]),
+                choices=.getCachedCommonInfo(se, "MAPlot")$valid.p.fields),
             hr(),
             numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
                 value=x[["PValueThreshold"]], min=0, max=1, step=0.005),

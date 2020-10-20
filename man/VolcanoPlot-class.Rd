@@ -40,12 +40,8 @@ Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.method
 
 The following slots control the choice of columns in the user interface:
 \itemize{
-\item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-Set to all continuous columns with names matching any of the strings in \code{\link{getPValuePattern}}.
-This cannot be changed after the application has started.
-\item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-Set to all continuous columns with names matching any of the strings in \code{\link{getLogFCPattern}}.
-This cannot be changed after the application has started.
+\item \code{PValuePattern}, a character vector specifying the patterns of all potential columns containing p-values, see \code{\link{getPValuePattern}}.
+\item \code{LogFCPattern}, a character vector specifying the patterns of all potential columns containing log-fold changes, see \code{\link{getLogFCPattern}}.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -56,6 +52,11 @@ In addition, this class inherits all slots from its parent \linkS4class{RowDataP
 
 \code{VolcanoPlot(...)} creates an instance of a VolcanoPlot class,
 where any slot and its value can be passed to \code{...} as a named argument.
+
+Initial values for \code{PValuePattern} and \code{LogFCPattern} are set to the outputs of \code{\link{getPValuePattern}} and \code{\link{getLogFCPattern}}, respectively.
+These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
+Similarly, it is not possible for multiple VolcanoPlots in the same application to have different values for these slots;
+within the app, all values are set to those of the first encountered VolcanoPlot to ensure consistency.
 }
 
 \section{Supported methods}{
@@ -67,7 +68,7 @@ For setting up data values:
 \itemize{
 \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
 This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
-\item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
+\item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"} and the various \code{*Pattern} fields to their cached values.
 This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
 }

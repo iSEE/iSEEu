@@ -17,12 +17,8 @@
 #'
 #' The following slots control the choice of columns in the user interface:
 #' \itemize{
-#' \item \code{PValueFields}, a character vector specifying the names of all columns containing p-values.
-#' Set to all continuous columns with names matching any of the strings in \code{\link{getPValuePattern}}.
-#' This cannot be changed after the application has started.
-#' \item \code{LogFCFields}, a character vector specifying the names of all columns containing log-fold changes.
-#' Set to all continuous columns with names matching any of the strings in \code{\link{getLogFCPattern}}.
-#' This cannot be changed after the application has started.
+#' \item \code{PValuePattern}, a character vector specifying the patterns of all potential columns containing p-values, see \code{\link{getPValuePattern}}.
+#' \item \code{LogFCPattern}, a character vector specifying the patterns of all potential columns containing log-fold changes, see \code{\link{getLogFCPattern}}.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
@@ -32,6 +28,11 @@
 #' \code{VolcanoPlot(...)} creates an instance of a VolcanoPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
+#' Initial values for \code{PValuePattern} and \code{LogFCPattern} are set to the outputs of \code{\link{getPValuePattern}} and \code{\link{getLogFCPattern}}, respectively.
+#' These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
+#' Similarly, it is not possible for multiple VolcanoPlots in the same application to have different values for these slots;
+#' within the app, all values are set to those of the first encountered VolcanoPlot to ensure consistency.
+#'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
@@ -40,7 +41,7 @@
 #' \itemize{
 #' \item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
 #' This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
-#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}.
+#' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"} and the various \code{*Pattern} fields to their cached values.
 #' This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
 #' If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
 #' }
@@ -124,7 +125,7 @@ NULL
 #' @export
 setClass("VolcanoPlot", contains="RowDataPlot",
     slots=c(PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
-        PValueFields="character", LogFCFields="character"))
+        PValuePattern="character", LogFCPattern="character"))
 
 #' @export
 setMethod(".fullName", "VolcanoPlot", function(x) "Volcano plot")
@@ -139,8 +140,8 @@ setMethod("initialize", "VolcanoPlot", function(.Object, PValueThreshold=0.05,
     args <- list(PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
 
-    args$PValueFields <- NA_character_
-    args$LogFCFields <- NA_character_
+    args$PValuePattern <- getPValuePattern()
+    args$LogFCPattern <- getLogFCPattern()
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -153,7 +154,7 @@ VolcanoPlot <- function(...) {
 
 #' @importFrom stats p.adjust.methods
 setValidity2("VolcanoPlot", function(object) {
-    msg <- .define_de_validity(object)
+    msg <- .define_de_validity(object, patterns=c("PValuePattern", "LogFCPattern"))
     if (length(msg)) msg else TRUE
 })
 
@@ -166,12 +167,12 @@ setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
     se <- callNextMethod()
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    # We determine the valid fields from the first encountered instance of the
-    # class, which assumes that 'PValueFields' and 'LogFCFields' are class-wide
-    # constants. (We actually ensure that this is the case by forcibly setting
-    # them in .refineParameters later.)
-    p.okay <- .match_acceptable_fields(x[["PValueFields"]], getPValuePattern(), all.cont)
-    lfc.okay <- .match_acceptable_fields(x[["LogFCFields"]], getLogFCPattern(), all.cont)
+    # NOTE: these fields are assumed to be globals, so it's okay to use their
+    # values when caching the common values.  The plan is to use
+    # .refineParameters to force all VolcanoPlots to use the fields defined by
+    # the patterns of the first encountered VolcanoPlot.
+    p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
+    lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
 
     .setCachedCommonInfo(se, "VolcanoPlot", valid.lfc.fields=lfc.okay, valid.p.fields=p.okay)
 })
@@ -179,9 +180,6 @@ setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
 #' @export
 #' @importFrom methods callNextMethod
 setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
-    x[["PValueFields"]] <- .getCachedCommonInfo(se, "VolcanoPlot")$valid.p.fields
-    x[["LogFCFields"]] <- .getCachedCommonInfo(se, "VolcanoPlot")$valid.lfc.fields
-
     x <- callNextMethod() # Trigger warnings from base classes.
     if (is.null(x)) {
         return(NULL)
@@ -192,10 +190,10 @@ setMethod(".refineParameters", "VolcanoPlot", function(x, se) {
 })
 
 #' @export
-setMethod(".allowableXAxisChoices", "VolcanoPlot", function(x, se) x[["LogFCFields"]])
+setMethod(".allowableXAxisChoices", "VolcanoPlot", function(x, se) .getCachedCommonInfo(se, "VolcanoPlot")$valid.lfc.fields)
 
 #' @export
-setMethod(".allowableYAxisChoices", "VolcanoPlot", function(x, se) x[["PValueFields"]])
+setMethod(".allowableYAxisChoices", "VolcanoPlot", function(x, se) .getCachedCommonInfo(se, "VolcanoPlot")$valid.p.fields)
 
 #' @export
 #' @importFrom shiny numericInput selectInput hr

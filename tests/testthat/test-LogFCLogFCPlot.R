@@ -12,11 +12,11 @@ test_that("LogFCLogFCPlot constructor works", {
     expect_error(LogFCLogFCPlot(XPValueField=character(0)), "must be a single string")
     expect_error(LogFCLogFCPlot(YPValueField=character(0)), "must be a single string")
 
-    expect_error(LogFCLogFCPlot(LogFCThreshold=numeric(0)), "must be a non-negative numeric scalar")
+    expect_error(LogFCLogFCPlot(LogFCThreshold=numeric(0)), "should be a numeric scalar")
 
-    expect_error(LogFCLogFCPlot(PValueThreshold=numeric(0)), "must be a numeric scalar")
+    expect_error(LogFCLogFCPlot(PValueThreshold=numeric(0)), "should be a numeric scalar")
 
-    expect_error(LogFCLogFCPlot(PValueCorrection='stuff'), "must be in")
+    expect_error(LogFCLogFCPlot(PValueCorrection='stuff'), "should be one of")
 })
 
 test_that("LogFCLogFCPlot refinement works correctly", {

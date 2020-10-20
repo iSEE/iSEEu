@@ -38,11 +38,6 @@ Each entry should be a string containing R commands to define a character vector
 as well as the \code{se} variable containing the input SummarizedExperiment object.)
 }
 
-The \code{CreateCollections} and \code{RetrieveSet} parameters cannot be changed inside the \code{iSEE} application.
-In fact, they cannot even be set in the constructor as they are global to all FeatureSetTable instances.
-Rather, they are always set to the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
-If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
-
 The following slots control the selections:
 \itemize{
 \item \code{Selected}, a string containing the name of the currently selected gene set.
@@ -60,6 +55,12 @@ In addition, this class inherits all slots from its parent \linkS4class{Panel} c
 
 \code{FeatureSetTable(...)} creates an instance of a FeatureSetTable class,
 where any slot and its value can be passed to \code{...} as a named argument.
+
+Initial values for \code{CreateCollections} and \code{RetrieveSet} are taken from the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
+If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
+These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
+Similarly, it is not possible for multiple FeatureSetTables in the same application to have different values for these slots;
+within the app, all values are set to those of the first encountered FeatureSetTable to ensure consistency.
 }
 
 \section{Supported methods}{
@@ -130,8 +131,8 @@ rowData(sce) <- cbind(rowData(sce), modelGeneVarWithSpikes(sce, "ERCC"))
 
 cmds <- createGeneSetCommands(collections="GO",
     organism="org.Mm.eg.db", identifier="ENSEMBL")
-gst <- FeatureSetTable(PanelId=1L, RetrieveSet=cmds$RetrieveSet,
-    CreateCollections=cmds$CreateCollections)
+setFeatureSetCommands(cmds)
+gst <- FeatureSetTable(PanelId=1L)
 
 rdp <- RowDataPlot(RowSelectionSource="FeatureSetTable1",
     SelectionEffect="Color",
