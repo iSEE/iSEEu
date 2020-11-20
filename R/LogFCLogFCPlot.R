@@ -147,8 +147,8 @@ setMethod("initialize", "LogFCLogFCPlot", function(.Object,
         PValueThreshold=PValueThreshold, LogFCThreshold=LogFCThreshold, 
         PValueCorrection=PValueCorrection, ...)
 
-    args$PValuePattern <- NA_character_
-    args$LogFCPattern <- NA_character_
+    args$PValuePattern <- getPValuePattern()
+    args$LogFCPattern <- getLogFCPattern()
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -191,8 +191,8 @@ setMethod(".cacheCommonInfo", "LogFCLogFCPlot", function(x, se) {
     # class, which assumes that 'PValuePattern' and 'LogFCPattern' are class-wide
     # constants. (We actually ensure that this is the case by forcibly setting
     # them in .refineParameters later.)
-    p.okay <- .match_acceptable_fields(getPValuePattern(), all.cont)
-    lfc.okay <- .match_acceptable_fields(getLogFCPattern(), all.cont)
+    p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
+    lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
 
     .setCachedCommonInfo(se, "LogFCLogFCPlot", valid.p.fields=p.okay, valid.lfc.fields=lfc.okay)
 })
