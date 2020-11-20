@@ -328,8 +328,8 @@ setMethod(".cacheCommonInfo", "AggregatedDotPlot", function(x, se) {
     coldata_discrete <- .whichGroupable(subdf)
 
     .setCachedCommonInfo(se, "AggregatedDotPlot",
-        continuous.assay.names=named_assays[assays_continuous],
-        discrete.colData.names=coldata_displayable[coldata_discrete])
+        continuous.assay.names=unique(named_assays[assays_continuous]),
+        discrete.colData.names=unique(coldata_displayable[coldata_discrete]))
 })
 
 #' @export

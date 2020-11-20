@@ -174,7 +174,9 @@ setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
     p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
     lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
 
-    .setCachedCommonInfo(se, "VolcanoPlot", valid.lfc.fields=lfc.okay, valid.p.fields=p.okay)
+    .setCachedCommonInfo(se, "VolcanoPlot", 
+        valid.lfc.fields=unique(lfc.okay), 
+        valid.p.fields=unique(p.okay))
 })
 
 #' @export

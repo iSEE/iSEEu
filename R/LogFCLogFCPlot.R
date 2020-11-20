@@ -194,7 +194,9 @@ setMethod(".cacheCommonInfo", "LogFCLogFCPlot", function(x, se) {
     p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
     lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
 
-    .setCachedCommonInfo(se, "LogFCLogFCPlot", valid.p.fields=p.okay, valid.lfc.fields=lfc.okay)
+    .setCachedCommonInfo(se, "LogFCLogFCPlot", 
+        valid.p.fields=unique(p.okay), 
+        valid.lfc.fields=unique(lfc.okay))
 })
 
 #' @export

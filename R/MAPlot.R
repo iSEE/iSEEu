@@ -186,9 +186,9 @@ setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
     ab.okay <- .match_acceptable_fields(x[["AveAbPattern"]], all.cont)
 
     .setCachedCommonInfo(se, "MAPlot",
-        valid.lfc.fields=lfc.okay,
-        valid.p.fields=p.okay,
-        valid.ab.fields=ab.okay)
+        valid.lfc.fields=unique(lfc.okay),
+        valid.p.fields=unique(p.okay),
+        valid.ab.fields=unique(ab.okay))
 })
 
 #' @export

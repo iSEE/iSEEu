@@ -158,9 +158,9 @@ setMethod(".cacheCommonInfo", "ReducedDimensionHexPlot", function(x, se) {
     continuous <- .whichNumeric(subdf)
 
     .setCachedCommonInfo(se, "ReducedDimensionHexPlot",
-        valid.colData.names=displayable,
-        discrete.colData.names=displayable[discrete],
-        continuous.colData.names=displayable[continuous])
+        valid.colData.names=unique(displayable),
+        discrete.colData.names=unique(displayable[discrete]),
+        continuous.colData.names=unique(displayable[continuous]))
 })
 
 # Interface ----

@@ -166,7 +166,7 @@ setMethod(".cacheCommonInfo", "DynamicReducedDimensionPlot", function(x, se) {
 
     named_assays <- assayNames(se)
     named_assays <- named_assays[nzchar(named_assays)]
-    .setCachedCommonInfo(se, "DynamicReducedDimensionPlot", valid.assay.names=named_assays)
+    .setCachedCommonInfo(se, "DynamicReducedDimensionPlot", valid.assay.names=unique(named_assays))
 })
 
 #' @export

@@ -209,8 +209,8 @@ setMethod(".cacheCommonInfo", "DynamicMarkerTable", function(x, se) {
     }
 
     .setCachedCommonInfo(se, "DynamicMarkerTable", 
-        valid.assay.names=named_assays, 
-        valid.rowdata.names=intersect(extras, valid_rd))
+        valid.assay.names=unique(named_assays),
+        valid.rowdata.names=unique(intersect(extras, valid_rd)))
 })
 
 #' @export
