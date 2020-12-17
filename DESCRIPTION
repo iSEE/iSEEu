@@ -61,15 +61,16 @@ Suggests:
     rmarkdown,
     BiocStyle,
     htmltools,
+    rstudioapi,
     Rtsne,
     uwot,
     testthat (>= 2.1.0),
     covr
 URL: https://github.com/iSEE/iSEEu
 BugReports: https://github.com/iSEE/iSEEu/issues
+RoxygenNote: 7.1.1
 biocViews: ImmunoOncology, Visualization, GUI, DimensionReduction, 
     FeatureExtraction, Clustering, Transcription, 
     GeneExpression, Transcriptomics, SingleCell, CellBasedAssays
-RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
