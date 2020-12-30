@@ -27,6 +27,7 @@ jobs:
           leftovers <- setdiff(dependencies, installed.packages())
           BiocManager::install(leftovers, ask=FALSE, Ncpu=2L)
           remotes::install_cran("rcmdcheck")
+          BiocManager::install("iSEE/iSEE")
         shell: Rscript {0}
 
       - name: Check
