@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -66,7 +66,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/iSEE/iSEEu">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +100,7 @@
                   <a class="author_email" href="mailto:#"></a><a href="mailto:infinite.monkeys.with.keyboards@gmail.com" class="email">infinite.monkeys.with.keyboards@gmail.com</a>
       
                   
-            <h4 class="date">20 November 2020</h4>
+            <h4 class="date">30 December 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/iSEE/iSEEu/blob/master/vignettes/universe.Rmd"><code>vignettes/universe.Rmd</code></a></small>
       <div class="hidden name"><code>universe.Rmd</code></div>
@@ -112,17 +112,17 @@
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
-<p>The <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em> package <span class="citation">(Rue-Albrecht et al. 2018)</span> provides a general and flexible framework for interactively exploring <code>SummarizedExperiment</code> objects. However, in many cases, more specialized panels are required for effective visualization of specific data types. The <em><a href="https://bioconductor.org/packages/3.12/iSEEu">iSEEu</a></em> package implements a collection of such dedicated panel classes that work directly in the <code>iSEE</code> application and can smoothly interact with other panels. This allows users to quickly parametrize bespoke apps for their data to address scientific questions of interest. We first load in the package:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/iSEE/iSEEu">iSEEu</a></span><span class="op">)</span></pre></div>
+<p>The <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em> package <span class="citation">(Rue-Albrecht et al. 2018)</span> provides a general and flexible framework for interactively exploring <code>SummarizedExperiment</code> objects. However, in many cases, more specialized panels are required for effective visualization of specific data types. The <em><a href="https://bioconductor.org/packages/3.13/iSEEu">iSEEu</a></em> package implements a collection of such dedicated panel classes that work directly in the <code>iSEE</code> application and can smoothly interact with other panels. This allows users to quickly parametrize bespoke apps for their data to address scientific questions of interest. We first load in the package:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/iSEE/iSEEu">iSEEu</a></span><span class="op">)</span></code></pre></div>
 <p>All the panels described in this document can be deployed by simply passing them into the <code>iSEE()</code> function via the <code>initial=</code> argument, as shown in the following examples.</p>
 </div>
 <div id="differential-expression-plots" class="section level1">
 <h1 class="hasAnchor">
 <a href="#differential-expression-plots" class="anchor"></a>Differential expression plots</h1>
-<p>To demonstrate the use of these panels, we will perform a differential expression analysis on the <em><a href="https://bioconductor.org/packages/3.12/airway">airway</a></em> dataset with the <em><a href="https://bioconductor.org/packages/3.12/edgeR">edgeR</a></em> package. We store the resulting statistics in the <code>rowData</code> of the <code>SummarizedExperiment</code> so that it can be accessed by <code>iSEE</code> panels.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span>
+<p>To demonstrate the use of these panels, we will perform a differential expression analysis on the <em><a href="https://bioconductor.org/packages/3.13/airway">airway</a></em> dataset with the <em><a href="https://bioconductor.org/packages/3.13/edgeR">edgeR</a></em> package. We store the resulting statistics in the <code>rowData</code> of the <code>SummarizedExperiment</code> so that it can be accessed by <code>iSEE</code> panels.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://bioinf.wehi.edu.au/edgeR">edgeR</a></span><span class="op">)</span>
@@ -136,20 +136,20 @@
 <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html">glmQLFTest</a></span><span class="op">(</span><span class="va">fit</span>, coef<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
 
 <span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/topTags.html">topTags</a></span><span class="op">(</span><span class="va">res</span>, n<span class="op">=</span><span class="cn">Inf</span><span class="op">)</span><span class="op">$</span><span class="va">table</span>
-<span class="fu">rowData</span><span class="op">(</span><span class="va">airway</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/cbind.html">cbind</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">airway</span><span class="op">)</span>, <span class="va">tab</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span></pre></div>
+<span class="fu">rowData</span><span class="op">(</span><span class="va">airway</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/cbind.html">cbind</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">airway</span><span class="op">)</span>, <span class="va">tab</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
 <p>The <code>MAPlot</code> class creates a MA plot, i.e., with the log-fold change on the y-axis and the average expression on the x-axis. Features with significant differences in each direction are highlighted and counted on the legend. Users can vary the significance threshold and apply <em>ad hoc</em> filters on the log-fold change. This is a subclass of the <code>RowDataPlot</code> so points can be transmitted to other panels as multiple row selections. Instances of this class are created like:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">ma.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MAPlot-class.html">MAPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
-<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ma.panel</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ma.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MAPlot-class.html">MAPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
+<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">ma.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="screenshots/ma.png" width="488"></p>
 <p>The <code>VolcanoPlot</code> class creates a volcano plot with the log-fold change on the x-axis and the negative log-p-value on the y-axis. Features with significant differences in each direction are highlighted and counted on the legend. Users can vary the significance threshold and apply <em>ad hoc</em> filters on the log-fold change. This is a subclass of the <code>RowDataPlot</code> so points can be transmitted to other panels as multiple row selections. Instances of this class are created like:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">vol.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VolcanoPlot-class.html">VolcanoPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
-<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">vol.panel</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">vol.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VolcanoPlot-class.html">VolcanoPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
+<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">vol.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="screenshots/volcano.png" width="488"></p>
 <p>The <code>LogFCLogFCPlot</code> class creates a scatter plot of two log-fold changes from different DE comparisons. This allows us to compare DE results on the same dataset - or even from different datasets, as long as the row names are shared. Users can vary the significant threshold used to identify DE genes in either or both comparisons. This is a subclass of the <code>RowDataPlot</code> so points can be transmitted to other panels as multiple row selections. Instances of this class are created like:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co"># Creating another comparison, this time by blocking on the cell line</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Creating another comparison, this time by blocking on the cell line</span>
 <span class="va">design.alt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">cell</span> <span class="op">+</span> <span class="va">dex</span>, <span class="va">y</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span>
 <span class="va">y.alt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/estimateDisp.html">estimateDisp</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">design.alt</span><span class="op">)</span>
 <span class="va">fit.alt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html">glmQLFit</a></span><span class="op">(</span><span class="va">y.alt</span>, <span class="va">design.alt</span><span class="op">)</span>
@@ -160,24 +160,24 @@
 
 <span class="va">lfc.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LogFCLogFCPlot-class.html">LogFCLogFCPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span>, YAxis<span class="op">=</span><span class="st">"alt.logFC"</span>, 
     YPValueField<span class="op">=</span><span class="st">"alt.PValue"</span><span class="op">)</span>
-<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">lfc.panel</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">lfc.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="screenshots/logfclogfc.png" width="496"></p>
 </div>
 <div id="dynamically-recalculated-panels" class="section level1">
 <h1 class="hasAnchor">
 <a href="#dynamically-recalculated-panels" class="anchor"></a>Dynamically recalculated panels</h1>
-<p>To demonstrate, we will perform a quick analysis of a small dataset from the <em><a href="https://bioconductor.org/packages/3.12/scRNAseq">scRNAseq</a></em> package. This involves computing normalized expression values and low-dimensional results using the <em><a href="https://bioconductor.org/packages/3.12/scater">scater</a></em> package.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scRNAseq</span><span class="op">)</span>
+<p>To demonstrate, we will perform a quick analysis of a small dataset from the <em><a href="https://bioconductor.org/packages/3.13/scRNAseq">scRNAseq</a></em> package. This involves computing normalized expression values and low-dimensional results using the <em><a href="https://bioconductor.org/packages/3.13/scater">scater</a></em> package.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scRNAseq</span><span class="op">)</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html">ReprocessedAllenData</a></span><span class="op">(</span>assays<span class="op">=</span><span class="st">"tophat_counts"</span><span class="op">)</span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/scater/">scater</a></span><span class="op">)</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/logNormCounts.html">logNormCounts</a></span><span class="op">(</span><span class="va">sce</span>, exprs_values<span class="op">=</span><span class="st">"tophat_counts"</span><span class="op">)</span>
 <span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runPCA.html">runPCA</a></span><span class="op">(</span><span class="va">sce</span>, ncomponents<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
-<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runTSNE.html">runTSNE</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></pre></div>
-<p>The <code>DynamicReducedDimensionPlot</code> class creates a scatter plot with a dimensionality reduction result, namely principal components analysis (PCA), <span class="math inline">\(t\)</span>-stochastic neighbor embedding (<span class="math inline">\(t\)</span>-SNE) or uniform manifold and approximate projection (UMAP). It does so dynamically on the subset of points that are selected in a transmitting panel, allowing users to focus on finer structure when dealing with a heterogeneous population. Calculations are performed using relevant functions from the <em><a href="https://bioconductor.org/packages/3.12/scater">scater</a></em> package.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co"># Receives a selection from a reduced dimension plot.</span>
+<span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runTSNE.html">runTSNE</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></code></pre></div>
+<p>The <code>DynamicReducedDimensionPlot</code> class creates a scatter plot with a dimensionality reduction result, namely principal components analysis (PCA), <span class="math inline">\(t\)</span>-stochastic neighbor embedding (<span class="math inline">\(t\)</span>-SNE) or uniform manifold and approximate projection (UMAP). It does so dynamically on the subset of points that are selected in a transmitting panel, allowing users to focus on finer structure when dealing with a heterogeneous population. Calculations are performed using relevant functions from the <em><a href="https://bioconductor.org/packages/3.13/scater">scater</a></em> package.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Receives a selection from a reduced dimension plot.</span>
 <span class="va">dyn.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DynamicReducedDimensionPlot-class.html">DynamicReducedDimensionPlot</a></span><span class="op">(</span>Type<span class="op">=</span><span class="st">"UMAP"</span>, Assay<span class="op">=</span><span class="st">"logcounts"</span>,
     ColumnSelectionSource<span class="op">=</span><span class="st">"ReducedDimensionPlot1"</span>, PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
 
@@ -202,11 +202,11 @@
     <span class="op">)</span>
 <span class="op">)</span>
 
-<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">red.panel</span>, <span class="va">dyn.panel</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">red.panel</span>, <span class="va">dyn.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="screenshots/dynreddim.png" width="488"></p>
-<p>The <code>DynamicMarkerTable</code> class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel. If only the active selection exists in the transmitting panel, a comparison is performed between the points in that selection and all unselected points. If saved selections are present, pairwise comparisons between the active selection and each saved selection is performed and the results are combined into a single table using the <code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html">findMarkers()</a></code> function from <em><a href="https://bioconductor.org/packages/3.12/scran">scran</a></em>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">diff.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DynamicMarkerTable-class.html">DynamicMarkerTable</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">8L</span>, Assay<span class="op">=</span><span class="st">"logcounts"</span>,
+<p>The <code>DynamicMarkerTable</code> class dynamically computes basic differential statistics comparing assay values across groups of multiple selections in a transmitting panel. If only the active selection exists in the transmitting panel, a comparison is performed between the points in that selection and all unselected points. If saved selections are present, pairwise comparisons between the active selection and each saved selection is performed and the results are combined into a single table using the <code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html">findMarkers()</a></code> function from <em><a href="https://bioconductor.org/packages/3.13/scran">scran</a></em>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">diff.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/DynamicMarkerTable-class.html">DynamicMarkerTable</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">8L</span>, Assay<span class="op">=</span><span class="st">"logcounts"</span>,
     ColumnSelectionSource<span class="op">=</span><span class="st">"ReducedDimensionPlot1"</span>,<span class="op">)</span>
 
 <span class="co"># Recycling the reduced dimension panel above, adding a saved selection to</span>
@@ -231,15 +231,15 @@
 <span class="op">)</span>
 <span class="va">red.panel</span><span class="op">[[</span><span class="st">"PanelWidth"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">4L</span> <span class="co"># To fit onto one line.</span>
 
-<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">red.panel</span>, <span class="va">diff.panel</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">red.panel</span>, <span class="va">diff.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="screenshots/diffstat.png" width="488"></p>
 </div>
 <div id="feature-set-table" class="section level1">
 <h1 class="hasAnchor">
 <a href="#feature-set-table" class="anchor"></a>Feature set table</h1>
 <p>The <code><a href="../reference/FeatureSetTable-class.html">FeatureSetTable()</a></code> class is a bit unusual in that its rows do not correspond to any dimension of the <code>SummarizedExperiment</code>. Rather, each row is a feature set (e.g., from GO or KEGG) that, upon click, transmits a multiple row selection to other panels. The multiple selection consists of all rows in the chosen feature set, allowing users to identify the positions of all genes in a pathway of interest on, say, a volcano plot. This is also a rare example of a panel that only transmits and does not receive any selections from other panels.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/getFeatureSetCommands.html">setFeatureSetCommands</a></span><span class="op">(</span><span class="fu"><a href="../reference/createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>identifier<span class="op">=</span><span class="st">"ENSEMBL"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/getFeatureSetCommands.html">setFeatureSetCommands</a></span><span class="op">(</span><span class="fu"><a href="../reference/createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>identifier<span class="op">=</span><span class="st">"ENSEMBL"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">gset.tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FeatureSetTable-class.html">FeatureSetTable</a></span><span class="op">(</span>Selected<span class="op">=</span><span class="st">"GO:0002576"</span>, 
     Search<span class="op">=</span><span class="st">"platelet"</span>, PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
@@ -248,13 +248,13 @@
 <span class="va">vol.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VolcanoPlot-class.html">VolcanoPlot</a></span><span class="op">(</span>RowSelectionSource<span class="op">=</span><span class="st">"FeatureSetTable1"</span>,
     SelectionEffect<span class="op">=</span><span class="st">"Color"</span>, PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
 
-<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">gset.tab</span>, <span class="va">vol.panel</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">gset.tab</span>, <span class="va">vol.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="screenshots/geneset.png" width="488"></p>
 </div>
 <div id="app-modes" class="section level1">
 <h1 class="hasAnchor">
 <a href="#app-modes" class="anchor"></a>App modes</h1>
-<p><em><a href="https://bioconductor.org/packages/3.12/iSEEu">iSEEu</a></em> contains a number of “modes” that allow users to conveniently load an <code>iSEE</code> instance in one of several common configurations:</p>
+<p><em><a href="https://bioconductor.org/packages/3.13/iSEEu">iSEEu</a></em> contains a number of “modes” that allow users to conveniently load an <code>iSEE</code> instance in one of several common configurations:</p>
 <ul>
 <li>
 <code><a href="../reference/modeEmpty.html">modeEmpty()</a></code> will launch an empty app, i.e., with no panels. This is occasionally useful to jump to the landing page where a user can then upload a <code>SummarizedExperiment</code> object.</li>
@@ -266,23 +266,23 @@
 </div>
 <div id="contributing-to-iseeu" class="section level1">
 <h1 class="hasAnchor">
-<a href="#contributing-to-iseeu" class="anchor"></a>Contributing to <em><a href="https://bioconductor.org/packages/3.12/iSEEu">iSEEu</a></em>
+<a href="#contributing-to-iseeu" class="anchor"></a>Contributing to <em><a href="https://bioconductor.org/packages/3.13/iSEEu">iSEEu</a></em>
 </h1>
-<p>If you want to contribute to the development of the <em><a href="https://bioconductor.org/packages/3.12/iSEEu">iSEEu</a></em> package, here is a quick step-by-step guide:</p>
+<p>If you want to contribute to the development of the <em><a href="https://bioconductor.org/packages/3.13/iSEEu">iSEEu</a></em> package, here is a quick step-by-step guide:</p>
 <ul>
 <li>Fork the <code>iSEEu</code> repository from GitHub (<a href="https://github.com/iSEE/iSEEu" class="uri">https://github.com/iSEE/iSEEu</a>) and clone it locally.</li>
 </ul>
 <pre><code>git clone https://github.com/[your_github_username]/iSEEu.git</code></pre>
 <ul>
-<li><p>Add the desired new files - start from the <code>R</code> folder, then document via <code>roxygen2</code> - and push to your fork. As an example you can check out to understand how things are supposed to work, there are several modes already defined in the <code>R/</code> directory. A typical contribution could include e.g. a function defining an <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em> mode, named <code>modeXXX</code>, where <code>XXX</code> provides a clear representation of the purpose of the mode. Please place each mode in a file of its own, with the same name as the function. The function should be documented (including an example), and any required packages should be added to the <code>DESCRIPTION</code> file.</p></li>
+<li><p>Add the desired new files - start from the <code>R</code> folder, then document via <code>roxygen2</code> - and push to your fork. As an example you can check out to understand how things are supposed to work, there are several modes already defined in the <code>R/</code> directory. A typical contribution could include e.g. a function defining an <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em> mode, named <code>modeXXX</code>, where <code>XXX</code> provides a clear representation of the purpose of the mode. Please place each mode in a file of its own, with the same name as the function. The function should be documented (including an example), and any required packages should be added to the <code>DESCRIPTION</code> file.</p></li>
 <li><p>Once your <code>mode</code>/function is done, consider adding some information in the package. Some examples might be a screenshot of the mode in action (to be placed in the folder <code>inst/modes_img</code>), and a well-documented example use case (maybe an entry in the <code>vignettes</code> folder). Also add yourself as a contributor (<code>ctb</code>) to the <code>DESCRIPTION</code> file.</p></li>
-<li><p>Make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies. The <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em> core team will evaluate the contribution and get back to you!</p></li>
+<li><p>Make a pull request to the original repo - the GitHub site offers a practical framework to do so, enabling comments, code reviews, and other goodies. The <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em> core team will evaluate the contribution and get back to you!</p></li>
 </ul>
 <p>That’s pretty much it!</p>
 <div id="using-example-data-sets" class="section level4 unnumbered">
 <h4 class="hasAnchor">
 <a href="#using-example-data-sets" class="anchor"></a>Using example data sets</h4>
-<p>Example data sets can often be obtained from an <em><a href="https://bioconductor.org/packages/3.12/ExperimentHub">ExperimentHub</a></em> package (e.g. from the <em><a href="https://bioconductor.org/packages/3.12/scRNAseq">scRNAseq</a></em> package for single-cell RNA-sequencing data), and should not be added to the <em><a href="https://bioconductor.org/packages/3.12/iSEEu">iSEEu</a></em> package.</p>
+<p>Example data sets can often be obtained from an <em><a href="https://bioconductor.org/packages/3.13/ExperimentHub">ExperimentHub</a></em> package (e.g. from the <em><a href="https://bioconductor.org/packages/3.13/scRNAseq">scRNAseq</a></em> package for single-cell RNA-sequencing data), and should not be added to the <em><a href="https://bioconductor.org/packages/3.13/iSEEu">iSEEu</a></em> package.</p>
 </div>
 <div id="documenting-testing-coding-style-and-conventions" class="section level4 unnumbered">
 <h4 class="hasAnchor">
@@ -310,31 +310,31 @@
 </ul>
 </li>
 </ul>
-<p>If you intend to understand more in depth the internals of the <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em> framework, consider checking out the bookdown resource we put together at <a href="https://isee.github.io/iSEE-book/" class="uri">https://isee.github.io/iSEE-book/</a></p>
+<p>If you intend to understand more in depth the internals of the <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em> framework, consider checking out the bookdown resource we put together at <a href="https://isee.github.io/iSEE-book/" class="uri">https://isee.github.io/iSEE-book/</a></p>
 </div>
 <div id="looking-for-constants-within-isee" class="section level4 unnumbered">
 <h4 class="hasAnchor">
-<a href="#looking-for-constants-within-isee" class="anchor"></a>Looking for constants within <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em>
+<a href="#looking-for-constants-within-isee" class="anchor"></a>Looking for constants within <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em>
 </h4>
-<p>Many of the “global” variables that are used in several places in <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em> are defined in the <a href="https://github.com/iSEE/iSEE/blob/master/R/constants.R">constants.R</a> script in <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em>. We suggest to refer to those constants by their actual value rather than their internal variable name in downstream panel code. Both constant variable names and values may change at any time, but we will only announce changes to the constant value.</p>
+<p>Many of the “global” variables that are used in several places in <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em> are defined in the <a href="https://github.com/iSEE/iSEE/blob/master/R/constants.R">constants.R</a> script in <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em>. We suggest to refer to those constants by their actual value rather than their internal variable name in downstream panel code. Both constant variable names and values may change at any time, but we will only announce changes to the constant value.</p>
 </div>
 <div id="what-if-i-need-a-custom-panel-type" class="section level4 unnumbered">
 <h4 class="hasAnchor">
 <a href="#what-if-i-need-a-custom-panel-type" class="anchor"></a>What if I need a custom panel type?</h4>
-<p>In addition to the eight standard panel types, custom panels are easily accommodated within <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em> applications. For a guide, see the corresponding <a href="https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html">vignette</a>. For examples, see <a href="https://github.com/iSEE/iSEE_custom">this repo</a>.</p>
+<p>In addition to the eight standard panel types, custom panels are easily accommodated within <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em> applications. For a guide, see the corresponding <a href="https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html">vignette</a>. For examples, see <a href="https://github.com/iSEE/iSEE_custom">this repo</a>.</p>
 </div>
 <div id="where-can-i-find-a-comprehensive-introduction-to-isee" class="section level4 unnumbered">
 <h4 class="hasAnchor">
-<a href="#where-can-i-find-a-comprehensive-introduction-to-isee" class="anchor"></a>Where can I find a comprehensive introduction to <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em>?</h4>
-<p>The <em><a href="https://bioconductor.org/packages/3.12/iSEE">iSEE</a></em> package contains several vignettes detailing the main functionality. You can also take a look at this <a href="https://iSEE.github.io/iSEEWorkshop2019/index.html">workshop</a>. A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available <a href="http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/">here</a>.</p>
+<a href="#where-can-i-find-a-comprehensive-introduction-to-isee" class="anchor"></a>Where can I find a comprehensive introduction to <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em>?</h4>
+<p>The <em><a href="https://bioconductor.org/packages/3.13/iSEE">iSEE</a></em> package contains several vignettes detailing the main functionality. You can also take a look at this <a href="https://iSEE.github.io/iSEEWorkshop2019/index.html">workshop</a>. A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available <a href="http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/">here</a>.</p>
 </div>
 </div>
 <div id="session-information" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h1>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></pre></div>
-<pre><code>## R version 4.0.3 Patched (2020-10-13 r79342)
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## R Under development (unstable) (2020-11-12 r79424)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.1 LTS
 ## 
@@ -354,86 +354,87 @@
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] scater_1.18.3               ggplot2_3.3.2              
-##  [3] scRNAseq_2.4.0              edgeR_3.32.0               
-##  [5] limma_3.46.0                airway_1.10.0              
-##  [7] iSEEu_1.1.9                 iSEE_2.2.1                 
-##  [9] SingleCellExperiment_1.12.0 SummarizedExperiment_1.20.0
-## [11] Biobase_2.50.0              GenomicRanges_1.42.0       
-## [13] GenomeInfoDb_1.26.0         IRanges_2.24.0             
-## [15] S4Vectors_0.28.0            BiocGenerics_0.36.0        
-## [17] MatrixGenerics_1.2.0        matrixStats_0.57.0         
-## [19] BiocStyle_2.18.0           
+##  [1] scater_1.19.5               ggplot2_3.3.2              
+##  [3] scRNAseq_2.5.0              edgeR_3.33.0               
+##  [5] limma_3.47.3                airway_1.11.0              
+##  [7] iSEEu_1.1.9                 iSEE_2.3.3                 
+##  [9] SingleCellExperiment_1.13.3 SummarizedExperiment_1.21.1
+## [11] Biobase_2.51.0              GenomicRanges_1.43.1       
+## [13] GenomeInfoDb_1.27.3         IRanges_2.25.6             
+## [15] S4Vectors_0.29.6            BiocGenerics_0.37.0        
+## [17] MatrixGenerics_1.3.0        matrixStats_0.57.0         
+## [19] BiocStyle_2.19.1           
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] backports_1.1.10              circlize_0.4.10              
-##   [3] AnnotationHub_2.22.0          BiocFileCache_1.14.0         
-##   [5] systemfonts_0.3.2             igraph_1.2.6                 
-##   [7] lazyeval_0.2.2                shinydashboard_0.7.1         
-##   [9] splines_4.0.3                 BiocParallel_1.24.1          
-##  [11] digest_0.6.25                 ensembldb_2.14.0             
-##  [13] htmltools_0.5.0               viridis_0.5.1                
-##  [15] magrittr_1.5                  memoise_1.1.0                
-##  [17] cluster_2.1.0                 ComplexHeatmap_2.6.2         
-##  [19] Biostrings_2.58.0             askpass_1.1                  
-##  [21] pkgdown_1.6.1                 prettyunits_1.1.1            
-##  [23] colorspace_1.4-1              blob_1.2.1                   
-##  [25] rappdirs_0.3.1                ggrepel_0.8.2                
-##  [27] textshaping_0.1.2             xfun_0.18                    
-##  [29] dplyr_1.0.2                   crayon_1.3.4                 
-##  [31] RCurl_1.98-1.2                jsonlite_1.7.1               
-##  [33] glue_1.4.2                    gtable_0.3.0                 
-##  [35] zlibbioc_1.36.0               XVector_0.30.0               
-##  [37] GetoptLong_1.0.3              DelayedArray_0.16.0          
-##  [39] BiocSingular_1.6.0            shape_1.4.5                  
-##  [41] scales_1.1.1                  DBI_1.1.0                    
-##  [43] miniUI_0.1.1.1                Rcpp_1.0.5                   
-##  [45] viridisLite_0.3.0             xtable_1.8-4                 
-##  [47] progress_1.2.2                clue_0.3-57                  
-##  [49] rsvd_1.0.3                    bit_4.0.4                    
-##  [51] DT_0.15                       htmlwidgets_1.5.2            
-##  [53] httr_1.4.2                    RColorBrewer_1.1-2           
-##  [55] shinyAce_0.4.1                ellipsis_0.3.1               
-##  [57] scuttle_1.0.0                 pkgconfig_2.0.3              
-##  [59] XML_3.99-0.5                  dbplyr_1.4.4                 
-##  [61] locfit_1.5-9.4                tidyselect_1.1.0             
-##  [63] rlang_0.4.8                   later_1.1.0.1                
-##  [65] AnnotationDbi_1.52.0          munsell_0.5.0                
-##  [67] BiocVersion_3.12.0            tools_4.0.3                  
-##  [69] generics_0.0.2                RSQLite_2.2.1                
-##  [71] ExperimentHub_1.16.0          rintrojs_0.2.2               
-##  [73] evaluate_0.14                 stringr_1.4.0                
-##  [75] fastmap_1.0.1                 yaml_2.2.1                   
-##  [77] ragg_0.4.0                    knitr_1.30                   
-##  [79] bit64_4.0.5                   fs_1.5.0                     
-##  [81] purrr_0.3.4                   AnnotationFilter_1.14.0      
-##  [83] sparseMatrixStats_1.2.0       nlme_3.1-149                 
-##  [85] mime_0.9                      xml2_1.3.2                   
-##  [87] biomaRt_2.46.0                compiler_4.0.3               
-##  [89] beeswarm_0.2.3                curl_4.3                     
-##  [91] png_0.1-7                     interactiveDisplayBase_1.28.0
+##   [1] circlize_0.4.11               AnnotationHub_2.23.0         
+##   [3] BiocFileCache_1.15.1          systemfonts_0.3.2            
+##   [5] igraph_1.2.6                  lazyeval_0.2.2               
+##   [7] shinydashboard_0.7.1          splines_4.1.0                
+##   [9] BiocParallel_1.25.2           digest_0.6.27                
+##  [11] ensembldb_2.15.1              htmltools_0.5.0              
+##  [13] viridis_0.5.1                 magrittr_2.0.1               
+##  [15] memoise_1.1.0                 cluster_2.1.0                
+##  [17] ComplexHeatmap_2.7.3          Biostrings_2.59.2            
+##  [19] askpass_1.1                   pkgdown_1.6.1                
+##  [21] prettyunits_1.1.1             colorspace_2.0-0             
+##  [23] blob_1.2.1                    rappdirs_0.3.1               
+##  [25] ggrepel_0.9.0                 textshaping_0.2.1            
+##  [27] xfun_0.19                     dplyr_1.0.2                  
+##  [29] crayon_1.3.4                  RCurl_1.98-1.2               
+##  [31] jsonlite_1.7.2                glue_1.4.2                   
+##  [33] gtable_0.3.0                  zlibbioc_1.37.0              
+##  [35] XVector_0.31.1                GetoptLong_1.0.5             
+##  [37] DelayedArray_0.17.7           BiocSingular_1.7.0           
+##  [39] shape_1.4.5                   scales_1.1.1                 
+##  [41] DBI_1.1.0                     miniUI_0.1.1.1               
+##  [43] Rcpp_1.0.5                    viridisLite_0.3.0            
+##  [45] xtable_1.8-4                  progress_1.2.2               
+##  [47] clue_0.3-58                   rsvd_1.0.3                   
+##  [49] bit_4.0.4                     DT_0.16                      
+##  [51] htmlwidgets_1.5.3             httr_1.4.2                   
+##  [53] RColorBrewer_1.1-2            shinyAce_0.4.1               
+##  [55] ellipsis_0.3.1                scuttle_1.1.5                
+##  [57] pkgconfig_2.0.3               XML_3.99-0.5                 
+##  [59] dbplyr_2.0.0                  locfit_1.5-9.4               
+##  [61] tidyselect_1.1.0              rlang_0.4.9                  
+##  [63] later_1.1.0.1                 AnnotationDbi_1.53.0         
+##  [65] munsell_0.5.0                 BiocVersion_3.13.1           
+##  [67] tools_4.1.0                   generics_0.1.0               
+##  [69] RSQLite_2.2.1                 ExperimentHub_1.17.0         
+##  [71] rintrojs_0.2.2                evaluate_0.14                
+##  [73] stringr_1.4.0                 fastmap_1.0.1                
+##  [75] yaml_2.2.1                    ragg_0.4.0                   
+##  [77] knitr_1.30                    bit64_4.0.5                  
+##  [79] fs_1.5.0                      purrr_0.3.4                  
+##  [81] AnnotationFilter_1.15.0       sparseMatrixStats_1.3.2      
+##  [83] nlme_3.1-151                  mime_0.9                     
+##  [85] xml2_1.3.2                    biomaRt_2.47.1               
+##  [87] compiler_4.1.0                beeswarm_0.2.3               
+##  [89] filelock_1.0.2                curl_4.3                     
+##  [91] png_0.1-7                     interactiveDisplayBase_1.29.0
 ##  [93] tibble_3.0.4                  stringi_1.5.3                
-##  [95] GenomicFeatures_1.42.1        desc_1.2.0                   
-##  [97] lattice_0.20-41               ProtGenerics_1.22.0          
-##  [99] Matrix_1.2-18                 shinyjs_2.0.0                
-## [101] vctrs_0.3.4                   pillar_1.4.6                 
+##  [95] GenomicFeatures_1.43.3        desc_1.2.0                   
+##  [97] lattice_0.20-41               ProtGenerics_1.23.5          
+##  [99] Matrix_1.3-0                  shinyjs_2.0.0                
+## [101] vctrs_0.3.6                   pillar_1.4.7                 
 ## [103] lifecycle_0.2.0               BiocManager_1.30.10          
-## [105] GlobalOptions_0.1.2           BiocNeighbors_1.8.1          
+## [105] GlobalOptions_0.1.2           BiocNeighbors_1.9.4          
 ## [107] irlba_2.3.3                   bitops_1.0-6                 
-## [109] rtracklayer_1.50.0            httpuv_1.5.4                 
-## [111] R6_2.4.1                      bookdown_0.20                
-## [113] promises_1.1.1                gridExtra_2.3                
-## [115] vipor_0.4.5                   colourpicker_1.1.0           
-## [117] assertthat_0.2.1              openssl_1.4.3                
-## [119] rprojroot_1.3-2               rjson_0.2.20                 
-## [121] withr_2.3.0                   shinyWidgets_0.5.4           
-## [123] GenomicAlignments_1.26.0      Rsamtools_2.6.0              
-## [125] GenomeInfoDbData_1.2.4        mgcv_1.8-33                  
-## [127] hms_0.5.3                     beachmat_2.6.1               
-## [129] grid_4.0.3                    DelayedMatrixStats_1.12.0    
-## [131] rmarkdown_2.4                 Rtsne_0.15                   
-## [133] Cairo_1.5-12.2                shiny_1.5.0                  
-## [135] ggbeeswarm_0.6.0</code></pre>
+## [109] rtracklayer_1.51.2            httpuv_1.5.4                 
+## [111] BiocIO_1.1.2                  R6_2.5.0                     
+## [113] bookdown_0.21                 promises_1.1.1               
+## [115] gridExtra_2.3                 vipor_0.4.5                  
+## [117] colourpicker_1.1.0            assertthat_0.2.1             
+## [119] openssl_1.4.3                 rprojroot_2.0.2              
+## [121] rjson_0.2.20                  withr_2.3.0                  
+## [123] shinyWidgets_0.5.4            GenomicAlignments_1.27.2     
+## [125] Rsamtools_2.7.0               GenomeInfoDbData_1.2.4       
+## [127] mgcv_1.8-33                   hms_0.5.3                    
+## [129] beachmat_2.7.4                grid_4.1.0                   
+## [131] DelayedMatrixStats_1.13.1     rmarkdown_2.6                
+## [133] Rtsne_0.15                    Cairo_1.5-12.2               
+## [135] shiny_1.5.0                   ggbeeswarm_0.6.0             
+## [137] restfulr_0.0.13</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
