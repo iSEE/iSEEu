@@ -73,7 +73,7 @@ modeGating <- function(se, features, plotAssay = NA_character_,
             XAxisFeatureName = features[i, "x"],
             YAxisFeatureName = features[i, "y"],
             ColumnSelectionSource = ifelse(i == 1, "---", paste0("FeatureAssayPlot", i - 1)),
-            SelectionEffect = ifelse(i != nrow(features), "Restrict", "Color"),
+            ColumnSelectionRestrict = (i != nrow(features)),
             PanelWidth = as.integer(plotWidth[i])
         )
     })

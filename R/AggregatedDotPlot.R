@@ -707,12 +707,6 @@ setMethod(".createObservers", "AggregatedDotPlot", function(x, se, input, sessio
             .ADPExpressors, .ADPCenter, .ADPScale),
         input=input, pObjects=pObjects, rObjects=rObjects)
 
-    .createMultiSelectionEffectObserver(plot_name,
-        by_field=iSEE:::.selectColSource,
-        type_field=iSEE:::.selectColType,
-        saved_field=iSEE:::.selectColSaved,
-        input=input, session=session, pObjects=pObjects, rObjects=rObjects)
-
     .createCustomDimnamesModalObservers(plot_name, .ADPFeatNameText, .dimnamesModalOpen, se,
         input=input, session=session, pObjects=pObjects, rObjects=rObjects, source_type="row")
 

@@ -238,7 +238,7 @@ gset.tab <- FeatureSetTable(Selected="GO:0002576",
 
 # This volcano plot will highlight the genes in the selected gene set.
 vol.panel <- VolcanoPlot(RowSelectionSource="FeatureSetTable1",
-    SelectionEffect="Color", PanelWidth=6L)
+    ColorBy="Row selection", PanelWidth=6L)
 
 app <- iSEE(airway, initial=list(gset.tab, vol.panel))
 ```

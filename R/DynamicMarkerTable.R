@@ -235,9 +235,6 @@ setMethod(".refineParameters", "DynamicMarkerTable", function(x, se) {
     # Forcing everyone to use the same globals.
     x[["ExtraFields"]] <- cached$valid.rowdata.names
 
-    # It can't be anything else, really.
-    x[["ColumnSelectionType"]] <- "Union"
-
     x
 })
 
@@ -312,7 +309,7 @@ setMethod(".generateTable", "DynamicMarkerTable", function(x, envir) {
 
 #' @export
 setMethod(".hideInterface", "DynamicMarkerTable", function(x, field) {
-    if (field %in% c("RowSelectionSource", "RowSelectionType", "RowSelectionSaved", "RowSelectionDynamicSource")) {
+    if (field %in% c("RowSelectionSource", "RowSelectionRestrict", "RowSelectionDynamicSource")) {
         TRUE
     } else if (field %in% "ColumnSelectionSource") {
         FALSE
