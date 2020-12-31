@@ -100,7 +100,7 @@
                   <a class="author_email" href="mailto:#"></a><a href="mailto:infinite.monkeys.with.keyboards@gmail.com" class="email">infinite.monkeys.with.keyboards@gmail.com</a>
       
                   
-            <h4 class="date">30 December 2020</h4>
+            <h4 class="date">31 December 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/iSEE/iSEEu/blob/master/vignettes/universe.Rmd"><code>vignettes/universe.Rmd</code></a></small>
       <div class="hidden name"><code>universe.Rmd</code></div>
@@ -246,7 +246,7 @@
 
 <span class="co"># This volcano plot will highlight the genes in the selected gene set.</span>
 <span class="va">vol.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VolcanoPlot-class.html">VolcanoPlot</a></span><span class="op">(</span>RowSelectionSource<span class="op">=</span><span class="st">"FeatureSetTable1"</span>,
-    SelectionEffect<span class="op">=</span><span class="st">"Color"</span>, PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
+    ColorBy<span class="op">=</span><span class="st">"Row selection"</span>, PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">iSEE</span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">gset.tab</span>, <span class="va">vol.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="screenshots/geneset.png" width="488"></p>
@@ -354,10 +354,10 @@
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] scater_1.19.5               ggplot2_3.3.2              
+##  [1] scater_1.19.5               ggplot2_3.3.3              
 ##  [3] scRNAseq_2.5.0              edgeR_3.33.0               
 ##  [5] limma_3.47.3                airway_1.11.0              
-##  [7] iSEEu_1.1.9                 iSEE_2.3.3                 
+##  [7] iSEEu_1.1.9                 iSEE_2.3.4                 
 ##  [9] SingleCellExperiment_1.13.3 SummarizedExperiment_1.21.1
 ## [11] Biobase_2.51.0              GenomicRanges_1.43.1       
 ## [13] GenomeInfoDb_1.27.3         IRanges_2.25.6             
@@ -396,7 +396,7 @@
 ##  [55] ellipsis_0.3.1                scuttle_1.1.5                
 ##  [57] pkgconfig_2.0.3               XML_3.99-0.5                 
 ##  [59] dbplyr_2.0.0                  locfit_1.5-9.4               
-##  [61] tidyselect_1.1.0              rlang_0.4.9                  
+##  [61] tidyselect_1.1.0              rlang_0.4.10                 
 ##  [63] later_1.1.0.1                 AnnotationDbi_1.53.0         
 ##  [65] munsell_0.5.0                 BiocVersion_3.13.1           
 ##  [67] tools_4.1.0                   generics_0.1.0               
