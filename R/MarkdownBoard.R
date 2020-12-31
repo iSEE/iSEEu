@@ -41,6 +41,13 @@
 #' \item \code{\link{.generateOutput}(x, se, all_memory, all_contents)} will render the Markdown to HTML via the \pkg{rmarkdown} package,
 #' returning a string containing the rendered content in the \code{text} element of the output list.
 #' The Markdown-formatted content is converted into an R comment for code tracking purposes.
+#' \item \code{\link{.exportOutput}(x, se, all_memory, all_contents)} will create a HTML containing the rendered Markdown, and return a string containing the path to that HTML.
+#' }
+#'
+#' For documentation:
+#' \itemize{
+#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' Not that there's a great deal to say here.
 #' }
 #'
 #' @author Aaron Lun
@@ -61,6 +68,7 @@
 #' .generateOutput,MarkdownBoard-method
 #' .renderOutput,MarkdownBoard-method
 #' .defineOutput,MarkdownBoard-method
+#' .exportOutput,MarkdownBoard-method
 #' .definePanelTour,MarkdownBoard-method
 #'
 #' @seealso
@@ -163,12 +171,10 @@ setMethod(".renderOutput", "MarkdownBoard", function(x, se, ..., output, pObject
 setMethod(".generateOutput", "MarkdownBoard", function(x, se, all_memory, all_contents) {
     current <- slot(x, "Content")
 
-    tmpin <- tempfile(fileext=".md")
     tmpout <- tempfile(fileext=".html")
-    on.exit(unlink(c(tmpin, tmpout)))
-    write(current, file=tmpin)
+    on.exit(unlink(tmpout))
+    out <- .run_pandoc(current, tmpout)
 
-    out <- try(rmarkdown::pandoc_convert(tmpin, output=tmpout), silent=TRUE)
     if (is(out, "try-error")) {
         # nocov start
         showNotification(as.character(out), type="error")
@@ -187,4 +193,36 @@ setMethod(".generateOutput", "MarkdownBoard", function(x, se, all_memory, all_co
         commands=commented,
         text=out
     )
+})
+
+.run_pandoc <- function(md, out, ...) {
+    tmpin <- tempfile(fileext=".md")
+    write(md, file=tmpin)
+    on.exit(unlink(tmpin))
+    try(rmarkdown::pandoc_convert(tmpin, output=out, ...), silent=TRUE)
+}
+
+#' @export
+setMethod(".exportOutput", "MarkdownBoard", function(x, se, all_memory, all_contents) {
+    tmpout <- paste0(.getEncodedName(x), ".html")
+    out <- .run_pandoc(slot(x, "Content"), file.path(getwd(), tmpout), options="-s")
+
+    if (is(out, "try-error")) {
+        # nocov start
+        showNotification(as.character(out), type="error")
+        write(c("Error: failed to render to HTML", as.character(out)), file=tmpout)
+        # nocov end
+    }
+
+    tmpout
+})
+
+#' @export
+setMethod(".definePanelTour", "MarkdownBoard", function(x) {
+    out <- rbind(
+        c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">MarkdownBoard</font> panel will render arbitrary Markdown to HTML to be displayed on-screen. This allows us to put down extra information about the surrounding plots, and for users to jot down notes that can be saved in the code tracker.", .getPanelColor(x))),
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this panel.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        c(paste0("#", .getEncodedName(x), "_Content"), "The most important (and only) parameter is the Markdown text itself. Users can fill this in with whatever Markdown they like; the app will render this 1 second later.")
+    )
+    data.frame(element=out[,1], intro=out[,2])
 })

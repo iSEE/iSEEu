@@ -13,6 +13,7 @@
 \alias{.generateOutput,MarkdownBoard-method}
 \alias{.renderOutput,MarkdownBoard-method}
 \alias{.defineOutput,MarkdownBoard-method}
+\alias{.exportOutput,MarkdownBoard-method}
 \alias{.definePanelTour,MarkdownBoard-method}
 \title{The MarkdownBoard class}
 \description{
@@ -62,6 +63,13 @@ For rendering the display:
 \item \code{\link{.generateOutput}(x, se, all_memory, all_contents)} will render the Markdown to HTML via the \pkg{rmarkdown} package,
 returning a string containing the rendered content in the \code{text} element of the output list.
 The Markdown-formatted content is converted into an R comment for code tracking purposes.
+\item \code{\link{.exportOutput}(x, se, all_memory, all_contents)} will create a HTML containing the rendered Markdown, and return a string containing the path to that HTML.
+}
+
+For documentation:
+\itemize{
+\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+Not that there's a great deal to say here.
 }
 }
 

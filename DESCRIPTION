@@ -45,7 +45,8 @@ Imports:
     ggplot2,
     DT,
     stats,
-    colourpicker
+    colourpicker,
+    shinyAce
 Suggests: 
     scRNAseq,
     scater,
