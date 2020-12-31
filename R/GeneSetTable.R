@@ -84,7 +84,7 @@
 #' gst <- GeneSetTable(PanelId=1L)
 #'
 #' rdp <- RowDataPlot(RowSelectionSource="GeneSetTable1",
-#'     SelectionEffect="Color",
+#'     ColorBy="Row selection",
 #'     XAxis="Row data", XAxisRowData="mean", YAxis="total")
 #'
 #' rdt <- RowDataTable(RowSelectionSource="GeneSetTable1")

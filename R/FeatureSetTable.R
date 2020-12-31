@@ -108,7 +108,7 @@
 #' gst <- FeatureSetTable(PanelId=1L)
 #'
 #' rdp <- RowDataPlot(RowSelectionSource="FeatureSetTable1",
-#'     SelectionEffect="Color",
+#'     ColorBy="Row selection",
 #'     XAxis="Row data", XAxisRowData="mean", YAxis="total")
 #'
 #' rdt <- RowDataTable(RowSelectionSource="FeatureSetTable1")
