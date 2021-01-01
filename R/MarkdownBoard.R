@@ -162,8 +162,10 @@ setMethod(".defineOutput", "MarkdownBoard", function(x) {
 setMethod(".renderOutput", "MarkdownBoard", function(x, se, ..., output, pObjects, rObjects) {
     panel_name <- .getEncodedName(x)
     output[[panel_name]] <- renderUI({
+        # nocov start
         out <- .retrieveOutput(panel_name, se, pObjects, rObjects)
         HTML(out$text)
+        # nocov end
     })
 })
 
@@ -205,7 +207,8 @@ setMethod(".generateOutput", "MarkdownBoard", function(x, se, all_memory, all_co
 #' @export
 setMethod(".exportOutput", "MarkdownBoard", function(x, se, all_memory, all_contents) {
     tmpout <- paste0(.getEncodedName(x), ".html")
-    out <- .run_pandoc(slot(x, "Content"), file.path(getwd(), tmpout), options="-s")
+    out <- .run_pandoc(slot(x, "Content"), file.path(getwd(), tmpout), 
+        options=c("-s", "--metadata", paste0("title=", .getFullName(x))))
 
     if (is(out, "try-error")) {
         # nocov start
