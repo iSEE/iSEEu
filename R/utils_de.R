@@ -124,6 +124,6 @@ NULL
     okay <- logical(length(available))
     for (x in provided) {
         okay <- okay | grepl(x, available, fixed=TRUE)
-    } 
-    available[okay]
+    }
+    unique(available[okay])
 }
