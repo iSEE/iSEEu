@@ -1,3 +1,7 @@
+# iSEEu 1.1.10
+
+* Added the `MarkdownBoard` panel to show arbitrary Markdown-formatted content.
+
 # iSEEu 1.1.9
 
 * Ensure that global parameters only affect panels during construction.
