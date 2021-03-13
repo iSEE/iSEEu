@@ -232,10 +232,52 @@ setMethod(".defineDataInterface", "LogFCLogFCPlot", function(x, se, select_info)
     input_FUN <- function(field) paste0(plot_name, "_", field)
     p.fields <- .getCachedCommonInfo(se, "LogFCLogFCPlot")$valid.p.fields
 
+    .addSpecificTour(class(x), "YAxis", function(plot_name) {
+        data.frame(
+            rbind(
+                c(
+                    element=paste0("#", plot_name, "_", "YAxis + .selectize-control"),
+                    intro="Here, we select the <code>rowData</code> field containing the log-fold changes to show on the y-axis.
+This is presumably generated from some comparison between conditions, e.g., for differential gene expression."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", "XAxisRowData + .selectize-control"),
+                    intro="Similarly, we can select the <code>rowData</code> field containing the log-fold changes to show on the x-axis.
+This should have been generated from another comparison between conditions, typically different to that used for the y-axis.
+If the comparisons are not completely independent, one should be careful when interpreting technical correlations between the log-fold changes."
+                )
+            )
+        )
+    })
+
+    .addSpecificTour(class(x), "YPValueField", function(plot_name) {
+        data.frame(
+            rbind(
+                c(
+                    element=paste0("#", plot_name, "_", "YPValueField + .selectize-control"),
+                    intro="Here, we select the <code>rowData</code> field containing the p-values for the y-axis comparison.
+This is used to identify significant features for this comparison, after adjusting for multiple testing and applying log-fold change thresholds.
+Points will then be colored based on whether they are significant in this comparison (and/or in the x-axis comparison).
+<br/><br/>
+Note that these p-values should be on the raw scale, i.e., not log-transformed, and they should not already be corrected for multiple testing."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", "XPValueField + .selectize-control"),
+                    intro="Here, we select the <code>rowData</code> field containing the p-values for the x-axis comparison.
+This is used to identify significant features for this comparison, which is combined with the corresponding results for the y-axis to determine the coloring for each point.
+<br/><br/>
+Again, p-values should be on the raw scale, i.e., not log-transformed, and not corrected for multiple testing."
+                )
+            )
+        )
+    })
+
+    .define_gene_sig_tours(x)
+
     c(callNextMethod(),
         list(
             hr(),
-            selectInput(input_FUN("YPValueField"),
+            .selectInput.iSEE(x, "YPValueField",
                 label="P-value field (Y-axis):",
                 selected=x[["YPValueField"]],
                 choices=p.fields),
@@ -243,14 +285,9 @@ setMethod(".defineDataInterface", "LogFCLogFCPlot", function(x, se, select_info)
                 label="P-value field (X-axis):",
                 selected=x[["XPValueField"]],
                 choices=p.fields),
-            hr(),
-            numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
-                value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
-            numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
-                value=x[["LogFCThreshold"]], min=0, max=NA, step=0.5),
-            selectInput(input_FUN("PValueCorrection"), label="Correction method:",
-                selected=x[["PValueCorrection"]], choices=p.adjust.methods)
-        )
+            hr()
+        ),
+        .define_gene_sig_ui(x)
     )
 })
 

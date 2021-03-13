@@ -220,7 +220,6 @@ setMethod(".allowableYAxisChoices", "MAPlot", function(x, se) .getCachedCommonIn
 #' @export
 #' @importFrom shiny numericInput selectInput hr
 #' @importFrom stats p.adjust.methods
-#' @importFrom iSEE .selectInput.iSEE .numericInput.iSEE
 setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
     input_FUN <- function(field) paste0(plot_name, "_", field)
@@ -249,33 +248,11 @@ This should have been generated from the same analysis that was used to obtain t
 This will be used to identify significant features after adjusting for multiple testing and applying log-fold change thresholds.
 All significant features will then be highlighted by color on the plot.
 <br/><br/>
-Note that these p-values should be on the raw scale, i.e., not log-transformed."
+Note that these p-values should be on the raw scale, i.e., not log-transformed, and not corrected for multiple testing."
         )
     })
 
-    .addSpecificTour(class(x), "PValueThreshold", function(plot_name) {
-        data.frame(
-            element=paste0("#", plot_name, "_", "PValueThreshold"),
-            intro="Features with <em>adjusted</em> p-values lower than the specified threshold are considered significant, and are colored accordingly on the plot.
-Note that this is combined with the log-fold change threshold if the latter is non-zero."
-        )
-    })
-
-    .addSpecificTour(class(x), "LogFCThreshold", function(plot_name) {
-        data.frame(
-            element=paste0("#", plot_name, "_", "LogFCThreshold"),
-            intro="Features are only considered significant if they have low adjusted p-values <em>and</em> absolute log-fold changes greater than the threshold specified here.
-Note that this is not a particularly formal filter and may not control the relevant error rate."
-        )
-    })
-
-    .addSpecificTour(class(x), "PValueCorrection", function(plot_name) {
-        data.frame(
-            element=paste0("#", plot_name, "_", "PValueCorrection + .selectize-control"),
-            intro="Here we can choose the multiple testing correction method to use on the p-values.
-By and large, the Benjamini-Hochberg method is the best choice for genome-scale results."            
-        )
-    })
+    .define_gene_sig_tours(x)
 
     c(callNextMethod(),
         list(
@@ -283,18 +260,9 @@ By and large, the Benjamini-Hochberg method is the best choice for genome-scale 
                 label="P-value field:",
                 selected=slot(x, "PValueField"),
                 choices=.getCachedCommonInfo(se, "MAPlot")$valid.p.fields),
-            hr(),
-            .numericInput.iSEE(x, "PValueThreshold", 
-                label="P-value threshold:",
-                value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
-            .numericInput.iSEE(x, "LogFCThreshold", 
-                label="Log-FC threshold:",
-                value=x[["LogFCThreshold"]], min=0, max=NA, step=0.5),
-            .selectInput.iSEE(x, "PValueCorrection", 
-                label="Correction method:",
-                selected=x[["PValueCorrection"]], 
-                choices=p.adjust.methods)
-        )
+            hr()
+        ),
+        .define_gene_sig_ui(x)
     )
 })
 
