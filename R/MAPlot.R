@@ -227,17 +227,18 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
 
     .addSpecificTour(class(x), "YAxis", function(plot_name) {
         data.frame(
-            element=paste0("#", plot_name, "_", "YAxis + .selectize-control"),
-            intro="Here, we select the <code>rowData</code> field containing the log-fold changes for all features.
+            rbind(
+                c(
+                    element=paste0("#", plot_name, "_", "YAxis + .selectize-control"),
+                    intro="Here, we select the <code>rowData</code> field containing the log-fold changes for all features.
 This is presumably generated from some comparison between conditions, e.g., for differential gene expression."
-        )
-    })
-
-    .addSpecificTour(class(x), "XAxis", function(plot_name) {
-        data.frame(
-            element=paste0("#", plot_name, "_", "YAxis + .selectize-control"),
-            intro="Here, we select the <code>rowData</code> field containing the average abundances for all features.
-This is presumably generated from the same analysis that was used to obtain the log-fold changes."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", "XAxisRowData + .selectize-control"),
+                    intro="Similarly, we can select the <code>rowData</code> field containing the average abundances for all features.
+This should have been generated from the same analysis that was used to obtain the log-fold changes."
+                )
+            )
         )
     })
 
