@@ -182,12 +182,100 @@ setMethod(".defineVisualShapeInterface", "ReducedDimensionHexPlot", function(x) 
 #' @importFrom shiny tagList
 setMethod(".defineVisualSizeInterface", "ReducedDimensionHexPlot", function(x) {
     plot_name <- .getEncodedName(x)
+
+    .addSpecificTour(class(x), .plotBinResolution, function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_", .plotBinResolution),
+            intro="Here, we can change the bin size of the plot.
+Larger values will result in larger bins, sacrificing resolution for more stable counts.
+One should avoid setting this too low as then the plot just collapses to showing each point as a separate bin."
+        )
+    })
+
     tagList(
-        numericInput(
-            paste0(plot_name, "_", .plotBinResolution), label="Bin resolution:",
+        .numericInput.iSEE(x, .plotBinResolution, label="Bin resolution:",
             min=1, value=x[[.plotBinResolution]], step = 1)
     )
 })
+
+#' @export
+#' @importFrom shiny tagList
+setMethod(".getDotPlotColorHelp", "ReducedDimensionHexPlot", function(x, color_choices) {
+    force(color_choices)
+    function(plot_name) {
+        start <- paste0("#", plot_name, "_", iSEE:::.colorByField)
+        base <- "The default is to color bins by the number of points inside them (<em>None</em>). However, we can also color by various per-column attributes. Try out some of the different choices here, and note how further options become available when each choice is selected."
+        steps <- list(c(element=start, intro=base))
+
+        if ("Column data" %in% color_choices) {
+            steps <- c(steps, list(
+                c(
+                    element=start,
+                    intro="For example, if we <strong>select <em>Column data</em></strong>..."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorByColData, " + .selectize-control"),
+                    intro="... we can choose between different <code>colData</code> fields that we might want to color by.
+For continuous variables, this will take the average value across all points in each bin."
+                )
+            ))
+        }
+
+        if ("Feature name" %in% color_choices) {
+            steps <- c(steps, list(
+                c(
+                    element=start,
+                    intro="If we <strong>select <em>Feature name</em></strong>..."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorByFeatName, " + .selectize-control"),
+                    intro="... each bin is colored according to the assay values of a feature of interest for the corresponding column.
+For continuous assay values, this involves taking the average value across all points in each bin."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorByFeatNameAssay, " + .selectize-control"),
+                    intro="We can change the choice of assay."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorByRowTable, " + .selectize-control"),
+                    intro="And we can even synchronize the choice of feature to a selection in another panel. This assumes that our current application actually has another panel that allows us to select a single feature from our <code>SummarizedExperiment</code>."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorByFeatDynamic),
+                    intro="In fact, we don't even need to manually choose another panel - if dynamic feature selection is enabled, the plot will automatically respond to any single feature selection from any applicable panel in our application."
+                )
+            ))
+        }
+
+        if ("Sample name" %in% color_choices) {
+            steps <- c(steps, list(
+                c(
+                    element=start,
+                    intro="If we <strong>select <em>Sample name</em></strong>..."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorBySampName, " + .selectize-control"),
+                    intro="... we can highlight the location of a particular point based on the column name."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorBySampNameColor),
+                    intro="We can fiddle with the choice of color for the highlighted point."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorByColTable, " + .selectize-control"),
+                    intro="We can even synchronize the choice of sample to a selection in another panel. This assumes that our current application actually has another panel that we can use to select a single sample."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", iSEE:::.colorBySampDynamic),
+                    intro="In fact, we don't even need to manually choose another panel - if dynamic sample selection is enabled, the plot will automatically respond to any single sample selection from any applicable panel in our application."
+                )
+            ))
+        }
+
+        data.frame(do.call(rbind, steps))
+    }
+})
+
 
 #' @export
 setMethod(".defineVisualOtherInterface", "ReducedDimensionHexPlot", function(x) {
