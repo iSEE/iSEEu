@@ -83,6 +83,7 @@
 #' For documentation:
 #' \itemize{
 #' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' \item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 #' }
 #'
 #' @docType methods
@@ -289,6 +290,23 @@ Again, p-values should be on the raw scale, i.e., not log-transformed, and not c
         ),
         .define_gene_sig_ui(x)
     )
+})
+
+#' @export
+#' @importFrom shiny tagList
+setMethod(".getDotPlotColorHelp", "LogFCLogFCPlot", function(x, color_choices) {
+    FUN <- callNextMethod()
+
+    function(plot_name) {
+        df <- FUN(plot_name)
+        df[1,2] <- "Here, we choose whether to color points by per-row attributes.
+When <em>None</em> is selected, the plot defaults to a constant color for all non-significant features
+and a variety of other colors for each combination of significant/non-significant features in each direction across the two comparisons.
+The number of features in each category is also shown in the legend.
+<br/><br/>
+Alternatively, try out some of the different choices here, and note how further options become available when each choice is selected."
+        df
+    }
 })
 
 #' @export

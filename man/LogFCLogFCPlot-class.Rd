@@ -110,6 +110,7 @@ This is to be used for coloring when \code{ColorBy="None"}.
 For documentation:
 \itemize{
 \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 }
 }
 

@@ -82,6 +82,7 @@
 #' For documentation:
 #' \itemize{
 #' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' \item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 #' }
 #'
 #' @docType methods
@@ -294,6 +295,24 @@ setMethod(".generateDotPlotData", "MAPlot", function(x, envir) {
     output$commands <- c(output$commands, extra_cmds)
 
     output
+})
+
+#' @export
+#' @importFrom shiny tagList
+setMethod(".getDotPlotColorHelp", "MAPlot", function(x, color_choices) {
+    FUN <- callNextMethod()
+
+    function(plot_name) {
+        df <- FUN(plot_name)
+        df[1,2] <- "Here, we choose whether to color points by per-row attributes.
+When <em>None</em> is selected, the plot defaults to a constant color for all non-significant features,
+pink for the significant features with positive log-fold changes,
+and blue for the significant features with negative log-fold changes.
+The number of features in each category is also shown in the legend.
+<br/><br/>
+Alternatively, try out some of the different choices here, and note how further options become available when each choice is selected."
+        df
+    }
 })
 
 #' @export
