@@ -273,8 +273,18 @@ setMethod(".defineOutput", "FeatureSetTable", function(x) {
 setMethod(".defineDataInterface", "FeatureSetTable", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
     all.sets <- .getCachedCommonInfo(se, "FeatureSetTable")$available.sets
+
+    .addSpecificTour(class(x)[1], "Collection", function(panel_name) {
+        data.frame(
+            element=paste0("#", panel_name, "_Collection + .selectize-control"),
+            intro="Here, we can choose the feature set collection to show in the table.
+Examples include the collection of all GO or KEGG terms, as provided by <code>iSEE::createGeneSetCommands</code>,
+though other sources can be accommodated by <code>iSEE::setFeatureSetCommands</code>."
+        )
+    })
+
     list(
-        selectInput(paste0(panel_name, "_Collection"),
+        .selectInput.iSEE(x, "Collection",
             label="Collection:",
             choices=names(all.sets),
             selected=x[["Collection"]]
