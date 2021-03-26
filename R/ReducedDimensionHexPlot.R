@@ -352,7 +352,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
 setMethod(".definePanelTour", "ReducedDimensionHexPlot", function(x) {
     prev <- callNextMethod()
 
-    prev[1,"intro"] <- sprintf("The <font color=\"%s\">Hexagonal reduced dimension plot</font> panel shows a dimensionality reduction result across samples where points are binned into hexagons. The color of each hexagon is proportional to the number of points contained within, which provides a more quantitative way of assessing density. It also allows for faster plotting as each point does not need to be rendered.", .getPanelColor(x))
+    prev[1,"intro"] <- sprintf("The <font color=\"%s\">Hexagonal reduced dimension plot</font> panel shows a dimensionality reduction result across samples where points are binned into hexagons. The color of each hexagon is proportional to the number of points contained within, which provides a more quantitative way of assessing density. It also allows for faster plotting as each point does not need to be rendered.<br/><br/>The bin resolution controls the size of the hexagons; this can be changed in the <em>Size</em> section of the <em>Visual parameters</em>.", .getPanelColor(x))
 
     prev
 })
