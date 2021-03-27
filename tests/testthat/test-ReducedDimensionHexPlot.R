@@ -180,9 +180,5 @@ test_that("ReducedDimensionHexPlot generates a tour correctly", {
 
     expect_s3_class(tour, "data.frame")
 
-    expect_true(any(grepl("check the .*Size.* box", tour$intro)))
-
-    expect_true(any(grepl("average value across all points", tour$intro)))
-
     expect_true(any(grepl("bin resolution", tour$intro)))
 })
