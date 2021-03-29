@@ -564,7 +564,7 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
             rbind(
                 c(
                     element=paste0("#", plot_name, "_", .ADPCustomFeatNames),
-                    intro="The most important parameter is the choice of features to show as rows on the heatmap. If this box is unchecked, the selection is chained to a multiple row selection from another panel - see <i>Selection parameters</i>. Alternatively, we can request a custom set of features by checking this box.<br/><br/><strong>Check this box if it isn't already checked.</strong>."
+                    intro="The most important parameter is the choice of features to show as rows on the plot. If this box is unchecked, the selection is chained to a multiple row selection from another panel - see <i>Selection parameters</i>. Alternatively, we can request a custom set of features by checking this box.<br/><br/><strong>Check this box if it isn't already checked.</strong>."
                 ),
                 c(
                     element=paste0("#", plot_name, "_", .dimnamesModalOpen),
@@ -677,7 +677,7 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
     .addSpecificTour(class(x), .ADPCenter, function(plot_name) {
         data.frame(
             element=paste0("#", plot_name, "_", .ADPCenter),
-            intro="Here, we can center the means for each feature, to mimic the typical visualization for a heatmap. This provides better coloration to explore differences between means, though it becomes more complex to interpret this color scale in combination with the changes in size of the dots."
+            intro="Here, we can center the means for each feature, which mimics the visualization that we might see for a heatmap. This provides better coloration to explore differences between means, though it becomes more complex to interpret this color scale in combination with the changes in size of the dots."
         )
     })
 
@@ -685,6 +685,13 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
         data.frame(
             element=paste0("#", plot_name, "_", .ADPScale),
             intro="If centering is enabled, we can also turn on scaling of the centered means. This means that the colors now correspond to z-scores."
+        )
+    })
+
+    .addSpecificTour(class(x)[1], .ADPColorCentered, function(plot_name) {
+        data.frame(
+            element = paste0("#", plot_name, "_", .ADPColorCentered, " + .selectize-control"),
+            intro = "Here, we can select from a choice of diverging color maps when row values are centered. This enables convenient visualizations of deviations from the mean, especially when the values are also scaled."
         )
     })
 
@@ -749,8 +756,7 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     .conditionalOnCheckSolo(
                         center_field,
                         on_select=TRUE,
-                        selectInput(
-                            .input_FUN(.ADPColorCentered),
+                        .selectInput.iSEE(x, .ADPColorCentered,
                             label="Divergent colormap",
                             selected=x[[.ADPColorCentered]],
                             choices=.centered_color_choices
@@ -830,7 +836,7 @@ setMethod(".definePanelTour", "AggregatedDotPlot", function(x) {
     rbind(
         c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">AggregatedDotPlot</font> panel displays an aggregated dot plot that visualizes the mean assay value along with the proportion of non-zero values, for each of multiple features in each of multiple groups of samples. This is strictly an end-point panel, i.e., it cannot transmit to other panels.", .getPanelColor(x))),
         .addTourStep(x, iSEE:::.dataParamBoxOpen, "The <i>Data parameters</i> box shows the available parameters that can be tweaked to control the data in the aggregated dot plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        .addTourStep(x, .visualParamBoxOpen, "The <i>Visual parameters</i> box shows the available visual parameters that can be tweaked in this heatmap.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
+        .addTourStep(x, .visualParamBoxOpen, "The <i>Visual parameters</i> box shows the available visual parameters that can be tweaked in this plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
         .addTourStep(x, .visualParamChoice, "A large number of options are available here, so not all of them are shown by default. We can check some of the boxes here to show or hide some classes of parameters.<br/><br/><strong>Action:</strong> check the <i>Transform</i> box to expose some transformation options."),
         callNextMethod()
     )
