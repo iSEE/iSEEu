@@ -104,6 +104,7 @@
 #' .colorByNoneDotPlotScale,LogFCLogFCPlot-method
 #' .generateDotPlot,LogFCLogFCPlot-method
 #' .definePanelTour,LogFCLogFCPlot-method
+#' .getDotPlotColorHelp,LogFCLogFCPlot-method
 #'
 #' @examples
 #' # Making up some results:

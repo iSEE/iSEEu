@@ -101,6 +101,7 @@
 #' .colorByNoneDotPlotScale,VolcanoPlot-method
 #' .generateDotPlot,VolcanoPlot-method
 #' .definePanelTour,VolcanoPlot-method
+#' .getDotPlotColorHelp,VolcanoPlot-method
 #'
 #' @examples
 #' # Making up some results:

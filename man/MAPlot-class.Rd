@@ -20,6 +20,7 @@
 \alias{.colorByNoneDotPlotScale,MAPlot-method}
 \alias{.generateDotPlot,MAPlot-method}
 \alias{.definePanelTour,MAPlot-method}
+\alias{.getDotPlotColorHelp,MAPlot-method}
 \title{The MAPlot class}
 \description{
 The MAPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.

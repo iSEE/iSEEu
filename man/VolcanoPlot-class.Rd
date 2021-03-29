@@ -20,6 +20,7 @@
 \alias{.colorByNoneDotPlotScale,VolcanoPlot-method}
 \alias{.generateDotPlot,VolcanoPlot-method}
 \alias{.definePanelTour,VolcanoPlot-method}
+\alias{.getDotPlotColorHelp,VolcanoPlot-method}
 \title{The VolcanoPlot class}
 \description{
 The VolcanoPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a volcano plot.

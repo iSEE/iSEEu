@@ -53,6 +53,7 @@
 #' For documentation:
 #' \itemize{
 #' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' \item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 #' }
 #'
 #' @docType methods
@@ -68,6 +69,7 @@
 #' .defineVisualOtherInterface,ReducedDimensionHexPlot-method
 #' .generateDotPlot,ReducedDimensionHexPlot-method
 #' .definePanelTour,ReducedDimensionHexPlot-method
+#' .getDotPlotColorHelp,ReducedDimensionHexPlot-method
 #'
 #' @examples
 #' library(scRNAseq)

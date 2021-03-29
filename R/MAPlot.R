@@ -103,6 +103,7 @@
 #' .colorByNoneDotPlotScale,MAPlot-method
 #' .generateDotPlot,MAPlot-method
 #' .definePanelTour,MAPlot-method
+#' .getDotPlotColorHelp,MAPlot-method
 #'
 #' @examples
 #' # Making up some results:

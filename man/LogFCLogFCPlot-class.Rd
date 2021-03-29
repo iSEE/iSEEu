@@ -20,6 +20,7 @@
 \alias{.colorByNoneDotPlotScale,LogFCLogFCPlot-method}
 \alias{.generateDotPlot,LogFCLogFCPlot-method}
 \alias{.definePanelTour,LogFCLogFCPlot-method}
+\alias{.getDotPlotColorHelp,LogFCLogFCPlot-method}
 \title{The LogFCLogFCPlot class}
 \description{
 The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a scatter plot of two log-fold changes.

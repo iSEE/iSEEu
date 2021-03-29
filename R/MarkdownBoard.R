@@ -125,6 +125,7 @@ setMethod(".hideInterface", "MarkdownBoard", function(x, field) {
 
 #' @export
 #' @importFrom shinyAce aceEditor
+#' @importFrom shiny span HTML
 setMethod(".defineDataInterface", "MarkdownBoard", function(x, se, select_info) {
     .addSpecificTour(class(x), "Content", function(panel_name) {
         data.frame(
