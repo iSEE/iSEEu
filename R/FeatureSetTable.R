@@ -273,8 +273,18 @@ setMethod(".defineOutput", "FeatureSetTable", function(x) {
 setMethod(".defineDataInterface", "FeatureSetTable", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
     all.sets <- .getCachedCommonInfo(se, "FeatureSetTable")$available.sets
+
+    .addSpecificTour(class(x)[1], "Collection", function(panel_name) {
+        data.frame(
+            element=paste0("#", panel_name, "_Collection + .selectize-control"),
+            intro="Here, we can choose the feature set collection to show in the table.
+Examples include the collection of all GO or KEGG terms, as provided by <code>iSEE::createGeneSetCommands</code>,
+though other sources can be accommodated by <code>iSEE::setFeatureSetCommands</code>."
+        )
+    })
+
     list(
-        selectInput(paste0(panel_name, "_Collection"),
+        .selectInput.iSEE(x, "Collection",
             label="Collection:",
             choices=names(all.sets),
             selected=x[["Collection"]]
@@ -443,7 +453,6 @@ setMethod(".definePanelTour", "FeatureSetTable", function(x) {
     collated <- rbind(
         c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">Feature set table</font> panel contains information about sets of features, most typically gene sets. Here, each row corresponds to a feature set, i.e., multiple rows of our original <code>SummarizedExperiment</code> object.", .getPanelColor(x))),
         c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this table.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        c(paste0("#", .getEncodedName(x), "_Collection + .selectize-control"), "The main option is the collection of sets to show in the table. For gene sets, this defaults to KEGG and GO collections, though one can of course put anything in there."),
         c(paste0("#", .getEncodedName(x)), "The most interesting part about this panel is that clicking on any row of this table will transmit a multiple row selection to another panel! This is useful for exploring the results of gene set enrichment analyses where a gene set of interest can be selected to quickly highlight the position of the member genes in another plot.")
     )
 

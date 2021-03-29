@@ -167,17 +167,38 @@ setMethod(".defineDataInterface", "DynamicMarkerTable", function(x, se, select_i
     plot_name <- .getEncodedName(x)
     cached <- .getCachedCommonInfo(se, "DynamicMarkerTable")
 
+    .addSpecificTour(class(x), "LogFC", function(tab_name) {
+        data.frame(
+            element=paste0("#", tab_name, "_LogFC"),
+            intro="We can control the log-fold change threshold to test against. In other words, we require the points in our active selection to have a log-fold change above the other samples (or saved selections) that is significantly greater than the specified threshold. This is similar to the <code>treat</code> method from the <em>limma</em> package; it is more sophisticated than simply applying a threshold directly to the log-fold changes as it accounts for the variability of the observations."
+        )
+    })
+
+    .addSpecificTour(class(x), "TestMethod", function(tab_name) {
+        data.frame(
+            element=paste0("#", tab_name, "_TestMethod + .selectize-control"),
+            intro="We can control the testing method to use. Specifically, we can use Welch two-sample t-tests to identify changes in mean; Wilcoxon rank sum tests (i.e., Mann-Whitney U-tests) to detect differences in distribution; or binomial tests to detect differences in the number of non-zero elements. The last only makes sense for assays where zero is a meaningful value, e.g., sequencing datasets. In all cases, we do one-sided tests to identify increases in the active selection compared to other samples or saved selections."
+        )
+    })
+
+    .addSpecificTour(class(x), "Assay", function(tab_name) {
+        data.frame(
+            element=paste0("#", .getEncodedName(x), "_Assay + .selectize-control"), 
+            intro="Similarly, we can change the assay values to be tested. It is generally safest to use log-transformed normalized values here, as the differences in means from the t-test can be interpreted as log-fold changes. The Wilcoxon test only needs normalized values while the binomial test can be used with any zero-preserving transformation."
+        )
+    })
+
     list(
-        numericInput(paste0(plot_name, "_LogFC"),
-            label="Log-FC threshold",
+        .numericInput.iSEE(x, "LogFC",
+            label="Log-FC threshold:",
             min=0,
             value=x[["LogFC"]]),
-        selectInput(paste0(plot_name, "_TestMethod"),
-            label="Test method",
+        .selectInput.iSEE(x, "TestMethod",
+            label="Test method:",
             choices=c(`t-test`="t", `Wilcoxon rank sum`="wilcox", `Binomial test`="binom"),
             selected=x[["TestMethod"]]),
-        selectInput(paste0(plot_name, "_Assay"),
-            label="Assay",
+        .selectInput.iSEE(x, "Assay",
+            label="Assay:",
             choices=cached$valid.assay.names,
             selected=x[["Assay"]]),
         callNextMethod()
@@ -329,10 +350,6 @@ setMethod(".definePanelTour", "DynamicMarkerTable", function(x) {
     rbind(
         c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">Dynamic marker table</font> panel performs marker detection for one or more groups of samples selected in another panel. Each row here corresponds to a feature in our <code>SummarizedExperiment</code> while the columns contain statistics for the comparisons between groups.<br/><br/>If the transmitting panel only contains one actively selected group, markers are detected by comparing the selected group against all samples outside the selection.<br/><br/>If the transmitting panel contains an actively selected group and any saved selections, marker detection is performed by comparing the active group to each of the saved selections in a pairwise manner.", .getPanelColor(x))),
         c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this table.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        c(paste0("#", .getEncodedName(x), "_LogFC"), "We can control the log-fold change threshold to test against..."),
-        c(paste0("#", .getEncodedName(x), "_TestMethod + .selectize-control"), "... as well as the test method to be used, i.e., t-tests (for changes in mean), Wilcoxon rank sum tests (for differences in distribution) or binomial tests (for differences in the number of non-zero elements)."),
-        c(paste0("#", .getEncodedName(x), "_Assay + .selectize-control"), "Similarly, we can change the assay values to be tested. It is generally safest to use log-transformed normalized values here."),
-        c(paste0("#", .getEncodedName(x), "_HiddenColumns + .selectize-control"), "We can also choose to hide any number of metadata fields if the table is too wide. Note that left-to-right scrolling is also enabled for wide tables."),
         callNextMethod()
     )
 })

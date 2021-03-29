@@ -1,4 +1,12 @@
-# iSEEu 1.1.10
+# iSEEu 1.3.3
+
+* Redistributed documentation from panel tours to UI-specific tours.
+
+# iSEEu 1.3.2
+
+* Tour-related patch to fix the builds for the time being.
+
+# iSEEu 1.3.1
 
 * Added the `MarkdownBoard` panel to show arbitrary Markdown-formatted content.
 

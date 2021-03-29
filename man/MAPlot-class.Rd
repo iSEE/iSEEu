@@ -20,6 +20,7 @@
 \alias{.colorByNoneDotPlotScale,MAPlot-method}
 \alias{.generateDotPlot,MAPlot-method}
 \alias{.definePanelTour,MAPlot-method}
+\alias{.getDotPlotColorHelp,MAPlot-method}
 \title{The MAPlot class}
 \description{
 The MAPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.
@@ -109,6 +110,7 @@ This is to be used for coloring when \code{ColorBy="None"}.
 For documentation:
 \itemize{
 \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 }
 }
 
