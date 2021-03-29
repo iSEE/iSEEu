@@ -559,10 +559,72 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
     all_assays <- .getCachedCommonInfo(se, "AggregatedDotPlot")$continuous.assay.names
     all_coldata <- .getCachedCommonInfo(se, "AggregatedDotPlot")$discrete.colData.names
 
+    .addSpecificTour(class(x), .ADPCustomFeatNames, function(plot_name) {
+        data.frame(
+            rbind(
+                c(
+                    element=paste0("#", plot_name, "_", .ADPCustomFeatNames),
+                    intro="The most important parameter is the choice of features to show as rows on the heatmap. If this box is unchecked, the selection is chained to a multiple row selection from another panel - see <i>Selection parameters</i>. Alternatively, we can request a custom set of features by checking this box.<br/><br/><strong>Check this box if it isn't already checked.</strong>."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", .dimnamesModalOpen),
+                    intro="This button opens a modal that allows users to copy and paste their desired set of features. These should match up to the row names in the input <code>SummarizedExperiment</code>."
+                )
+            )
+        )
+    })
+
+    .addSpecificTour(class(x), .ADPColDataLabel, function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_", .ADPColDataLabel, " + .selectize-control"),
+            intro="Another key parameter is to select the column metadata field to use to define our groups of samples. This variable must be categorical, for example a cell type label. To create the plot, we then compute the average assay value and percentage of non-zero observations in each group for each feature."
+        )
+    })
+
+    .addSpecificTour(class(x), .ADPColDataFacet, function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_", .ADPColDataFacet, " + .selectize-control"),
+            intro="We can also facet by another column metadata field, if multiple fields are of interest. Averages and proportions are then computed for each group within each facet. The faceting variable must also be categorical."
+        )
+    })
+
+    # TODO: inherit these from a virtual CHMP plot in iSEE.
+    .addSpecificTour(class(x)[1], .ADPAssay, function(plot_name) {
+        data.frame(
+            element = paste0("#", plot_name, "_", .ADPAssay, " + .selectize-control"),
+            intro = "Here, we can select the name of the assay matrix to show.
+The choices are extracted from the <code>assayNames</code> of a <code>SummarizedExperiment</code> object.
+These matrices should be loaded into the object prior to calling <strong>iSEE</strong> - they are not computed on the fly."
+        )
+    })
+
+    .addSpecificTour(class(x)[1], .ADPClusterFeatures, function(plot_name) {
+        data.frame(
+            element = paste0("#", plot_name, "_", .ADPClusterFeatures),
+            intro = "Features displayed as rows in plot can be (i) clustered dynamically using a selection of distance metrics and clustering methods, or (ii) shown in the order they appear in <code>rownames</code>. The former choice is enabled by checking this box.<br/><br/>
+The clustering itself is done on the group averages using <code>hclust</code>, i.e., hierarchical clustering. This is simple and intuitive but not particularly efficient, so should only be used for small numbers of features.<br/><br/>
+<strong>Click on this checkbox to cluster dynamically.</strong>"
+        )
+    })
+
+    .addSpecificTour(class(x)[1], .ADPClusterDistanceFeatures, function(plot_name) {
+        data.frame(
+            element = paste0("#", plot_name, "_", .ADPClusterDistanceFeatures, " + .selectize-control"),
+            intro = "Here we can choose from a variety of different metrics to compute distances between features based on their assay values. The resulting distance is then used in <code>hclust</code> to perform hierarchical clustering. Euclidean distances are probably most common; the Spearman distance is another popular choice that is more robust to outliers."
+        )
+    })
+
+    .addSpecificTour(class(x)[1], .ADPClusterMethodFeatures, function(plot_name) {
+        data.frame(
+            element = paste0("#", plot_name, "_", .ADPClusterMethodFeatures, " + .selectize-control"),
+            intro = "We can also choose from a variety of different clustering methods. Ward's method and complete linkage clustering are popular choices as they tend to yield more compact and interpretable clusters."
+        )
+    })
+
     list(
-        selectInput(.input_FUN(.ADPAssay), label="Assay choice",
+        .selectInput.iSEE(x, .ADPAssay, label="Assay:",
             choices=all_assays, selected=x[[.ADPAssay]]),
-        checkboxInput(.input_FUN(.ADPCustomFeatNames), label="Use custom rows",
+        .checkboxInput.iSEE(x, .ADPCustomFeatNames, label="Use custom rows",
             value=x[[.ADPCustomFeatNames]]),
         .conditionalOnCheckSolo(
             .input_FUN(.ADPCustomFeatNames),
@@ -570,25 +632,25 @@ setMethod(".defineDataInterface", "AggregatedDotPlot", function(x, se, select_in
             actionButton(.input_FUN(.dimnamesModalOpen), label="Edit feature names"),
             br(), br()
         ),
-        checkboxInput(.input_FUN(.ADPClusterFeatures), label="Cluster rows (on Average)",
+        .checkboxInput.iSEE(x, .ADPClusterFeatures, label="Cluster rows (on averages)",
             value=x[[.ADPClusterFeatures]]),
         .conditionalOnCheckSolo(
             .input_FUN(.ADPClusterFeatures),
             on_select=TRUE,
-            selectInput(.input_FUN(.ADPClusterDistanceFeatures), label="Clustering distance for rows",
+            .selectInput.iSEE(x, .ADPClusterDistanceFeatures, label="Clustering distance for rows",
                 choices=c(.clusterDistanceEuclidean,  .clusterDistanceMaximum, .clusterDistanceManhattan,
                     .clusterDistanceCanberra, .clusterDistanceBinary, .clusterDistanceMinkowski),
                 selected=x[[.ADPClusterDistanceFeatures]]),
-            selectInput(.input_FUN(.ADPClusterMethodFeatures), label="Clustering method for rows",
+            .selectInput.iSEE(x, .ADPClusterMethodFeatures, label="Clustering method for rows",
                 choices=c(.clusterMethodWardD, .clusterMethodWardD2, .clusterMethodSingle, .clusterMethodComplete,
                     "average (= UPGMA)"=.clusterMethodAverage,
                     "mcquitty (= WPGMA)"=.clusterMethodMcquitty,
                     "median (= WPGMC)"=.clusterMethodMedian,
                     "centroid (= UPGMC)"=.clusterMethodCentroid),
                 selected=x[[.ADPClusterMethodFeatures]])),
-        selectInput(.input_FUN(.ADPColDataLabel), label="Column label:",
+        .selectInput.iSEE(x, .ADPColDataLabel, label="Column label:",
             selected=x[[.ADPColDataLabel]], choices=all_coldata),
-        selectInput(.input_FUN(.ADPColDataFacet), label="Column facet:",
+        .selectInput.iSEE(x, .ADPColDataFacet, label="Column facet:",
             selected=x[[.ADPColDataFacet]], choices=c(iSEE:::.noSelection, all_coldata))
     )
 })
@@ -605,6 +667,46 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
     center_field <- .input_FUN(.ADPCenter)
     custom_field <- .input_FUN(.ADPCustomColor)
 
+    .addSpecificTour(class(x), .ADPExpressors, function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_", .ADPExpressors),
+            intro="Checking this box will compute the mean assay value for each group across the non-zero values only. This can provide more information about the distribution at the cost of consistency with other applications that just use the average across all values in each group."
+        )
+    })
+
+    .addSpecificTour(class(x), .ADPCenter, function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_", .ADPCenter),
+            intro="Here, we can center the means for each feature, to mimic the typical visualization for a heatmap. This provides better coloration to explore differences between means, though it becomes more complex to interpret this color scale in combination with the changes in size of the dots."
+        )
+    })
+
+    .addSpecificTour(class(x), .ADPScale, function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_", .ADPScale),
+            intro="If centering is enabled, we can also turn on scaling of the centered means. This means that the colors now correspond to z-scores."
+        )
+    })
+
+    .addSpecificTour(class(x), .ADPCustomColor, function(plot_name) {
+        data.frame(
+            rbind(
+                c(
+                    element=paste0("#", plot_name, "_", .ADPCustomColor),
+                    intro="By default, we use the color map for the chosen assay in the <code>ExperimentColorMap</code>, passed to <strong>iSEE</strong> during app start-up. However, if this box is checked, we can specify our own color scale in terms of the lower and upper colors. <strong>Check this box.</strong>"
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", .ADPColorLower),
+                    intro="Here, we can choose the lower color, i.e., at zero."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", .ADPColorUpper),
+                    intro="Here, we can choose the upper color, to be used at the maximum average assay value among all selected features. We then interpolate between the lower and upper boundaries to obtain colors for all other values."
+                )
+            )
+        )
+    })
+
     c(
         out[1],
         list(
@@ -618,9 +720,10 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     inline=TRUE,
                     selected=x[[.visualParamChoice]],
                     choices=c(
-                         .visualParamChoiceColorTitle,
-                         .visualParamChoiceTransformTitle,
-                         .visualParamChoiceLegendTitle)
+                        .visualParamChoiceColorTitle,
+                        .visualParamChoiceTransformTitle
+                    )
+#                        .visualParamChoiceLegendTitle) # TODO: add this.
                 ),
                 .conditionalOnCheckGroup(
                     pchoice_field,
@@ -629,7 +732,7 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     .conditionalOnCheckSolo(
                         center_field,
                         on_select=FALSE,
-                        checkboxInput(.input_FUN(.ADPCustomColor),
+                        .checkboxInput.iSEE(x, .ADPCustomColor,
                             label="Use custom colors",
                             value=x[[.ADPCustomColor]]),
                         .conditionalOnCheckSolo(
@@ -658,16 +761,16 @@ setMethod(".defineInterface", "AggregatedDotPlot", function(x, se, select_info) 
                     pchoice_field,
                     .visualParamChoiceTransformTitle,
                     hr(),
-                    checkboxInput(.input_FUN(.ADPExpressors),
+                    .checkboxInput.iSEE(x, .ADPExpressors,
                         label="Compute average expression over non-zero samples",
                         value=x[[.ADPExpressors]]),
-                    checkboxInput(center_field,
+                    .checkboxInput.iSEE(x, .ADPCenter,
                         label="Center averages",
                         value=x[[.ADPCenter]]),
                     .conditionalOnCheckSolo(
                         center_field,
                         on_select=TRUE,
-                        checkboxInput(.input_FUN(.ADPScale),
+                        .checkboxInput.iSEE(x, .ADPScale,
                             label="Scale averages",
                             value=x[[.ADPScale]])
                     )
@@ -724,24 +827,11 @@ setMethod(".hideInterface", "AggregatedDotPlot", function(x, field) {
 
 #' @export
 setMethod(".definePanelTour", "AggregatedDotPlot", function(x) {
-    collated <- rbind(
+    rbind(
         c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">AggregatedDotPlot</font> panel displays an aggregated dot plot that visualizes the mean assay value along with the proportion of non-zero values, for each of multiple features in each of multiple groups of samples. This is strictly an end-point panel, i.e., it cannot transmit to other panels.", .getPanelColor(x))),
         .addTourStep(x, iSEE:::.dataParamBoxOpen, "The <i>Data parameters</i> box shows the available parameters that can be tweaked to control the data in the aggregated dot plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        .addTourStep(x, .ADPCustomFeatNames, "The most important parameter is the choice of features to show as rows on the heatmap. This can be chained to a multiple row selection from another panel, if the <i>Custom rows</i> choice is unselected - see the <i>Selection parameters</i> later. Alternatively, we can request a custom set of rows based on their row names.<br/><br/><strong>Action:</strong> check this box (if it isn't already)."),
-        .addTourStep(x, .dimnamesModalOpen, "A custom set can be manually specified by entering row names of the <code>SummarizedExperiment</code> object into a modal that opens when we click this button."),
-        .addTourStep(x, .ADPColDataLabel, "Another key parameter is to select the column metadata field to use to define our groups of samples. This variable must be categorical, for example a cell type label.", is_selectize=TRUE),
-        .addTourStep(x, .ADPColDataFacet, "We can also facet by another (categorical) column metadata field, if multiple fields are of interest.", is_selectize=TRUE),
-
         .addTourStep(x, .visualParamBoxOpen, "The <i>Visual parameters</i> box shows the available visual parameters that can be tweaked in this heatmap.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
         .addTourStep(x, .visualParamChoice, "A large number of options are available here, so not all of them are shown by default. We can check some of the boxes here to show or hide some classes of parameters.<br/><br/><strong>Action:</strong> check the <i>Transform</i> box to expose some transformation options."),
-        .addTourStep(x, .ADPExpressors, "We can choose to only compute the mean assay value for each group across the non-zero values..."),
-        .addTourStep(x, .ADPCenter, "Or we can center (and scale) the means for each feature, to mimic the typical visualization for a heatmap."),
-
         callNextMethod()
     )
-
-    collated[collated[,2]=="PLACEHOLDER_ROW_SELECT",2] <- "We can receive a multiple selection of rows from another panel, which is used to control the rows that are shown in this panel."
-    collated[collated[,2]=="PLACEHOLDER_COLUMN_SELECT",2] <- "We can also receive a multiple selection of columns from another panel. This is used to define the subset of samples to use in this plot - all samples outside of the selection are ignored."
-
-    collated
 })
