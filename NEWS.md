@@ -1,3 +1,15 @@
+# iSEEu 1.3.3
+
+* Add UI element-specific tour components for all panels.
+
+# iSEEu 1.3.2
+
+* Patch to tours to fix devel builds for the time being.
+
+# iSEEu 1.3.1
+
+* Eliminate duplicates in available fields, as these break selectizes.
+
 # iSEEu 1.1.10
 
 * Added the `MarkdownBoard` panel to show arbitrary Markdown-formatted content.
