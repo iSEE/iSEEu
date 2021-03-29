@@ -15,6 +15,7 @@
 \alias{.defineVisualOtherInterface,ReducedDimensionHexPlot-method}
 \alias{.generateDotPlot,ReducedDimensionHexPlot-method}
 \alias{.definePanelTour,ReducedDimensionHexPlot-method}
+\alias{.getDotPlotColorHelp,ReducedDimensionHexPlot-method}
 \title{The ReducedDimensionHexPlot class}
 \description{
 The ReducedDimensionHexPlot is a \linkS4class{ReducedDimensionPlot} subclass that is dedicated to creating a reduced dimension plot summarising data points in hexagonal bins.
@@ -75,6 +76,7 @@ For creating the plot:
 For documentation:
 \itemize{
 \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 }
 }
 

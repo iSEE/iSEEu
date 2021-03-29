@@ -125,10 +125,21 @@ setMethod(".hideInterface", "MarkdownBoard", function(x, field) {
 
 #' @export
 #' @importFrom shinyAce aceEditor
+#' @importFrom shiny span HTML
 setMethod(".defineDataInterface", "MarkdownBoard", function(x, se, select_info) {
+    .addSpecificTour(class(x), "Content", function(panel_name) {
+        data.frame(
+            element=paste0("#", panel_name, "_Content"), 
+            intro="The most important (and only) parameter is the Markdown text itself. Users can fill this in with whatever Markdown they like; the app will then render this into HTML."
+        )
+    })
+
     panel_name <- .getEncodedName(x)
+    id <- paste0(panel_name, "_Content")
     list(
-        aceEditor(paste0(panel_name, "_Content"),
+        span(id = paste0(id, "_specific_help"), style="display:inline-block; padding-bottom:5px;", 
+            HTML("<strong>Content:</strong> <sup>?</sup>")),
+        aceEditor(id,
             mode="markdown",
             theme="xcode",
             autoComplete="disabled",
@@ -224,8 +235,7 @@ setMethod(".exportOutput", "MarkdownBoard", function(x, se, all_memory, all_cont
 setMethod(".definePanelTour", "MarkdownBoard", function(x) {
     out <- rbind(
         c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">MarkdownBoard</font> panel will render arbitrary Markdown to HTML to be displayed on-screen. This allows us to put down extra information about the surrounding plots, and for users to jot down notes that can be saved in the code tracker.", .getPanelColor(x))),
-        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this panel.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        c(paste0("#", .getEncodedName(x), "_Content"), "The most important (and only) parameter is the Markdown text itself. Users can fill this in with whatever Markdown they like; the app will render this 1 second later.")
+        c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this panel.<br/><br/><strong>Action:</strong> click on this box to open up available options.")
     )
     data.frame(element=out[,1], intro=out[,2])
 })

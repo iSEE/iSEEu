@@ -143,13 +143,31 @@ setMethod(".panelColor", "DynamicReducedDimensionPlot", function(x) "#0F0F0F")
 setMethod(".defineDataInterface", "DynamicReducedDimensionPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
 
+    .addSpecificTour(class(x), "Type", function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_Type + .selectize-control"),
+            intro="We can control the type of dimensionality reduction to compute on the selected samples. Currently there are only the usual choices of PCA, t-SNE or UMAP."
+        )
+    })
+
+    .addSpecificTour(class(x), "NGenes", function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_NGenes"),
+            intro = "We perform the calculations on only the most highly variable features in the dataset, to speed up the calculation and to reduce noise at the cost of potentially discarding some biological signal. Here, we can control the exact number of genes to vary the speed-signal-noise trade-off.")
+    })
+
+    .addSpecificTour(class(x), "Assay", function(plot_name) {
+        data.frame(
+            element=paste0("#", .getEncodedName(x), "_Assay + .selectize-control"),
+            intro = "Here, we can change the assay values to use for the dimensionality reduction. We suggest using log-transformed normalized values (or something equivalent) where the differences between values have some meaning. For log-values, the differences can be nominally interpreted as log-fold changes.")
+    })
+
     list(
-        selectInput(paste0(plot_name, "_Type"), label="Type:",
+        .selectInput.iSEE(x, "Type", label="Type:",
             choices=c("PCA", "TSNE", "UMAP"), selected=x[["Type"]]),
-        numericInput(paste0(plot_name, "_NGenes"), label="Number of HVGs:",
+        .numericInput.iSEE(x, "NGenes", label="Number of HVGs:",
             min=1, value=x[["NGenes"]]),
-        selectInput(paste0(plot_name, "_Assay"),
-            label="Assay",
+        .selectInput.iSEE(x, "Assay", label="Assay:",
             choices=.getCachedCommonInfo(se, "DynamicReducedDimensionPlot")$valid.assay.names,
             selected=x[["Assay"]])
     )
@@ -239,9 +257,6 @@ setMethod(".definePanelTour", "DynamicReducedDimensionPlot", function(x) {
     rbind(
         c(paste0("#", .getEncodedName(x)), sprintf("The <font color=\"%s\">Dynamic reduced dimension plot</font> panel performs dimensionality reduction on the samples selected in another panel. Each point here corresponds to a sample in our <code>SummarizedExperiment</code>.", .getPanelColor(x))),
         c(paste0("#", .getEncodedName(x), "_DataBoxOpen"), "The <i>Data parameters</i> box shows the available parameters that can be tweaked in this plot.<br/><br/><strong>Action:</strong> click on this box to open up available options."),
-        c(paste0("#", .getEncodedName(x), "_Type + .selectize-control"), "We can control the type of dimensionality reduction to compute."),
-        c(paste0("#", .getEncodedName(x), "_NGenes"), "For the sake of speed, we perform the calculations on only the most highly variable features, which are identified after correcting for any mean-variance trend in the data. We can control the exact number of genes to vary the speed-signal-noise trade-off."),
-        c(paste0("#", .getEncodedName(x), "_Assay + .selectize-control"), "Similarly, we can change the assay values to be tested. We suggest using log-transformed normalized values or something equivalent."),
         callNextMethod()
     )
 })

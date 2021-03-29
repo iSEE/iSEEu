@@ -80,6 +80,7 @@
 #' For documentation:
 #' \itemize{
 #' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' \item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 #' }
 #'
 #' @docType methods
@@ -100,6 +101,7 @@
 #' .colorByNoneDotPlotScale,VolcanoPlot-method
 #' .generateDotPlot,VolcanoPlot-method
 #' .definePanelTour,VolcanoPlot-method
+#' .getDotPlotColorHelp,VolcanoPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -202,16 +204,29 @@ setMethod(".defineDataInterface", "VolcanoPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
     input_FUN <- function(field) paste0(plot_name, "_", field)
 
-    c(callNextMethod(),
-        list(
-            hr(),
-            numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
-                value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
-            numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
-                value=x[["LogFCThreshold"]], min=0, max=NA, step=0.5),
-            selectInput(input_FUN("PValueCorrection"), label="Correction method:",
-                selected=x[["PValueCorrection"]], choices=p.adjust.methods)
+    .addSpecificTour(class(x), "YAxis", function(plot_name) {
+        data.frame(
+            rbind(
+                c(
+                    element=paste0("#", plot_name, "_", "YAxis + .selectize-control"),
+                    intro="Here, we select the <code>rowData</code> field containing the p-values for all features.
+This is presumably generated from some comparison between conditions, e.g., for differential gene expression.
+In general, the values here should not be corrected, and they should certainly not be transformed in any way."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", "XAxisRowData + .selectize-control"),
+                    intro="Similarly, we can select the <code>rowData</code> field containing the log-fold changes for all features.
+This should have been generated from the same analysis that was used to obtain the p-values."
+                )
+            )
         )
+    })
+
+    .define_gene_sig_tours(x)
+
+    c(callNextMethod(), 
+        list(hr()), 
+        .define_gene_sig_ui(x)
     )
 })
 
@@ -292,4 +307,22 @@ setMethod(".definePanelTour", "VolcanoPlot", function(x) {
         c(paste0("#", .getEncodedName(x), "_PValueThreshold"), "A variety of thresholds can also be tuned to define significant differences; the most relevant of these is the threshold on the false discovery rate."),
         prev
     )
+})
+
+#' @export
+#' @importFrom shiny tagList
+setMethod(".getDotPlotColorHelp", "VolcanoPlot", function(x, color_choices) {
+    FUN <- callNextMethod()
+
+    function(plot_name) {
+        df <- FUN(plot_name)
+        df[1,2] <- "Here, we choose whether to color points by per-row attributes.
+When <em>None</em> is selected, the plot defaults to a constant color for all non-significant features,
+pink for the significant features with positive log-fold changes,
+and blue for the significant features with negative log-fold changes.
+The number of features in each category is also shown in the legend.
+<br/><br/>
+Alternatively, try out some of the different choices here, and note how further options become available when each choice is selected."
+        df
+    }
 })

@@ -20,6 +20,7 @@
 \alias{.colorByNoneDotPlotScale,LogFCLogFCPlot-method}
 \alias{.generateDotPlot,LogFCLogFCPlot-method}
 \alias{.definePanelTour,LogFCLogFCPlot-method}
+\alias{.getDotPlotColorHelp,LogFCLogFCPlot-method}
 \title{The LogFCLogFCPlot class}
 \description{
 The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a scatter plot of two log-fold changes.
@@ -110,6 +111,7 @@ This is to be used for coloring when \code{ColorBy="None"}.
 For documentation:
 \itemize{
 \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 }
 }
 

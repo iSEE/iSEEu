@@ -82,6 +82,7 @@
 #' For documentation:
 #' \itemize{
 #' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' \item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 #' }
 #'
 #' @docType methods
@@ -102,6 +103,7 @@
 #' .colorByNoneDotPlotScale,MAPlot-method
 #' .generateDotPlot,MAPlot-method
 #' .definePanelTour,MAPlot-method
+#' .getDotPlotColorHelp,MAPlot-method
 #'
 #' @examples
 #' # Making up some results:
@@ -224,20 +226,45 @@ setMethod(".defineDataInterface", "MAPlot", function(x, se, select_info) {
     plot_name <- .getEncodedName(x)
     input_FUN <- function(field) paste0(plot_name, "_", field)
 
+    .addSpecificTour(class(x), "YAxis", function(plot_name) {
+        data.frame(
+            rbind(
+                c(
+                    element=paste0("#", plot_name, "_", "YAxis + .selectize-control"),
+                    intro="Here, we select the <code>rowData</code> field containing the log-fold changes for all features.
+This is presumably generated from some comparison between conditions, e.g., for differential gene expression."
+                ),
+                c(
+                    element=paste0("#", plot_name, "_", "XAxisRowData + .selectize-control"),
+                    intro="Similarly, we can select the <code>rowData</code> field containing the average abundances for all features.
+This should have been generated from the same analysis that was used to obtain the log-fold changes."
+                )
+            )
+        )
+    })
+
+    .addSpecificTour(class(x), "PValueField", function(plot_name) {
+        data.frame(
+            element=paste0("#", plot_name, "_", "PValueField + .selectize-control"),
+            intro="Here, we select the <code>rowData</code> field containing the p-values.
+This will be used to identify significant features after adjusting for multiple testing and applying log-fold change thresholds.
+All significant features will then be highlighted by color on the plot.
+<br/><br/>
+Note that these p-values should be on the raw scale, i.e., not log-transformed, and not corrected for multiple testing."
+        )
+    })
+
+    .define_gene_sig_tours(x)
+
     c(callNextMethod(),
         list(
-            selectInput(input_FUN("PValueField"),
+            .selectInput.iSEE(x, "PValueField",
                 label="P-value field:",
-                selected=x[["PValueField"]],
+                selected=slot(x, "PValueField"),
                 choices=.getCachedCommonInfo(se, "MAPlot")$valid.p.fields),
-            hr(),
-            numericInput(input_FUN("PValueThreshold"), label="P-value threshold:",
-                value=x[["PValueThreshold"]], min=0, max=1, step=0.005),
-            numericInput(input_FUN("LogFCThreshold"), label="Log-FC threshold:",
-                value=x[["LogFCThreshold"]], min=0, max=NA, step=0.5),
-            selectInput(input_FUN("PValueCorrection"), label="Correction method:",
-                selected=x[["PValueCorrection"]], choices=p.adjust.methods)
-        )
+            hr()
+        ),
+        .define_gene_sig_ui(x)
     )
 })
 
@@ -269,6 +296,24 @@ setMethod(".generateDotPlotData", "MAPlot", function(x, envir) {
     output$commands <- c(output$commands, extra_cmds)
 
     output
+})
+
+#' @export
+#' @importFrom shiny tagList
+setMethod(".getDotPlotColorHelp", "MAPlot", function(x, color_choices) {
+    FUN <- callNextMethod()
+
+    function(plot_name) {
+        df <- FUN(plot_name)
+        df[1,2] <- "Here, we choose whether to color points by per-row attributes.
+When <em>None</em> is selected, the plot defaults to a constant color for all non-significant features,
+pink for the significant features with positive log-fold changes,
+and blue for the significant features with negative log-fold changes.
+The number of features in each category is also shown in the legend.
+<br/><br/>
+Alternatively, try out some of the different choices here, and note how further options become available when each choice is selected."
+        df
+    }
 })
 
 #' @export

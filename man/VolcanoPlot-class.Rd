@@ -20,6 +20,7 @@
 \alias{.colorByNoneDotPlotScale,VolcanoPlot-method}
 \alias{.generateDotPlot,VolcanoPlot-method}
 \alias{.definePanelTour,VolcanoPlot-method}
+\alias{.getDotPlotColorHelp,VolcanoPlot-method}
 \title{The VolcanoPlot class}
 \description{
 The VolcanoPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a volcano plot.
@@ -107,6 +108,7 @@ This is to be used for coloring when \code{ColorBy="None"}.
 For documentation:
 \itemize{
 \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 }
 }
 
