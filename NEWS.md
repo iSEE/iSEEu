@@ -8,8 +8,8 @@
 
 # iSEEu 1.3.1
 
-* Eliminate duplicates in available fields, as these break selectizes.
 * Added the `MarkdownBoard` panel to show arbitrary Markdown-formatted content.
+* Eliminate duplicates in available fields, as these break selectizes.
 
 # iSEEu 1.1.9
 
