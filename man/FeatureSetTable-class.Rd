@@ -23,22 +23,18 @@
 \title{Feature set table}
 \description{
 A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.
+This relies on feature set collections that have been registered in the input \linkS4class{SummarizedExperiment},
+see \code{\link{registerCollections}} for more details.
 }
 \section{Slot overview}{
 
 The following slots control the feature sets in use:
 \itemize{
 \item \code{Collection}, string specifying the type of feature set collection to show.
-Defaults to the first set.
-\item \code{CreateCollections}, a named character vector where each entry is named after a feature set collection.
-Each entry should be a string containing R commands to define a data.frame named \code{tab}, where each row is a feature set and the row names are the names of those sets.
-\item \code{RetrieveSet}, a named character vector where each entry is named after a feature set collection.
-Each entry should be a string containing R commands to define a character vector named \code{selected} containing the identity of all rows of the SummarizedExperiment in the set of interest.
-(These commands can assume that a \code{.set_id} variable is present containing the name of the chosen feature set,
-as well as the \code{se} variable containing the input SummarizedExperiment object.)
+Defaults to the first registered collection in the SummarizedExperiment.
 }
 
-The following slots control the selections:
+The following slots control the table selections:
 \itemize{
 \item \code{Selected}, a string containing the name of the currently selected gene set.
 Defaults to \code{""}, i.e., no selection.
@@ -55,12 +51,6 @@ In addition, this class inherits all slots from its parent \linkS4class{Panel} c
 
 \code{FeatureSetTable(...)} creates an instance of a FeatureSetTable class,
 where any slot and its value can be passed to \code{...} as a named argument.
-
-Initial values for \code{CreateCollections} and \code{RetrieveSet} are taken from the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
-If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
-These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
-Similarly, it is not possible for multiple FeatureSetTables in the same application to have different values for these slots;
-within the app, all values are set to those of the first encountered FeatureSetTable to ensure consistency.
 }
 
 \section{Supported methods}{
@@ -94,7 +84,7 @@ For monitoring reactive expressions:
 
 For creating the table:
 \itemize{
-\item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}, based on the contents of \code{x[["CreateCollections"]]}.
+\item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}.
 It will also return the commands required to do so and the name of the variable corresponding to said data.frame.
 \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
 will add a \code{\link{datatable}} widget to the output,
@@ -104,7 +94,7 @@ which is used to render the aforementioned data.frame.
 For controlling the multiple selections:
 \itemize{
 \item \code{\link{.multiSelectionDimension}(x)} returns \code{"row"}.
-\item \code{\link{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the contents of \code{x[["RetrieveSet"]]}.
+\item \code{\link{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set.
 \code{index} is ignored.
 \item \code{\link{.multiSelectionActive}(x)} returns the name of the currently selected gene set,
 unless no selection is made, in which case \code{NULL} is returned.

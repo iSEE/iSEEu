@@ -1,21 +1,17 @@
 #' Feature set table
 #'
 #' A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.
+#' This relies on feature set collections that have been registered in the input \linkS4class{SummarizedExperiment},
+#' see \code{\link{registerCollections}} for more details.
 #'
 #' @section Slot overview:
 #' The following slots control the feature sets in use:
 #' \itemize{
 #' \item \code{Collection}, string specifying the type of feature set collection to show.
-#' Defaults to the first set.
-#' \item \code{CreateCollections}, a named character vector where each entry is named after a feature set collection.
-#' Each entry should be a string containing R commands to define a data.frame named \code{tab}, where each row is a feature set and the row names are the names of those sets.
-#' \item \code{RetrieveSet}, a named character vector where each entry is named after a feature set collection.
-#' Each entry should be a string containing R commands to define a character vector named \code{selected} containing the identity of all rows of the SummarizedExperiment in the set of interest.
-#' (These commands can assume that a \code{.set_id} variable is present containing the name of the chosen feature set,
-#' as well as the \code{se} variable containing the input SummarizedExperiment object.)
+#' Defaults to the first registered collection in the SummarizedExperiment.
 #' }
 #'
-#' The following slots control the selections:
+#' The following slots control the table selections:
 #' \itemize{
 #' \item \code{Selected}, a string containing the name of the currently selected gene set.
 #' Defaults to \code{""}, i.e., no selection.
@@ -30,12 +26,6 @@
 #' @section Constructor:
 #' \code{FeatureSetTable(...)} creates an instance of a FeatureSetTable class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
-#'
-#' Initial values for \code{CreateCollections} and \code{RetrieveSet} are taken from the fields of the same name in the output of \code{\link{getFeatureSetCommands}}.
-#' If these fields are also \code{NULL}, we fall back to the output of \code{\link{createGeneSetCommands}} with default parameters.
-#' These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
-#' Similarly, it is not possible for multiple FeatureSetTables in the same application to have different values for these slots;
-#' within the app, all values are set to those of the first encountered FeatureSetTable to ensure consistency.
 #'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{FeatureSetTable} class.
@@ -67,7 +57,7 @@
 #'
 #' For creating the table:
 #' \itemize{
-#' \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}, based on the contents of \code{x[["CreateCollections"]]}.
+#' \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}. 
 #' It will also return the commands required to do so and the name of the variable corresponding to said data.frame.
 #' \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
 #' will add a \code{\link{datatable}} widget to the output,
@@ -77,7 +67,7 @@
 #' For controlling the multiple selections:
 #' \itemize{
 #' \item \code{\link{.multiSelectionDimension}(x)} returns \code{"row"}.
-#' \item \code{\link{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the contents of \code{x[["RetrieveSet"]]}.
+#' \item \code{\link{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set.
 #' \code{index} is ignored.
 #' \item \code{\link{.multiSelectionActive}(x)} returns the name of the currently selected gene set,
 #' unless no selection is made, in which case \code{NULL} is returned.
@@ -142,8 +132,8 @@ NULL
 setClass("FeatureSetTable", contains="Panel",
     slots=c(
         Collection="character",
-        CreateCollections="character",
-        RetrieveSet="character",
+        CreateCollections="character", # deprecated
+        RetrieveSet="character",       # deprecated
         Selected="character",
         Search="character",
         SearchColumns="character"
@@ -156,16 +146,6 @@ setValidity2("FeatureSetTable", function(object) {
 
     msg <- .singleStringError(msg, object, c("Collection", "Selected", "Search"))
 
-    cre.cmds <- object[["CreateCollections"]]
-    ret.cmds <- object[["RetrieveSet"]]
-    nms <- names(cre.cmds)
-    if (is.null(nms) || anyDuplicated(nms)) {
-        msg <- c(msg, "names of 'CreateCollections' must be non-NULL and unique")
-    }
-    if (!identical(nms, names(ret.cmds))) {
-        msg <- c(msg, "names of 'CreateCollections' and 'RetrieveSet' must be identical")
-    }
-
     if (length(msg)) {
         return(msg)
     }
@@ -177,15 +157,6 @@ setMethod("initialize", "FeatureSetTable",
     function(.Object, Collection=NA_character_, Selected="", Search="", SearchColumns=character(0), ...) 
 {
     args <- list(..., Collection=Collection, Selected=Selected, Search=Search, SearchColumns=SearchColumns)
-
-    stuff <- getFeatureSetCommands()
-    if (is.null(stuff)) {
-        stuff <- createGeneSetCommands()
-    }
-
-    args$CreateCollections <- stuff$CreateCollections
-    args$RetrieveSet <- stuff$RetrieveSet
-
     do.call(callNextMethod, c(list(.Object), args))
 })
 
@@ -195,7 +166,11 @@ FeatureSetTable <- function(...) {
     new("FeatureSetTable", ...)
 }
 
+set.cmds.env <- new.env()
+set.cmds.env$commands <- list()
+
 #' @export
+#' @importFrom S4Vectors mcols
 setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
     if (!is.null(.getCachedCommonInfo(se, "FeatureSetTable"))) {
         return(se)
@@ -203,31 +178,52 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
 
     se <- callNextMethod()
 
-    # NOTE: these fields are assumed to be globals, so it's okay to use their
-    # values when caching the common values.  The plan is to use
-    # .refineParameters to force all FeatureSetTables to use the commands of
-    # the first encountered FeatureSetTable.
-    cre.cmds <- x[["CreateCollections"]]
-    ret.cmds <- x[["RetrieveSet"]]
+    # Let's see if there are any collections.
+    if (!is.null(all.collections <- retrieveCollection(se))) {
+        .validate_collections(all.collections)
+        cmds <- sprintf("iSEEu::retrieveCollection(se, %s)", vapply(names(all.collections), deparse, ""))
+        cre.cmds <- sprintf("tab <- mcols(%s)", cmds)
+        ret.cmds <- sprintf("selected <- %s[[.set_id]]", cmds)
+        created <- lapply(all.collections, function(x) data.frame(mcols(x), check.names=FALSE))
 
-    created <- lapply(cre.cmds, function(code) {
-        env <- new.env()
-        eval(parse(text=code), envir=env)
-        env$tab
-    })
+    } else {
+        if (!is.null(all.cmds <- metadata(se)$commands)) {
+            .validate_commands(all.cmds)
+            cre.cmds <- all.cmds$collections
+            ret.cmds <- all.cmds$sets
+
+        } else {
+            stuff <- getFeatureSetCommands() # deprecated.
+            if (is.null(stuff)) {
+                stuff <- createGeneSetCommands() # not deprecated, fall back in case there's nothing.
+            }
+
+            # NOTE: these fields are assumed to be globals, so it's okay to use their
+            # values when caching the common values.  The plan is to use
+            # .refineParameters to force all FeatureSetTables to use the commands of
+            # the first encountered FeatureSetTable.
+            cre.cmds <- stuff[["CreateCollections"]]
+            ret.cmds <- stuff[["RetrieveSet"]]
+        }
+
+        created <- lapply(cre.cmds, function(code) {
+            env <- new.env()
+            eval(parse(text=code), envir=env)
+            env$tab
+        })
+    }
+
+    # Hack to get this information to .multiSelectionCommands, 
+    # which is not otherwise aware of the SummarizedExperiment.
+    set.cmds.env$commands <- ret.cmds
 
     .setCachedCommonInfo(se, "FeatureSetTable", 
         available.sets=created,
-        create.collections.cmds=cre.cmds,
-        retrieve.set.cmds=ret.cmds)
+        create.collections.cmds=cre.cmds)
 })
 
 #' @export
 setMethod(".refineParameters", "FeatureSetTable", function(x, se) {
-    x[["CreateCollections"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$create.collections.cmds
-    x[["RetrieveSet"]] <- .getCachedCommonInfo(se, "FeatureSetTable")$retrieve.set.cmds
-    validObject(x)
-
     x <- callNextMethod()
     if (is.null(x)) {
         return(NULL)
@@ -308,7 +304,7 @@ setMethod(".generateOutput", "FeatureSetTable", function(x, se, ..., all_memory,
     current <- x[["Collection"]]
 
     list(
-        commands=list(x[["CreateCollections"]][current]),
+        commands=.getCachedCommonInfo(se, "FeatureSetTable")$create.collections.cmds,
         contents=list(table=all.sets[[current]], available=nrow(se)),
         varname="tab"
     )
@@ -424,7 +420,7 @@ setMethod(".multiSelectionDimension", "FeatureSetTable", function(x) "row")
 setMethod(".multiSelectionCommands", "FeatureSetTable", function(x, index) {
     c(
         sprintf(".set_id <- %s;", deparse(x[["Selected"]])),
-        x[["RetrieveSet"]][x[["Collection"]]]
+        set.cmds.env$commands[x[["Collection"]]]
     )
 })
 
