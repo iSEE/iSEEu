@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
 
       
 
-      </header><script src="universe_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="universe_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Universe of iSEE panels</h1>
@@ -90,17 +90,17 @@
       </address>
                               <h4 class="author">Federico Marini</h4>
             <address class="author_afil">
-      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz<br><a class="author_email" href="mailto:#"></a><a href="mailto:marinif@uni-mainz.de" class="email">marinif@uni-mainz.de</a>
+      Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), MainzCenter for Thrombosis and Hemostasis (CTH), Mainz<br><a class="author_email" href="mailto:#"></a><a href="mailto:marinif@uni-mainz.de" class="email">marinif@uni-mainz.de</a>
       </address>
                               <h4 class="author">Charlotte Soneson</h4>
             <address class="author_afil">
-      Friedrich Miescher Institute for Biomedical Research, Basel<br><a class="author_email" href="mailto:#"></a><a href="mailto:charlottesoneson@gmail.com" class="email">charlottesoneson@gmail.com</a>
+      Friedrich Miescher Institute for Biomedical Research, BaselSIB Swiss Institute of Bioinformatics<br><a class="author_email" href="mailto:#"></a><a href="mailto:charlottesoneson@gmail.com" class="email">charlottesoneson@gmail.com</a>
       </address>
                               <h4 class="author">Aaron Lun</h4>
                   <a class="author_email" href="mailto:#"></a><a href="mailto:infinite.monkeys.with.keyboards@gmail.com" class="email">infinite.monkeys.with.keyboards@gmail.com</a>
       
                   
-            <h4 class="date">5 January 2021</h4>
+            <h4 class="date">1 April 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/iSEE/iSEEu/blob/master/vignettes/universe.Rmd"><code>vignettes/universe.Rmd</code></a></small>
       <div class="hidden name"><code>universe.Rmd</code></div>
@@ -334,9 +334,9 @@
 <a href="#session-information" class="anchor"></a>Session information</h1>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## R Under development (unstable) (2020-12-31 r79746)
+<pre><code>## R Under development (unstable) (2021-03-18 r80099)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 20.04.1 LTS
+## Running under: Ubuntu 20.04.2 LTS
 ## 
 ## Matrix products: default
 ## BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.8.so
@@ -354,94 +354,100 @@
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] scater_1.19.6               ggplot2_3.3.3              
-##  [3] scRNAseq_2.5.0              edgeR_3.33.0               
-##  [5] limma_3.47.3                airway_1.11.0              
-##  [7] iSEEu_1.3.1                 iSEE_2.3.6                 
-##  [9] SingleCellExperiment_1.13.3 SummarizedExperiment_1.21.1
-## [11] Biobase_2.51.0              GenomicRanges_1.43.1       
-## [13] GenomeInfoDb_1.27.3         IRanges_2.25.6             
-## [15] S4Vectors_0.29.6            BiocGenerics_0.37.0        
-## [17] MatrixGenerics_1.3.0        matrixStats_0.57.0         
-## [19] BiocStyle_2.19.1           
+##  [1] scater_1.19.11               ggplot2_3.3.3               
+##  [3] scRNAseq_2.5.7               edgeR_3.33.3                
+##  [5] limma_3.47.12                airway_1.11.0               
+##  [7] iSEEu_1.3.3                  iSEE_2.3.12                 
+##  [9] SingleCellExperiment_1.13.12 SummarizedExperiment_1.21.1 
+## [11] Biobase_2.51.0               GenomicRanges_1.43.3        
+## [13] GenomeInfoDb_1.27.8          IRanges_2.25.6              
+## [15] S4Vectors_0.29.9             BiocGenerics_0.37.1         
+## [17] MatrixGenerics_1.3.1         matrixStats_0.58.0          
+## [19] BiocStyle_2.19.2            
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] circlize_0.4.11               AnnotationHub_2.23.0         
-##   [3] BiocFileCache_1.15.1          systemfonts_0.3.2            
-##   [5] igraph_1.2.6                  lazyeval_0.2.2               
-##   [7] shinydashboard_0.7.1          splines_4.1.0                
-##   [9] BiocParallel_1.25.2           digest_0.6.27                
-##  [11] ensembldb_2.15.1              htmltools_0.5.0              
-##  [13] viridis_0.5.1                 magrittr_2.0.1               
-##  [15] memoise_1.1.0                 cluster_2.1.0                
-##  [17] ComplexHeatmap_2.7.4          Biostrings_2.59.2            
-##  [19] askpass_1.1                   pkgdown_1.6.1                
-##  [21] prettyunits_1.1.1             colorspace_2.0-0             
-##  [23] blob_1.2.1                    rappdirs_0.3.1               
-##  [25] ggrepel_0.9.0                 textshaping_0.2.1            
-##  [27] xfun_0.19                     dplyr_1.0.2                  
-##  [29] crayon_1.3.4                  RCurl_1.98-1.2               
-##  [31] jsonlite_1.7.2                glue_1.4.2                   
-##  [33] gtable_0.3.0                  zlibbioc_1.37.0              
-##  [35] XVector_0.31.1                GetoptLong_1.0.5             
-##  [37] DelayedArray_0.17.7           BiocSingular_1.7.0           
-##  [39] shape_1.4.5                   scales_1.1.1                 
-##  [41] DBI_1.1.0                     miniUI_0.1.1.1               
-##  [43] Rcpp_1.0.5                    viridisLite_0.3.0            
-##  [45] xtable_1.8-4                  progress_1.2.2               
-##  [47] clue_0.3-58                   rsvd_1.0.3                   
-##  [49] bit_4.0.4                     DT_0.16                      
-##  [51] htmlwidgets_1.5.3             httr_1.4.2                   
-##  [53] RColorBrewer_1.1-2            shinyAce_0.4.1               
-##  [55] ellipsis_0.3.1                scuttle_1.1.5                
-##  [57] pkgconfig_2.0.3               XML_3.99-0.5                 
-##  [59] dbplyr_2.0.0                  locfit_1.5-9.4               
-##  [61] tidyselect_1.1.0              rlang_0.4.10                 
-##  [63] later_1.1.0.1                 AnnotationDbi_1.53.0         
-##  [65] munsell_0.5.0                 BiocVersion_3.13.1           
-##  [67] tools_4.1.0                   generics_0.1.0               
-##  [69] RSQLite_2.2.1                 ExperimentHub_1.17.0         
-##  [71] rintrojs_0.2.2                evaluate_0.14                
-##  [73] stringr_1.4.0                 fastmap_1.0.1                
-##  [75] yaml_2.2.1                    ragg_0.4.0                   
-##  [77] knitr_1.30                    bit64_4.0.5                  
-##  [79] fs_1.5.0                      purrr_0.3.4                  
-##  [81] AnnotationFilter_1.15.0       sparseMatrixStats_1.3.2      
-##  [83] nlme_3.1-151                  mime_0.9                     
-##  [85] xml2_1.3.2                    biomaRt_2.47.1               
-##  [87] compiler_4.1.0                beeswarm_0.2.3               
-##  [89] filelock_1.0.2                curl_4.3                     
-##  [91] png_0.1-7                     interactiveDisplayBase_1.29.0
-##  [93] tibble_3.0.4                  stringi_1.5.3                
-##  [95] GenomicFeatures_1.43.3        desc_1.2.0                   
-##  [97] lattice_0.20-41               ProtGenerics_1.23.6          
-##  [99] Matrix_1.3-0                  shinyjs_2.0.0                
-## [101] vctrs_0.3.6                   pillar_1.4.7                 
-## [103] lifecycle_0.2.0               BiocManager_1.30.10          
-## [105] GlobalOptions_0.1.2           BiocNeighbors_1.9.4          
-## [107] irlba_2.3.3                   bitops_1.0-6                 
-## [109] rtracklayer_1.51.2            httpuv_1.5.4                 
-## [111] BiocIO_1.1.2                  R6_2.5.0                     
-## [113] bookdown_0.21                 promises_1.1.1               
-## [115] gridExtra_2.3                 vipor_0.4.5                  
-## [117] colourpicker_1.1.0            assertthat_0.2.1             
-## [119] openssl_1.4.3                 rprojroot_2.0.2              
-## [121] rjson_0.2.20                  withr_2.3.0                  
-## [123] shinyWidgets_0.5.4            GenomicAlignments_1.27.2     
-## [125] Rsamtools_2.7.0               GenomeInfoDbData_1.2.4       
-## [127] mgcv_1.8-33                   hms_0.5.3                    
-## [129] beachmat_2.7.5                grid_4.1.0                   
-## [131] DelayedMatrixStats_1.13.1     rmarkdown_2.6                
-## [133] Rtsne_0.15                    Cairo_1.5-12.2               
-## [135] shiny_1.5.0                   ggbeeswarm_0.6.0             
-## [137] restfulr_0.0.13</code></pre>
+##   [1] utf8_1.2.1                    shinydashboard_0.7.1         
+##   [3] tidyselect_1.1.0              RSQLite_2.2.5                
+##   [5] AnnotationDbi_1.53.1          htmlwidgets_1.5.3            
+##   [7] grid_4.1.0                    BiocParallel_1.25.5          
+##   [9] Rtsne_0.15                    munsell_0.5.0                
+##  [11] ScaledMatrix_0.99.2           codetools_0.2-18             
+##  [13] ragg_1.1.2                    DT_0.17                      
+##  [15] miniUI_0.1.1.1                withr_2.4.1                  
+##  [17] colorspace_2.0-0              filelock_1.0.2               
+##  [19] highr_0.8                     knitr_1.31                   
+##  [21] shinyWidgets_0.6.0            GenomeInfoDbData_1.2.4       
+##  [23] bit64_4.0.5                   rprojroot_2.0.2              
+##  [25] vctrs_0.3.7                   generics_0.1.0               
+##  [27] xfun_0.22                     BiocFileCache_1.15.1         
+##  [29] R6_2.5.0                      doParallel_1.0.16            
+##  [31] ggbeeswarm_0.6.0              clue_0.3-58                  
+##  [33] rsvd_1.0.3                    locfit_1.5-9.4               
+##  [35] AnnotationFilter_1.15.0       bitops_1.0-6                 
+##  [37] cachem_1.0.4                  shinyAce_0.4.1               
+##  [39] DelayedArray_0.17.10          assertthat_0.2.1             
+##  [41] promises_1.2.0.1              BiocIO_1.1.2                 
+##  [43] scales_1.1.1                  beeswarm_0.3.1               
+##  [45] gtable_0.3.0                  beachmat_2.7.7               
+##  [47] Cairo_1.5-12.2                ensembldb_2.15.2             
+##  [49] rlang_0.4.10                  systemfonts_1.0.1            
+##  [51] GlobalOptions_0.1.2           splines_4.1.0                
+##  [53] rtracklayer_1.51.5            lazyeval_0.2.2               
+##  [55] BiocManager_1.30.12           yaml_2.2.1                   
+##  [57] GenomicFeatures_1.43.7        httpuv_1.5.5                 
+##  [59] tools_4.1.0                   bookdown_0.21                
+##  [61] ellipsis_0.3.1                jquerylib_0.1.3              
+##  [63] RColorBrewer_1.1-2            Rcpp_1.0.6                   
+##  [65] sparseMatrixStats_1.3.7       progress_1.2.2               
+##  [67] zlibbioc_1.37.0               purrr_0.3.4                  
+##  [69] RCurl_1.98-1.3                prettyunits_1.1.1            
+##  [71] openssl_1.4.3                 viridis_0.5.1                
+##  [73] GetoptLong_1.0.5              ggrepel_0.9.1                
+##  [75] cluster_2.1.1                 fs_1.5.0                     
+##  [77] magrittr_2.0.1                circlize_0.4.12              
+##  [79] colourpicker_1.1.0            ProtGenerics_1.23.7          
+##  [81] hms_1.0.0                     shinyjs_2.0.0                
+##  [83] mime_0.10                     evaluate_0.14                
+##  [85] xtable_1.8-4                  XML_3.99-0.6                 
+##  [87] gridExtra_2.3                 shape_1.4.5                  
+##  [89] compiler_4.1.0                biomaRt_2.47.6               
+##  [91] tibble_3.1.0                  crayon_1.4.1                 
+##  [93] htmltools_0.5.1.1             mgcv_1.8-34                  
+##  [95] later_1.1.0.1                 DBI_1.1.1                    
+##  [97] ExperimentHub_1.17.1          dbplyr_2.1.0                 
+##  [99] ComplexHeatmap_2.7.8          rappdirs_0.3.3               
+## [101] Matrix_1.3-2                  igraph_1.2.6                 
+## [103] pkgconfig_2.0.3               pkgdown_1.6.1                
+## [105] GenomicAlignments_1.27.2      scuttle_1.1.18               
+## [107] xml2_1.3.2                    foreach_1.5.1                
+## [109] vipor_0.4.5                   bslib_0.2.4                  
+## [111] XVector_0.31.1                stringr_1.4.0                
+## [113] digest_0.6.27                 Biostrings_2.59.2            
+## [115] rmarkdown_2.7                 rintrojs_0.2.2               
+## [117] DelayedMatrixStats_1.13.5     restfulr_0.0.13              
+## [119] curl_4.3                      shiny_1.6.0                  
+## [121] Rsamtools_2.7.1               rjson_0.2.20                 
+## [123] lifecycle_1.0.0               nlme_3.1-152                 
+## [125] jsonlite_1.7.2                BiocNeighbors_1.9.4          
+## [127] desc_1.3.0                    viridisLite_0.3.0            
+## [129] askpass_1.1                   fansi_0.4.2                  
+## [131] pillar_1.5.1                  lattice_0.20-41              
+## [133] KEGGREST_1.31.1               fastmap_1.1.0                
+## [135] httr_1.4.2                    interactiveDisplayBase_1.29.0
+## [137] glue_1.4.2                    png_0.1-7                    
+## [139] iterators_1.0.13              BiocVersion_3.13.1           
+## [141] bit_4.0.4                     stringi_1.5.3                
+## [143] sass_0.3.1                    blob_1.2.1                   
+## [145] textshaping_0.3.3             BiocSingular_1.7.2           
+## [147] AnnotationHub_2.23.2          memoise_2.0.0                
+## [149] dplyr_1.0.5                   irlba_2.3.3</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<div id="refs" class="references">
-<div id="ref-iSEE-2018">
-<p>Rue-Albrecht, Kevin, Federico Marini, Charlotte Soneson, and Aaron T. L. Lun. 2018. “ISEE: Interactive Summarizedexperiment Explorer.” <em>F1000Research</em> 7 (June): 741. <a href="https://doi.org/10.12688/f1000research.14966.1">https://doi.org/10.12688/f1000research.14966.1</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-iSEE-2018" class="csl-entry">
+Rue-Albrecht, Kevin, Federico Marini, Charlotte Soneson, and Aaron T. L. Lun. 2018. <span>“iSEE: Interactive SummarizedExperiment Explorer.”</span> <em>F1000Research</em> 7 (June): 741. <a href="https://doi.org/10.12688/f1000research.14966.1">https://doi.org/10.12688/f1000research.14966.1</a>.
 </div>
 </div>
 </div>

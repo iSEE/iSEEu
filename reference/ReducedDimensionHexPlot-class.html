@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
       </span>
     </div>
 
@@ -158,14 +158,6 @@ where any slot and its value can be passed to <code>...</code> as a named argume
 
 <p>In the following code snippets, <code>x</code> is an instance of a ReducedDimensionHexPlot class.
 Refer to the documentation for each method for more details on the remaining arguments.</p>
-<p>For setting up data values:</p><ul>
-<li><p><code>.cacheCommonInfo(x)</code> adds a <code>"ReducedDimensionHexPlot"</code> entry containing
-<code>valid.colData.names</code>, a character vector of names of columns that are valid (i.e., contain atomic values);
-<code>discrete.colData.names</code>, a character vector of names for columns with discrete atomic values;
-and <code>continuous.colData.names</code>, a character vector of names of columns with continuous atomic values.
-This will also call the equivalent ColumnDotPlot method.</p></li>
-</ul>
-
 <p>For defining the interface:</p><ul>
 <li><p><code>.panelColor(x)</code> will return the specified default color for this panel class.</p></li>
 <li><p><code>.fullName(x)</code> will return <code>"Hexagonal reduced dimension plot"</code>.</p></li>
@@ -174,6 +166,8 @@ otherwise this function will call the ReducedDimensionPlot method.</p></li>
 <li><p><code>.defineVisualShapeInterface(x)</code> will return <code>NULL</code> for this panel, as the shape aesthetic is not applicable to this panel that does not display individual data points.</p></li>
 <li><p><code>.defineVisualSizeInterface(x)</code> overrides the equivalent method inherited from all parents classes and will return instead an HTML tag definition that contains a user input controlling the number of hexagonal bins in both vertical and horizontal directions.</p></li>
 <li><p><code>.defineVisualOtherInterface(x)</code> will return <code>NULL</code>, as there are no additional visual parameters for this panel.</p></li>
+<li><p><code>.allowableColorByDataChoices(x, se)</code> will return a character vector with the names of all continuous fields in <code>colData(se)</code>,
+where <code>se</code> is the input SummarizedExperiment object.</p></li>
 </ul>
 
 <p>For monitoring reactive expressions:</p><ul>
@@ -186,6 +180,7 @@ otherwise this function will call the ReducedDimensionPlot method.</p></li>
 
 <p>For documentation:</p><ul>
 <li><p><code>.definePanelTour(x)</code> returns an data.frame containing the steps of a panel-specific tour.</p></li>
+<li><p><code>.getDotPlotColorHelp(x, color_choices)</code> returns a function that generates an <span class="pkg">rintrojs</span> tour for the color choice UI.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -200,7 +195,7 @@ otherwise this function will call the ReducedDimensionPlot method.</p></li>
 
 <span class='co'># Example data ----</span>
 <span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html'>ReprocessedAllenData</a></span><span class='op'>(</span>assays<span class='op'>=</span><span class='st'>"tophat_counts"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-01-04</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-03-30</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "SingleCellExperiment"
 #&gt; attr(,"package")
 #&gt; [1] "SingleCellExperiment"</div><div class='input'>
