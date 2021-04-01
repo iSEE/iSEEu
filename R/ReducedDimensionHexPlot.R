@@ -20,15 +20,6 @@
 #' In the following code snippets, `x` is an instance of a [ReducedDimensionHexPlot-class] class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
 #'
-#' For setting up data values:
-#' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a `"ReducedDimensionHexPlot"` entry containing
-#' `valid.colData.names`, a character vector of names of columns that are valid (i.e., contain atomic values);
-#' `discrete.colData.names`, a character vector of names for columns with discrete atomic values;
-#' and `continuous.colData.names`, a character vector of names of columns with continuous atomic values.
-#' This will also call the equivalent [ColumnDotPlot-class] method.
-#' }
-#'
 #' For defining the interface:
 #' \itemize{
 #' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
@@ -38,6 +29,8 @@
 #' \item \code{\link{.defineVisualShapeInterface}(x)} will return `NULL` for this panel, as the shape aesthetic is not applicable to this panel that does not display individual data points.
 #' \item \code{\link{.defineVisualSizeInterface}(x)} overrides the equivalent method inherited from all parents classes and will return instead an HTML tag definition that contains a user input controlling the number of hexagonal bins in both vertical and horizontal directions.
 #' \item \code{\link{.defineVisualOtherInterface}(x)} will return `NULL`, as there are no additional visual parameters for this panel.
+#' \item \code{\link{.allowableColorByDataChoices}(x, se)} will return a character vector with the names of all continuous fields in \code{\link{colData}(se)},
+#' where \code{se} is the input \linkS4class{SummarizedExperiment} object.
 #' }
 #'
 #' For monitoring reactive expressions:
@@ -61,7 +54,6 @@
 #' initialize,ReducedDimensionHexPlot-method
 #' .fullName,ReducedDimensionHexPlot-method
 #' .panelColor,ReducedDimensionHexPlot-method
-#' .cacheCommonInfo,ReducedDimensionHexPlot-method
 #' .createObservers,ReducedDimensionHexPlot-method
 #' .hideInterface,ReducedDimensionHexPlot-method
 #' .defineVisualShapeInterface,ReducedDimensionHexPlot-method
@@ -70,6 +62,7 @@
 #' .generateDotPlot,ReducedDimensionHexPlot-method
 #' .definePanelTour,ReducedDimensionHexPlot-method
 #' .getDotPlotColorHelp,ReducedDimensionHexPlot-method
+#' .allowableColorByDataChoices,ReducedDimensionHexPlot-method
 #'
 #' @examples
 #' library(scRNAseq)
@@ -141,30 +134,6 @@ setMethod("initialize", "ReducedDimensionHexPlot", function(.Object, ...) {
     do.call(callNextMethod, c(list(.Object), args))
 })
 
-#' @export
-#' @importFrom SummarizedExperiment colData
-#' @importFrom methods callNextMethod
-#' @importFrom iSEE .findAtomicFields .whichGroupable .whichNumeric
-setMethod(".cacheCommonInfo", "ReducedDimensionHexPlot", function(x, se) {
-    if (!is.null(.getCachedCommonInfo(se, "ReducedDimensionHexPlot"))) {
-        return(se)
-    }
-
-    se <- callNextMethod()
-
-    df <- colData(se)
-    displayable <- .findAtomicFields(df)
-
-    subdf <- df[,displayable,drop=FALSE]
-    discrete <- .whichGroupable(subdf)
-    continuous <- .whichNumeric(subdf)
-
-    .setCachedCommonInfo(se, "ReducedDimensionHexPlot",
-        valid.colData.names=displayable,
-        discrete.colData.names=displayable[discrete],
-        continuous.colData.names=displayable[continuous])
-})
-
 # Interface ----
 
 #' @export
@@ -198,6 +167,11 @@ One should avoid setting this too low as then the plot just collapses to showing
         .numericInput.iSEE(x, .plotBinResolution, label="Bin resolution:",
             min=1, value=x[[.plotBinResolution]], step = 1)
     )
+})
+
+#' @export
+setMethod(".allowableColorByDataChoices", "ReducedDimensionHexPlot", function(x, se) {
+    .getCachedCommonInfo(se, "ColumnDotPlot")$continuous.colData.names
 })
 
 #' @export
@@ -348,25 +322,27 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
     plot_cmds[["ggplot"]] <- "ggplot() +"
 
     color_set <- !is.null(plot_data$ColorBy)
-    shape_set <- param_choices[["ShapeBy"]] != "None"
-    size_set <- param_choices[["SizeBy"]] != "None"
     color_discrete <- is.factor(plot_data$ColorBy)
 
-    if (color_set && !color_discrete) {
-        new_aes <- .buildAes(color=FALSE, shape=shape_set, size=size_set, alt=c(z="ColorBy"))
-    } else if (color_set && param_choices[["ColorBy"]] == "Sample name") {
-        new_aes <- .buildAes(color=FALSE, shape=shape_set, size=size_set)
+    if (color_set) {
+        if (param_choices[["ColorBy"]] == "Sample name") {
+            new_aes <- .buildAes()
+        } else if (!color_discrete) {
+            new_aes <- .buildAes(alt=c(z="ColorBy"))
+        } else {
+            # If this somehow manages to happen (e.g., discrete assays), 
+            # don't even try to plot it.
+            color_lab <- "Count"
+            new_aes <- .buildAes()
+        }
     } else {
-        new_aes <- .buildAes(color=color_set, shape=shape_set, size=size_set)
+        color_lab <- "Count"
+        new_aes <- .buildAes()
     }
 
-    plot_cmds[["hex"]] <- .create_hex(param_choices,
-        new_aes, color_set, size_set, color_discrete, is_subsetted)
+    plot_cmds[["hex"]] <- .create_hex(param_choices, new_aes, color_set, is_subsetted)
 
     # Adding axes labels.
-    if (is.null(color_lab) || color_discrete) {
-        color_lab <- "Count"
-    }
     plot_cmds[["labs"]] <- .buildLabs(x=x_lab, y=y_lab, fill=color_lab, shape=shape_lab, size=size_lab, title=title)
 
     # Adding further aesthetic elements.
@@ -385,7 +361,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
 }
 
 #' @importFrom ggplot2 geom_hex stat_summary_hex coord_cartesian geom_point
-.create_hex <- function(param_choices, aes, color, size, color_discrete, is_subsetted) {
+.create_hex <- function(param_choices, aes, color, is_subsetted) {
     plot_cmds <- list()
 
     # NOTE: the 'ggplot2::' prefixing is QUITE deliberate here, as the commands
@@ -399,17 +375,11 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
 
     color_choice <- param_choices[["ColorBy"]]
     if (color_choice %in% c("Column data", "Feature name")) {
-        if (color_discrete) {
-            plot_cmds[["hex"]] <- fallback
-        } else {
-            plot_cmds[["hex"]] <- sprintf(
-                sprintf('ggplot2::stat_summary_hex(%s, geom = "hex", bins = %i, fun=%s, alpha=%s, plot.data) +',
-                    aes,
-                    as.integer(param_choices[[.plotBinResolution]]),
-                    deparse("mean"),
-                    param_choices[["PointAlpha"]])
-            )
-        }
+        plot_cmds[["hex"]] <- sprintf('ggplot2::stat_summary_hex(%s, geom = "hex", bins = %i, fun=%s, alpha=%s, plot.data) +',
+            aes,
+            as.integer(param_choices[[.plotBinResolution]]),
+            deparse("mean"),
+            param_choices[["PointAlpha"]])
     } else if (color_choice == "Sample name") {
         plot_cmds[["hex"]] <- c(fallback, sprintf(
             "geom_point(%s, data=subset(plot.data, ColorBy == 'TRUE'), color=%s, alpha=1, size=5*%s) +",
