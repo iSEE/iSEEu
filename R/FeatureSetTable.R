@@ -204,7 +204,14 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
                 # .refineParameters to force all FeatureSetTables to use the commands of
                 # the first encountered FeatureSetTable.
                 cre.cmds <- stuff[["CreateCollections"]]
+                if (is.null(cre.cmds)) {
+                    cre.cmds <- stuff[["collections"]]
+                }
+
                 ret.cmds <- stuff[["RetrieveSet"]]
+                if (is.null(cre.cmds)) {
+                    cre.cmds <- stuff[["sets"]]
+                }
             }
         }
 
