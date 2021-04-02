@@ -66,21 +66,23 @@
 registerCollections <- function(se, collections, commands) {
     value <- list()
 
-    if (!missing(collections)) {
-        .validate_collections(collections)
-        value$collections <- collections
-    } else if (!missing(commands)) {
-        .validate_commands(commands)
-        value$commands <- commands
-    } else {
-        value <- NULL
-    }
-
+    # TODO: fix the handling of deeply nested lists.
     meta <- metadata(se)[["iSEEu"]]
     if (is.null(meta)) { 
         meta <- list() 
     }
-    meta$FeatureSetTable <- c(meta$FeatureSetTable, value)
+
+    if (!missing(collections)) {
+        .validate_collections(collections)
+        meta$collections <- collections
+    } else if (!missing(commands)) {
+        .validate_commands(commands)
+        meta$commands <- commands
+    } else {
+        meta <- NULL
+    }
+
+    meta$FeatureSetTable <- meta
     metadata(se)[["iSEEu"]] <- meta
 
     se

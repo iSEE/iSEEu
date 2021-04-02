@@ -184,9 +184,10 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
         cre.cmds <- sprintf("tab <- mcols(%s)", cmds)
         ret.cmds <- sprintf("selected <- %s[[.set_id]]", cmds)
         created <- lapply(all.collections, function(x) data.frame(mcols(x), check.names=FALSE))
+        names(cre.cmds) <- names(ret.cmds) <- names(all.collections)
 
     } else {
-        if (!is.null(all.cmds <- metadata(se)$commands)) {
+        if (!is.null(all.cmds <- metadata(se)$iSEEu$FeatureSetTable$commands)) {
             .validate_commands(all.cmds)
             cre.cmds <- all.cmds$collections
             ret.cmds <- all.cmds$sets
@@ -195,14 +196,16 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
             stuff <- getFeatureSetCommands() # deprecated.
             if (is.null(stuff)) {
                 stuff <- createGeneSetCommands() # not deprecated, fall back in case there's nothing.
+                cre.cmds <- stuff[["collections"]]
+                ret.cmds <- stuff[["sets"]]
+            } else {
+                # NOTE: these fields are assumed to be globals, so it's okay to use their
+                # values when caching the common values.  The plan is to use
+                # .refineParameters to force all FeatureSetTables to use the commands of
+                # the first encountered FeatureSetTable.
+                cre.cmds <- stuff[["CreateCollections"]]
+                ret.cmds <- stuff[["RetrieveSet"]]
             }
-
-            # NOTE: these fields are assumed to be globals, so it's okay to use their
-            # values when caching the common values.  The plan is to use
-            # .refineParameters to force all FeatureSetTables to use the commands of
-            # the first encountered FeatureSetTable.
-            cre.cmds <- stuff[["CreateCollections"]]
-            ret.cmds <- stuff[["RetrieveSet"]]
         }
 
         created <- lapply(cre.cmds, function(code) {

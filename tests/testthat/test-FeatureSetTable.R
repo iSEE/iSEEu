@@ -1,8 +1,72 @@
 # library(testthat); library(iSEEu); source("test-FeatureSetTable.R")
 
-se <- SummarizedExperiment(list(logcounts=matrix(0, 10, 4)),
-    rowData=DataFrame(PValue=runif(10), LogFC=rnorm(10), AveExpr=rnorm(10)))
+se <- SummarizedExperiment(list(logcounts=matrix(0, 100, 4)),
+    rowData=DataFrame(PValue=runif(100), LogFC=rnorm(100), AveExpr=rnorm(100)))
 dimnames(se) <- list(1:nrow(se), letters[seq_len(ncol(se))])
+
+#############################################
+# Testing the defaults.
+
+test_that("createGeneSetCommands works as expected", {
+    cmds <- createGeneSetCommands()
+    
+    # GO creation works.
+    env <- new.env()
+    eval(parse(text=cmds$collections[1]), envir=env)
+    expect_true(nrow(env$tab) > 0)
+
+    # GO retrieval works.
+    env$se <- se
+    env$.set_id <- rownames(env$tab)[1]
+    eval(parse(text=cmds$sets[1]), envir=env)
+    expect_type(env$selected, "character")
+
+    # KEGG creation works.
+    env <- new.env()
+    eval(parse(text=cmds$collections[2]), envir=env)
+    expect_true(nrow(env$tab) > 0)
+
+    env$se <- se
+    env$.set_id <- rownames(env$tab)[1]
+    eval(parse(text=cmds$sets[2]), envir=env)
+    expect_type(env$selected, "character")
+})
+
+#############################################
+
+random <- CharacterList(
+   Aaron = sample(rownames(se), 10),
+   Kevin = sample(rownames(se), 20),
+   Charlotte = sample(rownames(se), 30),
+   Fed = sample(rownames(se), 40)
+)
+mcols(random)$p.value <- runif(4)
+
+test_that("registerCollections works correctly for collections", {
+    se <- registerCollections(se, list(random=random))
+    expect_identical(retrieveCollection(se, "random"), random)
+
+    se <- registerCollections(se, list(random=random, other=rev(random)))
+    expect_identical(retrieveCollection(se, "other"), rev(random))
+
+    expect_error(registerCollections(se, list(random)), "unique")
+    expect_error(registerCollections(se, list(A=random, A=random)), "unique")
+    expect_error(registerCollections(se, list(A=random, random)), "unique")
+    expect_error(registerCollections(se, list(random=unname(random))), "named")
+})
+
+test_that("registerCollections works correctly for commands", {
+    cmds <- createGeneSetCommands()
+    se <- registerCollections(se, commands=cmds)
+
+    expect_identical(metadata(se)$iSEEu$FeatureSetTable$commands$collections, cmds$collections)
+    expect_identical(metadata(se)$iSEEu$FeatureSetTable$commands$sets, cmds$sets)
+
+    expect_error(registerCollections(se, commands=list(collections=unname(cmds$collections), sets=character(0)), "unique"))
+    expect_error(registerCollections(se, commands=list(collections=cmds$collections, sets=character(0)), "same"))
+})
+
+#############################################
 
 test_that("FeatureSetTable constructor works as expected", {
     out <- FeatureSetTable()
@@ -19,9 +83,25 @@ test_that("FeatureSetTable interface elements work as expected", {
     expect_true(.hideInterface(out, "SelectionBoxOpen"))
 })
 
+test_that("FeatureSetTable responds to registration of collections", {
+    se2 <- registerCollections(se, list(random=random))
+     
+    out <- FeatureSetTable()
+    se2 <- .cacheCommonInfo(out, se2)
+    out <- .refineParameters(out, se2)
+
+    expect_identical(out[["Collection"]], "random")
+    expect_identical(.getCachedCommonInfo(se2, "FeatureSetTable")$available.sets, list(random=as.data.frame(mcols(random))))
+    expect_match(.getCachedCommonInfo(se2, "FeatureSetTable")$create.collections.cmds[[1]], "retrieveCollection")
+})
+
 test_that("FeatureSetTable generates sensible output", {
     out <- FeatureSetTable()
-    spawn <- .generateOutput(out, se, list(), list())
+    se2 <- registerCollections(se, list(random=random))
+    se2 <- .cacheCommonInfo(out, se2)
+    out <- .refineParameters(out, se2)
+
+    spawn <- .generateOutput(out, se2, list(), list())
     expect_is(spawn$commands[[1]], "character")
     expect_identical(spawn$contents$available, nrow(se))
 
@@ -31,58 +111,54 @@ test_that("FeatureSetTable generates sensible output", {
 
 test_that("FeatureSetTable implements multiple selection methods correctly", {
     out <- FeatureSetTable()
+    se2 <- registerCollections(se, list(random=random))
+    se2 <- .cacheCommonInfo(out, se2)
+    out <- .refineParameters(out, se2)
+
     expect_identical(.multiSelectionDimension(out), "row")
     expect_identical(.multiSelectionActive(out), NULL)
 
-    out <- FeatureSetTable(Collection="GO", Selected="BLAH")
-    expect_true(any(grepl("BLAH", .multiSelectionCommands(out, NULL))))
-    expect_identical(.multiSelectionActive(out), "BLAH")
+    out <- FeatureSetTable(Collection="random", Selected="Aaron")
+    expect_true(any(grepl("Aaron", .multiSelectionCommands(out, NULL))))
+    expect_true(any(grepl("random", .multiSelectionCommands(out, NULL))))
+    expect_identical(.multiSelectionActive(out), "Aaron")
 
     expect_identical(.multiSelectionClear(out)[["Selected"]], "")
     expect_identical(.multiSelectionAvailable(out, list(available=10)), 10)
 })
 
-test_that("createGeneSetCommands works as expected", {
-    cmds <- createGeneSetCommands()
-    
-    # GO creation works.
-    env <- new.env()
-    eval(parse(text=cmds$CreateCollections[1]), envir=env)
-    expect_true(nrow(env$tab) > 0)
-
-    # GO retrieval works.
-    env$se <- se
-    env$.set_id <- rownames(env$tab)[1]
-    eval(parse(text=cmds$RetrieveSet[1]), envir=env)
-    expect_type(env$selected, "character")
-
-    # KEGG creation works.
-    env <- new.env()
-    eval(parse(text=cmds$CreateCollections[2]), envir=env)
-    expect_true(nrow(env$tab) > 0)
-
-    env$se <- se
-    env$.set_id <- rownames(env$tab)[1]
-    eval(parse(text=cmds$RetrieveSet[2]), envir=env)
-    expect_type(env$selected, "character")
-})
-
-test_that("FeatureSetCommands constructor interacts with globals", {
+test_that("FeatureSetTable responds to registration of commands", {
+    cmds <- createGeneSetCommands(identifier="SYMBOL")
+    se <- registerCollections(se, commands=cmds)
+     
     out <- FeatureSetTable()
     se2 <- .cacheCommonInfo(out, se)
     out <- .refineParameters(out, se2)
-    expect_identical(names(out[["CreateCollections"]]), c("GO", "KEGG"))
-    expect_identical(names(out[["RetrieveSet"]]), c("GO", "KEGG"))
 
-    # Overriding the globals.
+    expect_identical(out[["Collection"]], "GO")
+    expect_identical(names(.getCachedCommonInfo(se2, "FeatureSetTable")$available.sets), names(cmds$collections))
+    expect_match(.getCachedCommonInfo(se2, "FeatureSetTable")$create.collections.cmds[[1]], "GO")
+
+    out <- FeatureSetTable(Collection="GO", Selected="GO:00001")
+    select.cmds <- .multiSelectionCommands(out, NULL)
+    expect_match(select.cmds[2], "org.Hs.eg.db")
+    expect_match(select.cmds[2], "SYMBOL")
+})
+
+test_that("FeatureSetCommands constructor falls back to the defaults", {
+    out <- FeatureSetTable()
+    se2 <- .cacheCommonInfo(out, se)
+    out <- .refineParameters(out, se2)
+    expect_identical(out[["Collection"]], "GO")
+
+    # Overriding the globals (deprecated!).
     old <- getFeatureSetCommands()
     setFeatureSetCommands(list(RetrieveSet=c(A="1"), CreateCollections=c(A="1")))
 
     out <- FeatureSetTable()
     se2 <- .cacheCommonInfo(out, se)
     out <- .refineParameters(out, se2)
-    expect_identical(names(out[["CreateCollections"]]), "A")
-    expect_identical(names(out[["RetrieveSet"]]), "A")
+    expect_identical(names(.getCachedCommonInfo(se2, "FeatureSetTable")$available.sets), "A")
 
     setFeatureSetCommands(old)
 })
@@ -90,3 +166,5 @@ test_that("FeatureSetCommands constructor interacts with globals", {
 test_that("FeatureSetTable generates a tour correctly", {
     expect_s3_class(.definePanelTour(FeatureSetTable()), "data.frame")
 })
+
+
