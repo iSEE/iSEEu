@@ -160,6 +160,10 @@ test_that("FeatureSetCommands constructor falls back to the defaults", {
     out <- .refineParameters(out, se2)
     expect_identical(names(.getCachedCommonInfo(se2, "FeatureSetTable")$available.sets), "A")
 
+    out <- FeatureSetTable(Collection="A", Selected="XXX")
+    select.cmds <- .multiSelectionCommands(out, NULL)
+    expect_identical(unname(select.cmds[2]), "1")
+
     setFeatureSetCommands(old)
 })
 

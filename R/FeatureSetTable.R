@@ -209,8 +209,8 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
                 }
 
                 ret.cmds <- stuff[["RetrieveSet"]]
-                if (is.null(cre.cmds)) {
-                    cre.cmds <- stuff[["sets"]]
+                if (is.null(ret.cmds)) {
+                    ret.cmds <- stuff[["sets"]]
                 }
             }
         }
