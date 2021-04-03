@@ -19,7 +19,7 @@ createGeneSetCommands(
 }
 \value{
 A list of two character vectors describing how to create collections and retrieve gene sets.
-This follows the expectations for \code{commands} in \code{\link{registerCollections}}.
+This follows the expectations for \code{commands} in \code{\link{registerFeatureSetCommands}}.
 }
 \description{
 Create the commands required to populate \linkS4class{FeatureSetTable}s with commonly used gene sets.
@@ -45,7 +45,7 @@ cat(out$sets['GO'], "\n")
 \seealso{
 \linkS4class{FeatureSetTable}, where the commands are intended for use.
 
-\code{\link{setFeatureSetCommands}}, to use the commands globally.
+\code{\link{registerFeatureSetCommands}}, to use the commands globally.
 }
 \author{
 Aaron Lun

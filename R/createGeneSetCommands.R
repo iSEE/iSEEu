@@ -8,7 +8,7 @@
 #'
 #' @return
 #' A list of two character vectors describing how to create collections and retrieve gene sets.
-#' This follows the expectations for \code{commands} in \code{\link{registerCollections}}.
+#' This follows the expectations for \code{commands} in \code{\link{registerFeatureSetCommands}}.
 #'
 #' @details
 #' GO terms are extracted using the \code{"GOALL"} mode,
@@ -32,7 +32,7 @@
 #' @seealso
 #' \linkS4class{FeatureSetTable}, where the commands are intended for use.
 #'
-#' \code{\link{setFeatureSetCommands}}, to use the commands globally.
+#' \code{\link{registerFeatureSetCommands}}, to use the commands globally.
 #' @export
 createGeneSetCommands <- function(collections=c("GO", "KEGG"), organism="org.Hs.eg.db", identifier="ENTREZID") {
     init <- retrieve <- list()

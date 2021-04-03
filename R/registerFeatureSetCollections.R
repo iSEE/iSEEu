@@ -56,7 +56,7 @@
 #'
 #' # Storing the collections inside our SummarizedExperiment.
 #' sce <- registerFeatureSetCollections(sce, list(random=random))
-#' getFeatureSetCollection(sce)
+#' getFeatureSetCollections(sce)
 #'
 #' if (interactive()) {
 #'     iSEE(sce, initial=list(FeatureSetTable()))
