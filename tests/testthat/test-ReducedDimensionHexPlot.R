@@ -145,8 +145,8 @@ test_that("coloring by sample name works", {
     expect_is(out$plot, "ggplot")
 })
 
-test_that("coloring by discrete covariate works", {
-    x <- ReducedDimensionHexPlot(PanelId=1L, ColorBy = "Column data", ColorByColumnData = "driver_1_s")
+test_that("coloring by continuous variable works", {
+    x <- ReducedDimensionHexPlot(PanelId=1L, ColorBy = "Column data", ColorByColumnData = "NREADS")
     sce <- .cacheCommonInfo(x, sce)
     x <- .refineParameters(x, sce)
 
@@ -158,6 +158,10 @@ test_that("coloring by discrete covariate works", {
     expect_type(unlist(out$commands), "character")
     expect_is(out$contents, "data.frame")
     expect_is(out$plot, "ggplot")
+
+    choices <- .allowableColorByDataChoices(x, sce)
+    expect_true("NREADS" %in% choices)
+    expect_false("driver_1_s" %in% choices)
 })
 
 test_that("zoom works", {
@@ -181,4 +185,7 @@ test_that("ReducedDimensionHexPlot generates a tour correctly", {
     expect_s3_class(tour, "data.frame")
 
     expect_true(any(grepl("bin resolution", tour$intro)))
+
+    FUN <- .getDotPlotColorHelp(ReducedDimensionHexPlot(), "Column data")
+    expect_true(is.function(FUN))
 })
