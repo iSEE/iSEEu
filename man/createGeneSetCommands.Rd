@@ -33,7 +33,7 @@ Mappings of genes to KEGG pathway are extracted from the organism package using 
 Unfortunately, this is not up to date due to the licensing around KEGG terms.
 Descriptions for each pathway are extracted from \url{http://rest.kegg.jp/list/pathway}.
 
-The output of this function can be used as the \code{commands} argument of \code{\link{registerCollections}}.
+The output of this function can be used as the \code{commands} argument of \code{\link{registerFeatureSetCommands}}.
 It is also used by default in the \code{\link{FeatureSetTable}} constructor when no collections are registered.
 }
 \examples{

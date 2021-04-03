@@ -95,7 +95,9 @@
 #'
 #' cmds <- createGeneSetCommands(collections="GO",
 #'     organism="org.Mm.eg.db", identifier="ENSEMBL")
-#' setFeatureSetCommands(cmds)
+#' sce <- registerFeatureSetCommands(sce, cmds)
+#'
+#' # Setting up the application.
 #' gst <- FeatureSetTable(PanelId=1L)
 #'
 #' rdp <- RowDataPlot(RowSelectionSource="FeatureSetTable1",
@@ -177,8 +179,12 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
 
     se <- callNextMethod()
 
+    # TODO: when we get rid of the deprecated mode below, we don't need
+    # 'set.cmds.env'; we can just generate it inside .multiSelectionCommands
+    # from the activated registry.
+
     # Let's see if there are any collections.
-    if (!is.null(all.collections <- retrieveCollection(se))) {
+    if (!is.null(all.collections <- getFeatureSetCollections(se))) {
         .validate_collections(all.collections)
         cmds <- sprintf("iSEEu::retrieveCollection(se, %s)", vapply(names(all.collections), deparse, ""))
         cre.cmds <- sprintf("tab <- mcols(%s)", cmds)
@@ -187,7 +193,7 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
         names(cre.cmds) <- names(ret.cmds) <- names(all.collections)
 
     } else {
-        if (!is.null(all.cmds <- metadata(se)$iSEEu$FeatureSetTable$commands)) {
+        if (!is.null(all.cmds <- getFeatureSetCommands(se))) {
             .validate_commands(all.cmds)
             cre.cmds <- all.cmds$collections
             ret.cmds <- all.cmds$sets

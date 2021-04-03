@@ -5,29 +5,31 @@
 #' @param se The \linkS4class{SummarizedExperiment} object to be used in \code{\link{iSEE}}.
 #' @param collections A named list containing one or more \linkS4class{CharacterList} objects.
 #' Each entry represents a collection of feature sets (see Details) and should be named.
-#' @param collection String containing the name of the collection to retrieve.
 #' @param commands A named list containing two character vectors of commands to use to generate collections and sets.
 #'
 #' @return 
-#' For \code{registerCollections}, \code{se} is returned with embedded feature set collections.
+#' For \code{registerFeatureSetCollections} and \code{registerFeatureSetCommands},
+#' a modified \code{se} is returned that contains the feature set collections or commands, respectively.
 #' This can be used with \linkS4class{FeatureSetTable}s in \code{\link{iSEE}} calls.
 #'
-#' For \code{retrieveCollection}, the CharacterList corresponding to \code{collection} is returned.
+#' For \code{getFeatureSetCollections}, the list of CharacterLists is returned.
+#' Alternatively \code{NULL}, if no such list was stored by \code{registerFeatureSetCollections}.
 #'
+#' For \code{getFeatureSetCommands}, the list of of commands is returned containing \code{collections} and \code{sets}.
+#' Alternatively \code{NULL}, if no such list was stored by \code{registerFeatureSetCommands}.
+#' 
 #' @author Aaron Lun
 #' 
 #' @details
 #' Arbitrary feature sets are challenging as there is no obvious place to store them.
-#' \code{registerCollections} will insert them into the \code{\link{metadata}} of the SummarizedExperiment object,
-#' allowing \code{retrieveCollection} to quickly extract them later within the \code{iSEE} app.
+#' \code{registerFeatureSetCollections} and friends will insert these sets into the \code{\link{metadata}} of the SummarizedExperiment object,
+#' allowing the corresponding getter functions to quickly extract them later within the \code{iSEE} app.
 #'
-#' If \code{collections} is supplied, it should be a named list containing \linkS4class{CharacterList} objects.
+#' \code{collections} should be a named list containing \linkS4class{CharacterList} objects.
 #' Each \linkS4class{CharacterList} represents a collection where each entry is a feature set, i.e., a character vector corresponding to some of the row names of \code{se}. 
 #' The \code{\link{mcols}} can contain additional per-set fields (e.g., descriptions, enrichment statistics) that will be shown in the \linkS4class{FeatureSetTable}.
 #'
-#' If \code{collections} is not supplied, the function looks at whether \code{commands} is provided.
-#' If so, it should contain R commands instructing \code{\link{iSEE}} to create the collections and sets on the fly.
-#' The entries of the list should be named:
+#' \code{commands} should be a list containing:
 #' \itemize{
 #' \item \code{collections}, a named character vector where each entry is named after a feature set collection.
 #' Each entry should be a string containing R commands to define a data.frame named \code{tab}, where each row is a feature set and the row names are the names of those sets.
@@ -52,42 +54,41 @@
 #' )
 #' mcols(random)$p.value <- runif(4)
 #'
-#' # Storing the collections inside my object.
-#' sce <- registerCollections(sce, list(random=random))
-#' retrieveCollection(sce, "random")
+#' # Storing the collections inside our SummarizedExperiment.
+#' sce <- registerFeatureSetCollections(sce, list(random=random))
+#' getFeatureSetCollection(sce)
 #'
 #' if (interactive()) {
 #'     iSEE(sce, initial=list(FeatureSetTable()))
 #' }
 #' 
 #' @export
-#' @importClassesFrom IRanges CharacterList
-#' @importFrom S4Vectors metadata metadata<- mcols
-registerCollections <- function(se, collections, commands) {
-    value <- list()
-
-    # TODO: fix the handling of deeply nested lists.
-    meta <- metadata(se)[["iSEEu"]]
-    if (is.null(meta)) { 
-        meta <- list() 
-    }
-
+#' @rdname registerFeatureSetCollections
+registerFeatureSetCollections <- function(se, collections) {
     if (!missing(collections)) {
         .validate_collections(collections)
-        meta$collections <- collections
-    } else if (!missing(commands)) {
-        .validate_commands(commands)
-        meta$commands <- commands
+        registerAppOptions(se, iSEEu_FeatureSetTable_collections=collections)
     } else {
-        meta <- NULL
+        existing <- getAllAppOptions(se)
+        existing <- existing[names(existing)!="iSEEu_FeatureSetTable_collections"]
+        registerAppOptions(se, existing)
     }
-
-    meta$FeatureSetTable <- meta
-    metadata(se)[["iSEEu"]] <- meta
-
-    se
 }
 
+#' @export
+#' @rdname registerFeatureSetCollections
+registerFeatureSetCommands <- function(se, commands) {
+    if (!missing(commands)) {
+        .validate_commands(commands)
+        registerAppOptions(se, iSEEu_FeatureSetTable_commands=commands)
+    } else {
+        existing <- getAllAppOptions(se)
+        existing <- existing[names(existing)!="iSEEu_FeatureSetTable_commands"]
+        registerAppOptions(se, existing)
+    }
+}
+
+#' @importClassesFrom IRanges CharacterList
 .validate_collections <- function(collections) {
     if (length(collections)) {
         nms <- names(collections)
@@ -114,13 +115,17 @@ registerCollections <- function(se, collections, commands) {
 }
 
 #' @export
-#' @rdname registerCollections
-#' @importFrom S4Vectors metadata 
-retrieveCollection <- function(se, collection=NULL) {
-    all.collections <- metadata(se)[["iSEEu"]]$FeatureSetTable$collections
-    if (is.null(collection)) {
-        all.collections
+#' @rdname registerFeatureSetCollections
+getFeatureSetCollections <- function(se) {
+    getAppOption("iSEEu_FeatureSetTable_collections", se)
+}
+
+#' @export
+#' @rdname registerFeatureSetCollections
+getFeatureSetCommands <- function(se) {
+    if (missing(se)) {
+        .globals$get("FeatureSetCommands")
     } else {
-        all.collections[[collection]]
+        getAppOption("iSEEu_FeatureSetTable_commands", se)
     }
 }

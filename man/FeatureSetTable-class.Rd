@@ -122,7 +122,9 @@ rowData(sce) <- cbind(rowData(sce), modelGeneVarWithSpikes(sce, "ERCC"))
 
 cmds <- createGeneSetCommands(collections="GO",
     organism="org.Mm.eg.db", identifier="ENSEMBL")
-setFeatureSetCommands(cmds)
+sce <- registerFeatureSetCommands(sce, cmds)
+
+# Setting up the application.
 gst <- FeatureSetTable(PanelId=1L)
 
 rdp <- RowDataPlot(RowSelectionSource="FeatureSetTable1",

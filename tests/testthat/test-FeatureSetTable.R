@@ -43,27 +43,27 @@ random <- CharacterList(
 mcols(random)$p.value <- runif(4)
 
 test_that("registerCollections works correctly for collections", {
-    se <- registerCollections(se, list(random=random))
-    expect_identical(retrieveCollection(se, "random"), random)
+    se <- registerFeatureSetCollections(se, list(random=random))
+    expect_identical(getFeatureSetCollections(se)$random, random)
 
-    se <- registerCollections(se, list(random=random, other=rev(random)))
-    expect_identical(retrieveCollection(se, "other"), rev(random))
+    se <- registerFeatureSetCollections(se, list(random=random, other=rev(random)))
+    expect_identical(getFeatureSetCollections(se)$other, rev(random))
 
-    expect_error(registerCollections(se, list(random)), "unique")
-    expect_error(registerCollections(se, list(A=random, A=random)), "unique")
-    expect_error(registerCollections(se, list(A=random, random)), "unique")
-    expect_error(registerCollections(se, list(random=unname(random))), "named")
+    expect_error(registerFeatureSetCollections(se, list(random)), "unique")
+    expect_error(registerFeatureSetCollections(se, list(A=random, A=random)), "unique")
+    expect_error(registerFeatureSetCollections(se, list(A=random, random)), "unique")
+    expect_error(registerFeatureSetCollections(se, list(random=unname(random))), "named")
 })
 
 test_that("registerCollections works correctly for commands", {
     cmds <- createGeneSetCommands()
-    se <- registerCollections(se, commands=cmds)
+    se <- registerFeatureSetCommands(se, commands=cmds)
 
-    expect_identical(metadata(se)$iSEEu$FeatureSetTable$commands$collections, cmds$collections)
-    expect_identical(metadata(se)$iSEEu$FeatureSetTable$commands$sets, cmds$sets)
+    expect_identical(getFeatureSetCommands(se)$collections, cmds$collections)
+    expect_identical(getFeatureSetCommands(se)$sets, cmds$sets)
 
-    expect_error(registerCollections(se, commands=list(collections=unname(cmds$collections), sets=character(0)), "unique"))
-    expect_error(registerCollections(se, commands=list(collections=cmds$collections, sets=character(0)), "same"))
+    expect_error(registerFeatureSetCommands(se, commands=list(collections=unname(cmds$collections), sets=character(0)), "unique"))
+    expect_error(registerFeatureSetCommands(se, commands=list(collections=cmds$collections, sets=character(0)), "same"))
 })
 
 #############################################
@@ -84,7 +84,7 @@ test_that("FeatureSetTable interface elements work as expected", {
 })
 
 test_that("FeatureSetTable responds to registration of collections", {
-    se2 <- registerCollections(se, list(random=random))
+    se2 <- registerFeatureSetCollections(se, list(random=random))
      
     out <- FeatureSetTable()
     se2 <- .cacheCommonInfo(out, se2)
@@ -97,7 +97,7 @@ test_that("FeatureSetTable responds to registration of collections", {
 
 test_that("FeatureSetTable generates sensible output", {
     out <- FeatureSetTable()
-    se2 <- registerCollections(se, list(random=random))
+    se2 <- registerFeatureSetCollections(se, list(random=random))
     se2 <- .cacheCommonInfo(out, se2)
     out <- .refineParameters(out, se2)
 
@@ -111,7 +111,7 @@ test_that("FeatureSetTable generates sensible output", {
 
 test_that("FeatureSetTable implements multiple selection methods correctly", {
     out <- FeatureSetTable()
-    se2 <- registerCollections(se, list(random=random))
+    se2 <- registerFeatureSetCollections(se, list(random=random))
     se2 <- .cacheCommonInfo(out, se2)
     out <- .refineParameters(out, se2)
 
@@ -129,7 +129,7 @@ test_that("FeatureSetTable implements multiple selection methods correctly", {
 
 test_that("FeatureSetTable responds to registration of commands", {
     cmds <- createGeneSetCommands(identifier="SYMBOL")
-    se <- registerCollections(se, commands=cmds)
+    se <- registerFeatureSetCommands(se, commands=cmds)
      
     out <- FeatureSetTable()
     se2 <- .cacheCommonInfo(out, se)
