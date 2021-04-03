@@ -11,23 +11,16 @@
 
 #' Global feature set commands
 #'
-#' Get or set the commands to define the global collection of feature sets.
+#' Set the commands to define the global collection of feature sets.
+#' This is deprecated in favor of \code{\link{registerFeatureSetCommands}}.
 #'
-#' @param value A list of two character vectors named \code{"CreateCollections"} and \code{"RetrieveSet"}.
+#' @param value A list of two character vectors named \code{"collections"} and \code{"sets"}.
 #' Both vectors should be of the same length and have the same names.
 #' Vectors should contain R commands to create collections and retrieve sets;
 #' see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{createGeneSetCommands}} for details.
 #'
 #' @return 
-#' \code{getFeatureSetCommands} returns the current global feature set commands.
-#'
 #' \code{setFeatureSetCommands} will set the current global feature set commands and return \code{NULL} invisibly.
-#'
-#' @details
-#' These utilities allow users to easily set the feature set commands for all \linkS4class{FeatureSetTable}s at once.
-#' Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
-#' and (ii) if the first \linkS4class{FeatureSetTable} does not have an existing values in the 
-#' \code{"CreateCollections"} or \code{"RetrieveSet"} slots.
 #'
 #' @author Aaron Lun
 #'
@@ -44,12 +37,6 @@
 #' getFeatureSetCommands()
 #'
 #' setFeatureSetCommands(old) 
-#' @export
-#' @rdname global-FeatureSetCommands
-getFeatureSetCommands <- function() {
-    .globals$get("FeatureSetCommands")
-}
-
 #' @export
 #' @rdname global-FeatureSetCommands
 setFeatureSetCommands <- function(value) {

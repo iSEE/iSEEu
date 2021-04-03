@@ -227,7 +227,7 @@ AggregatedDotPlot <- function(...) {
 setMethod("initialize", "AggregatedDotPlot", function(.Object, ...) {
     args <- list(...)
 
-    args <- .emptyDefault(args, .ADPAssay, NA_character_)
+    args <- .emptyDefault(args, .ADPAssay, getPanelDefault("Assay"))
     args <- .emptyDefault(args, .ADPCustomFeatNames, TRUE)
     args <- .emptyDefault(args, .ADPFeatNameText, NA_character_)
 
@@ -351,7 +351,6 @@ setMethod(".refineParameters", "AggregatedDotPlot", function(x, se) {
         return(NULL)
     }
 
-    all_assays <- c(intersect(iSEEOptions$get("assay"), all_assays), all_assays)
     x <- .replaceMissingWithFirst(x, .ADPAssay, all_assays)
 
     if (is.na(x[[.ADPFeatNameText]])) {

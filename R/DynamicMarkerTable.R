@@ -149,11 +149,9 @@ setMethod("initialize", "DynamicMarkerTable",
 {
     args <- list(LogFC=LogFC, TestMethod=TestMethod, ...)
 
-    args <- .emptyDefault(args, field="Assay", 
-        default=iSEEOptions$get("assay")[1])
+    args <- .emptyDefault(args, field="Assay", default=getPanelDefault("Assay"))
 
-    args <- .emptyDefault(args, field="ColumnSelectionDynamicSource", 
-        default=iSEEOptions$get("selection.dynamic.multiple"))
+    args <- .emptyDefault(args, field="ColumnSelectionDynamicSource", default=getPanelDefault("MultipleSelectionDynamicSource"))
 
     # Clean out any user supplied value and force the class to use the globals.
     args$ExtraFields <- NA_character_

@@ -7,8 +7,8 @@
 #' @param identifier String specifying the identifier to use to extract IDs for the organism package.
 #'
 #' @return
-#' A list of character vectors describing how to create collections and retrieve gene sets.
-#' These can be used as arguments for the \code{\link{FeatureSetTable}} constructor.
+#' A list of two character vectors describing how to create collections and retrieve gene sets.
+#' This follows the expectations for \code{commands} in \code{\link{registerFeatureSetCommands}}.
 #'
 #' @details
 #' GO terms are extracted using the \code{"GOALL"} mode,
@@ -19,17 +19,20 @@
 #' Unfortunately, this is not up to date due to the licensing around KEGG terms.
 #' Descriptions for each pathway are extracted from \url{http://rest.kegg.jp/list/pathway}.
 #' 
+#' The output of this function can be used as the \code{commands} argument of \code{\link{registerFeatureSetCommands}}.
+#' It is also used by default in the \code{\link{FeatureSetTable}} constructor when no collections are registered.
+#'
 #' @author Aaron Lun
 #'
 #' @examples
 #' out <- createGeneSetCommands()
-#' cat(out$CreateCollections['GO'], "\n")
-#' cat(out$RetrieveSet['GO'], "\n")
+#' cat(out$collections['GO'], "\n")
+#' cat(out$sets['GO'], "\n")
 #' 
 #' @seealso
 #' \linkS4class{FeatureSetTable}, where the commands are intended for use.
 #'
-#' \code{\link{setFeatureSetCommands}}, to use the commands globally.
+#' \code{\link{registerFeatureSetCommands}}, to use the commands globally.
 #' @export
 createGeneSetCommands <- function(collections=c("GO", "KEGG"), organism="org.Hs.eg.db", identifier="ENTREZID") {
     init <- retrieve <- list()
@@ -66,6 +69,6 @@ createGeneSetCommands <- function(collections=c("GO", "KEGG"), organism="org.Hs.
          retrieve[["KEGG"]] <- sprintf(retrieve.format, "PATH")
     }
 
-    list(CreateCollections=unlist(init), RetrieveSet=unlist(retrieve))
+    list(collections=unlist(init), sets=unlist(retrieve))
 }
 

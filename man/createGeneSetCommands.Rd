@@ -18,8 +18,8 @@ createGeneSetCommands(
 \item{identifier}{String specifying the identifier to use to extract IDs for the organism package.}
 }
 \value{
-A list of character vectors describing how to create collections and retrieve gene sets.
-These can be used as arguments for the \code{\link{FeatureSetTable}} constructor.
+A list of two character vectors describing how to create collections and retrieve gene sets.
+This follows the expectations for \code{commands} in \code{\link{registerFeatureSetCommands}}.
 }
 \description{
 Create the commands required to populate \linkS4class{FeatureSetTable}s with commonly used gene sets.
@@ -32,17 +32,20 @@ A description for each GO term is extracted using the \pkg{GO.db} package.
 Mappings of genes to KEGG pathway are extracted from the organism package using the \code{"PATH"} term.
 Unfortunately, this is not up to date due to the licensing around KEGG terms.
 Descriptions for each pathway are extracted from \url{http://rest.kegg.jp/list/pathway}.
+
+The output of this function can be used as the \code{commands} argument of \code{\link{registerFeatureSetCommands}}.
+It is also used by default in the \code{\link{FeatureSetTable}} constructor when no collections are registered.
 }
 \examples{
 out <- createGeneSetCommands()
-cat(out$CreateCollections['GO'], "\n")
-cat(out$RetrieveSet['GO'], "\n")
+cat(out$collections['GO'], "\n")
+cat(out$sets['GO'], "\n")
 
 }
 \seealso{
 \linkS4class{FeatureSetTable}, where the commands are intended for use.
 
-\code{\link{setFeatureSetCommands}}, to use the commands globally.
+\code{\link{registerFeatureSetCommands}}, to use the commands globally.
 }
 \author{
 Aaron Lun
