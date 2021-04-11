@@ -120,6 +120,7 @@ getLogFCPatterns <- function(se) .get_de_stuff(se, "LogFC", "Patterns")
     getAppOption(opt, se)
 }
 
+# Keeping the old getPValuePattern() and relatives for back-compatibility.
 .matchPValueFields <- function(se, available) .match_fields(getPValueFields(se), c(getPValuePattern(), getPValuePatterns(se)), available)
 
 .matchAveAbFields <- function(se, available) .match_fields(getAveAbFields(se), c(getAveAbPattern(), getAveAbPatterns(se)), available)
@@ -130,6 +131,10 @@ getLogFCPatterns <- function(se) .get_de_stuff(se, "LogFC", "Patterns")
     if (!is.null(fields)) {
         intersect(fields, available)
     } else {
-        available[.match_acceptable_fields(patterns, available)]
+        okay <- logical(length(available))
+        for (x in patterns) {
+            okay <- okay | grepl(x, available, fixed=TRUE)
+        }
+        unique(available[okay])
     }
 }

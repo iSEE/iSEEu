@@ -1,80 +1,3 @@
-#' Acceptable fields for DE panels
-#'
-#' Set or get the acceptable fields to use for all \linkS4class{Panel} instances related to differential expression,
-#' including \linkS4class{VolcanoPlot} and \linkS4class{MAPlot}.
-#' These functions are now deprecated.
-#'
-#' @param value Character vector of acceptable fields (usually in the \code{\link{rowData}}) for a given statistic.
-#'
-#' @return
-#' \code{.getAcceptablePValueFields} will return a character vector of acceptable names for p-value fields.
-#'
-#' \code{.getAcceptableLogFCFields} will return a character vector of acceptable names for log-FC fields.
-#'
-#' \code{.getAcceptableAveAbFields} will return a character vector of acceptable names for average abundance fields.
-#'
-#' The setter functions will define the set of acceptable fields and return \code{NULL} invisibly.
-#' 
-#' @author Aaron Lun
-#'
-#' @examples
-#' old <- .getAcceptablePValueFields()
-#' old
-#'
-#' .setAcceptablePValueFields("YAY")
-#' .getAcceptablePValueFields()
-#'
-#' # Restoring.
-#' .setAcceptablePValueFields(old)
-#'
-#' @name utils-de
-NULL
-
-#' @export
-#' @rdname utils-de
-.getAcceptablePValueFields <- function() {
-    .Deprecated(new="getPValuePattern")
-    getPValuePattern()
-}
-
-#' @export
-#' @rdname utils-de
-.getAcceptableLogFCFields <- function() {
-    .Deprecated(new="getLogFCPattern")
-    getLogFCPattern()
-}
-
-#' @export
-#' @rdname utils-de
-.getAcceptableAveAbFields <- function() {
-    .Deprecated(new="getAveAbPattern")
-    getAveAbPattern()
-}
-
-#' @export
-#' @rdname utils-de
-.setAcceptablePValueFields <- function(value) {
-    .Deprecated(new="setPValuePattern")
-    setPValuePattern(value)
-    invisible(NULL)
-}
-
-#' @export
-#' @rdname utils-de
-.setAcceptableLogFCFields <- function(value) {
-    .Deprecated(new="setLogFCPattern")
-    setLogFCPattern(value)
-    invisible(NULL)
-}
-
-#' @export
-#' @rdname utils-de
-.setAcceptableAveAbFields <- function(value) {
-    .Deprecated(new="setAveAbPattern")
-    setAveAbPattern(value)
-    invisible(NULL)
-}
-
 #' @importFrom ggplot2 scale_color_manual
 .de_color_scale <- "local({
     .de_colors <- c(down='dodgerblue', none='grey', up='salmon')
@@ -118,15 +41,6 @@ NULL
 }
 
 .needs_filling <- function(value) identical(value, NA_character_)
-
-.match_acceptable_fields <- function(globals, available) {
-    provided <- globals
-    okay <- logical(length(available))
-    for (x in provided) {
-        okay <- okay | grepl(x, available, fixed=TRUE)
-    }
-    unique(available[okay])
-}
 
 .define_gene_sig_ui <- function(x) {
     list(
