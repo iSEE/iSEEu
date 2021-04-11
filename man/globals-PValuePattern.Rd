@@ -35,6 +35,7 @@ The corresponding setters set the global parts for each statistic and return \co
 }
 \description{
 Get or set patterns for acceptable names of \code{\link{rowData}} columns related to a differential expression analysis.
+These functions are deprecated; use their counterparts in \code{?"\link{registerPValuePatterns}"} instead.
 }
 \details{
 These utilities allow users to easily get and set the patterns of acceptable fields in all

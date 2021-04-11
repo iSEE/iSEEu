@@ -2,7 +2,6 @@
 #'
 #' The VolcanoPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a volcano plot.
 #' It retrieves the log-fold change and p-value from and creates a row-based plot where each point represents a feature.
-#' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
@@ -15,12 +14,6 @@
 #' Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
 #' }
 #'
-#' The following slots control the choice of columns in the user interface:
-#' \itemize{
-#' \item \code{PValuePattern}, a character vector specifying the patterns of all potential columns containing p-values, see \code{\link{getPValuePattern}}.
-#' \item \code{LogFCPattern}, a character vector specifying the patterns of all potential columns containing log-fold changes, see \code{\link{getLogFCPattern}}.
-#' }
-#'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
 #' \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
@@ -28,10 +21,9 @@
 #' \code{VolcanoPlot(...)} creates an instance of a VolcanoPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
-#' Initial values for \code{PValuePattern} and \code{LogFCPattern} are set to the outputs of \code{\link{getPValuePattern}} and \code{\link{getLogFCPattern}}, respectively.
-#' These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
-#' Similarly, it is not possible for multiple VolcanoPlots in the same application to have different values for these slots;
-#' within the app, all values are set to those of the first encountered VolcanoPlot to ensure consistency.
+#' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
+#' This panel expects one or more columns containing the p-values and log-fold changes for each gene/row - see Examples.
+#' The expected column names (and how to tune them) are listed at \code{?"\link{registerPValueFields}"}.
 #'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
@@ -126,8 +118,7 @@ NULL
 
 #' @export
 setClass("VolcanoPlot", contains="RowDataPlot",
-    slots=c(PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
-        PValuePattern="character", LogFCPattern="character"))
+    slots=c(PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character"))
 
 #' @export
 setMethod(".fullName", "VolcanoPlot", function(x) "Volcano plot")
@@ -141,9 +132,6 @@ setMethod("initialize", "VolcanoPlot", function(.Object, PValueThreshold=0.05,
 {
     args <- list(PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
-
-    args$PValuePattern <- getPValuePattern()
-    args$LogFCPattern <- getLogFCPattern()
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -169,12 +157,8 @@ setMethod(".cacheCommonInfo", "VolcanoPlot", function(x, se) {
     se <- callNextMethod()
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    # NOTE: these fields are assumed to be globals, so it's okay to use their
-    # values when caching the common values.  The plan is to use
-    # .refineParameters to force all VolcanoPlots to use the fields defined by
-    # the patterns of the first encountered VolcanoPlot.
-    p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
-    lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
+    p.okay <- .matchPValueFields(se, all.cont)
+    lfc.okay <- .matchLogFCFields(se, all.cont)
 
     .setCachedCommonInfo(se, "VolcanoPlot", valid.lfc.fields=lfc.okay, valid.p.fields=p.okay)
 })

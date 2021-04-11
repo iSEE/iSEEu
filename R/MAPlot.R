@@ -2,7 +2,6 @@
 #'
 #' The MAPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a MA plot.
 #' It retrieves the log-fold change and average abundance and creates a row-based plot where each point represents a feature.
-#' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
@@ -16,13 +15,6 @@
 #' Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
 #' }
 #'
-#' The following slots control the choice of columns in the user interface:
-#' \itemize{
-#' \item \code{PValuePattern}, a character vector specifying the patterns of all potential columns containing p-values, see \code{\link{getPValuePattern}}.
-#' \item \code{LogFCPattern}, a character vector specifying the patterns of all potential columns containing log-fold changes, see \code{\link{getLogFCPattern}}.
-#' \item \code{AveAbPattern}, a character vector specifying the patterns of all potential columns containing average abundances, see \code{\link{getAveAbPattern}}.
-#' }
-#'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
 #' \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
@@ -30,11 +22,10 @@
 #' \code{MAPlot(...)} creates an instance of a MAPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
-#' Initial values for \code{PValuePattern}, \code{AveAbPattern} and \code{LogFCPattern} are set to the outputs of \code{\link{getPValuePattern}}, \code{\link{getAveAbPattern}} and \code{\link{getLogFCPattern}}, respectively.
-#' These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
-#' Similarly, it is not possible for multiple MAPlots in the same application to have different values for these slots;
-#' within the app, all values are set to those of the first encountered MAPlot to ensure consistency.
-#'
+#' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
+#' This panel expects one or more columns containing the p-values, log-fold changes and average abundances for each gene/row - see Examples.
+#' The expected column names (and how to tune them) are listed at \code{?"\link{registerPValueFields}"}.
+#' 
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
 #' Refer to the documentation for each method for more details on the remaining arguments.
@@ -127,8 +118,7 @@ NULL
 
 #' @export
 setClass("MAPlot", contains="RowDataPlot",
-    slots=c(PValueField="character", PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
-        PValuePattern="character", LogFCPattern="character", AveAbPattern="character"))
+    slots=c(PValueField="character", PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character"))
 
 #' @export
 setMethod(".fullName", "MAPlot", function(x) "MA plot")
@@ -142,10 +132,6 @@ setMethod("initialize", "MAPlot", function(.Object, PValueField=NA_character_,
 {
     args <- list(PValueField=PValueField, PValueThreshold=PValueThreshold,
         LogFCThreshold=LogFCThreshold, PValueCorrection=PValueCorrection, ...)
-
-    args$PValuePattern <- getPValuePattern()
-    args$AveAbPattern <- getAveAbPattern()
-    args$LogFCPattern <- getLogFCPattern()
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -179,13 +165,9 @@ setMethod(".cacheCommonInfo", "MAPlot", function(x, se) {
     se <- callNextMethod()
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    # NOTE: these fields are assumed to be globals, so it's okay to use their
-    # values when caching the common values.  The plan is to use
-    # .refineParameters to force all MAPlots to use the fields defined by
-    # the patterns of the first encountered MAPlot.
-    p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
-    lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
-    ab.okay <- .match_acceptable_fields(x[["AveAbPattern"]], all.cont)
+    p.okay <- .matchPValueFields(se, all.cont)
+    lfc.okay <- .matchLogFCFields(se, all.cont)
+    ab.okay <- .matchAveAbFields(se, all.cont)
 
     .setCachedCommonInfo(se, "MAPlot",
         valid.lfc.fields=lfc.okay,
