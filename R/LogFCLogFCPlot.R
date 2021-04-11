@@ -2,7 +2,6 @@
 #'
 #' The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a scatter plot of two log-fold changes.
 #' Each axis contains the log-fold change for a differential expression analysis and each point represents a feature.
-#' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
@@ -17,12 +16,6 @@
 #' Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
 #' }
 #'
-#' The following slots control the choice of columns in the user interface:
-#' \itemize{
-#' \item \code{PValuePattern}, a character vector specifying the patterns of all potential columns containing p-values, see \code{\link{getPValuePattern}}.
-#' \item \code{LogFCPattern}, a character vector specifying the patterns of all potential columns containing log-fold changes, see \code{\link{getLogFCPattern}}.
-#' }
-#'
 #' In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
 #' \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 #'
@@ -30,10 +23,9 @@
 #' \code{LogFCLogFCPlot(...)} creates an instance of a LogFCLogFCPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
-#' Initial values for \code{PValuePattern} and \code{LogFCPattern} are set to the outputs of \code{\link{getPValuePattern}} and \code{\link{getLogFCPattern}}, respectively.
-#' These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
-#' Similarly, it is not possible for multiple VolcanoPlots in the same application to have different values for these slots;
-#' within the app, all values are set to those of the first encountered VolcanoPlot to ensure consistency.
+#' Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
+#' There should be two columns for the p-values from each comparison - and another two for the corresponding log-fold changes - for each gene/row, see Examples.
+#' The expected column names (and how to tune them) are listed at \code{?"\link{registerPValueFields}"}.
 #'
 #' @section Supported methods:
 #' In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
@@ -131,8 +123,7 @@ NULL
 #' @export
 setClass("LogFCLogFCPlot", contains="RowDataPlot",
     slots=c(YPValueField="character", XPValueField="character",
-        PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character",
-        PValuePattern="character", LogFCPattern="character"))
+        PValueThreshold="numeric", LogFCThreshold="numeric", PValueCorrection="character"))
 
 #' @export
 setMethod(".fullName", "LogFCLogFCPlot", function(x) "LogFC-logFC plot")
@@ -148,9 +139,6 @@ setMethod("initialize", "LogFCLogFCPlot", function(.Object,
     args <- list(YPValueField=YPValueField, XPValueField=XPValueField,
         PValueThreshold=PValueThreshold, LogFCThreshold=LogFCThreshold, 
         PValueCorrection=PValueCorrection, ...)
-
-    args$PValuePattern <- getPValuePattern()
-    args$LogFCPattern <- getLogFCPattern()
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -189,12 +177,8 @@ setMethod(".cacheCommonInfo", "LogFCLogFCPlot", function(x, se) {
     se <- callNextMethod()
     all.cont <- .getCachedCommonInfo(se, "RowDotPlot")$continuous.rowData.names
 
-    # We determine the valid fields from the first encountered instance of the
-    # class, which assumes that 'PValuePattern' and 'LogFCPattern' are class-wide
-    # constants. (We actually ensure that this is the case by forcibly setting
-    # them in .refineParameters later.)
-    p.okay <- .match_acceptable_fields(x[["PValuePattern"]], all.cont)
-    lfc.okay <- .match_acceptable_fields(x[["LogFCPattern"]], all.cont)
+    p.okay <- .matchPValueFields(se, all.cont)
+    lfc.okay <- .matchLogFCFields(se, all.cont)
 
     .setCachedCommonInfo(se, "LogFCLogFCPlot", valid.p.fields=p.okay, valid.lfc.fields=lfc.okay)
 })

@@ -25,7 +25,6 @@
 \description{
 The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a scatter plot of two log-fold changes.
 Each axis contains the log-fold change for a differential expression analysis and each point represents a feature.
-Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
 }
 \section{Slot overview}{
 
@@ -41,12 +40,6 @@ Defaults to 0.
 Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
 }
 
-The following slots control the choice of columns in the user interface:
-\itemize{
-\item \code{PValuePattern}, a character vector specifying the patterns of all potential columns containing p-values, see \code{\link{getPValuePattern}}.
-\item \code{LogFCPattern}, a character vector specifying the patterns of all potential columns containing log-fold changes, see \code{\link{getLogFCPattern}}.
-}
-
 In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
 \linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
 }
@@ -56,10 +49,9 @@ In addition, this class inherits all slots from its parent \linkS4class{RowDataP
 \code{LogFCLogFCPlot(...)} creates an instance of a LogFCLogFCPlot class,
 where any slot and its value can be passed to \code{...} as a named argument.
 
-Initial values for \code{PValuePattern} and \code{LogFCPattern} are set to the outputs of \code{\link{getPValuePattern}} and \code{\link{getLogFCPattern}}, respectively.
-These parameters are considered to be global constants and cannot be changed inside the running \code{iSEE} application.
-Similarly, it is not possible for multiple VolcanoPlots in the same application to have different values for these slots;
-within the app, all values are set to those of the first encountered VolcanoPlot to ensure consistency.
+Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
+There should be two columns for the p-values from each comparison - and another two for the corresponding log-fold changes - for each gene/row, see Examples.
+The expected column names (and how to tune them) are listed at \code{?"\link{registerPValueFields}"}.
 }
 
 \section{Supported methods}{

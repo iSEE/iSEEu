@@ -83,6 +83,7 @@ setTableExtraFields <- function(value) {
 #' Global DE prefixes
 #'
 #' Get or set patterns for acceptable names of \code{\link{rowData}} columns related to a differential expression analysis.
+#' These functions are deprecated; use their counterparts in \code{?"\link{registerPValuePatterns}"} instead.
 #'
 #' @param value A character vector containing the acceptable prefixes for each statistic.
 #'
@@ -149,6 +150,7 @@ getAveAbPattern <- function() {
 #' @export
 #' @rdname globals-PValuePattern
 setPValuePattern <- function(value) {
+    .Deprecated(new="registerPValuePatterns")
     .globals$set("PValuePattern", value)
     invisible(NULL)
 }
@@ -156,6 +158,7 @@ setPValuePattern <- function(value) {
 #' @export
 #' @rdname globals-PValuePattern
 setLogFCPattern <- function(value) {
+    .Deprecated(new="registerLogFCPatterns")
     .globals$set("LogFCPattern", value)
     invisible(NULL)
 }
@@ -163,6 +166,7 @@ setLogFCPattern <- function(value) {
 #' @export
 #' @rdname globals-PValuePattern
 setAveAbPattern <- function(value) {
+    .Deprecated(new="registerAveAbPatterns")
     .globals$set("AveAbPattern", value)
     invisible(NULL)
 }
