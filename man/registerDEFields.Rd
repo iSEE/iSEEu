@@ -34,20 +34,24 @@ getAveAbFields(se)
 
 getLogFCFields(se)
 
-getPValuePatterns(se)
+getPValuePatterns(se, defaults = c("PValue", "p.value", "pval"))
 
-getAveAbPatterns(se)
+getAveAbPatterns(se, defaults = c("AveExpr", "logCPM"))
 
-getLogFCPatterns(se)
+getLogFCPatterns(se, defaults = c("logFC", "LogFC"))
 }
 \arguments{
 \item{se}{A \linkS4class{SummarizedExperiment} to be visualized with various DE-related Panels.
 This is expected to have a number of DE-related fields in its \code{\link{rowData}}.}
 
-\item{fields}{A character vector containing the names of the relevant fields containing the DE statistics.}
+\item{fields}{A character vector containing the names of the relevant fields containing the DE statistics.
+Alternatively \code{NULL} to remove any existing setting.}
 
 \item{patterns}{A character vector containing partial names,
-to match against the \code{colnames} of the \code{\link{rowData}} to identify relevant fields containing DE statistics.}
+to match against the \code{colnames} of the \code{\link{rowData}} to identify relevant fields containing DE statistics.
+Alternatively \code{NULL} to remove any existing setting.}
+
+\item{defaults}{Character vector specifying the default patterns to provide when no patterns were registered in \code{se}.}
 }
 \value{
 All \code{register} functions will return \code{se}, modified to contain the supplied \code{patterns} or \code{fields}.
@@ -73,13 +77,7 @@ The registered \code{patterns} are used for partial name matching to the names o
 All partial matching must be exact - regular expressions are not supported.
 Matches can occur anywhere in the name.
 For example, with \code{"PValue"}, columns with the names \code{"PValue.X"} and \code{"X.PValue"} will be considered acceptable matches.
-
-If no \code{patterns} are supplied, the Panels will use the following defaults:
-\itemize{
-\item \code{"PValue"}, \code{"pval"} and \code{"p.value"} for the p-values.
-\item \code{"AveAb"} and \code{"AveExpr"} for the average abundances.
-\item \code{"LogFC"} and \code{"logFC"} for the log-fold changes.
-}
+If no \code{patterns} are supplied, the Panels will use the \code{defaults}.
 }
 \examples{
 # Making up some results with unusual names.
