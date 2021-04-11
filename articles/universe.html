@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
       </span>
     </div>
 
@@ -100,7 +100,7 @@
                   <a class="author_email" href="mailto:#"></a><a href="mailto:infinite.monkeys.with.keyboards@gmail.com" class="email">infinite.monkeys.with.keyboards@gmail.com</a>
       
                   
-            <h4 class="date">1 April 2021</h4>
+            <h4 class="date">11 April 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/iSEE/iSEEu/blob/master/vignettes/universe.Rmd"><code>vignettes/universe.Rmd</code></a></small>
       <div class="hidden name"><code>universe.Rmd</code></div>
@@ -239,7 +239,7 @@
 <a href="#feature-set-table" class="anchor"></a>Feature set table</h1>
 <p>The <code><a href="../reference/FeatureSetTable-class.html">FeatureSetTable()</a></code> class is a bit unusual in that its rows do not correspond to any dimension of the <code>SummarizedExperiment</code>. Rather, each row is a feature set (e.g., from GO or KEGG) that, upon click, transmits a multiple row selection to other panels. The multiple selection consists of all rows in the chosen feature set, allowing users to identify the positions of all genes in a pathway of interest on, say, a volcano plot. This is also a rare example of a panel that only transmits and does not receive any selections from other panels.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/getFeatureSetCommands.html">setFeatureSetCommands</a></span><span class="op">(</span><span class="fu"><a href="../reference/createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>identifier<span class="op">=</span><span class="st">"ENSEMBL"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/setFeatureSetCommands.html">setFeatureSetCommands</a></span><span class="op">(</span><span class="fu"><a href="../reference/createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>identifier<span class="op">=</span><span class="st">"ENSEMBL"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">gset.tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/FeatureSetTable-class.html">FeatureSetTable</a></span><span class="op">(</span>Selected<span class="op">=</span><span class="st">"GO:0002576"</span>, 
     Search<span class="op">=</span><span class="st">"platelet"</span>, PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
@@ -357,11 +357,11 @@
 ##  [1] scater_1.19.11               ggplot2_3.3.3               
 ##  [3] scRNAseq_2.5.7               edgeR_3.33.3                
 ##  [5] limma_3.47.12                airway_1.11.0               
-##  [7] iSEEu_1.3.3                  iSEE_2.3.12                 
-##  [9] SingleCellExperiment_1.13.12 SummarizedExperiment_1.21.1 
-## [11] Biobase_2.51.0               GenomicRanges_1.43.3        
-## [13] GenomeInfoDb_1.27.8          IRanges_2.25.6              
-## [15] S4Vectors_0.29.9             BiocGenerics_0.37.1         
+##  [7] iSEEu_1.3.5                  iSEE_2.3.13                 
+##  [9] SingleCellExperiment_1.13.14 SummarizedExperiment_1.21.3 
+## [11] Biobase_2.51.0               GenomicRanges_1.43.4        
+## [13] GenomeInfoDb_1.27.11         IRanges_2.25.7              
+## [15] S4Vectors_0.29.15            BiocGenerics_0.37.1         
 ## [17] MatrixGenerics_1.3.1         matrixStats_0.58.0          
 ## [19] BiocStyle_2.19.2            
 ## 
@@ -379,7 +379,7 @@
 ##  [21] shinyWidgets_0.6.0            GenomeInfoDbData_1.2.4       
 ##  [23] bit64_4.0.5                   rprojroot_2.0.2              
 ##  [25] vctrs_0.3.7                   generics_0.1.0               
-##  [27] xfun_0.22                     BiocFileCache_1.15.1         
+##  [27] xfun_0.22                     BiocFileCache_1.99.3         
 ##  [29] R6_2.5.0                      doParallel_1.0.16            
 ##  [31] ggbeeswarm_0.6.0              clue_0.3-58                  
 ##  [33] rsvd_1.0.3                    locfit_1.5-9.4               
@@ -394,53 +394,52 @@
 ##  [51] GlobalOptions_0.1.2           splines_4.1.0                
 ##  [53] rtracklayer_1.51.5            lazyeval_0.2.2               
 ##  [55] BiocManager_1.30.12           yaml_2.2.1                   
-##  [57] GenomicFeatures_1.43.7        httpuv_1.5.5                 
+##  [57] GenomicFeatures_1.43.8        httpuv_1.5.5                 
 ##  [59] tools_4.1.0                   bookdown_0.21                
 ##  [61] ellipsis_0.3.1                jquerylib_0.1.3              
 ##  [63] RColorBrewer_1.1-2            Rcpp_1.0.6                   
 ##  [65] sparseMatrixStats_1.3.7       progress_1.2.2               
 ##  [67] zlibbioc_1.37.0               purrr_0.3.4                  
 ##  [69] RCurl_1.98-1.3                prettyunits_1.1.1            
-##  [71] openssl_1.4.3                 viridis_0.5.1                
-##  [73] GetoptLong_1.0.5              ggrepel_0.9.1                
-##  [75] cluster_2.1.1                 fs_1.5.0                     
-##  [77] magrittr_2.0.1                circlize_0.4.12              
-##  [79] colourpicker_1.1.0            ProtGenerics_1.23.7          
-##  [81] hms_1.0.0                     shinyjs_2.0.0                
-##  [83] mime_0.10                     evaluate_0.14                
-##  [85] xtable_1.8-4                  XML_3.99-0.6                 
-##  [87] gridExtra_2.3                 shape_1.4.5                  
-##  [89] compiler_4.1.0                biomaRt_2.47.6               
-##  [91] tibble_3.1.0                  crayon_1.4.1                 
-##  [93] htmltools_0.5.1.1             mgcv_1.8-34                  
-##  [95] later_1.1.0.1                 DBI_1.1.1                    
-##  [97] ExperimentHub_1.17.1          dbplyr_2.1.0                 
-##  [99] ComplexHeatmap_2.7.8          rappdirs_0.3.3               
-## [101] Matrix_1.3-2                  igraph_1.2.6                 
-## [103] pkgconfig_2.0.3               pkgdown_1.6.1                
-## [105] GenomicAlignments_1.27.2      scuttle_1.1.18               
-## [107] xml2_1.3.2                    foreach_1.5.1                
-## [109] vipor_0.4.5                   bslib_0.2.4                  
-## [111] XVector_0.31.1                stringr_1.4.0                
-## [113] digest_0.6.27                 Biostrings_2.59.2            
-## [115] rmarkdown_2.7                 rintrojs_0.2.2               
-## [117] DelayedMatrixStats_1.13.5     restfulr_0.0.13              
-## [119] curl_4.3                      shiny_1.6.0                  
-## [121] Rsamtools_2.7.1               rjson_0.2.20                 
-## [123] lifecycle_1.0.0               nlme_3.1-152                 
-## [125] jsonlite_1.7.2                BiocNeighbors_1.9.4          
-## [127] desc_1.3.0                    viridisLite_0.3.0            
-## [129] askpass_1.1                   fansi_0.4.2                  
-## [131] pillar_1.5.1                  lattice_0.20-41              
-## [133] KEGGREST_1.31.1               fastmap_1.1.0                
-## [135] httr_1.4.2                    interactiveDisplayBase_1.29.0
-## [137] glue_1.4.2                    png_0.1-7                    
-## [139] iterators_1.0.13              BiocVersion_3.13.1           
-## [141] bit_4.0.4                     stringi_1.5.3                
-## [143] sass_0.3.1                    blob_1.2.1                   
-## [145] textshaping_0.3.3             BiocSingular_1.7.2           
-## [147] AnnotationHub_2.23.2          memoise_2.0.0                
-## [149] dplyr_1.0.5                   irlba_2.3.3</code></pre>
+##  [71] viridis_0.5.1                 GetoptLong_1.0.5             
+##  [73] ggrepel_0.9.1                 cluster_2.1.1                
+##  [75] fs_1.5.0                      magrittr_2.0.1               
+##  [77] circlize_0.4.12               colourpicker_1.1.0           
+##  [79] ProtGenerics_1.23.9           hms_1.0.0                    
+##  [81] shinyjs_2.0.0                 mime_0.10                    
+##  [83] evaluate_0.14                 xtable_1.8-4                 
+##  [85] XML_3.99-0.6                  gridExtra_2.3                
+##  [87] shape_1.4.5                   compiler_4.1.0               
+##  [89] biomaRt_2.47.7                tibble_3.1.0                 
+##  [91] crayon_1.4.1                  htmltools_0.5.1.1            
+##  [93] mgcv_1.8-34                   later_1.1.0.1                
+##  [95] DBI_1.1.1                     ExperimentHub_1.99.1         
+##  [97] dbplyr_2.1.1                  ComplexHeatmap_2.7.9         
+##  [99] rappdirs_0.3.3                Matrix_1.3-2                 
+## [101] igraph_1.2.6                  pkgconfig_2.0.3              
+## [103] pkgdown_1.6.1                 GenomicAlignments_1.27.2     
+## [105] scuttle_1.1.18                foreach_1.5.1                
+## [107] vipor_0.4.5                   bslib_0.2.4                  
+## [109] XVector_0.31.1                stringr_1.4.0                
+## [111] digest_0.6.27                 Biostrings_2.59.2            
+## [113] rmarkdown_2.7                 rintrojs_0.2.2               
+## [115] DelayedMatrixStats_1.13.5     restfulr_0.0.13              
+## [117] curl_4.3                      shiny_1.6.0                  
+## [119] Rsamtools_2.7.1               rjson_0.2.20                 
+## [121] lifecycle_1.0.0               nlme_3.1-152                 
+## [123] jsonlite_1.7.2                BiocNeighbors_1.9.4          
+## [125] desc_1.3.0                    viridisLite_0.3.0            
+## [127] fansi_0.4.2                   pillar_1.5.1                 
+## [129] lattice_0.20-41               KEGGREST_1.31.1              
+## [131] fastmap_1.1.0                 httr_1.4.2                   
+## [133] interactiveDisplayBase_1.29.0 glue_1.4.2                   
+## [135] png_0.1-7                     iterators_1.0.13             
+## [137] BiocVersion_3.13.1            bit_4.0.4                    
+## [139] stringi_1.5.3                 sass_0.3.1                   
+## [141] blob_1.2.1                    textshaping_0.3.3            
+## [143] BiocSingular_1.7.2            AnnotationHub_2.99.1         
+## [145] memoise_2.0.0                 dplyr_1.0.5                  
+## [147] irlba_2.3.3</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

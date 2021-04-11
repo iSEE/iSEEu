@@ -40,7 +40,10 @@
 
 
 <meta property="og:title" content="Feature set table — FeatureSetTable-class" />
-<meta property="og:description" content="A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel." />
+<meta property="og:description" content="A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.
+This relies on feature set collections that have been registered in the input SummarizedExperiment,
+see registerFeatureSetCollections for more details.
+If no collections have been registered, we default to the GO and KEGG collections from createGeneSetCommands." />
 
 
 
@@ -72,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
       </span>
     </div>
 
@@ -130,7 +133,10 @@
     </div>
 
     <div class="ref-description">
-    <p>A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.</p>
+    <p>A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.
+This relies on feature set collections that have been registered in the input SummarizedExperiment,
+see <code><a href='registerFeatureSetCollections.html'>registerFeatureSetCollections</a></code> for more details.
+If no collections have been registered, we default to the GO and KEGG collections from <code><a href='createGeneSetCommands.html'>createGeneSetCommands</a></code>.</p>
     </div>
 
 
@@ -141,16 +147,10 @@
 
 <p>The following slots control the feature sets in use:</p><ul>
 <li><p><code>Collection</code>, string specifying the type of feature set collection to show.
-Defaults to the first set.</p></li>
-<li><p><code>CreateCollections</code>, a named character vector where each entry is named after a feature set collection.
-Each entry should be a string containing R commands to define a data.frame named <code>tab</code>, where each row is a feature set and the row names are the names of those sets.</p></li>
-<li><p><code>RetrieveSet</code>, a named character vector where each entry is named after a feature set collection.
-Each entry should be a string containing R commands to define a character vector named <code>selected</code> containing the identity of all rows of the SummarizedExperiment in the set of interest.
-(These commands can assume that a <code>.set_id</code> variable is present containing the name of the chosen feature set,
-as well as the <code>se</code> variable containing the input SummarizedExperiment object.)</p></li>
+Defaults to the first registered collection in the SummarizedExperiment.</p></li>
 </ul>
 
-<p>The following slots control the selections:</p><ul>
+<p>The following slots control the table selections:</p><ul>
 <li><p><code>Selected</code>, a string containing the name of the currently selected gene set.
 Defaults to <code>""</code>, i.e., no selection.</p></li>
 <li><p><code>Search</code>, a string containing the regular expression for the global search.
@@ -166,11 +166,6 @@ Defaults to an empty character vector, i.e., no search.</p></li>
 
 <p><code>FeatureSetTable(...)</code> creates an instance of a FeatureSetTable class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
-<p>Initial values for <code>CreateCollections</code> and <code>RetrieveSet</code> are taken from the fields of the same name in the output of <code><a href='getFeatureSetCommands.html'>getFeatureSetCommands</a></code>.
-If these fields are also <code>NULL</code>, we fall back to the output of <code><a href='createGeneSetCommands.html'>createGeneSetCommands</a></code> with default parameters.
-These parameters are considered to be global constants and cannot be changed inside the running <code>iSEE</code> application.
-Similarly, it is not possible for multiple FeatureSetTables in the same application to have different values for these slots;
-within the app, all values are set to those of the first encountered FeatureSetTable to ensure consistency.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
     
@@ -199,7 +194,7 @@ otherwise calling the method for Panel.</p></li>
 </ul>
 
 <p>For creating the table:</p><ul>
-<li><p><code>.generateOutput(x, envir)</code> will create a data.frame of gene set descriptions in <code>envir</code>, based on the contents of <code>x[["CreateCollections"]]</code>.
+<li><p><code>.generateOutput(x, envir)</code> will create a data.frame of gene set descriptions in <code>envir</code>.
 It will also return the commands required to do so and the name of the variable corresponding to said data.frame.</p></li>
 <li><p><code>.renderOutput(x, se, ..., output, pObjects, rObjects)</code>
 will add a <code>datatable</code> widget to the output,
@@ -208,7 +203,7 @@ which is used to render the aforementioned data.frame.</p></li>
 
 <p>For controlling the multiple selections:</p><ul>
 <li><p><code>.multiSelectionDimension(x)</code> returns <code>"row"</code>.</p></li>
-<li><p><code>.multiSelectionCommands(x, index)</code> returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set, based on the contents of <code>x[["RetrieveSet"]]</code>.
+<li><p><code>.multiSelectionCommands(x, index)</code> returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set.
 <code>index</code> is ignored.</p></li>
 <li><p><code>.multiSelectionActive(x)</code> returns the name of the currently selected gene set,
 unless no selection is made, in which case <code>NULL</code> is returned.</p></li>
@@ -228,7 +223,7 @@ which is set to the number of features in <code>se</code>.</p></li>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scRNAseq</span><span class='op'>)</span>
 <span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span><span class='op'>(</span>location<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-03-30</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-03-30</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>downloading 1 resources</span></div><div class='output co'>#&gt; <span class='message'>retrieving 1 resource</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-04-08</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-04-08</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://bioconductor.org/packages/scater/'>scater</a></span><span class='op'>)</span>
 <span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scuttle/man/logNormCounts.html'>logNormCounts</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
 
@@ -237,7 +232,9 @@ which is set to the number of features in <code>se</code>.</p></li>
 
 <span class='va'>cmds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='createGeneSetCommands.html'>createGeneSetCommands</a></span><span class='op'>(</span>collections<span class='op'>=</span><span class='st'>"GO"</span>,
     organism<span class='op'>=</span><span class='st'>"org.Mm.eg.db"</span>, identifier<span class='op'>=</span><span class='st'>"ENSEMBL"</span><span class='op'>)</span>
-<span class='fu'><a href='getFeatureSetCommands.html'>setFeatureSetCommands</a></span><span class='op'>(</span><span class='va'>cmds</span><span class='op'>)</span>
+<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='registerFeatureSetCollections.html'>registerFeatureSetCommands</a></span><span class='op'>(</span><span class='va'>sce</span>, <span class='va'>cmds</span><span class='op'>)</span>
+
+<span class='co'># Setting up the application.</span>
 <span class='va'>gst</span> <span class='op'>&lt;-</span> <span class='fu'>FeatureSetTable</span><span class='op'>(</span>PanelId<span class='op'>=</span><span class='fl'>1L</span><span class='op'>)</span>
 
 <span class='va'>rdp</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataPlot</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"FeatureSetTable1"</span>,

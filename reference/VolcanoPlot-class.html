@@ -41,8 +41,7 @@
 
 <meta property="og:title" content="The VolcanoPlot class — VolcanoPlot-class" />
 <meta property="og:description" content="The VolcanoPlot is a RowDataPlot subclass that is dedicated to creating a volcano plot.
-It retrieves the log-fold change and p-value from and creates a row-based plot where each point represents a feature.
-Users are expected to load relevant statistics into the rowData of a SummarizedExperiment." />
+It retrieves the log-fold change and p-value from and creates a row-based plot where each point represents a feature." />
 
 
 
@@ -74,7 +73,7 @@ Users are expected to load relevant statistics into the rowData of a SummarizedE
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
       </span>
     </div>
 
@@ -133,8 +132,7 @@ Users are expected to load relevant statistics into the rowData of a SummarizedE
 
     <div class="ref-description">
     <p>The VolcanoPlot is a RowDataPlot subclass that is dedicated to creating a volcano plot.
-It retrieves the log-fold change and p-value from and creates a row-based plot where each point represents a feature.
-Users are expected to load relevant statistics into the <code>rowData</code> of a SummarizedExperiment.</p>
+It retrieves the log-fold change and p-value from and creates a row-based plot where each point represents a feature.</p>
     </div>
 
 
@@ -152,11 +150,6 @@ Defaults to 0.</p></li>
 Defaults to <code>"BH"</code>, but can take any value from <code><a href='https://rdrr.io/r/stats/p.adjust.html'>p.adjust.methods</a></code>.</p></li>
 </ul>
 
-<p>The following slots control the choice of columns in the user interface:</p><ul>
-<li><p><code>PValuePattern</code>, a character vector specifying the patterns of all potential columns containing p-values, see <code><a href='getPValuePattern.html'>getPValuePattern</a></code>.</p></li>
-<li><p><code>LogFCPattern</code>, a character vector specifying the patterns of all potential columns containing log-fold changes, see <code><a href='getPValuePattern.html'>getLogFCPattern</a></code>.</p></li>
-</ul>
-
 <p>In addition, this class inherits all slots from its parent RowDataPlot,
 RowDotPlot, DotPlot and Panel classes.</p>
     <h2 class="hasAnchor" id="constructor"><a class="anchor" href="#constructor"></a>Constructor</h2>
@@ -165,10 +158,9 @@ RowDotPlot, DotPlot and Panel classes.</p>
 
 <p><code>VolcanoPlot(...)</code> creates an instance of a VolcanoPlot class,
 where any slot and its value can be passed to <code>...</code> as a named argument.</p>
-<p>Initial values for <code>PValuePattern</code> and <code>LogFCPattern</code> are set to the outputs of <code><a href='getPValuePattern.html'>getPValuePattern</a></code> and <code><a href='getPValuePattern.html'>getLogFCPattern</a></code>, respectively.
-These parameters are considered to be global constants and cannot be changed inside the running <code>iSEE</code> application.
-Similarly, it is not possible for multiple VolcanoPlots in the same application to have different values for these slots;
-within the app, all values are set to those of the first encountered VolcanoPlot to ensure consistency.</p>
+<p>Users are expected to load relevant statistics into the <code>rowData</code> of a SummarizedExperiment.
+This panel expects one or more columns containing the p-values and log-fold changes for each gene/row - see Examples.
+The expected column names (and how to tune them) are listed at <code>?"<a href='registerDEFields.html'>registerPValueFields</a>"</code>.</p>
     <h2 class="hasAnchor" id="supported-methods"><a class="anchor" href="#supported-methods"></a>Supported methods</h2>
 
     
