@@ -1,3 +1,11 @@
+# iSEEu 1.3.5
+
+* Switch to registration for storing DE Panel options, via `registerPValuePatterns` and related functions.
+
+# iSEEu 1.3.4
+
+* Support in-memory feature set collections and their statistics via `registerFeatureSetCollections`.
+
 # iSEEu 1.3.3
 
 * Redistributed documentation from panel tours to UI-specific tours.
