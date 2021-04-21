@@ -1,3 +1,7 @@
+# iSEEu 1.3.6
+
+* Fix spelling typo in man page.
+
 # iSEEu 1.3.5
 
 * Switch to registration for storing DE Panel options, via `registerPValuePatterns` and related functions.
