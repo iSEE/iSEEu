@@ -45,6 +45,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -56,9 +58,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -133,13 +141,13 @@
     <p>Register feature set collations and their annotations for display in <a href='FeatureSetTable-class.html'>FeatureSetTable</a>s.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>registerFeatureSetCollections</span><span class='op'>(</span><span class='va'>se</span>, <span class='va'>collections</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>registerFeatureSetCollections</span><span class='op'>(</span><span class='va'>se</span>, <span class='va'>collections</span><span class='op'>)</span>
 
 <span class='fu'>registerFeatureSetCommands</span><span class='op'>(</span><span class='va'>se</span>, <span class='va'>commands</span><span class='op'>)</span>
 
 <span class='fu'>getFeatureSetCollections</span><span class='op'>(</span><span class='va'>se</span><span class='op'>)</span>
 
-<span class='fu'>getFeatureSetCommands</span><span class='op'>(</span><span class='va'>se</span><span class='op'>)</span></pre>
+<span class='fu'>getFeatureSetCommands</span><span class='op'>(</span><span class='va'>se</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,33 +199,44 @@ as well as the <code>se</code> variable containing the input SummarizedExperimen
     <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scRNAseq</span><span class='op'>)</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span><span class='op'>(</span>location<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-05-18</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-05-18</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
-<span class='co'># Make up some random collections.</span>
-<span class='va'>random</span> <span class='op'>&lt;-</span> <span class='fu'>CharacterList</span><span class='op'>(</span>
-   Aaron <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>10</span><span class='op'>)</span>,
-   Kevin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>20</span><span class='op'>)</span>,
-   Charlotte <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>30</span><span class='op'>)</span>,
-   Fed <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>40</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'>mcols</span><span class='op'>(</span><span class='va'>random</span><span class='op'>)</span><span class='op'>$</span><span class='va'>p.value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4</span><span class='op'>)</span>
-
-<span class='co'># Storing the collections inside our SummarizedExperiment.</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>registerFeatureSetCollections</span><span class='op'>(</span><span class='va'>sce</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>random<span class='op'>=</span><span class='va'>random</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>getFeatureSetCollections</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $random
-#&gt; CharacterList of length 4
-#&gt; [["Aaron"]] ENSMUSG00000106245 ENSMUSG00000002409 ... ENSMUSG00000013236
-#&gt; [["Kevin"]] ENSMUSG00000086644 ENSMUSG00000107417 ... ENSMUSG00000088017
-#&gt; [["Charlotte"]] ENSMUSG00000052031 ENSMUSG00000025227 ... ENSMUSG00000105740
-#&gt; [["Fed"]] ENSMUSG00000075142 ENSMUSG00000079442 ... ENSMUSG00000083894
-#&gt; </div><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>iSEE</span><span class='op'>(</span><span class='va'>sce</span>, initial<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='FeatureSetTable-class.html'>FeatureSetTable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scRNAseq</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span><span class='op'>(</span>location<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> snapshotDate(): 2021-06-02</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> snapshotDate(): 2021-06-02</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Make up some random collections.</span></span>
+<span class='r-in'><span class='va'>random</span> <span class='op'>&lt;-</span> <span class='fu'>CharacterList</span><span class='op'>(</span></span>
+<span class='r-in'>   Aaron <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>10</span><span class='op'>)</span>,</span>
+<span class='r-in'>   Kevin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>20</span><span class='op'>)</span>,</span>
+<span class='r-in'>   Charlotte <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>30</span><span class='op'>)</span>,</span>
+<span class='r-in'>   Fed <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fl'>40</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>mcols</span><span class='op'>(</span><span class='va'>random</span><span class='op'>)</span><span class='op'>$</span><span class='va'>p.value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>4</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Storing the collections inside our SummarizedExperiment.</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'>registerFeatureSetCollections</span><span class='op'>(</span><span class='va'>sce</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>random<span class='op'>=</span><span class='va'>random</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>getFeatureSetCollections</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $random</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CharacterList of length 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["Aaron"]] ENSMUSG00000106245 ENSMUSG00000002409 ... ENSMUSG00000013236</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["Kevin"]] ENSMUSG00000086644 ENSMUSG00000107417 ... ENSMUSG00000088017</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["Charlotte"]] ENSMUSG00000052031 ENSMUSG00000025227 ... ENSMUSG00000105740</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["Fed"]] ENSMUSG00000075142 ENSMUSG00000079442 ... ENSMUSG00000083894</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'>iSEE</span><span class='op'>(</span><span class='va'>sce</span>, initial<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='FeatureSetTable-class.html'>FeatureSetTable</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -229,11 +248,11 @@ as well as the <code>se</code> variable containing the input SummarizedExperimen
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kevinrue.github.io'>Kevin Rue-Albrecht</a>, <a href='https://csoneson.github.io'>Charlotte Soneson</a>, <a href='https://federicomarini.github.io'>Federico Marini</a>, <a href='https://LTLA.github.io'>Aaron Lun</a>.</p>
+  <p><p>Developed by <a href="https://kevinrue.github.io" class="external-link">Kevin Rue-Albrecht</a>, <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://LTLA.github.io" class="external-link">Aaron Lun</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -241,6 +260,8 @@ as well as the <code>se</code> variable containing the input SummarizedExperimen
 
   
 
+
+  
 
   </body>
 </html>
