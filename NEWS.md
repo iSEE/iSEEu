@@ -1,4 +1,4 @@
-# iSEEu 1.3.6
+# iSEEu 1.5.1
 
 * Fix spelling typo in man page.
 
