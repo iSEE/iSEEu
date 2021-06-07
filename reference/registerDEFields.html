@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -192,7 +192,7 @@ or <code>NULL</code>, if nothing was set.</p>
 
     <p>DE-related Panels need to find relevant <code>rowData</code> fields containing p-values, log-fold changes, etc. to set appropriate defaults in the user interface.
 These functions allow a user to tune the definition of what those Panels consider to be relevant,
-which is occasionally necessary if the DE statistics are stored in a <code>rowData</code> field with an usual column name.
+which is occasionally necessary if the DE statistics are stored in a <code>rowData</code> field with an unusual column name.
 The idea is to <code>register</code> the relevant fields in <code>se</code>, which can then be supplied to <code>iSEE</code> with the affected Panels - see Examples.</p>
 <p>The registered <code>fields</code> should be the names of appropriate columns in <code>rowData</code> containing continuous variables.
 Columns containing categorical or non-atomic variables will generally be ignored.
@@ -201,7 +201,7 @@ For each DE statistic, if any <code>fields</code> are registered in <code>se</co
 All partial matching must be exact - regular expressions are not supported.
 Matches can occur anywhere in the name.
 For example, with <code>"PValue"</code>, columns with the names <code>"PValue.X"</code> and <code>"X.PValue"</code> will be considered acceptable matches.
-If no <code>patterns</code> are supplied, the Panels will use the <code>defaults</code>.</p>
+If no <code>patterns</code> are supplied, the Panels will use the values in <code>defaults</code>.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Aaron Lun</p>
