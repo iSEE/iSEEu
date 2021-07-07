@@ -1,3 +1,7 @@
+# iSEEu 1.5.2
+
+* Fix bug causing `AggregatedDotPlot` to crash when a column selection was transferred.
+
 # iSEEu 1.5.1
 
 * Fix spelling typo in man page.
