@@ -58,7 +58,7 @@
 #'
 #' For creating the table:
 #' \itemize{
-#' \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}. 
+#' \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}.
 #' It will also return the commands required to do so and the name of the variable corresponding to said data.frame.
 #' \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
 #' will add a \code{\link{datatable}} widget to the output,
@@ -154,8 +154,8 @@ setValidity2("FeatureSetTable", function(object) {
 })
 
 #' @export
-setMethod("initialize", "FeatureSetTable", 
-    function(.Object, Collection=NA_character_, Selected="", Search="", SearchColumns=character(0), ...) 
+setMethod("initialize", "FeatureSetTable",
+    function(.Object, Collection=NA_character_, Selected="", Search="", SearchColumns=character(0), ...)
 {
     args <- list(..., Collection=Collection, Selected=Selected, Search=Search, SearchColumns=SearchColumns)
     do.call(callNextMethod, c(list(.Object), args))
@@ -186,7 +186,7 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
     # Let's see if there are any collections.
     if (!is.null(all.collections <- getFeatureSetCollections(se))) {
         .validate_collections(all.collections)
-        cmds <- sprintf("iSEEu::retrieveCollection(se, %s)", vapply(names(all.collections), deparse, ""))
+        cmds <- sprintf("iSEEu::getFeatureSetCollections(se)[[%s]]", vapply(names(all.collections), deparse, ""))
         cre.cmds <- sprintf("tab <- mcols(%s)", cmds)
         ret.cmds <- sprintf("selected <- %s[[.set_id]]", cmds)
         created <- lapply(all.collections, function(x) data.frame(mcols(x), check.names=FALSE))
@@ -228,11 +228,11 @@ setMethod(".cacheCommonInfo", "FeatureSetTable", function(x, se) {
         })
     }
 
-    # Hack to get this information to .multiSelectionCommands, 
+    # Hack to get this information to .multiSelectionCommands,
     # which is not otherwise aware of the SummarizedExperiment.
     set.cmds.env$commands <- ret.cmds
 
-    .setCachedCommonInfo(se, "FeatureSetTable", 
+    .setCachedCommonInfo(se, "FeatureSetTable",
         available.sets=created,
         create.collections.cmds=cre.cmds)
 })

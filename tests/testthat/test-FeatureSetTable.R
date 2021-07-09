@@ -85,14 +85,14 @@ test_that("FeatureSetTable interface elements work as expected", {
 
 test_that("FeatureSetTable responds to registration of collections", {
     se2 <- registerFeatureSetCollections(se, list(random=random))
-     
+
     out <- FeatureSetTable()
     se2 <- .cacheCommonInfo(out, se2)
     out <- .refineParameters(out, se2)
 
     expect_identical(out[["Collection"]], "random")
     expect_identical(.getCachedCommonInfo(se2, "FeatureSetTable")$available.sets, list(random=as.data.frame(mcols(random))))
-    expect_match(.getCachedCommonInfo(se2, "FeatureSetTable")$create.collections.cmds[[1]], "retrieveCollection")
+    expect_match(.getCachedCommonInfo(se2, "FeatureSetTable")$create.collections.cmds[[1]], "getFeatureSetCollections")
 })
 
 test_that("FeatureSetTable generates sensible output", {
