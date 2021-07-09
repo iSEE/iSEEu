@@ -46,6 +46,8 @@ This has been deprecated in favor of the simpler FeatureSetTable." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -57,9 +59,15 @@ This has been deprecated in favor of the simpler FeatureSetTable." />
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -206,37 +214,50 @@ which is set to the number of features in <code>se</code>.</p></li>
     <p>Aaron Lun</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scRNAseq</span><span class='op'>)</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span><span class='op'>(</span>location<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-05-18</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-05-18</span></div><div class='output co'>#&gt; <span class='message'>see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://bioconductor.org/packages/scater/'>scater</a></span><span class='op'>)</span>
-<span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scuttle/man/logNormCounts.html'>logNormCounts</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scran</span><span class='op'>)</span>
-<span class='fu'>rowData</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'>rowData</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html'>modelGeneVarWithSpikes</a></span><span class='op'>(</span><span class='va'>sce</span>, <span class='st'>"ERCC"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># This defaults to 'org.Hs.eg.db' with 'ENTREZID'.</span>
-<span class='fu'><a href='utils-geneset.html'>.setOrganism</a></span><span class='op'>(</span><span class='st'>"org.Mm.eg.db"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setOrganism' is deprecated.</span>
-#&gt; <span class='warning'>Use 'setFeatureSetCommands' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='fu'><a href='utils-geneset.html'>.setIdentifierType</a></span><span class='op'>(</span><span class='st'>"ENSEMBL"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: '.setIdentifierType' is deprecated.</span>
-#&gt; <span class='warning'>Use 'setFeatureSetCommands' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'><span class='va'>gst</span> <span class='op'>&lt;-</span> <span class='fu'>GeneSetTable</span><span class='op'>(</span>PanelId<span class='op'>=</span><span class='fl'>1L</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: 'GeneSetTable' is deprecated.</span>
-#&gt; <span class='warning'>Use 'FeatureSetTable' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='input'>
-<span class='va'>rdp</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataPlot</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"GeneSetTable1"</span>,
-    ColorBy<span class='op'>=</span><span class='st'>"Row selection"</span>,
-    XAxis<span class='op'>=</span><span class='st'>"Row data"</span>, XAxisRowData<span class='op'>=</span><span class='st'>"mean"</span>, YAxis<span class='op'>=</span><span class='st'>"total"</span><span class='op'>)</span>
-
-<span class='va'>rdt</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataTable</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"GeneSetTable1"</span><span class='op'>)</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>iSEE</span><span class='op'>(</span><span class='va'>sce</span>, initial<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>gst</span>, <span class='va'>rdp</span>, <span class='va'>rdt</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scRNAseq</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html'>LunSpikeInData</a></span><span class='op'>(</span>location<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> snapshotDate(): 2021-06-21</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> snapshotDate(): 2021-06-21</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> loading from cache</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://bioconductor.org/packages/scater/'>scater</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sce</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scuttle/man/logNormCounts.html'>logNormCounts</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scran</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>rowData</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'>rowData</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html'>modelGeneVarWithSpikes</a></span><span class='op'>(</span><span class='va'>sce</span>, <span class='st'>"ERCC"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># This defaults to 'org.Hs.eg.db' with 'ENTREZID'.</span></span>
+<span class='r-in'><span class='fu'><a href='utils-geneset.html'>.setOrganism</a></span><span class='op'>(</span><span class='st'>"org.Mm.eg.db"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>'.setOrganism' is deprecated.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Use 'setFeatureSetCommands' instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> See help("Deprecated")</span>
+<span class='r-in'><span class='fu'><a href='utils-geneset.html'>.setIdentifierType</a></span><span class='op'>(</span><span class='st'>"ENSEMBL"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>'.setIdentifierType' is deprecated.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Use 'setFeatureSetCommands' instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> See help("Deprecated")</span>
+<span class='r-in'><span class='va'>gst</span> <span class='op'>&lt;-</span> <span class='fu'>GeneSetTable</span><span class='op'>(</span>PanelId<span class='op'>=</span><span class='fl'>1L</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>'GeneSetTable' is deprecated.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Use 'FeatureSetTable' instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> See help("Deprecated")</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>rdp</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataPlot</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"GeneSetTable1"</span>,</span>
+<span class='r-in'>    ColorBy<span class='op'>=</span><span class='st'>"Row selection"</span>,</span>
+<span class='r-in'>    XAxis<span class='op'>=</span><span class='st'>"Row data"</span>, XAxisRowData<span class='op'>=</span><span class='st'>"mean"</span>, YAxis<span class='op'>=</span><span class='st'>"total"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>rdt</span> <span class='op'>&lt;-</span> <span class='fu'>RowDataTable</span><span class='op'>(</span>RowSelectionSource<span class='op'>=</span><span class='st'>"GeneSetTable1"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'>iSEE</span><span class='op'>(</span><span class='va'>sce</span>, initial<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>gst</span>, <span class='va'>rdp</span>, <span class='va'>rdt</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -248,11 +269,11 @@ which is set to the number of features in <code>se</code>.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kevinrue.github.io'>Kevin Rue-Albrecht</a>, <a href='https://csoneson.github.io'>Charlotte Soneson</a>, <a href='https://federicomarini.github.io'>Federico Marini</a>, <a href='https://LTLA.github.io'>Aaron Lun</a>.</p>
+  <p><p>Developed by <a href="https://kevinrue.github.io" class="external-link">Kevin Rue-Albrecht</a>, <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://LTLA.github.io" class="external-link">Aaron Lun</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -260,6 +281,8 @@ which is set to the number of features in <code>se</code>.</p></li>
 
   
 
+
+  
 
   </body>
 </html>
