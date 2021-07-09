@@ -45,8 +45,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -58,15 +56,9 @@
 
 
 
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
       </span>
     </div>
 
@@ -141,7 +133,7 @@
     <p>This mode launches an app that does not display any panel.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>modeEmpty</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></code></pre></div>
+    <pre class="usage"><span class='fu'>modeEmpty</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,58 +154,57 @@ as it does not need to render any panel when the interface is launched.
 Users can then use the <code>"Organize panels"</code> widget to select panels to display in the interface.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='st'>"SingleCellExperiment"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; ncells &lt;- 100</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; u &lt;- matrix(rpois(20000, 5), ncol=ncells)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; v &lt;- log2(u + 1)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; pca &lt;- matrix(runif(ncells*5), ncells)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; tsne &lt;- matrix(rnorm(ncells*2), ncells)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; sce &lt;- SingleCellExperiment(assays=list(counts=u, logcounts=v),</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE+     reducedDims=SimpleList(PCA=pca, tSNE=tsne))</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; sce</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SingleCellExperiment </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 200 100 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(2): counts logcounts</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames: NULL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(2): PCA tSNE</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; ## coercion from SummarizedExperiment</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; se &lt;- SummarizedExperiment(assays=list(counts=u, logcounts=v))</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SnglCE&gt; as(se, "SingleCellExperiment")</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> class: SingleCellExperiment </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> dim: 200 100 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> metadata(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> assays(2): counts logcounts</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> rownames: NULL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> rowData names(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> colnames: NULL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> colData names(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> reducedDimNames(0):</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> mainExpName: NULL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> altExpNames(0):</span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"G"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"C"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'>modeEmpty</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'>  <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span><span class='op'>(</span><span class='va'>app</span>, port<span class='op'>=</span><span class='fl'>1234</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-in'></span>
-</code></pre></div>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='st'>"SingleCellExperiment"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; SnglCE&gt; ncells &lt;- 100
+#&gt; 
+#&gt; SnglCE&gt; u &lt;- matrix(rpois(20000, 5), ncol=ncells)
+#&gt; 
+#&gt; SnglCE&gt; v &lt;- log2(u + 1)
+#&gt; 
+#&gt; SnglCE&gt; pca &lt;- matrix(runif(ncells*5), ncells)
+#&gt; 
+#&gt; SnglCE&gt; tsne &lt;- matrix(rnorm(ncells*2), ncells)
+#&gt; 
+#&gt; SnglCE&gt; sce &lt;- SingleCellExperiment(assays=list(counts=u, logcounts=v),
+#&gt; SnglCE+     reducedDims=SimpleList(PCA=pca, tSNE=tsne))
+#&gt; 
+#&gt; SnglCE&gt; sce
+#&gt; class: SingleCellExperiment 
+#&gt; dim: 200 100 
+#&gt; metadata(0):
+#&gt; assays(2): counts logcounts
+#&gt; rownames: NULL
+#&gt; rowData names(0):
+#&gt; colnames: NULL
+#&gt; colData names(0):
+#&gt; reducedDimNames(2): PCA tSNE
+#&gt; mainExpName: NULL
+#&gt; altExpNames(0):
+#&gt; 
+#&gt; SnglCE&gt; ## coercion from SummarizedExperiment
+#&gt; SnglCE&gt; se &lt;- SummarizedExperiment(assays=list(counts=u, logcounts=v))
+#&gt; 
+#&gt; SnglCE&gt; as(se, "SingleCellExperiment")
+#&gt; class: SingleCellExperiment 
+#&gt; dim: 200 100 
+#&gt; metadata(0):
+#&gt; assays(2): counts logcounts
+#&gt; rownames: NULL
+#&gt; rowData names(0):
+#&gt; colnames: NULL
+#&gt; colData names(0):
+#&gt; reducedDimNames(0):
+#&gt; mainExpName: NULL
+#&gt; altExpNames(0):</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"G"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"C"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>)</span>
+
+<span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'>modeEmpty</span><span class='op'>(</span><span class='va'>sce</span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span><span class='op'>(</span><span class='va'>app</span>, port<span class='op'>=</span><span class='fl'>1234</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -225,11 +216,11 @@ Users can then use the <code>"Organize panels"</code> widget to select panels to
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="https://kevinrue.github.io" class="external-link">Kevin Rue-Albrecht</a>, <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://LTLA.github.io" class="external-link">Aaron Lun</a>.</p></p>
+  <p>Developed by <a href='https://kevinrue.github.io'>Kevin Rue-Albrecht</a>, <a href='https://csoneson.github.io'>Charlotte Soneson</a>, <a href='https://federicomarini.github.io'>Federico Marini</a>, <a href='https://LTLA.github.io'>Aaron Lun</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -237,8 +228,6 @@ Users can then use the <code>"Organize panels"</code> widget to select panels to
 
   
 
-
-  
 
   </body>
 </html>
