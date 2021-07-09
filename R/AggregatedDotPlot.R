@@ -401,7 +401,7 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
     col2 <- x[[.ADPColDataFacet]]
     use.facets <- col2!=iSEE:::.noSelection
     coldata.names <- c(col1, if (use.facets) col2)
-    cmd <- sprintf(".group_by <- SummarizedExperiment::colData(se)[,%s,drop=FALSE];",
+    cmd <- sprintf(".group_by <- SummarizedExperiment::colData(se)[.chosen.columns,%s,drop=FALSE];",
         paste(deparse(coldata.names), collapse=""))
 
     computation <- c(cmd,
