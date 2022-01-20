@@ -15,7 +15,7 @@
 #' \item \code{Assay}, string indicating the assay to use for testing.
 #' Defaults to the first named assay in the SummarizedExperiment.
 #' }
-#' 
+#'
 #' The following slots control the rendered table:
 #' \itemize{
 #' \item \code{ExtraFields}, a character vector containing names of \code{\link{rowData}} columns to be included in the table.
@@ -36,7 +36,7 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DynamicMarkerTable"} entry 
+#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DynamicMarkerTable"} entry
 #' containing \code{valid.assay.names} and \code{valid.rowdata.names}.
 #' This will also call the equivalent \linkS4class{RowTable} method.
 #' \item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
@@ -144,7 +144,7 @@ DifferentialStatisticsTable <- function(...) {
 }
 
 #' @export
-setMethod("initialize", "DynamicMarkerTable", 
+setMethod("initialize", "DynamicMarkerTable",
     function(.Object, LogFC=0, TestMethod="t", ...)
 {
     args <- list(LogFC=LogFC, TestMethod=TestMethod, ...)
@@ -181,7 +181,7 @@ setMethod(".defineDataInterface", "DynamicMarkerTable", function(x, se, select_i
 
     .addSpecificTour(class(x), "Assay", function(tab_name) {
         data.frame(
-            element=paste0("#", .getEncodedName(x), "_Assay + .selectize-control"), 
+            element=paste0("#", .getEncodedName(x), "_Assay + .selectize-control"),
             intro="Similarly, we can change the assay values to be tested. It is generally safest to use log-transformed normalized values here, as the differences in means from the t-test can be interpreted as log-fold changes. The Wilcoxon test only needs normalized values while the binomial test can be used with any zero-preserving transformation."
         )
     })
@@ -224,11 +224,11 @@ setMethod(".cacheCommonInfo", "DynamicMarkerTable", function(x, se) {
     # .refineParameters later.)
     extras <- x[["ExtraFields"]]
     if (.needs_filling(extras)) {
-        extras <- getTableExtraFields() 
+        extras <- getTableExtraFields()
     }
 
-    .setCachedCommonInfo(se, "DynamicMarkerTable", 
-        valid.assay.names=named_assays, 
+    .setCachedCommonInfo(se, "DynamicMarkerTable",
+        valid.assay.names=named_assays,
         valid.rowdata.names=intersect(extras, valid_rd))
 })
 
@@ -272,7 +272,7 @@ setMethod(".createObservers", "DynamicMarkerTable",
 
 #' @export
 setMethod(".generateTable", "DynamicMarkerTable", function(x, envir) {
-    extras <- x[["ExtraFields"]] 
+    extras <- x[["ExtraFields"]]
 
     if (!exists("col_selected", envir, inherits=FALSE) || !"active" %in% names(envir$col_selected)) {
         commands <- .spawn_empty_cmds(extras)
@@ -311,7 +311,7 @@ setMethod(".generateTable", "DynamicMarkerTable", function(x, envir) {
         }
     }
 
-    commands 
+    commands
 })
 
 .define_extra_data <- function(extras, subset="") {
