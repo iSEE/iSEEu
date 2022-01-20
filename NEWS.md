@@ -1,3 +1,7 @@
+# iSEEu 1.7.1
+
+* Fix bug causing `.setCachedCommonInfo()` to cache `NULL` value for `valid.rowdata.names` information of `DynamicMarkerTable` panel instead of empty character vector.
+
 # iSEEu 1.5.2
 
 * Fix bug causing `AggregatedDotPlot` to crash when a column selection was transferred.
