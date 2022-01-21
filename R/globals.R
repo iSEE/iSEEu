@@ -19,7 +19,7 @@
 #' Vectors should contain R commands to create collections and retrieve sets;
 #' see \code{?\linkS4class{FeatureSetTable}} and the output of \code{\link{createGeneSetCommands}} for details.
 #'
-#' @return 
+#' @return
 #' \code{setFeatureSetCommands} will set the current global feature set commands and return \code{NULL} invisibly.
 #'
 #' @author Aaron Lun
@@ -30,13 +30,13 @@
 #' @examples
 #' old <- getFeatureSetCommands()
 #'
-#' new.cmds <- createGeneSetCommands(organism="org.Mm.eg.db", 
+#' new.cmds <- createGeneSetCommands(organism="org.Mm.eg.db",
 #'     identifier="SYMBOL")
 #' setFeatureSetCommands(new.cmds)
 #'
 #' getFeatureSetCommands()
 #'
-#' setFeatureSetCommands(old) 
+#' setFeatureSetCommands(old)
 #' @export
 #' @rdname global-FeatureSetCommands
 setFeatureSetCommands <- function(value) {
@@ -45,7 +45,7 @@ setFeatureSetCommands <- function(value) {
 
 #' Global extra table fields
 #'
-#' Get or set the names of the extra fields to include in a table. 
+#' Get or set the names of the extra fields to include in a table.
 #'
 #' @param value A character vector containing the names of extra fields to include.
 #'
@@ -71,7 +71,11 @@ setFeatureSetCommands <- function(value) {
 #' @export
 #' @rdname global-TableExtraFields
 getTableExtraFields <- function() {
-    .globals$get("TableExtraFields")
+    out <- .globals$get("TableExtraFields")
+    if (is.null(out)) {
+        out <- character()
+    }
+    out
 }
 
 #' @export
@@ -91,16 +95,16 @@ setTableExtraFields <- function(value) {
 #' \code{getPValuePattern} returns the patterns for acceptable column names for p-values.
 #'
 #' \code{getLogFCPattern} returns the patterns for acceptable column names for log-fold changes.
-#' 
+#'
 #' \code{getAveAbPattern} returns the patterns for acceptable column names for the average abundances.
 #'
 #' The corresponding setters set the global parts for each statistic and return \code{NULL} invisibly.
-#' 
+#'
 #' @details
-#' These utilities allow users to easily get and set the patterns of acceptable fields in all 
+#' These utilities allow users to easily get and set the patterns of acceptable fields in all
 #' \linkS4class{VolcanoPlot}s, \linkS4class{MAPlot}s and \linkS4class{LogFCLogFCPlot}s at once.
 #' Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
-#' and (ii) if the first panel of each class does not have existing values in the 
+#' and (ii) if the first panel of each class does not have existing values in the
 #' \code{"PValueFields"}, \code{"LogFCFields"} or \code{"AveAbFields"} slots (which take precedence if present).
 #'
 #' Each of these global settings are treated as \emph{patterns} for partial matching.
@@ -110,7 +114,7 @@ setTableExtraFields <- function(value) {
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \linkS4class{VolcanoPlot}, \linkS4class{MAPlot} and \linkS4class{LogFCLogFCPlot}, 
+#' \linkS4class{VolcanoPlot}, \linkS4class{MAPlot} and \linkS4class{LogFCLogFCPlot},
 #' which are affected by these globals.
 #'
 #' @examples
