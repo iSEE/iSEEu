@@ -21,6 +21,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
       </span>
     </div>
 
@@ -67,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/iSEE/iSEEu">
+  <a href="https://github.com/iSEE/iSEEu" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -84,42 +86,42 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="iseeu" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#iseeu" class="anchor"></a><code>iSEEu</code>
+<div class="section level1">
+<div class="page-header"><h1 id="iseeu">
+<code>iSEEu</code><a class="anchor" aria-label="anchor" href="#iseeu"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>The <code>iSEEu</code> package contains material and code that extends the <code>iSEE</code> package (<a href="https://github.com/iSEE/iSEE" class="uri">https://github.com/iSEE/iSEE</a>).</p>
+<p>The <code>iSEEu</code> package contains material and code that extends the <code>iSEE</code> package (<a href="https://github.com/iSEE/iSEE" class="external-link uri">https://github.com/iSEE/iSEE</a>).</p>
 <p>We welcome contributions from the community, see below for more instructions. For example, during the Developer Day at the European Bioconductor 2019 conference (<code>#EuroBioc2019</code>, at the UCLouvain, in Brussels, Belgium), we proposed a hackathon-like session, and we focused on the design of “modes”, i.e. preconfigured sets of panels and linked content to be used as starting setup when launching <code>iSEE</code>.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p><code>iSEEu</code> can be easily installed from Bioconductor using <code><a href="https://rdrr.io/pkg/BiocManager/man/install.html">BiocManager::install()</a></code>:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p><code>iSEEu</code> can be easily installed from Bioconductor using <code><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">BiocManager::install()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"iSEEu"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"iSEEu"</span><span class="op">)</span></code></pre></div>
 <p>Optionally, if you want to install the development version from GitHub, you can use:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"iSEE/iSEEu"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"iSEE/iSEEu"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co"># or alternatively...</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"iSEE/iSEEu"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"iSEE/iSEEu"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Setting <code>dependencies = TRUE</code> should ensure that all packages, including the ones in the <code>Suggests:</code> field of the <code>DESCRIPTION</code>, are installed - this can be essential if you want to reproduce the code in the vignette, for example.</p>
 </div>
-<div id="expanding-the-isee-universe-with-iseeu" class="section level2">
-<h2 class="hasAnchor">
-<a href="#expanding-the-isee-universe-with-iseeu" class="anchor"></a>Expanding the <code>iSEE</code> universe with <code>iSEEu</code>
+<div class="section level2">
+<h2 id="expanding-the-isee-universe-with-iseeu">Expanding the <code>iSEE</code> universe with <code>iSEEu</code>
+<a class="anchor" aria-label="anchor" href="#expanding-the-isee-universe-with-iseeu"></a>
 </h2>
 <ul>
 <li>install <code>iSEE</code> first - the development version is recommended.</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"iSEE"</span>, version <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"iSEE"</span>, version <span class="op">=</span> <span class="st">"devel"</span><span class="op">)</span>
 <span class="co"># or</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"iSEE/iSEE"</span><span class="op">)</span></code></pre></div>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"iSEE/iSEE"</span><span class="op">)</span></code></pre></div>
 <ul>
-<li>fork the <code>iSEEu</code> repo (<a href="https://github.com/iSEE/iSEEu" class="uri">https://github.com/iSEE/iSEEu</a>) and clone it locally.</li>
+<li>fork the <code>iSEEu</code> repo (<a href="https://github.com/iSEE/iSEEu" class="external-link uri">https://github.com/iSEE/iSEEu</a>) and clone it locally.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/[your_github_username]/iSEEu.git</span></code></pre></div>
 <ul>
@@ -135,22 +137,22 @@
 </li>
 </ul>
 </div>
-<div id="some-more-info" class="section level2">
-<h2 class="hasAnchor">
-<a href="#some-more-info" class="anchor"></a>Some more info</h2>
-<div id="where-do-i-look-for-constants-within-isee" class="section level4">
-<h4 class="hasAnchor">
-<a href="#where-do-i-look-for-constants-within-isee" class="anchor"></a>Where do I look for constants within <code>iSEE</code>?</h4>
-<p>Many of the “global” variables that are used in several places in <code>iSEE</code> are defined in the <a href="https://github.com/iSEE/iSEE/blob/master/R/constants.R">constants.R</a> script in <code>iSEE</code>. We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. To access a constant, use <code>iSEE:::.constantName</code>.</p>
+<div class="section level2">
+<h2 id="some-more-info">Some more info<a class="anchor" aria-label="anchor" href="#some-more-info"></a>
+</h2>
+<div class="section level4">
+<h4 id="where-do-i-look-for-constants-within-isee">Where do I look for constants within <code>iSEE</code>?<a class="anchor" aria-label="anchor" href="#where-do-i-look-for-constants-within-isee"></a>
+</h4>
+<p>Many of the “global” variables that are used in several places in <code>iSEE</code> are defined in the <a href="https://github.com/iSEE/iSEE/blob/master/R/constants.R" class="external-link">constants.R</a> script in <code>iSEE</code>. We suggest to use these constants rather than hardcoding (e.g.) column names in the panel specification data frames, to protect against potential future changes of the precise column names. To access a constant, use <code>iSEE:::.constantName</code>.</p>
 </div>
-<div id="is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work" class="section level4">
-<h4 class="hasAnchor">
-<a href="#is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work" class="anchor"></a>Is there any example I can check out to understand how things are supposed to work?</h4>
+<div class="section level4">
+<h4 id="is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work">Is there any example I can check out to understand how things are supposed to work?<a class="anchor" aria-label="anchor" href="#is-there-any-example-i-can-check-out-to-understand-how-things-are-supposed-to-work"></a>
+</h4>
 <p>There are several modes already defined in the <code>R/</code> directory.</p>
 </div>
-<div id="are-there-any-style-guides-i-am-supposed-to-follow" class="section level4">
-<h4 class="hasAnchor">
-<a href="#are-there-any-style-guides-i-am-supposed-to-follow" class="anchor"></a>Are there any style guides I am supposed to follow?</h4>
+<div class="section level4">
+<h4 id="are-there-any-style-guides-i-am-supposed-to-follow">Are there any style guides I am supposed to follow?<a class="anchor" aria-label="anchor" href="#are-there-any-style-guides-i-am-supposed-to-follow"></a>
+</h4>
 <p>Yes. Mainly guided by common sense of “never changing a working system”, please stick to the conventions we have been adopting for developing the existing codebase. A few simple style options:</p>
 <ul>
 <li>keep the indentation as it is in the initial functions already available.</li>
@@ -159,88 +161,98 @@
 <li>for names, try to keep some consistency with what already is existing. We use camelCase for modes and some other functions, and prepend most unexported elements with a dot.</li>
 </ul>
 </div>
-<div id="what-if-i-need-a-custom-panel-type" class="section level4">
-<h4 class="hasAnchor">
-<a href="#what-if-i-need-a-custom-panel-type" class="anchor"></a>What if I need a custom panel type?</h4>
-<p>In addition to the eight standard panel types, custom panels are easily accommodated within <code>iSEE</code> applications. For a guide, see the corresponding <a href="https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html">vignette</a>. For examples, see <a href="https://github.com/iSEE/iSEE_custom">this repo</a>.</p>
+<div class="section level4">
+<h4 id="what-if-i-need-a-custom-panel-type">What if I need a custom panel type?<a class="anchor" aria-label="anchor" href="#what-if-i-need-a-custom-panel-type"></a>
+</h4>
+<p>In addition to the eight standard panel types, custom panels are easily accommodated within <code>iSEE</code> applications. For a guide, see the corresponding <a href="https://bioconductor.org/packages/release/bioc/vignettes/iSEE/inst/doc/custom.html" class="external-link">vignette</a>. For examples, see <a href="https://github.com/iSEE/iSEE_custom" class="external-link">this repo</a>.</p>
 </div>
-<div id="are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types" class="section level4">
-<h4 class="hasAnchor">
-<a href="#are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types" class="anchor"></a>Are there other examples on how to use <code>iSEE</code> for exploring other datasets/data types?</h4>
-<p>Yes, you can have a look at the examples in <a href="https://github.com/iSEE/iSEE_instances" class="uri">https://github.com/iSEE/iSEE_instances</a>, where we tried to put together fully worked vignettes to re-analyze publicly available datasets, e.g. also trying to replicate some key visualizations of the original publications.</p>
+<div class="section level4">
+<h4 id="are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types">Are there other examples on how to use <code>iSEE</code> for exploring other datasets/data types?<a class="anchor" aria-label="anchor" href="#are-there-other-examples-on-how-to-use-isee-for-exploring-other-datasetsdata-types"></a>
+</h4>
+<p>Yes, you can have a look at the examples in <a href="https://github.com/iSEE/iSEE_instances" class="external-link uri">https://github.com/iSEE/iSEE_instances</a>, where we tried to put together fully worked vignettes to re-analyze publicly available datasets, e.g. also trying to replicate some key visualizations of the original publications.</p>
 </div>
-<div id="where-can-i-find-a-comprehensive-introduction-to-isee" class="section level4">
-<h4 class="hasAnchor">
-<a href="#where-can-i-find-a-comprehensive-introduction-to-isee" class="anchor"></a>Where can I find a comprehensive introduction to <code>iSEE</code>?</h4>
-<p>The <code>iSEE</code> package contains several vignettes detailing the main functionality. You can also take a look at this <a href="https://isee.github.io/iSEEWorkshop2019/index.html">workshop</a>. A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available <a href="http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/">here</a>.</p>
+<div class="section level4">
+<h4 id="where-can-i-find-a-comprehensive-introduction-to-isee">Where can I find a comprehensive introduction to <code>iSEE</code>?<a class="anchor" aria-label="anchor" href="#where-can-i-find-a-comprehensive-introduction-to-isee"></a>
+</h4>
+<p>The <code>iSEE</code> package contains several vignettes detailing the main functionality. You can also take a look at this <a href="https://isee.github.io/iSEEWorkshop2019/index.html" class="external-link">workshop</a>. A compiled version from the Bioc2019 conference (based on Bioconductor release 3.10) is available <a href="http://biocworkshops2019.bioconductor.org.s3-website-us-east-1.amazonaws.com/page/iSEEWorkshop2019__iSEE-lab/" class="external-link">here</a>.</p>
 </div>
 </div>
-<div id="code-of-conduct" class="section level2">
-<h2 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
-<p>Please note that the iSEEu project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<div class="section level2">
+<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h2>
+<p>Please note that the iSEEu project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/iSEEu">https://​www.bioconductor.org/​packages/​iSEEu</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/iSEE/iSEEu/">https://​github.com/​iSEE/​iSEEu/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/iSEE/iSEEu/issues">https://​github.com/​iSEE/​iSEEu/​issues</a>
-</li>
+<li><a href="https://www.bioconductor.org/packages/iSEEu" class="external-link">View on Bioconductor</a></li>
+<li><a href="https://github.com/iSEE/iSEEu/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/iSEE/iSEEu/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://kevinrue.github.io">Kevin Rue-Albrecht</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3899-3872" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://csoneson.github.io">Charlotte Soneson</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3833-2169" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://federicomarini.github.io">Federico Marini</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3252-7758" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://LTLA.github.io">Aaron Lun</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-3564-4813" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing iSEEu</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/iSEE/iSEEu/actions"><img src="https://github.com/iSEE/iSEEu/workflows/build_check_deploy/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/iSEE/iSEEu?branch=master"><img src="https://codecov.io/gh/iSEE/iSEEu/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li>
+<a href="https://kevinrue.github.io" class="external-link">Kevin Rue-Albrecht</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-3899-3872" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3833-2169" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="https://federicomarini.github.io" class="external-link">Federico Marini</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3252-7758" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="https://LTLA.github.io" class="external-link">Aaron Lun</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-3564-4813" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/iSEE/iSEEu/actions" class="external-link"><img src="https://github.com/iSEE/iSEEu/workflows/build_check_deploy/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/iSEE/iSEEu?branch=master" class="external-link"><img src="https://codecov.io/gh/iSEE/iSEEu/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kevinrue.github.io">Kevin Rue-Albrecht</a>, <a href="https://csoneson.github.io">Charlotte Soneson</a>, <a href="https://federicomarini.github.io">Federico Marini</a>, <a href="https://LTLA.github.io">Aaron Lun</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://kevinrue.github.io" class="external-link">Kevin Rue-Albrecht</a>, <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://LTLA.github.io" class="external-link">Aaron Lun</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer>
@@ -248,6 +260,8 @@
 
   
 
+
+  
 
   </body>
 </html>
