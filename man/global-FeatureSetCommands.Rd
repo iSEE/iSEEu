@@ -22,13 +22,13 @@ This is deprecated in favor of \code{\link{registerFeatureSetCommands}}.
 \examples{
 old <- getFeatureSetCommands()
 
-new.cmds <- createGeneSetCommands(organism="org.Mm.eg.db", 
+new.cmds <- createGeneSetCommands(organism="org.Mm.eg.db",
     identifier="SYMBOL")
 setFeatureSetCommands(new.cmds)
 
 getFeatureSetCommands()
 
-setFeatureSetCommands(old) 
+setFeatureSetCommands(old)
 }
 \seealso{
 \code{\link{createGeneSetCommands}}, for one method of generating \code{value}.
