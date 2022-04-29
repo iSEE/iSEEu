@@ -314,6 +314,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
     list(plot=.textEval(plot_cmds, envir), commands=plot_cmds)
 })
 
+#' @importFrom hexbin hexcoords
 .reduced_dimension_hex_plot <- function(plot_data, param_choices,
     x_lab, y_lab, color_lab, shape_lab, size_lab, title,
     by_row=FALSE, is_subsetted=FALSE, is_downsampled=FALSE)
@@ -330,7 +331,7 @@ setMethod(".generateDotPlot", "ReducedDimensionHexPlot", function(x, labels, env
         } else if (!color_discrete) {
             new_aes <- .buildAes(alt=c(z="ColorBy"))
         } else {
-            # If this somehow manages to happen (e.g., discrete assays), 
+            # If this somehow manages to happen (e.g., discrete assays),
             # don't even try to plot it.
             color_lab <- "Count"
             new_aes <- .buildAes()

@@ -47,7 +47,8 @@ Imports:
     DT,
     stats,
     colourpicker,
-    shinyAce
+    shinyAce,
+    hexbin
 Suggests: 
     scRNAseq,
     scater,
@@ -72,6 +73,6 @@ BugReports: https://github.com/iSEE/iSEEu/issues
 biocViews: ImmunoOncology, Visualization, GUI, DimensionReduction, 
     FeatureExtraction, Clustering, Transcription, 
     GeneExpression, Transcriptomics, SingleCell, CellBasedAssays
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
