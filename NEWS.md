@@ -1,3 +1,7 @@
+# iSEEu 1.9.2
+
+* Add setup a-la-tidyverse to import `ReducedDimensionHexPlot` from `iSEEhex` package.
+
 # iSEEu 1.7.1
 
 * Fix bug causing `.setCachedCommonInfo()` to cache `NULL` value for `valid.rowdata.names` information of `DynamicMarkerTable` panel instead of empty character vector.
