@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -89,16 +89,27 @@
 <dd><p>For <code>.setIdentifierType</code> and <code>.setOrganism</code>,
 a string containing the type of identifier or organism package to use.</p>
 <p>For <code>.setGeneSetCommands</code>, a named list containing two character vectors, see Details.</p></dd>
+
+
 <dt>collection</dt>
 <dd><p>String specifying the gene set collection.</p></dd>
+
+
 <dt>mode</dt>
 <dd><p>String specifying the mode of operation for the returned commands.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>.getIdentifierType</code> will return the identifier type to use, defaulting to <code>"ENTREZID"</code>.
-<code>.getOrganism</code> will return the organism package to use, defaulting <code>"org.Hs.eg.db"</code>.
-<code>.getGeneSetCommands</code> will return:</p><ul><li><p>If <code>mode="show"</code>, a string containing R commands that create <code>tab</code>,
+    
+
+<p><code>.getIdentifierType</code> will return the identifier type to use, defaulting to <code>"ENTREZID"</code>.</p>
+
+
+<p><code>.getOrganism</code> will return the organism package to use, defaulting <code>"org.Hs.eg.db"</code>.</p>
+
+
+<p><code>.getGeneSetCommands</code> will return:</p><ul><li><p>If <code>mode="show"</code>, a string containing R commands that create <code>tab</code>,
 a data.frame of all gene sets for a given <code>collection</code>.</p></li>
 <li><p>If <code>mode="extract"</code>, a format string containing R commands that (after formatting) create <code>selected</code>,
 a character vector of gene identities for the selected gene set.
@@ -210,7 +221,7 @@ This is useful for setting, e.g., <code>GO=NULL</code> to ignore the in-built GO
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

@@ -19,7 +19,7 @@ SingleCellExperiment object."><!-- mathjax --><script src="https://cdnjs.cloudfl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ SingleCellExperiment object."><!-- mathjax --><script src="https://cdnjs.cloudfl
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -87,10 +87,14 @@ dimension plots for interactive data exploration of the
     <h2>Arguments</h2>
     <dl><dt>se</dt>
 <dd><p>An object that coercible to <a href="https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html" class="external-link">SingleCellExperiment</a></p></dd>
+
+
 <dt>includeNames</dt>
 <dd><p>Character vector with the names of reduced dimensions
 to display as individual panels. The default uses all available in
 <code>reducedDimNames(se)</code>.</p></dd>
+
+
 <dt>colorBy</dt>
 <dd><p>Character scalar controlling coloring of cells. Must match either
 to one of <code>colnames(colData(se))</code> or <code>rownames(se)</code>. If coloring
@@ -98,18 +102,25 @@ by a colData column, a column data plot is opened in addition to the
 reduced dimension panels. If coloring by a feature, a row statistics table
 is openend in addition to the reduced dimension panels, from which the
 latter are receiving the color.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments passed to <code>iSEE</code>.</p></dd>
+
+
 <dt>plotWidth</dt>
 <dd><p>The grid width of linked plots (numeric vector of length
 either 1 or equal to <code>length(includeNames)</code>). The total width of
 the window is 12, so <code>plotWidth = 4</code> for example will show three
 panels per row. If <code>plotWidth = NULL</code> (the default), a value will be
 estimated depending on the number of reduced dimension panels.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A Shiny app object is returned.</p>
+    
+
+<p>A Shiny app object is returned.</p>
     </div>
 
     <div id="ref-examples">
@@ -118,7 +129,7 @@ estimated depending on the number of reduced dimension panels.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Example data ----</span></span>
 <span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/ReprocessedData.html" class="external-link">ReprocessedAllenData</a></span><span class="op">(</span>assays<span class="op">=</span><span class="st">"tophat_counts"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> snapshotDate(): 2022-01-20</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> snapshotDate(): 2022-06-29</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
@@ -163,7 +174,7 @@ estimated depending on the number of reduced dimension panels.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ This is deprecated in favor of registerFeatureSetCommands."><!-- mathjax --><scr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -33,7 +33,7 @@ This is deprecated in favor of registerFeatureSetCommands."><!-- mathjax --><scr
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -82,10 +82,13 @@ This is deprecated in favor of <code><a href="registerFeatureSetCollections.html
 Both vectors should be of the same length and have the same names.
 Vectors should contain R commands to create collections and retrieve sets;
 see <code>?<a href="FeatureSetTable-class.html">FeatureSetTable</a></code> and the output of <code><a href="createGeneSetCommands.html">createGeneSetCommands</a></code> for details.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>setFeatureSetCommands</code> will set the current global feature set commands and return <code>NULL</code> invisibly.</p>
+    
+
+<p><code>setFeatureSetCommands</code> will set the current global feature set commands and return <code>NULL</code> invisibly.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -100,7 +103,7 @@ see <code>?<a href="FeatureSetTable-class.html">FeatureSetTable</a></code> and t
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">old</span> <span class="op">&lt;-</span> <span class="fu"><a href="registerFeatureSetCollections.html">getFeatureSetCommands</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">new.cmds</span> <span class="op">&lt;-</span> <span class="fu"><a href="createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>organism<span class="op">=</span><span class="st">"org.Mm.eg.db"</span>, </span>
+<span class="r-in"><span class="va">new.cmds</span> <span class="op">&lt;-</span> <span class="fu"><a href="createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>organism<span class="op">=</span><span class="st">"org.Mm.eg.db"</span>,</span>
 <span class="r-in">    identifier<span class="op">=</span><span class="st">"SYMBOL"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">setFeatureSetCommands</span><span class="op">(</span><span class="va">new.cmds</span><span class="op">)</span></span>
 <span class="r-in"></span>
@@ -118,7 +121,7 @@ see <code>?<a href="FeatureSetTable-class.html">FeatureSetTable</a></code> and t
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ".genes_in_set &lt;- tryCatch(AnnotationDbi::select(org.Mm.eg.db::org.Mm.eg.db, keys=.set_id, keytype='PATH',\n   column=\"SYMBOL\")[,\"SYMBOL\"], error=function(e) character(0));\nselected &lt;- intersect(rownames(se), .genes_in_set)" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu">setFeatureSetCommands</span><span class="op">(</span><span class="va">old</span><span class="op">)</span> </span>
+<span class="r-in"><span class="fu">setFeatureSetCommands</span><span class="op">(</span><span class="va">old</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -133,7 +136,7 @@ see <code>?<a href="FeatureSetTable-class.html">FeatureSetTable</a></code> and t
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>

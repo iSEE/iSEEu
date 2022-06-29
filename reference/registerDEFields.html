@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -100,21 +100,32 @@
     <dl><dt>se</dt>
 <dd><p>A SummarizedExperiment to be visualized with various DE-related Panels.
 This is expected to have a number of DE-related fields in its <code>rowData</code>.</p></dd>
+
+
 <dt>fields</dt>
 <dd><p>A character vector containing the names of the relevant fields containing the DE statistics.
 Alternatively <code>NULL</code> to remove any existing setting.</p></dd>
+
+
 <dt>patterns</dt>
 <dd><p>A character vector containing partial names,
 to match against the <code>colnames</code> of the <code>rowData</code> to identify relevant fields containing DE statistics.
 Alternatively <code>NULL</code> to remove any existing setting.</p></dd>
+
+
 <dt>defaults</dt>
 <dd><p>Character vector specifying the default patterns to provide when no patterns were registered in <code>se</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>All <code>register</code> functions will return <code>se</code>, modified to contain the supplied <code>patterns</code> or <code>fields</code>.
-These will be used as suggestions by DE-related Panels to identify the relevant fields.
-All <code>get</code> functions will return a character vector containing the value set by the corresponding <code>register</code> function;
+    
+
+<p>All <code>register</code> functions will return <code>se</code>, modified to contain the supplied <code>patterns</code> or <code>fields</code>.
+These will be used as suggestions by DE-related Panels to identify the relevant fields.</p>
+
+
+<p>All <code>get</code> functions will return a character vector containing the value set by the corresponding <code>register</code> function;
 or <code>NULL</code>, if nothing was set.</p>
     </div>
     <div id="details">
@@ -174,7 +185,7 @@ If no <code>patterns</code> are supplied, the Panels will use the values in <cod
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
       </footer></div>
