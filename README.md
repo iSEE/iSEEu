@@ -1,9 +1,11 @@
 # `iSEEu`
 
 <!-- badges: start -->
-
-[![R build status](https://github.com/iSEE/iSEEu/workflows/build_check_deploy/badge.svg)](https://github.com/iSEE/iSEEu/actions)
-[![Codecov test coverage](https://codecov.io/gh/iSEE/iSEEu/branch/master/graph/badge.svg)](https://codecov.io/gh/iSEE/iSEEu?branch=master)
+[![GitHub issues](https://img.shields.io/github/issues/iSEE/iSEEu)](https://github.com/iSEE/iSEEu/issues)
+[![GitHub pulls](https://img.shields.io/github/issues-pr/iSEE/iSEEu)](https://github.com/iSEE/iSEEu/pulls)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R-CMD-check-bioc](https://github.com/iSEE/iSEEu/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/iSEE/iSEEu/actions)
+[![Codecov test coverage](https://codecov.io/gh/iSEE/iSEEu/branch/main/graph/badge.svg)](https://app.codecov.io/gh/iSEE/iSEEu?branch=main)
 <!-- badges: end -->
 
 The `iSEEu` package contains material and code that extends the `iSEE` package (https://github.com/iSEE/iSEE).
