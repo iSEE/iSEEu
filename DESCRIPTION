@@ -48,7 +48,7 @@ Imports:
     stats,
     colourpicker,
     shinyAce,
-    hexbin,
+    iSEEhex,
     cli,
     rlang
 Suggests: 
