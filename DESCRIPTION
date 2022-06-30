@@ -49,6 +49,7 @@ Imports:
     colourpicker,
     shinyAce,
     iSEEhex,
+    crayon,
     cli,
     rlang
 Suggests: 
