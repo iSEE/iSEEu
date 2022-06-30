@@ -1,3 +1,4 @@
+#' @import iSEEhex
 core <- c("iSEE", "iSEEhex")
 
 core_unloaded <- function() {
