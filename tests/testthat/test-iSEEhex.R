@@ -3,7 +3,7 @@
 context("iSEEhex")
 
 test_that("iSEEhex is attached", {
-    expect_true(iSEEu:::is_attached("iSEEhex"))
+    expect_true("package:iSEEhex" %in% search())
 })
 
 test_that("ReducedDimensionHexPlot can be created", {
