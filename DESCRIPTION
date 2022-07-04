@@ -34,6 +34,8 @@ Description: iSEEu (the iSEE universe) contains diverse functionality to extend
     or modes allowing easy configuration of iSEE applications.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Depends:
+    iSEEhex
 Imports:
     methods,
     S4Vectors,
@@ -45,12 +47,7 @@ Imports:
     DT,
     stats,
     colourpicker,
-    shinyAce,
-    iSEE,
-    iSEEhex,
-    crayon,
-    cli,
-    rlang
+    shinyAce
 Suggests: 
     scRNAseq,
     scater,

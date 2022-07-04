@@ -1,6 +1,6 @@
 # iSEEu 1.9.2
 
-* Add setup a-la-tidyverse to import `ReducedDimensionHexPlot` from `iSEEhex` package.
+* Depend on the `iSEEhex` package to initiate the "iSEEverse".
 
 # iSEEu 1.7.1
 
