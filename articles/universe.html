@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Universe of iSEE panels • iSEEu</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -56,8 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/iSEEu_contribute_eurobioc2019.html">iSEEu_contribute_eurobioc2019
-</a>
+      <a href="../articles/universe.html">Universe of iSEE panels</a>
     </li>
   </ul>
 </li>
@@ -67,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/iSEE/iSEEu" class="external-link">
+  <a href="https://github.com/iSEE/iSEEu/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -112,7 +105,7 @@ Lun</h4>
                   <a class="author_email" href="mailto:#"></a><a href="mailto:infinite.monkeys.with.keyboards@gmail.com" class="email">infinite.monkeys.with.keyboards@gmail.com</a>
       
                   
-            <h4 data-toc-skip class="date">29 June 2022</h4>
+            <h4 data-toc-skip class="date">5 July 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/iSEE/iSEEu/blob/HEAD/vignettes/universe.Rmd" class="external-link"><code>vignettes/universe.Rmd</code></a></small>
       <div class="hidden name"><code>universe.Rmd</code></div>
@@ -177,7 +170,7 @@ like:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ma.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MAPlot-class.html">MAPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/iSEE.html" class="external-link">iSEE</a></span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ma.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="screenshots/ma.png" width="488"></p>
+<p><img src="screenshots/ma.png"><!-- --></p>
 <p>The <code>VolcanoPlot</code> class creates a volcano plot with the
 log-fold change on the x-axis and the negative log-p-value on the
 y-axis. Features with significant differences in each direction are
@@ -189,7 +182,7 @@ this class are created like:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vol.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/VolcanoPlot-class.html">VolcanoPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/iSEE.html" class="external-link">iSEE</a></span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">vol.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="screenshots/volcano.png" width="488"></p>
+<p><img src="screenshots/volcano.png"><!-- --></p>
 <p>The <code>LogFCLogFCPlot</code> class creates a scatter plot of two
 log-fold changes from different DE comparisons. This allows us to
 compare DE results on the same dataset - or even from different
@@ -211,7 +204,7 @@ Instances of this class are created like:</p>
 <span class="va">lfc.panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LogFCLogFCPlot-class.html">LogFCLogFCPlot</a></span><span class="op">(</span>PanelWidth<span class="op">=</span><span class="fl">6L</span>, YAxis<span class="op">=</span><span class="st">"alt.logFC"</span>, 
     YPValueField<span class="op">=</span><span class="st">"alt.PValue"</span><span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/iSEE.html" class="external-link">iSEE</a></span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">lfc.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="screenshots/logfclogfc.png" width="496"></p>
+<p><img src="screenshots/logfclogfc.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="dynamically-recalculated-panels">Dynamically recalculated panels<a class="anchor" aria-label="anchor" href="#dynamically-recalculated-panels"></a>
@@ -266,7 +259,7 @@ package.</p>
 <span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/iSEE.html" class="external-link">iSEE</a></span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">red.panel</span>, <span class="va">dyn.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="screenshots/dynreddim.png" width="488"></p>
+<p><img src="screenshots/dynreddim.png"><!-- --></p>
 <p>The <code>DynamicMarkerTable</code> class dynamically computes basic
 differential statistics comparing assay values across groups of multiple
 selections in a transmitting panel. If only the active selection exists
@@ -302,7 +295,7 @@ table using the <code><a href="https://rdrr.io/pkg/scran/man/findMarkers.html" c
 <span class="va">red.panel</span><span class="op">[[</span><span class="st">"PanelWidth"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">4L</span> <span class="co"># To fit onto one line.</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/iSEE.html" class="external-link">iSEE</a></span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">red.panel</span>, <span class="va">diff.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="screenshots/diffstat.png" width="488"></p>
+<p><img src="screenshots/diffstat.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="feature-set-table">Feature set table<a class="anchor" aria-label="anchor" href="#feature-set-table"></a>
@@ -327,7 +320,7 @@ selections from other panels.</p>
     ColorBy<span class="op">=</span><span class="st">"Row selection"</span>, PanelWidth<span class="op">=</span><span class="fl">6L</span><span class="op">)</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/iSEE.html" class="external-link">iSEE</a></span><span class="op">(</span><span class="va">airway</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">gset.tab</span>, <span class="va">vol.panel</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="screenshots/geneset.png" width="488"></p>
+<p><img src="screenshots/geneset.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="app-modes">App modes<a class="anchor" aria-label="anchor" href="#app-modes"></a>
@@ -495,13 +488,14 @@ release 3.10) is available <a href="http://biocworkshops2019.bioconductor.org.s3
 <span class="co">##  [1] scater_1.25.1               ggplot2_3.3.6              </span>
 <span class="co">##  [3] scuttle_1.7.2               scRNAseq_2.11.0            </span>
 <span class="co">##  [5] edgeR_3.39.1                limma_3.53.3               </span>
-<span class="co">##  [7] airway_1.17.0               iSEEu_1.9.1                </span>
-<span class="co">##  [9] iSEE_2.9.0                  SingleCellExperiment_1.19.0</span>
-<span class="co">## [11] SummarizedExperiment_1.27.1 Biobase_2.57.1             </span>
-<span class="co">## [13] GenomicRanges_1.49.0        GenomeInfoDb_1.33.3        </span>
-<span class="co">## [15] IRanges_2.31.0              S4Vectors_0.35.1           </span>
-<span class="co">## [17] BiocGenerics_0.43.0         MatrixGenerics_1.9.1       </span>
-<span class="co">## [19] matrixStats_0.62.0          BiocStyle_2.25.0           </span>
+<span class="co">##  [7] airway_1.17.0               iSEEu_1.9.2                </span>
+<span class="co">##  [9] iSEEhex_0.99.2              iSEE_2.9.0                 </span>
+<span class="co">## [11] SingleCellExperiment_1.19.0 SummarizedExperiment_1.27.1</span>
+<span class="co">## [13] Biobase_2.57.1              GenomicRanges_1.49.0       </span>
+<span class="co">## [15] GenomeInfoDb_1.33.3         IRanges_2.31.0             </span>
+<span class="co">## [17] S4Vectors_0.35.1            BiocGenerics_0.43.0        </span>
+<span class="co">## [19] MatrixGenerics_1.9.1        matrixStats_0.62.0         </span>
+<span class="co">## [21] BiocStyle_2.25.0           </span>
 <span class="co">## </span>
 <span class="co">## loaded via a namespace (and not attached):</span>
 <span class="co">##   [1] utf8_1.2.2                    shinydashboard_0.7.2         </span>
@@ -605,7 +599,7 @@ Explorer.”</span> <em>F1000Research</em> 7 (June): 741. <a href="https://doi.o
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://kevinrue.github.io" class="external-link">Kevin Rue-Albrecht</a>, <a href="https://csoneson.github.io" class="external-link">Charlotte Soneson</a>, <a href="https://federicomarini.github.io" class="external-link">Federico Marini</a>, <a href="https://LTLA.github.io" class="external-link">Aaron Lun</a>.</p>
+<p>Developed by Kevin Rue-Albrecht, Charlotte Soneson, Federico Marini, Aaron Lun.</p>
 </div>
 
 <div class="pkgdown">
