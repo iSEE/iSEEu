@@ -1,8 +1,8 @@
 Package: iSEEu
 Type: Package
 Title: iSEE Universe
-Version: 1.9.1
-Date: 2022-04-29
+Version: 1.9.2
+Date: 2022-06-29
 Authors@R: 
     c(
     person("Kevin", 
@@ -34,8 +34,9 @@ Description: iSEEu (the iSEE universe) contains diverse functionality to extend
     or modes allowing easy configuration of iSEE applications.
 License: MIT + file LICENSE
 Encoding: UTF-8
-Depends: 
-    iSEE
+Depends:
+    iSEE,
+    iSEEhex
 Imports:
     methods,
     S4Vectors,
@@ -47,8 +48,7 @@ Imports:
     DT,
     stats,
     colourpicker,
-    shinyAce,
-    hexbin
+    shinyAce
 Suggests: 
     scRNAseq,
     scater,
@@ -73,6 +73,6 @@ BugReports: https://github.com/iSEE/iSEEu/issues
 biocViews: ImmunoOncology, Visualization, GUI, DimensionReduction, 
     FeatureExtraction, Clustering, Transcription, 
     GeneExpression, Transcriptomics, SingleCell, CellBasedAssays
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
