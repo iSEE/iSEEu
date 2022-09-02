@@ -2,6 +2,6 @@ pandoc: '2.18'
 pkgdown: 2.0.6.9000
 pkgdown_sha: 956f076f661eb2de9413f64ea24a580cf444466d
 articles:
-  universe: universe.html
-last_built: 2022-09-02T10:35Z
+  iSEEu: iSEEu.html
+last_built: 2022-09-02T11:06Z
 
