@@ -346,9 +346,11 @@ setMethod(".prioritizeDotPlotData", "LogFCLogFCPlot", function(x, envir) {
 setMethod(".colorByNoneDotPlotField", "LogFCLogFCPlot", function(x) "IsSig")
 
 #' @export
-setMethod(".colorByNoneDotPlotScale", "LogFCLogFCPlot", function(x) 
-    "local({
-    .freq_status <- tabulate(1 + (plot.data$IsSigX - 1) + 3 * (plot.data$IsSigY - 1), nbins=9);
+setMethod(".colorByNoneDotPlotScale", "LogFCLogFCPlot", function(x) {
+    var <- if (x[["Downsample"]]) "plot.data.pre" else "plot.data"
+    paste0(
+"local({
+    .freq_status <- tabulate(1 + (", var, "$IsSigX - 1) + 3 * (", var, "$IsSigY - 1), nbins=9);
     .de_labels <- c(
         none=sprintf('none (%s)', .freq_status[5]),
         `x-only`=paste(sprintf('x %s 0 (%s)', c('<', '>'), .freq_status[c(4,6)]), collapse='\\n'),
@@ -359,6 +361,7 @@ setMethod(".colorByNoneDotPlotScale", "LogFCLogFCPlot", function(x)
     scale_color_manual(values=c(none='grey', `x-only`='#fc766a', `y-only`='#2da8d8', both='#2a2b2d'), 
         name='Outcome', labels=.de_labels)
 }) +")
+})
 
 #' @export
 #' @importFrom ggplot2 geom_hline

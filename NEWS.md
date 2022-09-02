@@ -1,3 +1,7 @@
+# iSEEu 1.9.3
+
+* Fix numbering issue affecting the coloring of `LogFCLogFCPlot` panels.
+
 # iSEEu 1.9.2
 
 * Depend on the `iSEEhex` package to initiate the "iSEEverse".

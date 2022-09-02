@@ -305,7 +305,7 @@ setMethod(".prioritizeDotPlotData", "MAPlot", function(x, envir) .define_de_prio
 setMethod(".colorByNoneDotPlotField", "MAPlot", function(x) "IsSig")
 
 #' @export
-setMethod(".colorByNoneDotPlotScale", "MAPlot", function(x) .de_color_scale)
+setMethod(".colorByNoneDotPlotScale", "MAPlot", function(x) .de_color_scale(x[["Downsample"]]))
 
 #' @export
 #' @importFrom ggplot2 geom_hline

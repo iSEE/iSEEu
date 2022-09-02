@@ -253,7 +253,7 @@ setMethod(".prioritizeDotPlotData", "VolcanoPlot", function(x, envir) .define_de
 setMethod(".colorByNoneDotPlotField", "VolcanoPlot", function(x) "IsSig")
 
 #' @export
-setMethod(".colorByNoneDotPlotScale", "VolcanoPlot", function(x) .de_color_scale)
+setMethod(".colorByNoneDotPlotScale", "VolcanoPlot", function(x) .de_color_scale(x[["Downsample"]]))
 
 #' @export
 #' @importFrom ggplot2 geom_vline
