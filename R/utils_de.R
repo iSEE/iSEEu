@@ -1,11 +1,15 @@
 #' @importFrom ggplot2 scale_color_manual
-.de_color_scale <- "local({
+.de_color_scale <- function(downsample) {
+    var <- if (downsample) "plot.data.pre" else "plot.data"
+    paste0(
+"local({
     .de_colors <- c(down='dodgerblue', none='grey', up='salmon')
-    .de_tab <- table(factor(plot.data$IsSig, names(.de_colors)))
+    .de_tab <- table(factor(", var, "$IsSig, names(.de_colors)))
     .labels <- sprintf('%s (%s)', names(.de_tab), .de_tab)
     names(.labels) <- names(.de_tab)
     scale_color_manual(values=.de_colors, name='Outcome', labels=.labels)
-}) +"
+}) +")
+}
 
 .define_de_priority <- function(envir) {
     cmds <- c(
