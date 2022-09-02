@@ -20,7 +20,7 @@ If no collections have been registered, we default to the GO and KEGG collection
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.9.3</span>
       </span>
     </div>
 
@@ -130,42 +130,42 @@ which is set to the number of features in <code>se</code>.</p></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRNAseq</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html" class="external-link">LunSpikeInData</a></span><span class="op">(</span>location<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> snapshotDate(): 2022-06-29</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scRNAseq</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scRNAseq/man/LunSpikeInData.html" class="external-link">LunSpikeInData</a></span><span class="op">(</span>location<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> snapshotDate(): 2022-08-23</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> snapshotDate(): 2022-06-29</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> snapshotDate(): 2022-08-23</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> see ?scRNAseq and browseVignettes('scRNAseq') for documentation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/scater/" class="external-link">scater</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/logNormCounts.html" class="external-link">logNormCounts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scran</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">rowData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html" class="external-link">modelGeneVarWithSpikes</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"ERCC"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">cmds</span> <span class="op">&lt;-</span> <span class="fu"><a href="createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>collections<span class="op">=</span><span class="st">"GO"</span>,</span>
-<span class="r-in">    organism<span class="op">=</span><span class="st">"org.Mm.eg.db"</span>, identifier<span class="op">=</span><span class="st">"ENSEMBL"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="registerFeatureSetCollections.html">registerFeatureSetCommands</a></span><span class="op">(</span><span class="va">sce</span>, <span class="va">cmds</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Setting up the application.</span></span>
-<span class="r-in"><span class="va">gst</span> <span class="op">&lt;-</span> <span class="fu">FeatureSetTable</span><span class="op">(</span>PanelId<span class="op">=</span><span class="fl">1L</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">rdp</span> <span class="op">&lt;-</span> <span class="fu">RowDataPlot</span><span class="op">(</span>RowSelectionSource<span class="op">=</span><span class="st">"FeatureSetTable1"</span>,</span>
-<span class="r-in">    ColorBy<span class="op">=</span><span class="st">"Row selection"</span>,</span>
-<span class="r-in">    XAxis<span class="op">=</span><span class="st">"Row data"</span>, XAxisRowData<span class="op">=</span><span class="st">"mean"</span>, YAxis<span class="op">=</span><span class="st">"total"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">rdt</span> <span class="op">&lt;-</span> <span class="fu">RowDataTable</span><span class="op">(</span>RowSelectionSource<span class="op">=</span><span class="st">"FeatureSetTable1"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu">iSEE</span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">gst</span>, <span class="va">rdp</span>, <span class="va">rdt</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/scater/" class="external-link">scater</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/logNormCounts.html" class="external-link">logNormCounts</a></span><span class="op">(</span><span class="va">sce</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scran</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">rowData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu">rowData</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/scran/man/modelGeneVarWithSpikes.html" class="external-link">modelGeneVarWithSpikes</a></span><span class="op">(</span><span class="va">sce</span>, <span class="st">"ERCC"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cmds</span> <span class="op">&lt;-</span> <span class="fu"><a href="createGeneSetCommands.html">createGeneSetCommands</a></span><span class="op">(</span>collections<span class="op">=</span><span class="st">"GO"</span>,</span></span>
+<span class="r-in"><span>    organism<span class="op">=</span><span class="st">"org.Mm.eg.db"</span>, identifier<span class="op">=</span><span class="st">"ENSEMBL"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu"><a href="registerFeatureSetCollections.html">registerFeatureSetCommands</a></span><span class="op">(</span><span class="va">sce</span>, <span class="va">cmds</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Setting up the application.</span></span></span>
+<span class="r-in"><span><span class="va">gst</span> <span class="op">&lt;-</span> <span class="fu">FeatureSetTable</span><span class="op">(</span>PanelId<span class="op">=</span><span class="fl">1L</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">rdp</span> <span class="op">&lt;-</span> <span class="fu">RowDataPlot</span><span class="op">(</span>RowSelectionSource<span class="op">=</span><span class="st">"FeatureSetTable1"</span>,</span></span>
+<span class="r-in"><span>    ColorBy<span class="op">=</span><span class="st">"Row selection"</span>,</span></span>
+<span class="r-in"><span>    XAxis<span class="op">=</span><span class="st">"Row data"</span>, XAxisRowData<span class="op">=</span><span class="st">"mean"</span>, YAxis<span class="op">=</span><span class="st">"total"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">rdt</span> <span class="op">&lt;-</span> <span class="fu">RowDataTable</span><span class="op">(</span>RowSelectionSource<span class="op">=</span><span class="st">"FeatureSetTable1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu">iSEE</span><span class="op">(</span><span class="va">sce</span>, initial<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">gst</span>, <span class="va">rdp</span>, <span class="va">rdt</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -180,7 +180,7 @@ which is set to the number of features in <code>se</code>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>
