@@ -377,7 +377,7 @@ setMethod(".fullName", "AggregatedDotPlot", function(x) "Aggregated dot plot")
 
 #' @export
 #' @importFrom SummarizedExperiment assay rowData colData
-#' @importFrom ggplot2 ggplot geom_text aes theme_void aes_string scale_size
+#' @importFrom ggplot2 ggplot geom_point aes_string scale_size
 #' theme element_rect element_line element_text element_blank xlab facet_wrap
 #' scale_color_gradient scale_color_gradientn scale_color_gradient2
 #' @importFrom S4Vectors metadata
