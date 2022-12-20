@@ -1,3 +1,7 @@
+# iSEEu 1.11.1
+
+* Update `ggplot2` imports for `AggregatedDotPlot`.
+
 # iSEEu 1.9.3
 
 * Fix numbering issue affecting the coloring of `LogFCLogFCPlot` panels.
