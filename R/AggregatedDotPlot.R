@@ -377,7 +377,7 @@ setMethod(".fullName", "AggregatedDotPlot", function(x) "Aggregated dot plot")
 
 #' @export
 #' @importFrom SummarizedExperiment assay rowData colData
-#' @importFrom ggplot2 ggplot geom_text aes theme_void aes_string scale_size
+#' @importFrom ggplot2 ggplot geom_point aes_string scale_size
 #' theme element_rect element_line element_text element_blank xlab facet_wrap
 #' scale_color_gradient scale_color_gradientn scale_color_gradient2
 #' @importFrom S4Vectors metadata
@@ -500,8 +500,8 @@ setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, al
         'scale_size(limits = c(0, max(plot.data$Detected)))',
         col.cmd,
         'theme(panel.background = element_rect(fill = "white"),
-    panel.grid.major = element_line(size = 0.5, colour = "grey80"),
-    panel.grid.minor = element_line(size = 0.25, colour = "grey80"),
+    panel.grid.major = element_line(linewidth = 0.5, colour = "grey80"),
+    panel.grid.minor = element_line(linewidth = 0.25, colour = "grey80"),
     axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
     axis.title.y = element_blank())',
         sprintf('xlab(%s)', deparse(paste0(coldata.names, collapse=", "))),
