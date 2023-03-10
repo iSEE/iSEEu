@@ -134,7 +134,7 @@ NULL
                 term_cmd,
                 "tab <- read.delim('http://rest.kegg.jp/list/pathway', header=FALSE);",
                 "colnames(tab) <- c('ID', 'Description');",
-                "rownames(tab) <- sub('path:map', '', tab$ID);",
+                "rownames(tab) <- sub('map', '', tab$ID);",
                 "tab <- tab[intersect(rownames(tab), .all_terms),];",
                 sep="\n"
             )
