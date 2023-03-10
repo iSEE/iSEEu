@@ -1,8 +1,8 @@
 Package: iSEEu
 Type: Package
 Title: iSEE Universe
-Version: 1.11.1
-Date: 2022-09-02
+Version: 1.11.2
+Date: 2023-03-10
 Authors@R: 
     c(
     person("Kevin", 
