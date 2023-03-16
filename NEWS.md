@@ -1,3 +1,7 @@
+# iSEEu 1.11.2
+
+* Adjusted code to correctly parse and rename KEGG pathway identifiers.
+
 # iSEEu 1.11.1
 
 * Update `ggplot2` imports for `AggregatedDotPlot`.
