@@ -1,3 +1,7 @@
+# iSEEu 1.10.1
+
+* Adjusted code to correctly parse and rename KEGG pathway identifiers.
+
 # iSEEu 1.9.3
 
 * Fix numbering issue affecting the coloring of `LogFCLogFCPlot` panels.
