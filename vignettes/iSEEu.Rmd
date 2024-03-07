@@ -258,6 +258,71 @@ This is useful for applying sequential restrictions on the data, equivalent to g
 -  `modeReducedDim()` will launch an app with multiple reduced dimension plots.
 This is useful for examining different views of large high-dimensional datasets (e.g., single-cell studies).
 
+# Miscellaneous panels
+
+`r Biocpkg("iSEEu")` also includes a number of other panel types, that one can find useful within different contexts.
+
+Coupled to each chunk of code listed below, it is possible to display a screenshot of the app showcasing them.
+
+**AggregatedDotPlot**
+
+```{r}
+app <- iSEE(
+    sce,
+    initial = list(
+        AggregatedDotPlot(
+            ColumnDataLabel="Primary.Type",
+            CustomRowsText = "Rorb\nSnap25\nFoxp2",
+            PanelHeight = 500L, 
+            PanelWidth = 8L
+        )  
+    )
+)
+
+## To be later run as...
+# app
+## ... or
+# shiny::runApp(app)
+```
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/aggrodotplot.png", delay=30)
+```
+
+This can be very useful as an alternative to the `ComplexHeatmapPlot` panel, as sometimes it is not just about the shifts in average expression levels, but true biological signal can be found e.g. in scenarios such as differential detection.
+
+**MarkdownBoard**
+
+The `MarkdownBoard` panel class renders Markdown notes, user-supplied, into HTML to display inside the app. 
+
+```{r}
+app <- iSEE(
+    sce, 
+    initial = list(
+        MarkdownBoard(
+            Content = "# `iSEE` notepad\n\nYou can enter anything here.\n\nA list of marker genes you might be interested into:\n\n- Snap25\n- Rorb\n- Foxp2\n\nThis makes it easier to copy-paste while staying inside `iSEE`.  \nAs you can notice, the full power of markdown is at your service.\n\nHave fun exploring your data, in an even more efficient manner!\n", 
+            PanelWidth = 8L,
+            DataBoxOpen = TRUE
+        )
+    )
+)
+
+## To be later run as...
+# app
+## ... or
+# shiny::runApp(app)
+```
+
+This is useful for displaying information alongside other panels, or for users to simply jot down their own notes (and re-use them more efficiently later).
+
+```{r, echo=FALSE}
+SCREENSHOT("screenshots/markdownboard.png", delay=30)
+```
+
+The content of the `MarkdownBoard` is included in the `Data parameters` portion of the panel, as visible in the screenshot.
+
+`r Biocpkg("iSEE")` will take care of rendering your notes into good-looking yet simple HTML, that can embedded in a variety of analytic workflows for the data under inspection.
+
 # Contributing to `r Biocpkg("iSEEu")`
 
 If you want to contribute to the development of the `r Biocpkg("iSEEu")` package, here is a quick step-by-step guide:
