@@ -1,3 +1,8 @@
+# iSEEu 1.15.1
+
+* Expanded the content of the vignette, to have `AggregatedDotPlot()` and
+the `MarkdownBoard()` panels highlighted
+
 # iSEEu 1.11.2
 
 * Adjusted code to correctly parse and rename KEGG pathway identifiers.
