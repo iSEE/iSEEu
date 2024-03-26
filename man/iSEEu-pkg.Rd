@@ -4,6 +4,7 @@
 \name{iSEEu-pkg}
 \alias{iSEEu}
 \alias{iSEEu-package}
+\alias{iSEEu-pkg}
 \title{iSEEu: iSEE Universe}
 \description{
 \code{iSEEu} is a package that provides modes and panels for \code{iSEE}, allowing easy configuration of \code{iSEE} applications.
