@@ -1,3 +1,7 @@
+# iSEEu 1.17.1
+
+* Version bump to rebuild classes derived from `DotPlot`.
+
 # iSEEu 1.15.1
 
 * Expanded the content of the vignette, to have `AggregatedDotPlot()` and
