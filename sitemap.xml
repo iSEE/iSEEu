@@ -1,93 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/iSEEu.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/AggregatedDotPlot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DynamicMarkerTable-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DynamicReducedDimensionPlot-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FeatureSetTable-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/GeneSetTable-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/LogFCLogFCPlot-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MAPlot-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/MarkdownBoard-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/VolcanoPlot-class.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createGeneSetCommands.html</loc>
-  </url>
-  <url>
-    <loc>/reference/defunct.html</loc>
-  </url>
-  <url>
-    <loc>/reference/global-FeatureSetCommands.html</loc>
-  </url>
-  <url>
-    <loc>/reference/global-TableExtraFields.html</loc>
-  </url>
-  <url>
-    <loc>/reference/globals-PValuePattern.html</loc>
-  </url>
-  <url>
-    <loc>/reference/iSEEu-pkg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/modeEmpty.html</loc>
-  </url>
-  <url>
-    <loc>/reference/modeGating.html</loc>
-  </url>
-  <url>
-    <loc>/reference/modeReducedDim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/registerDEFields.html</loc>
-  </url>
-  <url>
-    <loc>/reference/registerFeatureSetCollections.html</loc>
-  </url>
-  <url>
-    <loc>/reference/utils-geneset.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://isee.github.io/iSEEu/404.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/LICENSE-text.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/articles/iSEEu.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/articles/index.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/authors.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/index.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/news/index.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/AggregatedDotPlot.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/DynamicMarkerTable-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/DynamicReducedDimensionPlot-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/FeatureSetTable-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/GeneSetTable-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/LogFCLogFCPlot-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/MAPlot-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/MarkdownBoard-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/VolcanoPlot-class.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/createGeneSetCommands.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/defunct.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/global-FeatureSetCommands.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/global-TableExtraFields.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/globals-PValuePattern.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/iSEEu-pkg.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/index.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/modeEmpty.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/modeGating.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/modeReducedDim.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/registerDEFields.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/registerFeatureSetCollections.html</loc></url>
+<url><loc>https://isee.github.io/iSEEu/reference/utils-geneset.html</loc></url>
 </urlset>
+

@@ -1,7 +1,9 @@
-pandoc: 3.1.1
-pkgdown: 2.0.9.9000
-pkgdown_sha: 9a6bbfc6ecf3aaf94406783beb0154fec0f3e87c
+pandoc: '3.4'
+pkgdown: 2.1.1.9000
+pkgdown_sha: 71fd32ce95f17b379e57e7e33f2294bc034727fd
 articles:
   iSEEu: iSEEu.html
-last_built: 2024-05-02T16:21Z
-
+last_built: 2024-10-10T14:25Z
+urls:
+  reference: https://isee.github.io/iSEEu/reference
+  article: https://isee.github.io/iSEEu/articles
