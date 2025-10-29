@@ -1,7 +1,7 @@
 Package: iSEEu
 Type: Package
 Title: iSEE Universe
-Version: 1.21.0
+Version: 1.22.0
 Date: 2024-10-01
 Authors@R: 
     c(
