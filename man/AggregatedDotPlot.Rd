@@ -18,6 +18,7 @@
 \alias{.definePanelTour,AggregatedDotPlot-method}
 \alias{.createObservers,AggregatedDotPlot-method}
 \alias{.refineParameters,AggregatedDotPlot-method}
+\alias{.multiSelectionResponsive,AggregateDotPlot-method}
 \alias{initialize,AggregatedDotPlot-method}
 \title{The AggregatedDotPlot class}
 \description{
@@ -37,6 +38,10 @@ Defaults to \code{TRUE}.
 typically corresponding to the row names of the \linkS4class{SummarizedExperiment}.
 Names should be new-line separated within this string.
 Defaults to the name of the first row in the SummarizedExperiment.
+\item \code{CapRowSelection}, an integer specifying the cap on the number of rows from a multiple selection to show in the heatmap,
+to avoid a frozen state when the application attempts to process a very large heatmap.
+Ignored if \code{CustomRows = TRUE}.
+Defaults to 200.
 }
 
 The following slots control the specification of groups:
@@ -72,6 +77,19 @@ Defaults to \code{FALSE}.
 Defaults to \code{FALSE}.
 \item \code{Scale}, a logical scalar indicating whether the standard deviation for each feature across all groups should be scaled to unity.
 Defaults to \code{FALSE}.
+}
+
+The following slots control the clustering of rows:
+\itemize{
+\item \code{ClusterRows}, a logical scalar indicating whether clustering of the rows should be performed,
+so as to group genes that have more similar average expression profiles across groups.
+Defaults to \code{FALSE}.
+\item \code{ClusterRowsDistance}, string specifying the distance metric to use.
+This can be any one of \code{"euclidean"}, \code{"maximum"}, \code{"manhattan"}, \code{"canberra"}, \code{"binary"}, \code{"minkowski"}, \code{"pearson"}, \code{"spearman"}, or \code{"kendall"}.
+Defaults to \code{"euclidean"}.
+\item \code{ClusterRowsMethod}, string specifying a linkage method to use.
+This can be any one of \code{"ward.D"}, \code{"ward.D2"}, \code{"single"}, \code{"complete"}, \code{"average"}, \code{"mcquitty"}, \code{"median"}, or \code{"centroid"}.
+Defaults to \code{"ward.D2"}.
 }
 
 The following slots control the color:
