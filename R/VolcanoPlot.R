@@ -95,7 +95,7 @@
 #' @importFrom SummarizedExperiment rowData
 #'
 #' @seealso
-#' \link{RowDataPlot}, for the base class.
+#' \link[iSEE:RowDataPlot]{RowDataPlot}, for the base class.
 #' @name VolcanoPlot-class
 NULL
 

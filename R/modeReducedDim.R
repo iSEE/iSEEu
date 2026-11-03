@@ -4,7 +4,7 @@
 #' dimension plots for interactive data exploration of the
 #' \code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} object.
 #'
-#' @param se An object that coercible to \linkS4class{SingleCellExperiment}
+#' @param se An object that coercible to \linkS4class[SingleCellExperiment]{SingleCellExperiment}
 #' @param includeNames Character vector with the names of reduced dimensions
 #'   to display as individual panels. The default uses all available in
 #'   \code{reducedDimNames(se)}.

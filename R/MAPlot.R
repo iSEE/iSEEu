@@ -94,7 +94,7 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \link{RowDataPlot}, for the base class.
+#' \link[iSEE:RowDataPlot]{RowDataPlot}, for the base class.
 #'
 #' @name MAPlot-class
 NULL
