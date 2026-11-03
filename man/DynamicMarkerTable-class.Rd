@@ -83,7 +83,7 @@ For monitoring reactive expressions:
 
 For creating the table:
 \itemize{
-\item \code{\link{.generateTable}(x, envir)} will create a data.frame of newly computed statistics in \code{envir}.
+\item \code{\link[iSEE:.generateTable]{.generateTable}(x, envir)} will create a data.frame of newly computed statistics in \code{envir}.
 The method will return the commands required to do so.
 }
 

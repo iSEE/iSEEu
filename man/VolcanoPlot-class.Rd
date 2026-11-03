@@ -70,8 +70,8 @@ For defining the interface:
 \itemize{
 \item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
 \item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
-\item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link[SummarizedExperiment:rowData]{rowData}(se)} that can be used as choices for the x-axis.
-\item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link[SummarizedExperiment:rowData]{rowData}(se)} that can be used as choices for the y-axis.
+\item \code{\link[iSEE:.allowableXAxisChoices]{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link[SummarizedExperiment:rowData]{rowData}(se)} that can be used as choices for the x-axis.
+\item \code{\link[iSEE:.allowableYAxisChoices]{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable p-value-related variables in \code{\link[SummarizedExperiment:rowData]{rowData}(se)} that can be used as choices for the y-axis.
 \item \code{\link[iSEE:.hideInterface]{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
 otherwise it will call the \linkS4class[iSEE]{RowDataPlot} method.
 \item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"Volcano plot"}.
@@ -118,7 +118,7 @@ if (interactive()) {
 
 }
 \seealso{
-\link{RowDataPlot}, for the base class.
+\link[iSEE:RowDataPlot]{RowDataPlot}, for the base class.
 }
 \author{
 Aaron Lun

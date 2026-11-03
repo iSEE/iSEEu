@@ -13,7 +13,7 @@ modeReducedDim(
 )
 }
 \arguments{
-\item{se}{An object that coercible to \linkS4class{SingleCellExperiment}}
+\item{se}{An object that coercible to \linkS4class[SingleCellExperiment]{SingleCellExperiment}}
 
 \item{includeNames}{Character vector with the names of reduced dimensions
 to display as individual panels. The default uses all available in

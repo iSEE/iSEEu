@@ -111,7 +111,7 @@ If continuous assays or discrete \code{\link[SummarizedExperiment:colData]{colDa
 
 For defining the interface:
 \itemize{
-\item \code{\link{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
+\item \code{\link[iSEE:.defineInterface]{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
 mostly by calling the parent method and adding another visualization parameter box.
 \item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} creates an interface to modify the data-related parameters,
 i.e., those that affect the position of the points.
