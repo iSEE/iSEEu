@@ -56,7 +56,7 @@ setFeatureSetCommands <- function(value) {
 #'
 #' @details
 #' These utilities allow users to easily set the feature set commands for all \linkS4class{DynamicMarkerTable}s at once.
-#' Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
+#' Any global settings only take effect (i) during setup of the \code{\link[iSEE:iSEE]{iSEE}} application
 #' and (ii) if the first \linkS4class{DynamicMarkerTable} does not have an existing values in the \code{"TableExtraFields"} slots.
 #'
 #' @author Aaron Lun
@@ -86,7 +86,7 @@ setTableExtraFields <- function(value) {
 
 #' Global DE prefixes
 #'
-#' Get or set patterns for acceptable names of \code{\link{rowData}} columns related to a differential expression analysis.
+#' Get or set patterns for acceptable names of \code{\link[SummarizedExperiment:rowData]{rowData}} columns related to a differential expression analysis.
 #' These functions are deprecated; use their counterparts in \code{?"\link{registerPValuePatterns}"} instead.
 #'
 #' @param value A character vector containing the acceptable prefixes for each statistic.
@@ -103,7 +103,7 @@ setTableExtraFields <- function(value) {
 #' @details
 #' These utilities allow users to easily get and set the patterns of acceptable fields in all
 #' \linkS4class{VolcanoPlot}s, \linkS4class{MAPlot}s and \linkS4class{LogFCLogFCPlot}s at once.
-#' Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
+#' Any global settings only take effect (i) during setup of the \code{\link[iSEE:iSEE]{iSEE}} application
 #' and (ii) if the first panel of each class does not have existing values in the
 #' \code{"PValueFields"}, \code{"LogFCFields"} or \code{"AveAbFields"} slots (which take precedence if present).
 #'

@@ -14,7 +14,7 @@
 #'   reduced dimension panels. If coloring by a feature, a row statistics table
 #'   is openend in addition to the reduced dimension panels, from which the
 #'   latter are receiving the color.
-#' @param ... Additional arguments passed to \code{\link{iSEE}}.
+#' @param ... Additional arguments passed to \code{\link[iSEE:iSEE]{iSEE}}.
 #' @param plotWidth The grid width of linked plots (numeric vector of length
 #'   either 1 or equal to \code{length(includeNames)}). The total width of
 #'   the window is 12, so \code{plotWidth = 4} for example will show three
