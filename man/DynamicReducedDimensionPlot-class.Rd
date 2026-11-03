@@ -33,8 +33,8 @@ Defaults to 1000.
 Defaults to the first named assay in the SummarizedExperiment.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{ColumnDotPlot},
-\linkS4class{DotPlot} and \linkS4class{Panel} classes.
+In addition, this class inherits all slots from its parent \linkS4class[iSEE]{ColumnDotPlot},
+\linkS4class[iSEE]{DotPlot} and \linkS4class[iSEE]{Panel} classes.
 }
 
 \section{Constructor}{
@@ -51,9 +51,9 @@ Refer to the documentation for each method for more details on the remaining arg
 For setting up data values:
 \itemize{
 \item \code{\link[iSEE:.cacheCommonInfo]{.cacheCommonInfo}(x)} adds a \code{"DynamicReducedDimensionPlot"} entry containing \code{valid.assay.names}.
-This will also call the equivalent \linkS4class{ColumnDotPlot} method.
+This will also call the equivalent \linkS4class[iSEE]{ColumnDotPlot} method.
 \item \code{\link[iSEE:.refineParameters]{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
-This will also call the equivalent \linkS4class{ColumnDotPlot} method for further refinements to \code{x}.
+This will also call the equivalent \linkS4class[iSEE]{ColumnDotPlot} method for further refinements to \code{x}.
 If valid assay names are not available, \code{NULL} is returned instead.
 }
 
@@ -66,7 +66,7 @@ For defining the interface:
 
 For monitoring reactive expressions:
 \itemize{
-\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{ColumnDotPlot} method.
+\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class[iSEE]{ColumnDotPlot} method.
 }
 
 For creating the plot:

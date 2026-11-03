@@ -45,7 +45,7 @@ Defaults to \code{""}, i.e., no search.
 Defaults to an empty character vector, i.e., no search.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent \linkS4class[iSEE]{Panel} class.
 }
 
 \section{Constructor}{
@@ -62,10 +62,10 @@ Refer to the documentation for each method for more details on the remaining arg
 For setting up data values:
 \itemize{
 \item \code{\link[iSEE:.cacheCommonInfo]{.cacheCommonInfo}(x)} adds a \code{"FeatureSetTable"} entry containing \code{available.sets}, a named list of DataFrames containing information about the individual gene sets for each collection.
-This will also call the equivalent \linkS4class{Panel} method.
+This will also call the equivalent \linkS4class[iSEE]{Panel} method.
 \item \code{\link[iSEE:.refineParameters]{.refineParameters}(x, se)} replaces \code{NA} values in \code{Collection} with the first valid collection.
 It also replaces \code{NA} values for \code{Selected} with the first valid set in the chosen collection.
-This will also call the equivalent \linkS4class{Panel} method.
+This will also call the equivalent \linkS4class[iSEE]{Panel} method.
 }
 
 For defining the interface:
@@ -74,13 +74,13 @@ For defining the interface:
 \item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
 \item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"Gene set table"}.
 \item \code{\link[iSEE:.hideInterface]{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple selections,
-otherwise calling the method for \linkS4class{Panel}.
+otherwise calling the method for \linkS4class[iSEE]{Panel}.
 \item \code{\link[iSEE:.defineOutput]{.defineOutput}(x)} will return a HTML element containing a \code{\link[DT:datatable]{datatable}} widget.
 }
 
 For monitoring reactive expressions:
 \itemize{
-\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{Panel} method.
+\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class[iSEE]{Panel} method.
 }
 
 For creating the table:

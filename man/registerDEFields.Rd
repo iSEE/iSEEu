@@ -61,7 +61,7 @@ All \code{get} functions will return a character vector containing the value set
 or \code{NULL}, if nothing was set.
 }
 \description{
-Register the names of fields containing various DE statistics, to populate the user interface of DE-related \linkS4class{Panel}s.
+Register the names of fields containing various DE statistics, to populate the user interface of DE-related \linkS4class[iSEE]{Panel}s.
 }
 \details{
 DE-related Panels need to find relevant \code{\link[SummarizedExperiment:rowData]{rowData}} fields containing p-values, log-fold changes, etc. to set appropriate defaults in the user interface.

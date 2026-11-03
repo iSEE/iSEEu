@@ -28,7 +28,7 @@ The following slots are relevant to the rendered content:
 This will be rendered to HTML for display inside the app.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent \linkS4class[iSEE]{Panel} class.
 }
 
 \section{Constructor}{
@@ -39,7 +39,7 @@ where any slot and its value can be passed to \code{...} as a named argument.
 
 \section{Supported methods}{
 
-In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
+In the following code snippets, \code{x} is an instance of a \linkS4class[iSEE]{RowDataPlot} class.
 Refer to the documentation for each method for more details on the remaining arguments.
 
 For defining the interface:
@@ -53,7 +53,7 @@ For defining the interface:
 For monitoring reactive expressions:
 \itemize{
 \item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above,
-as well as in the parent classes via the \linkS4class{RowDataPlot} method.
+as well as in the parent classes via the \linkS4class[iSEE]{RowDataPlot} method.
 }
 
 For rendering the display:
@@ -80,7 +80,7 @@ if (interactive()) {
 
 }
 \seealso{
-\linkS4class{Panel}, for the base class.
+\linkS4class[iSEE]{Panel}, for the base class.
 }
 \author{
 Aaron Lun

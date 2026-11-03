@@ -40,7 +40,7 @@ A Shiny app object is returned.
 \description{
 This mode launches a Shiny App preconfigured with multiple linked reduced
 dimension plots for interactive data exploration of the
-\code{\link{SingleCellExperiment}} object.
+\code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} object.
 }
 \examples{
 library(scRNAseq)

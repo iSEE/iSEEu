@@ -29,7 +29,7 @@ A Shiny app object is returned.
 This mode launches a Shiny App preconfigured with multiple chain-linked
 feature expression plots for interactive data exploration of the
 \link[SingleCellExperiment:SingleCellExperiment]{SingleCellExperiment} or
-\code{\link{SummarizedExperiment}} object.
+\code{\linkS4class[SummarizedExperiment]{SummarizedExperiment}} object.
 }
 \examples{
 library(scRNAseq)
