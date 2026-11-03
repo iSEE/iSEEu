@@ -55,7 +55,7 @@
 #' The following slots control the color:
 #' \itemize{
 #' \item \code{UseCustomColormap}, a logical scalar indicating whether to use a custom color scale.
-#' Defaults to \code{FALSE}, in which case the application-wide color scale defined by \code{\link{ExperimentColorMap}} is used.
+#' Defaults to \code{FALSE}, in which case the application-wide color scale defined by \code{\linkS4class[iSEE]{ExperimentColorMap}} is used.
 #' \item \code{CustomColorLow}, a string specifying the low color (i.e., at an average of zero) for a custom scale.
 #' Defaults to \code{"grey"}.
 #' \item \code{CustomColorHigh}, a string specifying the high color for a custom scale.
@@ -64,7 +64,7 @@
 #' Defaults to \code{"blue < grey < orange"}; other choices are \code{"purple < black < yellow"}, \code{"blue < grey < red"} and \code{"green < grey < red"}.
 #' }
 #'
-#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+#' In addition, this class inherits all slots from its parent \linkS4class[iSEE]{Panel} class.
 #'
 #' @section Constructor:
 #' \code{AggregatedDotPlot(...)} creates an instance of a AggregatedDotPlot class,
@@ -85,7 +85,7 @@
 #'
 #' For defining the interface:
 #' \itemize{
-#' \item \code{\link{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
+#' \item \code{\link[iSEE:.defineInterface]{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
 #' mostly by calling the parent method and adding another visualization parameter box.
 #' \item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} creates an interface to modify the data-related parameters,
 #' i.e., those that affect the position of the points.
@@ -117,9 +117,9 @@
 #' @author Aaron Lun
 #'
 #' @seealso
-#' \linkS4class{Panel}, for the immediate parent class.
+#' \linkS4class[iSEE]{Panel}, for the immediate parent class.
 #'
-#' \linkS4class{ComplexHeatmapPlot}, for another panel with multi-row visualization capability.
+#' \linkS4class[iSEE]{ComplexHeatmapPlot}, for another panel with multi-row visualization capability.
 #'
 #' @examples
 #' library(scRNAseq)

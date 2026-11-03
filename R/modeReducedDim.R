@@ -2,7 +2,7 @@
 #'
 #' This mode launches a Shiny App preconfigured with multiple linked reduced
 #' dimension plots for interactive data exploration of the
-#' \code{\link{SingleCellExperiment}} object.
+#' \code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} object.
 #'
 #' @param se An object that coercible to \linkS4class{SingleCellExperiment}
 #' @param includeNames Character vector with the names of reduced dimensions
