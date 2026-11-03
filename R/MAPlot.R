@@ -77,24 +77,7 @@
 #' }
 #'
 #' @docType methods
-#' @aliases MAPlot MAPlot-class
-#' initialize,MAPlot-method
-#' .cacheCommonInfo,MAPlot-method
-#' .refineParameters,MAPlot-method
-#' .defineDataInterface,MAPlot-method
-#' .createObservers,MAPlot-method
-#' .hideInterface,MAPlot-method
-#' .fullName,MAPlot-method
-#' .panelColor,MAPlot-method
-#' .generateDotPlotData,MAPlot-method
-#' .allowableXAxisChoices,MAPlot-method
-#' .allowableYAxisChoices,MAPlot-method
-#' .prioritizeDotPlotData,MAPlot-method
-#' .colorByNoneDotPlotField,MAPlot-method
-#' .colorByNoneDotPlotScale,MAPlot-method
-#' .generateDotPlot,MAPlot-method
-#' .definePanelTour,MAPlot-method
-#' .getDotPlotColorHelp,MAPlot-method
+#' @aliases MAPlot MAPlot-class initialize,MAPlot-method .cacheCommonInfo,MAPlot-method .refineParameters,MAPlot-method .defineDataInterface,MAPlot-method .createObservers,MAPlot-method .hideInterface,MAPlot-method .fullName,MAPlot-method .panelColor,MAPlot-method .generateDotPlotData,MAPlot-method .allowableXAxisChoices,MAPlot-method .allowableYAxisChoices,MAPlot-method .prioritizeDotPlotData,MAPlot-method .colorByNoneDotPlotField,MAPlot-method .colorByNoneDotPlotScale,MAPlot-method .generateDotPlot,MAPlot-method .definePanelTour,MAPlot-method .getDotPlotColorHelp,MAPlot-method
 #'
 #' @examples
 #' # Making up some results:

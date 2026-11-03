@@ -58,18 +58,7 @@
 #' }
 #'
 #' @docType methods
-#' @aliases MarkdownBoard MarkdownBoard-class
-#' initialize,MarkdownBoard-method
-#' .defineDataInterface,MarkdownBoard-method
-#' .createObservers,MarkdownBoard-method
-#' .hideInterface,MarkdownBoard-method
-#' .fullName,MarkdownBoard-method
-#' .panelColor,MarkdownBoard-method
-#' .generateOutput,MarkdownBoard-method
-#' .renderOutput,MarkdownBoard-method
-#' .defineOutput,MarkdownBoard-method
-#' .exportOutput,MarkdownBoard-method
-#' .definePanelTour,MarkdownBoard-method
+#' @aliases MarkdownBoard MarkdownBoard-class initialize,MarkdownBoard-method .defineDataInterface,MarkdownBoard-method .createObservers,MarkdownBoard-method .hideInterface,MarkdownBoard-method .fullName,MarkdownBoard-method .panelColor,MarkdownBoard-method .generateOutput,MarkdownBoard-method .renderOutput,MarkdownBoard-method .defineOutput,MarkdownBoard-method .exportOutput,MarkdownBoard-method .definePanelTour,MarkdownBoard-method
 #'
 #' @seealso
 #' \linkS4class{Panel}, for the base class.

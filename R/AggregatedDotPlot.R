@@ -140,24 +140,7 @@
 #'
 #' @name AggregatedDotPlot
 #' @docType methods
-#' @aliases
-#' AggregatedDotPlot-class
-#' .cacheCommonInfo,AggregatedDotPlot-method
-#' .refineParameters,AggregatedDotplot-method
-#' .defineOutput,AggregatedDotPlot-method
-#' .generateOutput,AggregatedDotPlot-method
-#' .renderOutput,AggregatedDotPlot-method
-#' .exportOutput,AggregatedDotPlot-method
-#' .defineDataInterface,AggregatedDotPlot-method
-#' .defineInterface,AggregatedDotPlot-method
-#' .hideInterface,AggregatedDotPlot-method
-#' .panelColor,AggregatedDotPlot-method
-#' .fullName,AggregatedDotPlot-method
-#' .generateOutput,AggregatedDotPlot-method
-#' .definePanelTour,AggregatedDotPlot-method
-#' .createObservers,AggregatedDotPlot-method
-#' .refineParameters,AggregatedDotPlot-method
-#' initialize,AggregatedDotPlot-method
+#' @aliases AggregatedDotPlot-class .cacheCommonInfo,AggregatedDotPlot-method .refineParameters,AggregatedDotplot-method .defineOutput,AggregatedDotPlot-method .generateOutput,AggregatedDotPlot-method .renderOutput,AggregatedDotPlot-method .exportOutput,AggregatedDotPlot-method .defineDataInterface,AggregatedDotPlot-method .defineInterface,AggregatedDotPlot-method .hideInterface,AggregatedDotPlot-method .panelColor,AggregatedDotPlot-method .fullName,AggregatedDotPlot-method .generateOutput,AggregatedDotPlot-method .definePanelTour,AggregatedDotPlot-method .createObservers,AggregatedDotPlot-method .refineParameters,AggregatedDotPlot-method initialize,AggregatedDotPlot-method
 NULL
 
 .ADPAssay <- "Assay"
@@ -378,8 +361,8 @@ setMethod(".fullName", "AggregatedDotPlot", function(x) "Aggregated dot plot")
 #' @export
 #' @importFrom SummarizedExperiment assay rowData colData
 #' @importFrom ggplot2 ggplot geom_point aes_string scale_size
-#' theme element_rect element_line element_text element_blank xlab facet_wrap
-#' scale_color_gradient scale_color_gradientn scale_color_gradient2
+#'   theme element_rect element_line element_text element_blank xlab facet_wrap
+#'   scale_color_gradient scale_color_gradientn scale_color_gradient2
 #' @importFrom S4Vectors metadata
 #' @importFrom shiny showNotification
 setMethod(".generateOutput", "AggregatedDotPlot", function(x, se, all_memory, all_contents) {

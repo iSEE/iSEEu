@@ -84,17 +84,7 @@
 #' }
 #'
 #' @name DynamicReducedDimensionPlot-class
-#' @aliases DynamicReducedDimensionPlot DynamicReducedDimensionPlot-class
-#' initialize,DynamicReducedDimensionPlot-method
-#' .fullName,DynamicReducedDimensionPlot-method
-#' .panelColor,DynamicReducedDimensionPlot-method
-#' .defineDataInterface,DynamicReducedDimensionPlot-method
-#' .generateDotPlotData,DynamicReducedDimensionPlot-method
-#' .createObservers,DynamicReducedDimensionPlot-method
-#' .cacheCommonInfo,DynamicReducedDimensionPlot-method
-#' .refineParameters,DynamicReducedDimensionPlot-method
-#' .multiSelectionInvalidated,DynamicReducedDimensionPlot-method
-#' .definePanelTour,DynamicReducedDimensionPlot-method
+#' @aliases DynamicReducedDimensionPlot DynamicReducedDimensionPlot-class initialize,DynamicReducedDimensionPlot-method .fullName,DynamicReducedDimensionPlot-method .panelColor,DynamicReducedDimensionPlot-method .defineDataInterface,DynamicReducedDimensionPlot-method .generateDotPlotData,DynamicReducedDimensionPlot-method .createObservers,DynamicReducedDimensionPlot-method .cacheCommonInfo,DynamicReducedDimensionPlot-method .refineParameters,DynamicReducedDimensionPlot-method .multiSelectionInvalidated,DynamicReducedDimensionPlot-method .definePanelTour,DynamicReducedDimensionPlot-method
 NULL
 
 #' @export

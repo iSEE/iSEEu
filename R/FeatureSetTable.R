@@ -111,24 +111,7 @@
 #' }
 #'
 #' @name FeatureSetTable-class
-#' @aliases FeatureSetTable FeatureSetTable-class
-#' initialize,FeatureSetTable-method
-#' .fullName,FeatureSetTable-method
-#' .panelColor,FeatureSetTable-method
-#' .cacheCommonInfo,FeatureSetTable-method
-#' .refineParameters,FeatureSetTable-method
-#' .defineDataInterface,FeatureSetTable-method
-#' .hideInterface,FeatureSetTable-method
-#' .defineOutput,FeatureSetTable-method
-#' .generateOutput,FeatureSetTable-method
-#' .createObservers,FeatureSetTable-method
-#' .renderOutput,FeatureSetTable-method
-#' .multiSelectionDimension,FeatureSetTable-method
-#' .multiSelectionActive,FeatureSetTable-method
-#' .multiSelectionCommands,FeatureSetTable-method
-#' .multiSelectionAvailable,FeatureSetTable-method
-#' .multiSelectionClear,FeatureSetTable-method
-#' .definePanelTour,FeatureSetTable-method
+#' @aliases FeatureSetTable FeatureSetTable-class initialize,FeatureSetTable-method .fullName,FeatureSetTable-method .panelColor,FeatureSetTable-method .cacheCommonInfo,FeatureSetTable-method .refineParameters,FeatureSetTable-method .defineDataInterface,FeatureSetTable-method .hideInterface,FeatureSetTable-method .defineOutput,FeatureSetTable-method .generateOutput,FeatureSetTable-method .createObservers,FeatureSetTable-method .renderOutput,FeatureSetTable-method .multiSelectionDimension,FeatureSetTable-method .multiSelectionActive,FeatureSetTable-method .multiSelectionCommands,FeatureSetTable-method .multiSelectionAvailable,FeatureSetTable-method .multiSelectionClear,FeatureSetTable-method .definePanelTour,FeatureSetTable-method
 NULL
 
 #' @export

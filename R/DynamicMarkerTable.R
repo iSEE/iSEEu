@@ -90,20 +90,7 @@
 #' }
 #'
 #' @name DynamicMarkerTable-class
-#' @aliases DynamicMarkerTable DynamicMarkerTable-class
-#' DifferentialStatisticsTable
-#' initialize,DynamicMarkerTable-method
-#' .fullName,DynamicMarkerTable-method
-#' .panelColor,DynamicMarkerTable-method
-#' .defineDataInterface,DynamicMarkerTable-method
-#' .hideInterface,DynamicMarkerTable-method
-#' .generateTable,DynamicMarkerTable-method
-#' .createObservers,DynamicMarkerTable-method
-#' .cacheCommonInfo,DynamicMarkerTable-method
-#' .refineParameters,DynamicMarkerTable-method
-#' .multiSelectionInvalidated,DynamicMarkerTable-method
-#' .hideInterface,DynamicMarkerTable-method
-#' .definePanelTour,DynamicMarkerTable-method
+#' @aliases DynamicMarkerTable DynamicMarkerTable-class DifferentialStatisticsTable initialize,DynamicMarkerTable-method .fullName,DynamicMarkerTable-method .panelColor,DynamicMarkerTable-method .defineDataInterface,DynamicMarkerTable-method .hideInterface,DynamicMarkerTable-method .generateTable,DynamicMarkerTable-method .createObservers,DynamicMarkerTable-method .cacheCommonInfo,DynamicMarkerTable-method .refineParameters,DynamicMarkerTable-method .multiSelectionInvalidated,DynamicMarkerTable-method .hideInterface,DynamicMarkerTable-method .definePanelTour,DynamicMarkerTable-method
 NULL
 
 #' @export

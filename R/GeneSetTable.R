@@ -94,21 +94,7 @@
 #' }
 #'
 #' @name GeneSetTable-class
-#' @aliases GeneSetTable GeneSetTable-class
-#' initialize,GeneSetTable-method
-#' .fullName,GeneSetTable-method
-#' .panelColor,GeneSetTable-method
-#' .defineDataInterface,GeneSetTable-method
-#' .hideInterface,GeneSetTable-method
-#' .defineOutput,GeneSetTable-method
-#' .generateOutput,GeneSetTable-method
-#' .createObservers,GeneSetTable-method
-#' .renderOutput,GeneSetTable-method
-#' .multiSelectionDimension,GeneSetTable-method
-#' .multiSelectionActive,GeneSetTable-method
-#' .multiSelectionCommands,GeneSetTable-method
-#' .multiSelectionAvailable,GeneSetTable-method
-#' .multiSelectionClear,GeneSetTable-method
+#' @aliases GeneSetTable GeneSetTable-class initialize,GeneSetTable-method .fullName,GeneSetTable-method .panelColor,GeneSetTable-method .defineDataInterface,GeneSetTable-method .hideInterface,GeneSetTable-method .defineOutput,GeneSetTable-method .generateOutput,GeneSetTable-method .createObservers,GeneSetTable-method .renderOutput,GeneSetTable-method .multiSelectionDimension,GeneSetTable-method .multiSelectionActive,GeneSetTable-method .multiSelectionCommands,GeneSetTable-method .multiSelectionAvailable,GeneSetTable-method .multiSelectionClear,GeneSetTable-method
 NULL
 
 #' @export

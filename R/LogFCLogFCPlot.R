@@ -79,24 +79,7 @@
 #' }
 #'
 #' @docType methods
-#' @aliases LogFCLogFCPlot LogFCLogFCPlot-class
-#' initialize,LogFCLogFCPlot-method
-#' .cacheCommonInfo,LogFCLogFCPlot-method
-#' .refineParameters,LogFCLogFCPlot-method
-#' .defineDataInterface,LogFCLogFCPlot-method
-#' .createObservers,LogFCLogFCPlot-method
-#' .hideInterface,LogFCLogFCPlot-method
-#' .fullName,LogFCLogFCPlot-method
-#' .panelColor,LogFCLogFCPlot-method
-#' .generateDotPlotData,LogFCLogFCPlot-method
-#' .allowableXAxisChoices,LogFCLogFCPlot-method
-#' .allowableYAxisChoices,LogFCLogFCPlot-method
-#' .prioritizeDotPlotData,LogFCLogFCPlot-method
-#' .colorByNoneDotPlotField,LogFCLogFCPlot-method
-#' .colorByNoneDotPlotScale,LogFCLogFCPlot-method
-#' .generateDotPlot,LogFCLogFCPlot-method
-#' .definePanelTour,LogFCLogFCPlot-method
-#' .getDotPlotColorHelp,LogFCLogFCPlot-method
+#' @aliases LogFCLogFCPlot LogFCLogFCPlot-class initialize,LogFCLogFCPlot-method .cacheCommonInfo,LogFCLogFCPlot-method .refineParameters,LogFCLogFCPlot-method .defineDataInterface,LogFCLogFCPlot-method .createObservers,LogFCLogFCPlot-method .hideInterface,LogFCLogFCPlot-method .fullName,LogFCLogFCPlot-method .panelColor,LogFCLogFCPlot-method .generateDotPlotData,LogFCLogFCPlot-method .allowableXAxisChoices,LogFCLogFCPlot-method .allowableYAxisChoices,LogFCLogFCPlot-method .prioritizeDotPlotData,LogFCLogFCPlot-method .colorByNoneDotPlotField,LogFCLogFCPlot-method .colorByNoneDotPlotScale,LogFCLogFCPlot-method .generateDotPlot,LogFCLogFCPlot-method .definePanelTour,LogFCLogFCPlot-method .getDotPlotColorHelp,LogFCLogFCPlot-method
 #'
 #' @examples
 #' # Making up some results:

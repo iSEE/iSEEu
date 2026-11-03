@@ -76,24 +76,7 @@
 #' }
 #'
 #' @docType methods
-#' @aliases VolcanoPlot VolcanoPlot-class
-#' initialize,VolcanoPlot-method
-#' .cacheCommonInfo,VolcanoPlot-method
-#' .refineParameters,VolcanoPlot-method
-#' .defineDataInterface,VolcanoPlot-method
-#' .createObservers,VolcanoPlot-method
-#' .hideInterface,VolcanoPlot-method
-#' .fullName,VolcanoPlot-method
-#' .panelColor,VolcanoPlot-method
-#' .generateDotPlotData,VolcanoPlot-method
-#' .allowableXAxisChoices,VolcanoPlot-method
-#' .allowableYAxisChoices,VolcanoPlot-method
-#' .prioritizeDotPlotData,VolcanoPlot-method
-#' .colorByNoneDotPlotField,VolcanoPlot-method
-#' .colorByNoneDotPlotScale,VolcanoPlot-method
-#' .generateDotPlot,VolcanoPlot-method
-#' .definePanelTour,VolcanoPlot-method
-#' .getDotPlotColorHelp,VolcanoPlot-method
+#' @aliases VolcanoPlot VolcanoPlot-class initialize,VolcanoPlot-method .cacheCommonInfo,VolcanoPlot-method .refineParameters,VolcanoPlot-method .defineDataInterface,VolcanoPlot-method .createObservers,VolcanoPlot-method .hideInterface,VolcanoPlot-method .fullName,VolcanoPlot-method .panelColor,VolcanoPlot-method .generateDotPlotData,VolcanoPlot-method .allowableXAxisChoices,VolcanoPlot-method .allowableYAxisChoices,VolcanoPlot-method .prioritizeDotPlotData,VolcanoPlot-method .colorByNoneDotPlotField,VolcanoPlot-method .colorByNoneDotPlotScale,VolcanoPlot-method .generateDotPlot,VolcanoPlot-method .definePanelTour,VolcanoPlot-method .getDotPlotColorHelp,VolcanoPlot-method
 #'
 #' @examples
 #' # Making up some results:
