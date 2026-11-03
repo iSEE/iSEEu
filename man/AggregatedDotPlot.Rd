@@ -41,10 +41,10 @@ Defaults to the name of the first row in the SummarizedExperiment.
 
 The following slots control the specification of groups:
 \itemize{
-\item \code{ColumnDataLabel}, a string specifying the name of the \code{\link{colData}} field to use to group cells.
+\item \code{ColumnDataLabel}, a string specifying the name of the \code{\link[SummarizedExperiment:colData]{colData}} field to use to group cells.
 The chosen field should correspond to a categorical factor.
 Defaults to the first categorical field.
-\item \code{ColumnDataFacet}, a string specifying the name of the \code{\link{colData}} field to use for faceting.
+\item \code{ColumnDataFacet}, a string specifying the name of the \code{\link[SummarizedExperiment:colData]{colData}} field to use for faceting.
 The chosen field should correspond to a categorical factor.
 Defaults to \code{"---"}, i.e., no faceting.
 }
@@ -102,42 +102,42 @@ Refer to the documentation for each method for more details on the remaining arg
 
 For setting up data values:
 \itemize{
-\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"AggregatedDotPlot"} entry
+\item \code{\link[iSEE:.cacheCommonInfo]{.cacheCommonInfo}(x)} adds a \code{"AggregatedDotPlot"} entry
 containing \code{continuous.assay.names} and \code{discrete.colData.names}.
-\item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"},
+\item \code{\link[iSEE:.refineParameters]{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"},
 \code{"ColumnDataLabel"} and \code{"ColumnDataFacet"} to valid values.
-If continuous assays or discrete \code{\link{colData}} variables are not available, \code{NULL} is returned instead.
+If continuous assays or discrete \code{\link[SummarizedExperiment:colData]{colData}} variables are not available, \code{NULL} is returned instead.
 }
 
 For defining the interface:
 \itemize{
 \item \code{\link{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
 mostly by calling the parent method and adding another visualization parameter box.
-\item \code{\link{.defineDataInterface}(x, se, select_info)} creates an interface to modify the data-related parameters,
+\item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} creates an interface to modify the data-related parameters,
 i.e., those that affect the position of the points.
-\item \code{\link{.defineOutput}(x)} defines the output HTML element.
-\item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-\item \code{\link{.fullName}(x)} will return \code{"Aggregated dot plot"}.
-\item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections.
+\item \code{\link[iSEE:.defineOutput]{.defineOutput}(x)} defines the output HTML element.
+\item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
+\item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"Aggregated dot plot"}.
+\item \code{\link[iSEE:.hideInterface]{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections.
 }
 
 For monitoring reactive expressions:
 \itemize{
-\item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} will create all relevant observers for the UI elements.
+\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} will create all relevant observers for the UI elements.
 }
 
 For generating output:
 \itemize{
-\item \code{\link{.generateOutput}(x, se, all_memory, all_contents)} will return the aggregated dot plot as a \link{ggplot} object,
+\item \code{\link[iSEE:.generateOutput]{.generateOutput}(x, se, all_memory, all_contents)} will return the aggregated dot plot as a \link[ggplot2:ggplot]{ggplot} object,
 along with the commands used for its creation.
-\item \code{\link{.renderOutput}(x, se, output, pObjects, rObjects)} will render the aggregated dot plot onto the interface.
-\item \code{\link{.exportOutput}(x, se, all_memory, all_contents)} will save the aggregated dot plot to a PDF file named after \code{x},
+\item \code{\link[iSEE:.renderOutput]{.renderOutput}(x, se, output, pObjects, rObjects)} will render the aggregated dot plot onto the interface.
+\item \code{\link[iSEE:.exportOutput]{.exportOutput}(x, se, all_memory, all_contents)} will save the aggregated dot plot to a PDF file named after \code{x},
 returning the path to the new file.
 }
 
 For providing documentation:
 \itemize{
-\item \code{\link{.definePanelTour}(x)} will return a data.frame to be used in \pkg{rintrojs} as a panel-specific tour.
+\item \code{\link[iSEE:.definePanelTour]{.definePanelTour}(x)} will return a data.frame to be used in \pkg{rintrojs} as a panel-specific tour.
 }
 }
 

@@ -26,7 +26,7 @@ reduced dimension panels. If coloring by a feature, a row statistics table
 is openend in addition to the reduced dimension panels, from which the
 latter are receiving the color.}
 
-\item{...}{Additional arguments passed to \code{\link{iSEE}}.}
+\item{...}{Additional arguments passed to \code{\link[iSEE:iSEE]{iSEE}}.}
 
 \item{plotWidth}{The grid width of linked plots (numeric vector of length
 either 1 or equal to \code{length(includeNames)}). The total width of

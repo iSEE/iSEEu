@@ -22,7 +22,7 @@ Get or set the names of the extra fields to include in a table.
 }
 \details{
 These utilities allow users to easily set the feature set commands for all \linkS4class{DynamicMarkerTable}s at once.
-Any global settings only take effect (i) during setup of the \code{\link{iSEE}} application
+Any global settings only take effect (i) during setup of the \code{\link[iSEE:iSEE]{iSEE}} application
 and (ii) if the first \linkS4class{DynamicMarkerTable} does not have an existing values in the \code{"TableExtraFields"} slots.
 }
 \examples{

@@ -36,7 +36,7 @@ Defaults to the first named assay in the SummarizedExperiment.
 
 The following slots control the rendered table:
 \itemize{
-\item \code{ExtraFields}, a character vector containing names of \code{\link{rowData}} columns to be included in the table.
+\item \code{ExtraFields}, a character vector containing names of \code{\link[SummarizedExperiment:rowData]{rowData}} columns to be included in the table.
 Set to the output of \code{\link{getTableExtraFields}}.
 This cannot be changed once the application starts.
 }
@@ -58,10 +58,10 @@ Refer to the documentation for each method for more details on the remaining arg
 
 For setting up data values:
 \itemize{
-\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"DynamicMarkerTable"} entry
+\item \code{\link[iSEE:.cacheCommonInfo]{.cacheCommonInfo}(x)} adds a \code{"DynamicMarkerTable"} entry
 containing \code{valid.assay.names} and \code{valid.rowdata.names}.
 This will also call the equivalent \linkS4class{RowTable} method.
-\item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
+\item \code{\link[iSEE:.refineParameters]{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"} to the first valid value.
 This will also call the equivalent \linkS4class{RowTable} method for further refinements to \code{x}.
 If valid assay names are not available, \code{NULL} is returned instead.
 Any \code{"ExtraFields"} are intersected with the valid \code{rowData} names.
@@ -69,16 +69,16 @@ Any \code{"ExtraFields"} are intersected with the valid \code{rowData} names.
 
 For defining the interface:
 \itemize{
-\item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
-\item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-\item \code{\link{.fullName}(x)} will return \code{"Dynamic marker table"}.
-\item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections,
+\item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
+\item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
+\item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"Dynamic marker table"}.
+\item \code{\link[iSEE:.hideInterface]{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections,
 otherwise calling the method for \linkS4class{RowTable}.
 }
 
 For monitoring reactive expressions:
 \itemize{
-\item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{RowTable} method.
+\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{RowTable} method.
 }
 
 For creating the table:
@@ -89,7 +89,7 @@ The method will return the commands required to do so.
 
 For documentation:
 \itemize{
-\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link[iSEE:.definePanelTour]{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 }
 }
 
