@@ -2,7 +2,7 @@
 #'
 #' Register the names of fields containing various DE statistics, to populate the user interface of DE-related \linkS4class{Panel}s.
 #'
-#' @param se A \linkS4class{SummarizedExperiment} to be visualized with various DE-related Panels.
+#' @param se A \linkS4class[SummarizedExperiment]{SummarizedExperiment} to be visualized with various DE-related Panels.
 #' This is expected to have a number of DE-related fields in its \code{\link[SummarizedExperiment:rowData]{rowData}}.
 #' @param patterns A character vector containing partial names,
 #' to match against the \code{colnames} of the \code{\link[SummarizedExperiment:rowData]{rowData}} to identify relevant fields containing DE statistics.

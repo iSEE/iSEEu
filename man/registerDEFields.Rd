@@ -41,7 +41,7 @@ getAveAbPatterns(se, defaults = c("AveExpr", "logCPM"))
 getLogFCPatterns(se, defaults = c("logFC", "LogFC"))
 }
 \arguments{
-\item{se}{A \linkS4class{SummarizedExperiment} to be visualized with various DE-related Panels.
+\item{se}{A \linkS4class[SummarizedExperiment]{SummarizedExperiment} to be visualized with various DE-related Panels.
 This is expected to have a number of DE-related fields in its \code{\link[SummarizedExperiment:rowData]{rowData}}.}
 
 \item{fields}{A character vector containing the names of the relevant fields containing the DE statistics.

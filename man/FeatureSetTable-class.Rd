@@ -23,7 +23,7 @@
 \title{Feature set table}
 \description{
 A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.
-This relies on feature set collections that have been registered in the input \linkS4class{SummarizedExperiment},
+This relies on feature set collections that have been registered in the input \linkS4class[SummarizedExperiment]{SummarizedExperiment},
 see \code{\link{registerFeatureSetCollections}} for more details.
 If no collections have been registered, we default to the GO and KEGG collections from \code{\link{createGeneSetCommands}}.
 }

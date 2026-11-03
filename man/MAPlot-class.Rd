@@ -48,7 +48,7 @@ In addition, this class inherits all slots from its parent \linkS4class{RowDataP
 \code{MAPlot(...)} creates an instance of a MAPlot class,
 where any slot and its value can be passed to \code{...} as a named argument.
 
-Users are expected to load relevant statistics into the \code{\link[SummarizedExperiment:rowData]{rowData}} of a \linkS4class{SummarizedExperiment}.
+Users are expected to load relevant statistics into the \code{\link[SummarizedExperiment:rowData]{rowData}} of a \linkS4class[SummarizedExperiment]{SummarizedExperiment}.
 This panel expects one or more columns containing the p-values, log-fold changes and average abundances for each gene/row - see Examples.
 The expected column names (and how to tune them) are listed at \code{?"\link{registerPValueFields}"}.
 }

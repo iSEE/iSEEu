@@ -23,7 +23,7 @@
 #' \code{LogFCLogFCPlot(...)} creates an instance of a LogFCLogFCPlot class,
 #' where any slot and its value can be passed to \code{...} as a named argument.
 #'
-#' Users are expected to load relevant statistics into the \code{\link[SummarizedExperiment:rowData]{rowData}} of a \linkS4class{SummarizedExperiment}.
+#' Users are expected to load relevant statistics into the \code{\link[SummarizedExperiment:rowData]{rowData}} of a \linkS4class[SummarizedExperiment]{SummarizedExperiment}.
 #' There should be two columns for the p-values from each comparison - and another two for the corresponding log-fold changes - for each gene/row, see Examples.
 #' The expected column names (and how to tune them) are listed at \code{?"\link{registerPValueFields}"}.
 #'

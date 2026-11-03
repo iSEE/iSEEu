@@ -16,7 +16,7 @@ getFeatureSetCollections(se)
 getFeatureSetCommands(se)
 }
 \arguments{
-\item{se}{The \linkS4class{SummarizedExperiment} object to be used in \code{\link[iSEE:iSEE]{iSEE}}.}
+\item{se}{The \linkS4class[SummarizedExperiment]{SummarizedExperiment} object to be used in \code{\link[iSEE:iSEE]{iSEE}}.}
 
 \item{collections}{A named list containing one or more \linkS4class{CharacterList} objects.
 Each entry represents a collection of feature sets (see Details) and should be named.}

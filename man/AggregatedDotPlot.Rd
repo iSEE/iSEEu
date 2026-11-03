@@ -34,7 +34,7 @@ If \code{TRUE}, the feature identities are extracted from the \code{CustomRowsTe
 otherwise they are defined from a transmitted row selection.
 Defaults to \code{TRUE}.
 \item \code{CustomRowsText}, a string containing the names of the features of interest,
-typically corresponding to the row names of the \linkS4class{SummarizedExperiment}.
+typically corresponding to the row names of the \linkS4class[SummarizedExperiment]{SummarizedExperiment}.
 Names should be new-line separated within this string.
 Defaults to the name of the first row in the SummarizedExperiment.
 }

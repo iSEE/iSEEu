@@ -2,7 +2,7 @@
 #'
 #' Register feature set collations and their annotations for display in \linkS4class{FeatureSetTable}s.
 #'
-#' @param se The \linkS4class{SummarizedExperiment} object to be used in \code{\link[iSEE:iSEE]{iSEE}}.
+#' @param se The \linkS4class[SummarizedExperiment]{SummarizedExperiment} object to be used in \code{\link[iSEE:iSEE]{iSEE}}.
 #' @param collections A named list containing one or more \linkS4class{CharacterList} objects.
 #' Each entry represents a collection of feature sets (see Details) and should be named.
 #' @param commands A named list containing two character vectors of commands to use to generate collections and sets.
