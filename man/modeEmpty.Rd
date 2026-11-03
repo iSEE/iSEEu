@@ -7,7 +7,7 @@
 modeEmpty(...)
 }
 \arguments{
-\item{...}{Arguments passed to \code{\link[=iSEE]{iSEE()}}.}
+\item{...}{Arguments passed to \code{\link[iSEE:iSEE]{iSEE()}}.}
 }
 \value{
 A Shiny app object is returned.
