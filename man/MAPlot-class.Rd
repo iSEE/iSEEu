@@ -119,7 +119,7 @@ if (interactive()) {
 
 }
 \seealso{
-\link[iSEE:RowDataPlot]{RowDataPlot}, for the base class.
+\linkS4class[iSEE]{RowDataPlot}, for the base class.
 }
 \author{
 Aaron Lun
