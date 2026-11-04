@@ -11,6 +11,7 @@
 #' @keywords internal
 #' @import iSEE 
 #' @import methods
+#' @import iSEEhex
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
