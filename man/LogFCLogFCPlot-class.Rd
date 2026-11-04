@@ -23,15 +23,15 @@
 \alias{.getDotPlotColorHelp,LogFCLogFCPlot-method}
 \title{The LogFCLogFCPlot class}
 \description{
-The LogFCLogFCPlot is a \linkS4class{RowDataPlot} subclass that is dedicated to creating a scatter plot of two log-fold changes.
+The LogFCLogFCPlot is a \linkS4class[iSEE]{RowDataPlot} subclass that is dedicated to creating a scatter plot of two log-fold changes.
 Each axis contains the log-fold change for a differential expression analysis and each point represents a feature.
 }
 \section{Slot overview}{
 
 The following slots control the thresholds used in the visualization:
 \itemize{
-\item \code{XPValueField}, a string specifying the field of \code{\link{rowData}} containing the p-values for the x-axis comparison.
-\item \code{YPValueField}, a string specifying the field of \code{\link{rowData}} containing the p-values for the y-axis comparison.
+\item \code{XPValueField}, a string specifying the field of \code{\link[SummarizedExperiment:rowData]{rowData}} containing the p-values for the x-axis comparison.
+\item \code{YPValueField}, a string specifying the field of \code{\link[SummarizedExperiment:rowData]{rowData}} containing the p-values for the y-axis comparison.
 \item \code{PValueThreshold}, a numeric scalar in (0, 1] specifying the threshold to use on the (adjusted) p-value.
 Defaults to 0.05.
 \item \code{LogFCThreshold}, a non-negative numeric scalar specifying the threshold to use on the log-fold change.
@@ -40,8 +40,8 @@ Defaults to 0.
 Defaults to \code{"BH"}, but can take any value from \code{\link{p.adjust.methods}}.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{RowDataPlot},
-\linkS4class{RowDotPlot}, \linkS4class{DotPlot} and \linkS4class{Panel} classes.
+In addition, this class inherits all slots from its parent \linkS4class[iSEE]{RowDataPlot},
+\linkS4class[iSEE]{RowDotPlot}, \linkS4class[iSEE]{DotPlot} and \linkS4class[iSEE]{Panel} classes.
 }
 
 \section{Constructor}{
@@ -49,61 +49,61 @@ In addition, this class inherits all slots from its parent \linkS4class{RowDataP
 \code{LogFCLogFCPlot(...)} creates an instance of a LogFCLogFCPlot class,
 where any slot and its value can be passed to \code{...} as a named argument.
 
-Users are expected to load relevant statistics into the \code{\link{rowData}} of a \linkS4class{SummarizedExperiment}.
+Users are expected to load relevant statistics into the \code{\link[SummarizedExperiment:rowData]{rowData}} of a \linkS4class[SummarizedExperiment]{SummarizedExperiment}.
 There should be two columns for the p-values from each comparison - and another two for the corresponding log-fold changes - for each gene/row, see Examples.
 The expected column names (and how to tune them) are listed at \code{?"\link{registerPValueFields}"}.
 }
 
 \section{Supported methods}{
 
-In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
+In the following code snippets, \code{x} is an instance of a \linkS4class[iSEE]{RowDataPlot} class.
 Refer to the documentation for each method for more details on the remaining arguments.
 
 For setting up data values:
 \itemize{
-\item \code{\link{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
-This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link{rowData}} columns for the p-values and log-fold changes, respectively.
-\item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}
+\item \code{\link[iSEE:.cacheCommonInfo]{.cacheCommonInfo}(x, se)} returns \code{se} after being loaded with class-specific constants.
+This includes \code{"valid.p.fields"} and \code{"valid.lfc.fields"}, character vectors containing the names of valid \code{\link[SummarizedExperiment:rowData]{rowData}} columns for the p-values and log-fold changes, respectively.
+\item \code{\link[iSEE:.refineParameters]{.refineParameters}(x, se)} returns \code{x} after setting \code{XAxis="Row data"}
 as well as \code{"PValuePattern"} and \code{"LogFCPattern"} to their corresponding cached values.
-This will also call the equivalent \linkS4class{RowDataPlot} method for further refinements to \code{x}.
+This will also call the equivalent \linkS4class[iSEE]{RowDataPlot} method for further refinements to \code{x}.
 If valid p-value and log-fold change fields are not available, \code{NULL} is returned instead.
 }
 
 For defining the interface:
 \itemize{
-\item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
-\item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-\item \code{\link{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the x-axis.
-\item \code{\link{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link{rowData}(se)} that can be used as choices for the y-axis.
-\item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
-otherwise it will call the \linkS4class{RowDataPlot} method.
-\item \code{\link{.fullName}(x)} will return \code{"LogFC-logFC plot"}.
+\item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
+\item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
+\item \code{\link[iSEE:.allowableXAxisChoices]{.allowableXAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link[SummarizedExperiment:rowData]{rowData}(se)} that can be used as choices for the x-axis.
+\item \code{\link[iSEE:.allowableYAxisChoices]{.allowableYAxisChoices}(x, se)} returns a character vector specifying the acceptable log-fold change-related variables in \code{\link[SummarizedExperiment:rowData]{rowData}(se)} that can be used as choices for the y-axis.
+\item \code{\link[iSEE:.hideInterface]{.hideInterface}(x, field)} will return \code{TRUE} for \code{field="XAxis"},
+otherwise it will call the \linkS4class[iSEE]{RowDataPlot} method.
+\item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"LogFC-logFC plot"}.
 }
 
 For monitoring reactive expressions:
 \itemize{
-\item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{RowDataPlot} method.
+\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class[iSEE]{RowDataPlot} method.
 }
 
 For creating the plot:
 \itemize{
-\item \code{\link{.generateDotPlotData}(x, envir)} will create a data.frame of row metadata variables in \code{envir}.
+\item \code{\link[iSEE:.generateDotPlotData]{.generateDotPlotData}(x, envir)} will create a data.frame of row metadata variables in \code{envir}.
 This contains the two sets of log-fold changes on both axes,
 plus an extra field specifying whether or not the feature was considered to be significantly up or down.
 The method will return the commands required to do so as well as a list of labels.
-\item \code{\link{.prioritizeDotPlotData}(x, envir)} will create variables in \code{envir} marking the priority of points.
+\item \code{\link[iSEE:.prioritizeDotPlotData]{.prioritizeDotPlotData}(x, envir)} will create variables in \code{envir} marking the priority of points.
 Significant features receive higher priority (i.e., are plotted over their non-significant counterparts) and are less aggressively downsampled when \code{Downsample=TRUE}.
 The method will return the commands required to do this as well as a logical scalar indicating that rescaling of downsampling resolution is performed.
-\item \code{\link{.colorByNoneDotPlotField}(x)} will return a string specifying the field of the data.frame (generated by \code{\link{.generateDotPlotData}}) containing the significance information.
+\item \code{\link[iSEE:.colorByNoneDotPlotField]{.colorByNoneDotPlotField}(x)} will return a string specifying the field of the data.frame (generated by \code{\link[iSEE:.generateDotPlotData]{.generateDotPlotData}}) containing the significance information.
 This is to be used for coloring when \code{ColorBy="None"}.
-\item \code{\link{.colorByNoneDotPlotScale}(x)} will return a string containing a \pkg{ggplot2} command to add a default color scale when \code{ColorBy="None"}.
-\item \code{\link{.generateDotPlot}(x, labels, envir)} returns a list containing \code{plot} and \code{commands}, using the inital \linkS4class{ColumnDataPlot} \link{ggplot} and adding horizontal lines demarcating the log-fold change threshold.
+\item \code{\link[iSEE:.colorByNoneDotPlotScale]{.colorByNoneDotPlotScale}(x)} will return a string containing a \pkg{ggplot2} command to add a default color scale when \code{ColorBy="None"}.
+\item \code{\link[iSEE:.generateDotPlot]{.generateDotPlot}(x, labels, envir)} returns a list containing \code{plot} and \code{commands}, using the inital \linkS4class[iSEE]{ColumnDataPlot} \link[ggplot2:ggplot]{ggplot} and adding horizontal lines demarcating the log-fold change threshold.
 }
 
 For documentation:
 \itemize{
-\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
-\item \code{\link{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
+\item \code{\link[iSEE:.definePanelTour]{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link[iSEE:.getDotPlotColorHelp]{.getDotPlotColorHelp}(x, color_choices)} returns a function that generates an \pkg{rintrojs} tour for the color choice UI.
 }
 }
 
@@ -123,7 +123,7 @@ if (interactive()) {
 
 }
 \seealso{
-\link{RowDataPlot}, for the base class.
+\linkS4class[iSEE]{RowDataPlot}, for the base class.
 }
 \author{
 Aaron Lun

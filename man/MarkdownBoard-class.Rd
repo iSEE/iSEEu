@@ -28,7 +28,7 @@ The following slots are relevant to the rendered content:
 This will be rendered to HTML for display inside the app.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent \linkS4class[iSEE]{Panel} class.
 }
 
 \section{Constructor}{
@@ -39,36 +39,36 @@ where any slot and its value can be passed to \code{...} as a named argument.
 
 \section{Supported methods}{
 
-In the following code snippets, \code{x} is an instance of a \linkS4class{RowDataPlot} class.
+In the following code snippets, \code{x} is an instance of a \linkS4class[iSEE]{RowDataPlot} class.
 Refer to the documentation for each method for more details on the remaining arguments.
 
 For defining the interface:
 \itemize{
-\item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for editing the \code{Content}.
-\item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-\item \code{\link{.hideInterface}(x, field)} will return \code{TRUE} for all selection-related parameters.
-\item \code{\link{.fullName}(x)} will return \code{"Volcano plot"}.
+\item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for editing the \code{Content}.
+\item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
+\item \code{\link[iSEE:.hideInterface]{.hideInterface}(x, field)} will return \code{TRUE} for all selection-related parameters.
+\item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"Volcano plot"}.
 }
 
 For monitoring reactive expressions:
 \itemize{
-\item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above,
-as well as in the parent classes via the \linkS4class{RowDataPlot} method.
+\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above,
+as well as in the parent classes via the \linkS4class[iSEE]{RowDataPlot} method.
 }
 
 For rendering the display:
 \itemize{
-\item \code{\link{.defineOutput}(x)} will return a UI element to display the HTML.
-\item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)} will add reactive expressions to render the HTML.
-\item \code{\link{.generateOutput}(x, se, all_memory, all_contents)} will render the Markdown to HTML via the \pkg{rmarkdown} package,
+\item \code{\link[iSEE:.defineOutput]{.defineOutput}(x)} will return a UI element to display the HTML.
+\item \code{\link[iSEE:.renderOutput]{.renderOutput}(x, se, ..., output, pObjects, rObjects)} will add reactive expressions to render the HTML.
+\item \code{\link[iSEE:.generateOutput]{.generateOutput}(x, se, all_memory, all_contents)} will render the Markdown to HTML via the \pkg{rmarkdown} package,
 returning a string containing the rendered content in the \code{text} element of the output list.
 The Markdown-formatted content is converted into an R comment for code tracking purposes.
-\item \code{\link{.exportOutput}(x, se, all_memory, all_contents)} will create a HTML containing the rendered Markdown, and return a string containing the path to that HTML.
+\item \code{\link[iSEE:.exportOutput]{.exportOutput}(x, se, all_memory, all_contents)} will create a HTML containing the rendered Markdown, and return a string containing the path to that HTML.
 }
 
 For documentation:
 \itemize{
-\item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+\item \code{\link[iSEE:.definePanelTour]{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 Not that there's a great deal to say here.
 }
 }
@@ -80,7 +80,7 @@ if (interactive()) {
 
 }
 \seealso{
-\linkS4class{Panel}, for the base class.
+\linkS4class[iSEE]{Panel}, for the base class.
 }
 \author{
 Aaron Lun

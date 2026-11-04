@@ -2,9 +2,9 @@
 #'
 #' This mode launches a Shiny App preconfigured with multiple linked reduced
 #' dimension plots for interactive data exploration of the
-#' \code{\link{SingleCellExperiment}} object.
+#' \code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} object.
 #'
-#' @param se An object that coercible to \linkS4class{SingleCellExperiment}
+#' @param se An object that coercible to \linkS4class[SingleCellExperiment]{SingleCellExperiment}
 #' @param includeNames Character vector with the names of reduced dimensions
 #'   to display as individual panels. The default uses all available in
 #'   \code{reducedDimNames(se)}.
@@ -14,7 +14,7 @@
 #'   reduced dimension panels. If coloring by a feature, a row statistics table
 #'   is openend in addition to the reduced dimension panels, from which the
 #'   latter are receiving the color.
-#' @param ... Additional arguments passed to \code{\link{iSEE}}.
+#' @param ... Additional arguments passed to \code{\link[iSEE:iSEE]{iSEE}}.
 #' @param plotWidth The grid width of linked plots (numeric vector of length
 #'   either 1 or equal to \code{length(includeNames)}). The total width of
 #'   the window is 12, so \code{plotWidth = 4} for example will show three

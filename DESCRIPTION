@@ -1,8 +1,8 @@
 Package: iSEEu
 Type: Package
 Title: iSEE Universe
-Version: 1.23.0
-Date: 2024-10-01
+Version: 1.25.1
+Date: 2026-11-04
 Authors@R: 
     c(
     person("Kevin", 
@@ -73,6 +73,6 @@ BugReports: https://github.com/iSEE/iSEEu/issues
 biocViews: ImmunoOncology, Visualization, GUI, DimensionReduction, 
     FeatureExtraction, Clustering, Transcription, 
     GeneExpression, Transcriptomics, SingleCell, CellBasedAssays
-RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.1

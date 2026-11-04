@@ -2,15 +2,15 @@
 #'
 #' Register feature set collations and their annotations for display in \linkS4class{FeatureSetTable}s.
 #'
-#' @param se The \linkS4class{SummarizedExperiment} object to be used in \code{\link{iSEE}}.
-#' @param collections A named list containing one or more \linkS4class{CharacterList} objects.
+#' @param se The \linkS4class[SummarizedExperiment]{SummarizedExperiment} object to be used in \code{\link[iSEE:iSEE]{iSEE}}.
+#' @param collections A named list containing one or more \linkS4class[IRanges]{CharacterList} objects.
 #' Each entry represents a collection of feature sets (see Details) and should be named.
 #' @param commands A named list containing two character vectors of commands to use to generate collections and sets.
 #'
 #' @return 
 #' For \code{registerFeatureSetCollections} and \code{registerFeatureSetCommands},
 #' a modified \code{se} is returned that contains the feature set collections or commands, respectively.
-#' This can be used with \linkS4class{FeatureSetTable}s in \code{\link{iSEE}} calls.
+#' This can be used with \linkS4class{FeatureSetTable}s in \code{\link[iSEE:iSEE]{iSEE}} calls.
 #'
 #' For \code{getFeatureSetCollections}, the list of CharacterLists is returned.
 #' Alternatively \code{NULL}, if no such list was stored by \code{registerFeatureSetCollections}.
@@ -22,12 +22,12 @@
 #' 
 #' @details
 #' Arbitrary feature sets are challenging as there is no obvious place to store them.
-#' \code{registerFeatureSetCollections} and friends will insert these sets into the \code{\link{metadata}} of the SummarizedExperiment object,
+#' \code{registerFeatureSetCollections} and friends will insert these sets into the \code{\link[S4Vectors:metadata]{metadata}} of the SummarizedExperiment object,
 #' allowing the corresponding getter functions to quickly extract them later within the \code{iSEE} app.
 #'
-#' \code{collections} should be a named list containing \linkS4class{CharacterList} objects.
-#' Each \linkS4class{CharacterList} represents a collection where each entry is a feature set, i.e., a character vector corresponding to some of the row names of \code{se}. 
-#' The \code{\link{mcols}} can contain additional per-set fields (e.g., descriptions, enrichment statistics) that will be shown in the \linkS4class{FeatureSetTable}.
+#' \code{collections} should be a named list containing \linkS4class[IRanges]{CharacterList} objects.
+#' Each \linkS4class[IRanges]{CharacterList} represents a collection where each entry is a feature set, i.e., a character vector corresponding to some of the row names of \code{se}. 
+#' The \code{\link[S4Vectors:mcols]{mcols}} can contain additional per-set fields (e.g., descriptions, enrichment statistics) that will be shown in the \linkS4class{FeatureSetTable}.
 #'
 #' \code{commands} should be a list containing:
 #' \itemize{

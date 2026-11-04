@@ -13,7 +13,7 @@ modeReducedDim(
 )
 }
 \arguments{
-\item{se}{An object that coercible to \linkS4class{SingleCellExperiment}}
+\item{se}{An object that coercible to \linkS4class[SingleCellExperiment]{SingleCellExperiment}}
 
 \item{includeNames}{Character vector with the names of reduced dimensions
 to display as individual panels. The default uses all available in
@@ -26,7 +26,7 @@ reduced dimension panels. If coloring by a feature, a row statistics table
 is openend in addition to the reduced dimension panels, from which the
 latter are receiving the color.}
 
-\item{...}{Additional arguments passed to \code{\link{iSEE}}.}
+\item{...}{Additional arguments passed to \code{\link[iSEE:iSEE]{iSEE}}.}
 
 \item{plotWidth}{The grid width of linked plots (numeric vector of length
 either 1 or equal to \code{length(includeNames)}). The total width of
@@ -40,7 +40,7 @@ A Shiny app object is returned.
 \description{
 This mode launches a Shiny App preconfigured with multiple linked reduced
 dimension plots for interactive data exploration of the
-\code{\link{SingleCellExperiment}} object.
+\code{\linkS4class[SingleCellExperiment]{SingleCellExperiment}} object.
 }
 \examples{
 library(scRNAseq)

@@ -1,7 +1,7 @@
 #' Feature set table
 #'
 #' A table where each row is itself a feature set and can be clicked to transmit a multiple feature selection to another panel.
-#' This relies on feature set collections that have been registered in the input \linkS4class{SummarizedExperiment},
+#' This relies on feature set collections that have been registered in the input \linkS4class[SummarizedExperiment]{SummarizedExperiment},
 #' see \code{\link{registerFeatureSetCollections}} for more details.
 #' If no collections have been registered, we default to the GO and KEGG collections from \code{\link{createGeneSetCommands}}.
 #'
@@ -22,7 +22,7 @@
 #' Defaults to an empty character vector, i.e., no search.
 #' }
 #'
-#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+#' In addition, this class inherits all slots from its parent \linkS4class[iSEE]{Panel} class.
 #'
 #' @section Constructor:
 #' \code{FeatureSetTable(...)} creates an instance of a FeatureSetTable class,
@@ -34,52 +34,52 @@
 #'
 #' For setting up data values:
 #' \itemize{
-#' \item \code{\link{.cacheCommonInfo}(x)} adds a \code{"FeatureSetTable"} entry containing \code{available.sets}, a named list of DataFrames containing information about the individual gene sets for each collection.
-#' This will also call the equivalent \linkS4class{Panel} method.
-#' \item \code{\link{.refineParameters}(x, se)} replaces \code{NA} values in \code{Collection} with the first valid collection.
+#' \item \code{\link[iSEE:.cacheCommonInfo]{.cacheCommonInfo}(x)} adds a \code{"FeatureSetTable"} entry containing \code{available.sets}, a named list of DataFrames containing information about the individual gene sets for each collection.
+#' This will also call the equivalent \linkS4class[iSEE]{Panel} method.
+#' \item \code{\link[iSEE:.refineParameters]{.refineParameters}(x, se)} replaces \code{NA} values in \code{Collection} with the first valid collection.
 #' It also replaces \code{NA} values for \code{Selected} with the first valid set in the chosen collection.
-#' This will also call the equivalent \linkS4class{Panel} method.
+#' This will also call the equivalent \linkS4class[iSEE]{Panel} method.
 #' }
 #'
 #' For defining the interface:
 #' \itemize{
-#' \item \code{\link{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
-#' \item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-#' \item \code{\link{.fullName}(x)} will return \code{"Gene set table"}.
-#' \item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple selections,
-#' otherwise calling the method for \linkS4class{Panel}.
-#' \item \code{\link{.defineOutput}(x)} will return a HTML element containing a \code{\link{datatable}} widget.
+#' \item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} returns a list of interface elements for manipulating all slots described above.
+#' \item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
+#' \item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"Gene set table"}.
+#' \item \code{\link[iSEE:.hideInterface]{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple selections,
+#' otherwise calling the method for \linkS4class[iSEE]{Panel}.
+#' \item \code{\link[iSEE:.defineOutput]{.defineOutput}(x)} will return a HTML element containing a \code{\link[DT:datatable]{datatable}} widget.
 #' }
 #'
 #' For monitoring reactive expressions:
 #' \itemize{
-#' \item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class{Panel} method.
+#' \item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} sets up observers for all new slots described above, as well as in the parent classes via the \linkS4class[iSEE]{Panel} method.
 #' }
 #'
 #' For creating the table:
 #' \itemize{
-#' \item \code{\link{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}.
+#' \item \code{\link[iSEE:.generateOutput]{.generateOutput}(x, envir)} will create a data.frame of gene set descriptions in \code{envir}.
 #' It will also return the commands required to do so and the name of the variable corresponding to said data.frame.
-#' \item \code{\link{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
-#' will add a \code{\link{datatable}} widget to the output,
+#' \item \code{\link[iSEE:.renderOutput]{.renderOutput}(x, se, ..., output, pObjects, rObjects)}
+#' will add a \code{\link[DT:datatable]{datatable}} widget to the output,
 #' which is used to render the aforementioned data.frame.
 #' }
 #'
 #' For controlling the multiple selections:
 #' \itemize{
-#' \item \code{\link{.multiSelectionDimension}(x)} returns \code{"row"}.
-#' \item \code{\link{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set.
+#' \item \code{\link[iSEE:.multiSelectionDimension]{.multiSelectionDimension}(x)} returns \code{"row"}.
+#' \item \code{\link[iSEE:.multiSelectionCommands]{.multiSelectionCommands}(x, index)} returns a string specifying the commands to be used to extract the identities of the genes in the currently selected set.
 #' \code{index} is ignored.
-#' \item \code{\link{.multiSelectionActive}(x)} returns the name of the currently selected gene set,
+#' \item \code{\link[iSEE:.multiSelectionActive]{.multiSelectionActive}(x)} returns the name of the currently selected gene set,
 #' unless no selection is made, in which case \code{NULL} is returned.
-#' \item \code{\link{.multiSelectionClear}(x)} returns \code{x} but with the \code{Selected} slot replaced by an empty string.
-#' \item \code{\link{.multiSelectionAvailable}(x, contents)} returns \code{contents$available},
+#' \item \code{\link[iSEE:.multiSelectionClear]{.multiSelectionClear}(x)} returns \code{x} but with the \code{Selected} slot replaced by an empty string.
+#' \item \code{\link[iSEE:.multiSelectionAvailable]{.multiSelectionAvailable}(x, contents)} returns \code{contents$available},
 #' which is set to the number of features in \code{se}.
 #' }
 #'
 #' For documentation:
 #' \itemize{
-#' \item \code{\link{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
+#' \item \code{\link[iSEE:.definePanelTour]{.definePanelTour}(x)} returns an data.frame containing the steps of a panel-specific tour.
 #' }
 #'
 #' @author Aaron Lun
@@ -111,24 +111,7 @@
 #' }
 #'
 #' @name FeatureSetTable-class
-#' @aliases FeatureSetTable FeatureSetTable-class
-#' initialize,FeatureSetTable-method
-#' .fullName,FeatureSetTable-method
-#' .panelColor,FeatureSetTable-method
-#' .cacheCommonInfo,FeatureSetTable-method
-#' .refineParameters,FeatureSetTable-method
-#' .defineDataInterface,FeatureSetTable-method
-#' .hideInterface,FeatureSetTable-method
-#' .defineOutput,FeatureSetTable-method
-#' .generateOutput,FeatureSetTable-method
-#' .createObservers,FeatureSetTable-method
-#' .renderOutput,FeatureSetTable-method
-#' .multiSelectionDimension,FeatureSetTable-method
-#' .multiSelectionActive,FeatureSetTable-method
-#' .multiSelectionCommands,FeatureSetTable-method
-#' .multiSelectionAvailable,FeatureSetTable-method
-#' .multiSelectionClear,FeatureSetTable-method
-#' .definePanelTour,FeatureSetTable-method
+#' @aliases FeatureSetTable FeatureSetTable-class initialize,FeatureSetTable-method .fullName,FeatureSetTable-method .panelColor,FeatureSetTable-method .cacheCommonInfo,FeatureSetTable-method .refineParameters,FeatureSetTable-method .defineDataInterface,FeatureSetTable-method .hideInterface,FeatureSetTable-method .defineOutput,FeatureSetTable-method .generateOutput,FeatureSetTable-method .createObservers,FeatureSetTable-method .renderOutput,FeatureSetTable-method .multiSelectionDimension,FeatureSetTable-method .multiSelectionActive,FeatureSetTable-method .multiSelectionCommands,FeatureSetTable-method .multiSelectionAvailable,FeatureSetTable-method .multiSelectionClear,FeatureSetTable-method .definePanelTour,FeatureSetTable-method
 NULL
 
 #' @export

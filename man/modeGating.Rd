@@ -17,7 +17,7 @@ Plots are serially linked from the first row to the last.}
 \item{plotAssay}{The assay (one of assayNames(se)) to use for the plots
 (character vector of length either 1 or equal to \code{nrow(features)}).}
 
-\item{...}{Additional arguments passed to \code{\link[=iSEE]{iSEE()}}.}
+\item{...}{Additional arguments passed to \code{\link[iSEE:iSEE]{iSEE()}}.}
 
 \item{plotWidth}{The grid width of linked plots (numeric vector of
 length either 1 or equal to \code{nrow(features)}}
@@ -29,7 +29,7 @@ A Shiny app object is returned.
 This mode launches a Shiny App preconfigured with multiple chain-linked
 feature expression plots for interactive data exploration of the
 \link[SingleCellExperiment:SingleCellExperiment]{SingleCellExperiment} or
-\code{\link{SummarizedExperiment}} object.
+\code{\linkS4class[SummarizedExperiment]{SummarizedExperiment}} object.
 }
 \examples{
 library(scRNAseq)

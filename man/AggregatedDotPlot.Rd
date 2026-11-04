@@ -34,17 +34,17 @@ If \code{TRUE}, the feature identities are extracted from the \code{CustomRowsTe
 otherwise they are defined from a transmitted row selection.
 Defaults to \code{TRUE}.
 \item \code{CustomRowsText}, a string containing the names of the features of interest,
-typically corresponding to the row names of the \linkS4class{SummarizedExperiment}.
+typically corresponding to the row names of the \linkS4class[SummarizedExperiment]{SummarizedExperiment}.
 Names should be new-line separated within this string.
 Defaults to the name of the first row in the SummarizedExperiment.
 }
 
 The following slots control the specification of groups:
 \itemize{
-\item \code{ColumnDataLabel}, a string specifying the name of the \code{\link{colData}} field to use to group cells.
+\item \code{ColumnDataLabel}, a string specifying the name of the \code{\link[SummarizedExperiment:colData]{colData}} field to use to group cells.
 The chosen field should correspond to a categorical factor.
 Defaults to the first categorical field.
-\item \code{ColumnDataFacet}, a string specifying the name of the \code{\link{colData}} field to use for faceting.
+\item \code{ColumnDataFacet}, a string specifying the name of the \code{\link[SummarizedExperiment:colData]{colData}} field to use for faceting.
 The chosen field should correspond to a categorical factor.
 Defaults to \code{"---"}, i.e., no faceting.
 }
@@ -77,7 +77,7 @@ Defaults to \code{FALSE}.
 The following slots control the color:
 \itemize{
 \item \code{UseCustomColormap}, a logical scalar indicating whether to use a custom color scale.
-Defaults to \code{FALSE}, in which case the application-wide color scale defined by \code{\link{ExperimentColorMap}} is used.
+Defaults to \code{FALSE}, in which case the application-wide color scale defined by \code{\linkS4class[iSEE]{ExperimentColorMap}} is used.
 \item \code{CustomColorLow}, a string specifying the low color (i.e., at an average of zero) for a custom scale.
 Defaults to \code{"grey"}.
 \item \code{CustomColorHigh}, a string specifying the high color for a custom scale.
@@ -86,7 +86,7 @@ Defaults to \code{"red"}.
 Defaults to \code{"blue < grey < orange"}; other choices are \code{"purple < black < yellow"}, \code{"blue < grey < red"} and \code{"green < grey < red"}.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent \linkS4class[iSEE]{Panel} class.
 }
 
 \section{Constructor}{
@@ -102,42 +102,42 @@ Refer to the documentation for each method for more details on the remaining arg
 
 For setting up data values:
 \itemize{
-\item \code{\link{.cacheCommonInfo}(x)} adds a \code{"AggregatedDotPlot"} entry
+\item \code{\link[iSEE:.cacheCommonInfo]{.cacheCommonInfo}(x)} adds a \code{"AggregatedDotPlot"} entry
 containing \code{continuous.assay.names} and \code{discrete.colData.names}.
-\item \code{\link{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"},
+\item \code{\link[iSEE:.refineParameters]{.refineParameters}(x, se)} returns \code{x} after setting \code{"Assay"},
 \code{"ColumnDataLabel"} and \code{"ColumnDataFacet"} to valid values.
-If continuous assays or discrete \code{\link{colData}} variables are not available, \code{NULL} is returned instead.
+If continuous assays or discrete \code{\link[SummarizedExperiment:colData]{colData}} variables are not available, \code{NULL} is returned instead.
 }
 
 For defining the interface:
 \itemize{
-\item \code{\link{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
+\item \code{\link[iSEE:.defineInterface]{.defineInterface}(x, se, select_info)} creates an interface to modify the various parameters in the slots,
 mostly by calling the parent method and adding another visualization parameter box.
-\item \code{\link{.defineDataInterface}(x, se, select_info)} creates an interface to modify the data-related parameters,
+\item \code{\link[iSEE:.defineDataInterface]{.defineDataInterface}(x, se, select_info)} creates an interface to modify the data-related parameters,
 i.e., those that affect the position of the points.
-\item \code{\link{.defineOutput}(x)} defines the output HTML element.
-\item \code{\link{.panelColor}(x)} will return the specified default color for this panel class.
-\item \code{\link{.fullName}(x)} will return \code{"Aggregated dot plot"}.
-\item \code{\link{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections.
+\item \code{\link[iSEE:.defineOutput]{.defineOutput}(x)} defines the output HTML element.
+\item \code{\link[iSEE:.panelColor]{.panelColor}(x)} will return the specified default color for this panel class.
+\item \code{\link[iSEE:.fullName]{.fullName}(x)} will return \code{"Aggregated dot plot"}.
+\item \code{\link[iSEE:.hideInterface]{.hideInterface}(x)} will return \code{TRUE} for UI elements related to multiple row selections.
 }
 
 For monitoring reactive expressions:
 \itemize{
-\item \code{\link{.createObservers}(x, se, input, session, pObjects, rObjects)} will create all relevant observers for the UI elements.
+\item \code{\link[iSEE:.createObservers]{.createObservers}(x, se, input, session, pObjects, rObjects)} will create all relevant observers for the UI elements.
 }
 
 For generating output:
 \itemize{
-\item \code{\link{.generateOutput}(x, se, all_memory, all_contents)} will return the aggregated dot plot as a \link{ggplot} object,
+\item \code{\link[iSEE:.generateOutput]{.generateOutput}(x, se, all_memory, all_contents)} will return the aggregated dot plot as a \link[ggplot2:ggplot]{ggplot} object,
 along with the commands used for its creation.
-\item \code{\link{.renderOutput}(x, se, output, pObjects, rObjects)} will render the aggregated dot plot onto the interface.
-\item \code{\link{.exportOutput}(x, se, all_memory, all_contents)} will save the aggregated dot plot to a PDF file named after \code{x},
+\item \code{\link[iSEE:.renderOutput]{.renderOutput}(x, se, output, pObjects, rObjects)} will render the aggregated dot plot onto the interface.
+\item \code{\link[iSEE:.exportOutput]{.exportOutput}(x, se, all_memory, all_contents)} will save the aggregated dot plot to a PDF file named after \code{x},
 returning the path to the new file.
 }
 
 For providing documentation:
 \itemize{
-\item \code{\link{.definePanelTour}(x)} will return a data.frame to be used in \pkg{rintrojs} as a panel-specific tour.
+\item \code{\link[iSEE:.definePanelTour]{.definePanelTour}(x)} will return a data.frame to be used in \pkg{rintrojs} as a panel-specific tour.
 }
 }
 
@@ -160,9 +160,9 @@ if (interactive()) {
 
 }
 \seealso{
-\linkS4class{Panel}, for the immediate parent class.
+\linkS4class[iSEE]{Panel}, for the immediate parent class.
 
-\linkS4class{ComplexHeatmapPlot}, for another panel with multi-row visualization capability.
+\linkS4class[iSEE]{ComplexHeatmapPlot}, for another panel with multi-row visualization capability.
 }
 \author{
 Aaron Lun
